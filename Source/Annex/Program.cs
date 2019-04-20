@@ -1,4 +1,5 @@
-﻿using Annex.Logging;
+﻿using Annex.Events;
+using Annex.Logging;
 
 namespace Annex
 {
@@ -6,6 +7,9 @@ namespace Annex
     {
         private static void Main() {
             Singleton.Create<Log>();
+            var events = Singleton.Create<EventQueue>();
+
+            events.Run();
         }
     }
 }
