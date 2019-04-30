@@ -11,8 +11,8 @@ namespace Annex.Graphics.Contexts.Sfml
         private ResourceManager<Font> _fonts;
 
         public SfmlContext() {
-            this._textures = new ResourceManager<Texture>("/textures/", (path) => new Texture(path), true, (path) => path.EndsWith("png"));
-            this._fonts = new ResourceManager<Font>("/fonts/", (path) => new Font(path), true, (path) => path.EndsWith(".ttf"));
+            this._textures = new ResourceManager<Texture>("textures/", (path) => new Texture(path), true, (path) => path.EndsWith("png"));
+            this._fonts = new ResourceManager<Font>("fonts/", (path) => new Font(path), true, (path) => path.EndsWith(".ttf"));
             this._buffer = new RenderWindow(new VideoMode(1000, 1000), "Window");
         }
 
