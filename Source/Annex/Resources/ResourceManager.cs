@@ -9,7 +9,7 @@ namespace Annex.Resources
     {
         private readonly Dictionary<string, T> _resources;
         private readonly Func<string, T> _resourceLoader;
-        private readonly Func<string, bool> _resourceValidator;
+        private readonly Func<string, bool>? _resourceValidator;
         private readonly string _fullResourceDirectory;
 
         /// <summary>
@@ -18,21 +18,20 @@ namespace Annex.Resources
         /// <param name="resourceLoader">Loads the resource given the path. Returns whether or not it was successful.</param>
         /// <param name="lazyLoading">Only load resources as they're needed.</param>
         /// <param name="resourceValidator">Validates whether or not a path in the directory is a valid resource file.</param>
-        public ResourceManager(string localDirectory, Func<string, T> resourceLoader, bool lazyLoading = true, Func<string, bool> resourceValidator = null) {
+        public ResourceManager(string localDirectory, Func<string, T> resourceLoader, bool lazyLoading = true, Func<string, bool>? resourceValidator = null) {
             this._resources = new Dictionary<string, T>();
             this._fullResourceDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, localDirectory);
             this._resourceLoader = resourceLoader;
             this._resourceValidator = resourceValidator;
 
             if (!lazyLoading) {
-                Load(Directory.GetFiles(this._fullResourceDirectory, "*", SearchOption.AllDirectories));
+                this.Load(Directory.GetFiles(this._fullResourceDirectory, "*", SearchOption.AllDirectories));
             }
         }
 
         private void Load(IEnumerable<string> files) {
-            foreach (var file in files) {
-                var contentManager = this;
-                if (contentManager._resourceValidator == null || this._resourceValidator.Invoke(file)) {
+            foreach (string file in files) {
+                if (this._resourceValidator == null || this._resourceValidator.Invoke(file)) {
                     string key = file.Remove(0, this._fullResourceDirectory.Length).ToLower().Replace('\\', '/');
                     this._resources.Add(key, this._resourceLoader(file));
                 }

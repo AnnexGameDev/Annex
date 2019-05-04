@@ -2,7 +2,7 @@
 using Annex.Graphics;
 using Annex.IO.Hashing;
 using Annex.Logging;
-using System;
+using Annex.UserInterface;
 using System.Diagnostics;
 using System.IO;
 
@@ -14,6 +14,7 @@ namespace Annex
             Singleton.Create<Log>();
             this.CopyResources();
             var events = Singleton.Create<EventQueue>();
+            var ui = Singleton.Create<UI>();
             var window = Singleton.Create<GameWindow>();
 
             events.AddEvent(PriorityType.GRAPHICS, () => {
@@ -48,7 +49,7 @@ namespace Annex
             Directory.CreateDirectory(resourcePath);
 
             using (var md5 = new MD5()) {
-                foreach (var sourceFile in Directory.GetFiles(resourcePath, "*", SearchOption.AllDirectories)) {
+                foreach (string sourceFile in Directory.GetFiles(resourcePath, "*", SearchOption.AllDirectories)) {
                     log.WriteLine($"Copying file {sourceFile}.");
                     var fi = new FileInfo(sourceFile);
                     string relativeDirectory = fi.Directory.FullName.Remove(0, solutionPath.Length + 1);
