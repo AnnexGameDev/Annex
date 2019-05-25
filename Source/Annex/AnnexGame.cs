@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Annex
 {
-    public class Game
+    public abstract class AnnexGame
     {
         public void Start() {
             Singleton.Create<Log>();
@@ -19,7 +19,7 @@ namespace Annex
 
             events.AddEvent(PriorityType.GRAPHICS, () => {
                 window.Context.BeginDrawing();
-
+                DrawGame(window.Context);
                 window.Context.EndDrawing();
                 return ControlEvent.NONE;
             }, 16, 0);
@@ -87,5 +87,7 @@ namespace Annex
                 }
             }
         }
+
+        public abstract void DrawGame(IDrawableContext context);
     }
 }
