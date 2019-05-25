@@ -55,5 +55,43 @@ namespace Annex.Graphics.Contexts.Sfml
         public override void SetVisible(bool visible) {
             this._buffer.SetVisible(visible);
         }
+
+        public override bool IsMouseButtonDown(MouseButton button) {
+            Mouse.Button? sfmlButton = null;
+            switch (sfmlButton) {
+                case Mouse.Button.Left:
+                    sfmlButton = Mouse.Button.Left;
+                    break;
+                case Mouse.Button.Right:
+                    sfmlButton = Mouse.Button.Right;
+                    break;
+            }
+            if (sfmlButton == null) {
+                return false;
+            }
+            return Mouse.IsButtonPressed((Mouse.Button)sfmlButton);
+        }
+
+        public override bool IsKeyDown(Key key) {
+            Keyboard.Key? sfmlKey = null;
+            switch (key) {
+                case Key.ArrowKey_Down:
+                    sfmlKey = Keyboard.Key.Down;
+                    break;
+                case Key.ArrowKey_Left:
+                    sfmlKey = Keyboard.Key.Left;
+                    break;
+                case Key.ArrowKey_Up:
+                    sfmlKey = Keyboard.Key.Up;
+                    break;
+                case Key.ArrowKey_Right:
+                    sfmlKey = Keyboard.Key.Right;
+                    break;
+            }
+            if (sfmlKey == null) {
+                return false;
+            }
+            return Keyboard.IsKeyPressed((Keyboard.Key)sfmlKey);
+        }
     }
 }
