@@ -5,16 +5,20 @@ namespace Annex.UserInterface.Components
 {
     public class Container : UIElement
     {
-        public readonly List<UIElement> Children;
+        private protected readonly List<UIElement> _children;
 
-        public Container() {
-            this.Children = new List<UIElement>();
+        public Container(string elementID = "") : base(elementID) {
+            this._children = new List<UIElement>();
         }
 
         public override void Draw(IDrawableContext surfaceContext) {
-            foreach (var child in this.Children) {
+            foreach (var child in this._children) {
                 child.Draw(surfaceContext);
             }
+        }
+
+        public void AddChild(UIElement child) {
+            this._children.Add(child);
         }
     }
 }
