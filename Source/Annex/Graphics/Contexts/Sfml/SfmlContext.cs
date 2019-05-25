@@ -31,8 +31,6 @@ namespace Annex.Graphics.Contexts.Sfml
             //this._buffer.JoystickMoved += ();
 
             // TODO: Expose input state API.
-            //Keyboard.IsKeyPressed(Keyboard.Key.);
-            //Mouse.IsButtonPressed(Mouse.Button.);
             //Joystick.IsButtonPressed(, );
             //Joystick.IsConnected(, );
         }
