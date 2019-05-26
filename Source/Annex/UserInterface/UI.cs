@@ -25,5 +25,9 @@ namespace Annex.UserInterface
             }
             this._currentSceneType = typeof(T);
         }
+
+        public bool IsCurrentScene<T>() {
+            return this.CurrentScene.GetType() == typeof(T);
+        }
     }
 }

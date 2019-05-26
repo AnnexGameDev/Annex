@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Annex.UserInterface;
+using Annex.UserInterface.Scenes;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -29,9 +31,9 @@ namespace Annex.Events
         public void Run() {
             int tick;
             int lastTick = Environment.TickCount;
+            var ui = Singleton.Get<UI>();
 
-            // TODO: Replace this with a good condition.
-            while (true) {
+            while (!ui.IsCurrentScene<GameClosing>()) {
                 tick = Environment.TickCount;
                 int diff = tick - lastTick;
                 lastTick = tick;

@@ -1,6 +1,7 @@
 ﻿using Annex.Resources;
 using Annex.UserInterface;
 using SFML.Graphics;
+using SFML.System;
 using SFML.Window;
 
 namespace Annex.Graphics.Contexts.Sfml
@@ -12,8 +13,8 @@ namespace Annex.Graphics.Contexts.Sfml
         private readonly ResourceManager<Font> _fonts;
 
         public SfmlContext() {
-            this._textures = new ResourceManager<Texture>("textures/", (path) => new Texture(path), true, (path) => path.EndsWith("png"));
-            this._fonts = new ResourceManager<Font>("fonts/", (path) => new Font(path), true, (path) => path.EndsWith(".ttf"));
+            this._textures = new LazyResourceManager<Texture>("textures/", (path) => new Texture(path), (path) => path.EndsWith("png"));
+            this._fonts = new LazyResourceManager<Font>("fonts/", (path) => new Font(path), (path) => path.EndsWith(".ttf"));
             this._buffer = new RenderWindow(new VideoMode(1000, 1000), "Window");
 
             // TODO: Attach event handlers.
@@ -39,6 +40,37 @@ namespace Annex.Graphics.Contexts.Sfml
         }
 
         public override void Draw(SurfaceContext ctx) {
+            var sprite = GetSprite(ctx.SourceSurfaceName);
+
+            sprite.Position = ctx.RenderPosition;
+
+            if (ctx.SourceSurfaceRect != null) {
+                sprite.TextureRect = ctx.SourceSurfaceRect;
+                sprite.Scale = new Vector2f(ctx.RenderSize.X / ctx.SourceSurfaceRect.Width, ctx.RenderSize.Y / ctx.SourceSurfaceRect.Height);
+            } else {
+                sprite.Scale = new Vector2f(ctx.RenderSize.X / sprite.Texture.Size.X, ctx.RenderSize.Y / sprite.Texture.Size.Y);
+            }
+
+            // TODO: relative positioning based off of the camera
+            if (!ctx.IsAbsolute) {
+
+            }
+
+            if (ctx.RenderColor != null) {
+                sprite.Color = ctx.RenderColor;
+            }
+
+            if (ctx.Rotation % 360 != 0) {
+                sprite.Origin = ctx.RelativeRotationOrigin;
+                sprite.Rotation = ctx.Rotation;
+                sprite.Position += new Vector2f(ctx.RelativeRotationOrigin.X, ctx.RelativeRotationOrigin.Y);
+            }
+
+            this._buffer.Draw(sprite);
+        }
+
+        private Sprite GetSprite(string surfaceName) {
+            return new Sprite(this._textures.GetResource(surfaceName));
         }
 
         public override void BeginDrawing() {

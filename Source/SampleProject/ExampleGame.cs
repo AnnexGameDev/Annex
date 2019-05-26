@@ -1,4 +1,5 @@
 ﻿using Annex;
+using Annex.Events;
 using Annex.UserInterface;
 using SampleProject.Data;
 using SampleProject.Scenes;
@@ -12,7 +13,7 @@ namespace SampleProject
 
             Singleton.Create<DataManager>();
             Singleton.Get<UI>().LoadScene<MainMenu>();
-            
+
             game.Start();
         }
     }
