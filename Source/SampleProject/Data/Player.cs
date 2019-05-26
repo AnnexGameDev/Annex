@@ -21,7 +21,7 @@ namespace SampleProject.Data
             };
             this._hoverName = new TextContext("Dragon Player", "Augusta.ttf") {
                 RenderPosition = this.Position,
-                Aliignment = new TextAlignment() {
+                Alignment = new TextAlignment() {
                     Size = new Vector2f(this.Size.X, - 26),
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Bottom

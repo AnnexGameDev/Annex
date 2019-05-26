@@ -51,25 +51,25 @@ namespace Annex.Graphics.Contexts.Sfml
             text.OutlineColor = ctx.BorderColor;
 
             text.Position = ctx.RenderPosition;
-            if (ctx.Aliignment != null) {
+            if (ctx.Alignment != null) {
                 var offset = new Vector2f();
 
                 var end = text.FindCharacterPos((uint)(ctx.RenderText.Length - 1));
 
-                switch (ctx.Aliignment.HorizontalAlignment) {
+                switch (ctx.Alignment.HorizontalAlignment) {
                     case HorizontalAlignment.Center:
-                        offset.X += (ctx.Aliignment.Size.X / 2) - (end.X / 2);
+                        offset.X += (ctx.Alignment.Size.X / 2) - (end.X / 2);
                         break;
                     case HorizontalAlignment.Right:
-                        offset.X += ctx.Aliignment.Size.X - end.X;
+                        offset.X += ctx.Alignment.Size.X - end.X;
                         break;
                 }
-                switch (ctx.Aliignment.VerticalAlignment) {
+                switch (ctx.Alignment.VerticalAlignment) {
                     case VerticalAlignment.Middle:
-                        offset.Y += (ctx.Aliignment.Size.Y / 2) - (end.Y / 2);
+                        offset.Y += (ctx.Alignment.Size.Y / 2) - (end.Y / 2);
                         break;
                     case VerticalAlignment.Bottom:
-                        offset.Y += ctx.Aliignment.Size.Y - end.Y;
+                        offset.Y += ctx.Alignment.Size.Y - end.Y;
                         break;
                 }
                 text.Position += offset;

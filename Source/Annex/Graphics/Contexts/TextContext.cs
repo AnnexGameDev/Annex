@@ -7,7 +7,7 @@ namespace Annex.Graphics.Contexts
         public string RenderText { get; set; }
 
         public Vector2f RenderPosition { get; set; }
-        public TextAlignment? Aliignment { get; set; }
+        public TextAlignment? Alignment { get; set; }
 
         public string FontName { get; set; }
         public uint FontSize { get; set; }
@@ -22,7 +22,7 @@ namespace Annex.Graphics.Contexts
             this.RenderText = text;
 
             this.RenderPosition = new Vector2f();
-            this.Aliignment = null;
+            this.Alignment = null;
 
             this.FontName = font;
             this.FontSize = 12;
