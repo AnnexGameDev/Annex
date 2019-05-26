@@ -1,5 +1,4 @@
 ﻿using Annex;
-using Annex.Events;
 using Annex.UserInterface;
 using SampleProject.Data;
 using SampleProject.Scenes;

@@ -18,6 +18,10 @@
 
         }
 
+        public RGBA() : this(0, 0, 0) {
+
+        }
+
         public static implicit operator SFML.Graphics.Color(RGBA source) {
             return new SFML.Graphics.Color(source.R, source.G, source.B, source.A);
         }

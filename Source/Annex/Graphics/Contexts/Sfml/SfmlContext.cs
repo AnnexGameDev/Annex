@@ -37,6 +37,45 @@ namespace Annex.Graphics.Contexts.Sfml
         }
 
         public override void Draw(TextContext ctx) {
+
+            if (string.IsNullOrEmpty(ctx.RenderText)) {
+                return;
+            }
+
+            var font = GetFont(ctx.FontName);
+            var text = new Text(ctx.RenderText, font);
+
+            text.CharacterSize = ctx.FontSize;
+            text.FillColor = ctx.FontColor;
+            text.OutlineThickness = ctx.BorderThickness;
+            text.OutlineColor = ctx.BorderColor;
+
+            text.Position = ctx.RenderPosition;
+            if (ctx.Aliignment != null) {
+                var offset = new Vector2f();
+
+                var end = text.FindCharacterPos((uint)(ctx.RenderText.Length - 1));
+
+                switch (ctx.Aliignment.HorizontalAlignment) {
+                    case HorizontalAlignment.Center:
+                        offset.X += (ctx.Aliignment.Size.X / 2) - (end.X / 2);
+                        break;
+                    case HorizontalAlignment.Right:
+                        offset.X += ctx.Aliignment.Size.X - end.X;
+                        break;
+                }
+                switch (ctx.Aliignment.VerticalAlignment) {
+                    case VerticalAlignment.Middle:
+                        offset.Y += (ctx.Aliignment.Size.Y / 2) - (end.Y / 2);
+                        break;
+                    case VerticalAlignment.Bottom:
+                        offset.Y += ctx.Aliignment.Size.Y - end.Y;
+                        break;
+                }
+                text.Position += offset;
+            }
+
+            this._buffer.Draw(text);
         }
 
         public override void Draw(SurfaceContext ctx) {
@@ -71,6 +110,10 @@ namespace Annex.Graphics.Contexts.Sfml
 
         private Sprite GetSprite(string surfaceName) {
             return new Sprite(this._textures.GetResource(surfaceName));
+        }
+
+        private Font GetFont(string fontName) {
+            return this._fonts.GetResource(fontName);
         }
 
         public override void BeginDrawing() {
