@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Annex", "Annex\Annex.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleProject", "SampleProject\SampleProject.csproj", "{7FC28941-4B8E-423A-AE9A-16FBAC9F8440}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mud", "Mud\Mud.csproj", "{519B7950-0B48-4290-BA1A-8ACA41EF29EC}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{7FC28941-4B8E-423A-AE9A-16FBAC9F8440}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FC28941-4B8E-423A-AE9A-16FBAC9F8440}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FC28941-4B8E-423A-AE9A-16FBAC9F8440}.Release|Any CPU.Build.0 = Release|Any CPU
-		{519B7950-0B48-4290-BA1A-8ACA41EF29EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{519B7950-0B48-4290-BA1A-8ACA41EF29EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{519B7950-0B48-4290-BA1A-8ACA41EF29EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{519B7950-0B48-4290-BA1A-8ACA41EF29EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
