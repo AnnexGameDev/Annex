@@ -12,7 +12,7 @@ namespace Annex.Graphics.Contexts
         public RGBA? RenderColor { get; set; }
         public float Rotation { get; set; }
         public PVector RelativeRotationOrigin { get; set; }
-        public bool IsAbsolute { get; set; }
+        public bool UseUIView { get; set; }
 
         public SurfaceContext(PString surfaceName) {
             this.SourceSurfaceName = surfaceName;
@@ -20,7 +20,7 @@ namespace Annex.Graphics.Contexts
             this.RenderSize = new PVector();
             this.SourceSurfaceRect = null;
             this.Rotation = 0;
-            this.IsAbsolute = true;
+            this.UseUIView = false;
             this.RenderColor = null;
             this.RelativeRotationOrigin = new PVector();
         }

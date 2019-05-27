@@ -17,9 +17,6 @@ namespace Annex.Graphics.Cameras
         }
 
         public void Resize(float newWidth, float newHeight) {
-            float ratio1 = newWidth / this.Size.X;
-            float ratio2 = newHeight / this.Size.Y;
-            Debug.Assert(ratio1 == ratio2);
             this.CurrentZoom = newHeight / GameWindow.RESOLUTION_HEIGHT;
             this.Size.Set(newWidth, newHeight);
         }

@@ -10,7 +10,9 @@ namespace Annex.Graphics.Contexts.Sfml
 {
     public class SfmlContext : GraphicsContext
     {
-        private readonly View _primaryView;
+        private bool _usingUiView;
+        private readonly View _uiView;
+        private readonly View _gameContentView;
         private readonly Camera _camera;
         private readonly RenderWindow _buffer;
         private readonly ResourceManager<Texture> _textures;
@@ -18,7 +20,8 @@ namespace Annex.Graphics.Contexts.Sfml
 
         public SfmlContext() {
             this._camera = new Camera();
-            this._primaryView = new View();
+            this._uiView = new View(new Vector2f(GameWindow.RESOLUTION_WIDTH / 2, GameWindow.RESOLUTION_HEIGHT / 2), new Vector2f(GameWindow.RESOLUTION_WIDTH, GameWindow.RESOLUTION_HEIGHT));
+            this._gameContentView = new View();
 
             this._textures = new LazyResourceManager<Texture>("textures/", (path) => new Texture(path), (path) => path.EndsWith("png"));
             this._fonts = new LazyResourceManager<Font>("fonts/", (path) => new Font(path), (path) => path.EndsWith(".ttf"));
@@ -47,6 +50,17 @@ namespace Annex.Graphics.Contexts.Sfml
 
             if (String.IsNullOrEmpty(ctx.RenderText)) {
                 return;
+            }
+
+            // We need to update the camera.
+            if (ctx.UseUIView != this._usingUiView) {
+                if (ctx.UseUIView) {
+                    this._buffer.SetView(this._uiView);
+                    this._usingUiView = true;
+                } else {
+                    this._buffer.SetView(this._gameContentView);
+                    this._usingUiView = false;
+                }
             }
 
 #pragma warning disable CS8604 // Possible null reference argument.
@@ -96,6 +110,17 @@ namespace Annex.Graphics.Contexts.Sfml
                 return;
             }
 
+            // We need to update the camera.
+            if (ctx.UseUIView != this._usingUiView) {
+                if (ctx.UseUIView) {
+                    this._buffer.SetView(this._uiView);
+                    this._usingUiView = true;
+                } else {
+                    this._buffer.SetView(this._gameContentView);
+                    this._usingUiView = false;
+                }
+            }
+
 #pragma warning disable CS8604 // Possible null reference argument.
             // Prevented because of the null or empty check at the top.x`
             var sprite = this.GetSprite(ctx.SourceSurfaceName);
@@ -108,11 +133,6 @@ namespace Annex.Graphics.Contexts.Sfml
                 sprite.Scale = new Vector2f(ctx.RenderSize.X / ctx.SourceSurfaceRect.Width, ctx.RenderSize.Y / ctx.SourceSurfaceRect.Height);
             } else {
                 sprite.Scale = new Vector2f(ctx.RenderSize.X / sprite.Texture.Size.X, ctx.RenderSize.Y / sprite.Texture.Size.Y);
-            }
-
-            // TODO: relative positioning based off of the camera
-            if (!ctx.IsAbsolute) {
-
             }
 
             if (ctx.RenderColor != null) {
@@ -139,19 +159,20 @@ namespace Annex.Graphics.Contexts.Sfml
         public override void BeginDrawing() {
             this._buffer.Clear();
             this._buffer.DispatchEvents();
-            this.UpdateCamera();
+            this.UpdateGameContentCamera();
         }
 
         public override void EndDrawing() {
             this._buffer.Display();
         }
 
-        private void UpdateCamera() {
-            this._primaryView.Reset(new FloatRect(0, 0, 1, 1));
-            this._primaryView.Size = this._camera.Size;
-            this._primaryView.Zoom(this._camera.CurrentZoom);
-            this._primaryView.Center = this._camera.Centerpoint;
-            this._buffer.SetView(this._primaryView);
+        private void UpdateGameContentCamera() {
+            this._gameContentView.Reset(new FloatRect(0, 0, 1, 1));
+            this._gameContentView.Size = this._camera.Size;
+            this._gameContentView.Zoom(this._camera.CurrentZoom);
+            this._gameContentView.Center = this._camera.Centerpoint;
+            this._buffer.SetView(this._gameContentView);
+            this._usingUiView = false;
         }
 
         public override void SetVisible(bool visible) {

@@ -16,6 +16,7 @@ namespace Annex.UserInterface.Components
 
             this.RenderText = new TextContext(this.Caption, this.Font) {
                 RenderPosition = this.Position,
+                UseUIView = true,
                 Alignment = new TextAlignment() {
                     Size = this.Size,
                     HorizontalAlignment = HorizontalAlignment.Center,

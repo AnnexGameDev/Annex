@@ -15,23 +15,21 @@ namespace SampleProject.Scenes.MainMenu
 
         public MainMenu() {
             this._data = Singleton.Get<DataManager>();
-            this.RenderBoxSurface.Set("gui/backgrounds/menubackground.png");
-
-            this.AddChild(new SampleButton());
-
             var queue = Singleton.Get<EventQueue>();
             var ui = Singleton.Get<UI>();
 
+            this.AddChild(new SampleButton());
+
             queue.AddEvent(PriorityType.LOGIC, () => {
                 if (ui.IsCurrentScene<MainMenu>()) {
-                    HandlePlayerMovement();
+                    this.HandlePlayerMovement();
                 }
                 return ControlEvent.NONE;
             }, 1);
         }
 
-        public override void Draw(IDrawableContext surfaceContext) {
-            base.Draw(surfaceContext);
+        public override void DrawGameContent(IDrawableContext surfaceContext) {
+            this._data.Map.Draw(surfaceContext);
             this._data.Player.Draw(surfaceContext);
         }
 

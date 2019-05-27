@@ -6,7 +6,7 @@ namespace SampleProject.Scenes.MainMenu.Buttons
     public class SampleButton : Button
     {
         public SampleButton() {
-            this.Position.Set(0, 900);
+            this.Position.Set(0, 540);
             this.Size.Set(300, 100);
             this.RenderBoxSurface.Set("gui/buttons/orangefade.png");
             this.Caption.Set("Hello world!");

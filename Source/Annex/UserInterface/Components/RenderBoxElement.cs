@@ -13,7 +13,8 @@ namespace Annex.UserInterface.Components
             this.RenderBoxSurface = new PString();
             this.RenderBox = new SurfaceContext(this.RenderBoxSurface) {
                 RenderPosition = this.Position,
-                RenderSize = this.Size
+                RenderSize = this.Size,
+                UseUIView = true
             };
         }
 

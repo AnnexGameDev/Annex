@@ -17,7 +17,7 @@ namespace Annex.Graphics.Contexts
         public float BorderThickness { get; set; }
         public RGBA BorderColor { get; set; }
 
-        public bool IsAbsolute { get; set; }
+        public bool UseUIView { get; set; }
 
         public TextContext(PString text, PString font) {
             this.RenderText = text;
@@ -31,6 +31,8 @@ namespace Annex.Graphics.Contexts
 
             this.BorderThickness = 0;
             this.BorderColor = new RGBA();
+
+            this.UseUIView = false;
         }
     }
 }
