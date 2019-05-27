@@ -5,7 +5,7 @@ namespace Annex.UserInterface.Components
 {
     public class Container : RenderBoxElement
     {
-        private protected readonly List<UIElement> _children;
+        protected readonly List<UIElement> _children;
 
         public Container(string elementID = "") : base(elementID) {
             this._children = new List<UIElement>();

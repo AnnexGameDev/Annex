@@ -6,7 +6,7 @@ namespace Annex.UserInterface.Components
 {
     public class RenderBoxElement : UIElement
     {
-        private protected readonly SurfaceContext RenderBox;
+        protected readonly SurfaceContext RenderBox;
         public readonly PString RenderBoxSurface;
 
         public RenderBoxElement(string elementID = "") : base(elementID) {

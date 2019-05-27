@@ -6,7 +6,7 @@ namespace Annex.UserInterface.Components
 {
     public class Button : RenderBoxElement
     {
-        private protected readonly TextContext RenderText;
+        protected readonly TextContext RenderText;
         public readonly PString Caption;
         public readonly PString Font;
 
