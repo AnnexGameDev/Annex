@@ -1,4 +1,5 @@
-﻿using Annex.UserInterface;
+﻿using Annex.Graphics.Cameras;
+using Annex.UserInterface;
 
 namespace Annex.Graphics.Contexts
 {
@@ -14,5 +15,7 @@ namespace Annex.Graphics.Contexts
 
         public abstract void EndDrawing();
         public abstract void SetVisible(bool visible);
+
+        public abstract Camera GetCamera();
     }
 }

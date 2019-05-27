@@ -2,12 +2,11 @@
 {
     public class Vector2f
     {
-        public float X { get; set; }
-        public float Y { get; set; }
+        public virtual float X { get; set; }
+        public virtual float Y { get; set; }
 
         public Vector2f() {
-            this.X = 0;
-            this.Y = 0;
+
         }
 
         public Vector2f(float x, float y) {

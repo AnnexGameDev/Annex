@@ -49,16 +49,23 @@ namespace SampleProject.Scenes.MainMenu
             }
 
             if (context.IsKeyDown(KeyboardKey.Left)) {
-                player.PlayerPosition.X -= speed;
+                player.EntityPosition.X -= speed;
             }
             if (context.IsKeyDown(KeyboardKey.Right)) {
-                player.PlayerPosition.X += speed;
+                player.EntityPosition.X += speed;
             }
             if (context.IsKeyDown(KeyboardKey.Up)) {
-                player.PlayerPosition.Y -= speed;
+                player.EntityPosition.Y -= speed;
             }
             if (context.IsKeyDown(KeyboardKey.Down)) {
-                player.PlayerPosition.Y += speed;
+                player.EntityPosition.Y += speed;
+            }
+
+            if (context.IsKeyDown(KeyboardKey.Q)) {
+                Singleton.Get<GameWindow>().Context.GetCamera().ZoomIn(0.01f);
+            }
+            if (context.IsKeyDown(KeyboardKey.E)) {
+                Singleton.Get<GameWindow>().Context.GetCamera().ZoomOut(0.01f);
             }
         }
     }

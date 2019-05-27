@@ -1,4 +1,5 @@
-﻿using Annex.Resources;
+﻿using Annex.Graphics.Cameras;
+using Annex.Resources;
 using Annex.UserInterface;
 using SFML.Graphics;
 using SFML.System;
@@ -9,14 +10,19 @@ namespace Annex.Graphics.Contexts.Sfml
 {
     public class SfmlContext : GraphicsContext
     {
+        private readonly View _primaryView;
+        private readonly Camera _camera;
         private readonly RenderWindow _buffer;
         private readonly ResourceManager<Texture> _textures;
         private readonly ResourceManager<Font> _fonts;
 
         public SfmlContext() {
+            this._camera = new Camera();
+            this._primaryView = new View();
+
             this._textures = new LazyResourceManager<Texture>("textures/", (path) => new Texture(path), (path) => path.EndsWith("png"));
             this._fonts = new LazyResourceManager<Font>("fonts/", (path) => new Font(path), (path) => path.EndsWith(".ttf"));
-            this._buffer = new RenderWindow(new VideoMode(1000, 1000), "Window");
+            this._buffer = new RenderWindow(new VideoMode(GameWindow.RESOLUTION_WIDTH, GameWindow.RESOLUTION_HEIGHT), "Window");
 
             var ui = Singleton.Get<UI>();
             this._buffer.Closed += (sender, e) => { ui.CurrentScene.HandleCloseButtonPressed(); };
@@ -133,10 +139,19 @@ namespace Annex.Graphics.Contexts.Sfml
         public override void BeginDrawing() {
             this._buffer.Clear();
             this._buffer.DispatchEvents();
+            this.UpdateCamera();
         }
 
         public override void EndDrawing() {
             this._buffer.Display();
+        }
+
+        private void UpdateCamera() {
+            this._primaryView.Reset(new FloatRect(0, 0, 1, 1));
+            this._primaryView.Size = this._camera.Size;
+            this._primaryView.Zoom(this._camera.CurrentZoom);
+            this._primaryView.Center = this._camera.Centerpoint;
+            this._buffer.SetView(this._primaryView);
         }
 
         public override void SetVisible(bool visible) {
@@ -151,6 +166,10 @@ namespace Annex.Graphics.Contexts.Sfml
         public override bool IsKeyDown(KeyboardKey key) {
             var sfmlKey = key.ToSFML();
             return sfmlKey != Keyboard.Key.Unknown ? Keyboard.IsKeyPressed(sfmlKey) : false;
+        }
+
+        public override Camera GetCamera() {
+            return this._camera;
         }
     }
 }

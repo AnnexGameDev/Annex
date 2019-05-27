@@ -1,4 +1,5 @@
 ﻿using Annex;
+using Annex.Graphics;
 using Annex.UserInterface;
 using SampleProject.Data;
 using SampleProject.Scenes.MainMenu;
@@ -12,6 +13,7 @@ namespace SampleProject
 
             Singleton.Create<DataManager>();
             Singleton.Get<UI>().LoadScene<MainMenu>();
+            Singleton.Get<GameWindow>().Context.GetCamera().Follow(Singleton.Get<DataManager>().Player);
 
             game.Start();
         }

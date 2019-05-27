@@ -4,10 +4,8 @@ using Annex.Graphics.Contexts;
 
 namespace SampleProject.Data
 {
-    public class Player : IDrawableObject
+    public class Player : Entity, IDrawableObject
     {
-        public Vector2f PlayerPosition;
-        public Vector2f PlayerSize;
         public readonly PString PlayerName;
         public readonly PString PlayerSprite;
 
@@ -20,17 +18,17 @@ namespace SampleProject.Data
             this.PlayerSprite = new PString("dragon.png");
             this._hoverNameFont = new PString("Augusta.ttf");
 
-            this.PlayerPosition = new Vector2f(300, 300);
-            this.PlayerSize = new Vector2f(150, 150);
+            this.EntityPosition.Set(300, 300);
+            this.EntitySize.Set(150, 150);
             this._sprite = new SurfaceContext(this.PlayerSprite) {
                 SourceSurfaceRect = new IntRect(0, 0, 384 / 4, 384 / 4),
-                RenderSize = this.PlayerSize,
-                RenderPosition = this.PlayerPosition
+                RenderSize = this.EntitySize,
+                RenderPosition = this.EntityPosition
             };
             this._hoverName = new TextContext(this.PlayerName, this._hoverNameFont) {
-                RenderPosition = this.PlayerPosition,
+                RenderPosition = this.EntityPosition,
                 Alignment = new TextAlignment() {
-                    Size = new Vector2f(this.PlayerSize.X, - 26),
+                    Size = new Vector2f(this.EntitySize.X, - 26),
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Bottom
                 },
