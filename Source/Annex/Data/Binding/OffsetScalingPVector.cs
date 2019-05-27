@@ -1,4 +1,4 @@
-﻿namespace Annex.Data.ReferenceTypes
+﻿namespace Annex.Data.Binding
 {
     public class OffsetScalingPVector : ScalingPVector
     {
