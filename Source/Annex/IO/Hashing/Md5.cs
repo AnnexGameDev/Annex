@@ -6,7 +6,7 @@ namespace Annex.IO.Hashing
 {
     public class MD5 : IDisposable
     {
-        private System.Security.Cryptography.MD5 _algorithm;
+        private readonly System.Security.Cryptography.MD5 _algorithm;
 
         public MD5() {
             this._algorithm = System.Security.Cryptography.MD5.Create();
@@ -18,14 +18,14 @@ namespace Annex.IO.Hashing
 
         public string ComputeFileHash(string filepath) {
             Debug.Assert(File.Exists(filepath));
-            return Compute(File.ReadAllBytes(filepath));
+            return this.Compute(File.ReadAllBytes(filepath));
         }
 
         public string Compute(byte[] data) {
             Debug.Assert(data.Length != 0);
-            var hash = this._algorithm.ComputeHash(data);
+            byte[] hash = this._algorithm.ComputeHash(data);
             var sb = new StringBuilder();
-            foreach (var val in hash) {
+            foreach (byte val in hash) {
                 sb.Append(val.ToString("x2"));
             }
             return sb.ToString();

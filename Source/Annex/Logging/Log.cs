@@ -8,7 +8,7 @@ namespace Annex.Logging
         private readonly DecoratableLog _log;
 
         public Log() {
-            if (ConsoleExists()) {
+            if (this.ConsoleExists()) {
                 this._log = new FileLog(new ConsoleLog());
             } else {
                 this._log = new FileLog();

@@ -19,13 +19,13 @@ namespace Annex.Events
         }
 
         public void AddEvent(PriorityType type, GameEvent e) {
-            Debug.Assert((int)type < _queue.Length);
+            Debug.Assert((int)type < this._queue.Length);
             Debug.Assert((int)type >= 0);
             this._queue[(int)type].Add(e);
         }
 
         public void AddEvent(PriorityType type, Func<ControlEvent> e, int interval_ms, int delay_ms = 0) {
-            AddEvent(type, new GameEvent(e, interval_ms, delay_ms));
+            this.AddEvent(type, new GameEvent(e, interval_ms, delay_ms));
         }
 
         public void Run() {
@@ -44,9 +44,9 @@ namespace Annex.Events
                 }
 
                 foreach (int priority in Priorities.All) {
-                    for (int i = 0; i < _queue[priority].Count; i++) {
-                        if (_queue[priority][i].Probe(diff) == ControlEvent.REMOVE) {
-                            _queue[priority].RemoveAt(i--);
+                    for (int i = 0; i < this._queue[priority].Count; i++) {
+                        if (this._queue[priority][i].Probe(diff) == ControlEvent.REMOVE) {
+                            this._queue[priority].RemoveAt(i--);
                         }
                     }
                 }

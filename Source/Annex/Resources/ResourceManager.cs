@@ -20,7 +20,7 @@ namespace Annex.Resources
 
         private protected void Load(IEnumerable<string> files) {
             foreach (string file in files) {
-                Load(file);
+                this.Load(file);
             }
         }
 

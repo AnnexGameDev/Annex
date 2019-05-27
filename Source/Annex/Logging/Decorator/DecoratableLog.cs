@@ -4,21 +4,21 @@ namespace Annex.Logging.Decorator
 {
     public abstract class DecoratableLog : ILogable
     {
-        private DecoratableLog? _base;
+        private readonly DecoratableLog? _base;
 
         public DecoratableLog(DecoratableLog? @base = null) {
-            _base = @base;
+            this._base = @base;
         }
 
         private protected abstract void Append(string content);
 
         public void Write(string content) {
-            Append(content);
-            _base?.Write(content);
+            this.Append(content);
+            this._base?.Write(content);
         }
 
         public void WriteLine(string line) {
-            Write(line + Environment.NewLine);
+            this.Write(line + Environment.NewLine);
         }
     }
 }
