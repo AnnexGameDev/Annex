@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Annex.UserInterface.Components
 {
-    public class Container : UIElement
+    public class Container : RenderBoxElement
     {
         private protected readonly List<UIElement> _children;
 
@@ -12,6 +12,7 @@ namespace Annex.UserInterface.Components
         }
 
         public override void Draw(IDrawableContext surfaceContext) {
+            base.Draw(surfaceContext);
             foreach (var child in this._children) {
                 child.Draw(surfaceContext);
             }

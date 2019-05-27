@@ -6,23 +6,31 @@ namespace SampleProject.Data
 {
     public class Player : IDrawableObject
     {
-        private SurfaceContext _sprite;
-        private TextContext _hoverName;
-        public Vector2f Position;
-        public Vector2f Size;
+        public Vector2f PlayerPosition;
+        public Vector2f PlayerSize;
+        public readonly PString PlayerName;
+        public readonly PString PlayerSprite;
+
+        private readonly SurfaceContext _sprite;
+        private readonly TextContext _hoverName;
+        private readonly PString _hoverNameFont;
 
         public Player() {
-            this.Position = new Vector2f(300, 300);
-            this.Size = new Vector2f(150, 150);
-            this._sprite = new SurfaceContext("dragon.png") {
+            this.PlayerName = new PString("Dragon Player");
+            this.PlayerSprite = new PString("dragon.png");
+            this._hoverNameFont = new PString("Augusta.ttf");
+
+            this.PlayerPosition = new Vector2f(300, 300);
+            this.PlayerSize = new Vector2f(150, 150);
+            this._sprite = new SurfaceContext(this.PlayerSprite) {
                 SourceSurfaceRect = new IntRect(0, 0, 384 / 4, 384 / 4),
-                RenderSize = this.Size,
-                RenderPosition = this.Position
+                RenderSize = this.PlayerSize,
+                RenderPosition = this.PlayerPosition
             };
-            this._hoverName = new TextContext("Dragon Player", "Augusta.ttf") {
-                RenderPosition = this.Position,
+            this._hoverName = new TextContext(this.PlayerName, this._hoverNameFont) {
+                RenderPosition = this.PlayerPosition,
                 Alignment = new TextAlignment() {
-                    Size = new Vector2f(this.Size.X, - 26),
+                    Size = new Vector2f(this.PlayerSize.X, - 26),
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Bottom
                 },

@@ -1,7 +1,7 @@
 ﻿using Annex;
 using Annex.UserInterface;
 using SampleProject.Data;
-using SampleProject.Scenes;
+using SampleProject.Scenes.MainMenu;
 
 namespace SampleProject
 {

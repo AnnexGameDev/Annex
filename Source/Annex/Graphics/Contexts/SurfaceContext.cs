@@ -4,7 +4,7 @@ namespace Annex.Graphics.Contexts
 {
     public class SurfaceContext
     {
-        public string SourceSurfaceName { get; set; }
+        public PString SourceSurfaceName { get; set; }
         public Vector2f RenderPosition { get; set; }
         public Vector2f RenderSize { get; set; }
         public IntRect? SourceSurfaceRect { get; set; }
@@ -13,7 +13,7 @@ namespace Annex.Graphics.Contexts
         public Vector2f RelativeRotationOrigin { get; set; }
         public bool IsAbsolute { get; set; }
 
-        public SurfaceContext(string surfaceName) {
+        public SurfaceContext(PString surfaceName) {
             this.SourceSurfaceName = surfaceName;
             this.RenderPosition = new Vector2f();
             this.RenderSize = new Vector2f();

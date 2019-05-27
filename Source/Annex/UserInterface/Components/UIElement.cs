@@ -1,17 +1,19 @@
-﻿using Annex.Graphics;
+﻿using Annex.Data;
+using Annex.Graphics;
+using Annex.UserInterface.Controllers;
 
 namespace Annex.UserInterface.Components
 {
-    public abstract class UIElement : IDrawableObject
+    public abstract class UIElement : InputController, IDrawableObject
     {
         private readonly string ElementID;
-        public (float width, float height) Size;
-        public (float left, float top) Position;
+        public readonly Vector2f Size;
+        public readonly Vector2f Position;
 
         public UIElement(string elementID) {
             this.ElementID = elementID;
-            this.Size = (0, 0);
-            this.Position = (0, 0);
+            this.Size = new Vector2f(100, 100);
+            this.Position = new Vector2f();
         }
 
         public abstract void Draw(IDrawableContext surfaceContext);

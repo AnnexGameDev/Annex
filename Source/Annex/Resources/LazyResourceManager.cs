@@ -17,7 +17,7 @@ namespace Annex.Resources
             resourceKey = resourceKey.ToLower();
             Debug.Assert(!this._failedLoads.Contains(resourceKey));
             if (!this._resources.ContainsKey(resourceKey)) {
-                Load(Path.Join(this._fullResourceDirectory, resourceKey));
+                this.Load(Path.Join(this._fullResourceDirectory, resourceKey));
             }
             return base.GetResource(resourceKey);
         }

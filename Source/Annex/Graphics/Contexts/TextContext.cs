@@ -4,12 +4,12 @@ namespace Annex.Graphics.Contexts
 {
     public class TextContext
     {
-        public string RenderText { get; set; }
+        public PString RenderText { get; set; }
 
         public Vector2f RenderPosition { get; set; }
         public TextAlignment? Alignment { get; set; }
 
-        public string FontName { get; set; }
+        public PString FontName { get; set; }
         public uint FontSize { get; set; }
         public RGBA FontColor { get; set; }
 
@@ -18,7 +18,7 @@ namespace Annex.Graphics.Contexts
 
         public bool IsAbsolute { get; set; }
 
-        public TextContext(string text, string font) {
+        public TextContext(PString text, PString font) {
             this.RenderText = text;
 
             this.RenderPosition = new Vector2f();

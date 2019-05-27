@@ -3,6 +3,7 @@ using Annex.UserInterface;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
+using System;
 
 namespace Annex.Graphics.Contexts.Sfml
 {
@@ -17,14 +18,14 @@ namespace Annex.Graphics.Contexts.Sfml
             this._fonts = new LazyResourceManager<Font>("fonts/", (path) => new Font(path), (path) => path.EndsWith(".ttf"));
             this._buffer = new RenderWindow(new VideoMode(1000, 1000), "Window");
 
-            // TODO: Attach event handlers.
             var ui = Singleton.Get<UI>();
+            this._buffer.Closed += (sender, e) => { ui.CurrentScene.HandleCloseButtonPressed(); };
+            this._buffer.KeyPressed += (sender, e) => { ui.CurrentScene.HandleKeyboardKeyPressed(e.Code.ToNonSFML()); };
+            this._buffer.KeyReleased += (sender, e) => { ui.CurrentScene.HandleKeyboardKeyReleased(e.Code.ToNonSFML()); };
+            this._buffer.MouseButtonPressed += (sender, e) => { ui.CurrentScene.HandleMouseButtonReleased(e.Button.ToNonSFML()); };
+            this._buffer.MouseButtonReleased += (sender, e) => { ui.CurrentScene.HandleMouseButtonReleased(e.Button.ToNonSFML()); };
 
-            //this._buffer.Closed += ();
-            //this._buffer.KeyPressed += ();
-            //this._buffer.KeyReleased += ();
-            //this._buffer.MouseButtonPressed += ();
-            //this._buffer.MouseButtonReleased += ();
+            // TODO: Attach event handlers.
             //this._buffer.JoystickButtonPressed += ();
             //this._buffer.JoystickButtonReleased += ();
             //this._buffer.JoystickConnected += ();
@@ -38,23 +39,28 @@ namespace Annex.Graphics.Contexts.Sfml
 
         public override void Draw(TextContext ctx) {
 
-            if (string.IsNullOrEmpty(ctx.RenderText)) {
+            if (String.IsNullOrEmpty(ctx.RenderText)) {
                 return;
             }
 
-            var font = GetFont(ctx.FontName);
-            var text = new Text(ctx.RenderText, font);
-
-            text.CharacterSize = ctx.FontSize;
-            text.FillColor = ctx.FontColor;
-            text.OutlineThickness = ctx.BorderThickness;
-            text.OutlineColor = ctx.BorderColor;
-
-            text.Position = ctx.RenderPosition;
+#pragma warning disable CS8604 // Possible null reference argument.
+            // Prevented because of the null or empty check at the top.
+            var font = this.GetFont(ctx.FontName);
+#pragma warning restore CS8604 // Possible null reference argument.
+            var text = new Text(ctx.RenderText, font) {
+                CharacterSize = ctx.FontSize,
+                FillColor = ctx.FontColor,
+                OutlineThickness = ctx.BorderThickness,
+                OutlineColor = ctx.BorderColor,
+                Position = ctx.RenderPosition
+            };
             if (ctx.Alignment != null) {
                 var offset = new Vector2f();
 
-                var end = text.FindCharacterPos((uint)(ctx.RenderText.Length - 1));
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                // Prevented because of the null or empty check at the top.
+                var end = text.FindCharacterPos((uint)(ctx.RenderText.Value.Length - 1));
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
                 switch (ctx.Alignment.HorizontalAlignment) {
                     case HorizontalAlignment.Center:
@@ -79,7 +85,15 @@ namespace Annex.Graphics.Contexts.Sfml
         }
 
         public override void Draw(SurfaceContext ctx) {
-            var sprite = GetSprite(ctx.SourceSurfaceName);
+
+            if (String.IsNullOrEmpty(ctx.SourceSurfaceName)) {
+                return;
+            }
+
+#pragma warning disable CS8604 // Possible null reference argument.
+            // Prevented because of the null or empty check at the top.x`
+            var sprite = this.GetSprite(ctx.SourceSurfaceName);
+#pragma warning restore CS8604 // Possible null reference argument.
 
             sprite.Position = ctx.RenderPosition;
 
@@ -130,41 +144,13 @@ namespace Annex.Graphics.Contexts.Sfml
         }
 
         public override bool IsMouseButtonDown(MouseButton button) {
-            Mouse.Button? sfmlButton = null;
-            switch (sfmlButton) {
-                case Mouse.Button.Left:
-                    sfmlButton = Mouse.Button.Left;
-                    break;
-                case Mouse.Button.Right:
-                    sfmlButton = Mouse.Button.Right;
-                    break;
-            }
-            if (sfmlButton == null) {
-                return false;
-            }
-            return Mouse.IsButtonPressed((Mouse.Button)sfmlButton);
+            var sfmlButton = button.ToSFML();
+            return Mouse.IsButtonPressed(sfmlButton);
         }
 
-        public override bool IsKeyDown(Key key) {
-            Keyboard.Key? sfmlKey = null;
-            switch (key) {
-                case Key.ArrowKey_Down:
-                    sfmlKey = Keyboard.Key.Down;
-                    break;
-                case Key.ArrowKey_Left:
-                    sfmlKey = Keyboard.Key.Left;
-                    break;
-                case Key.ArrowKey_Up:
-                    sfmlKey = Keyboard.Key.Up;
-                    break;
-                case Key.ArrowKey_Right:
-                    sfmlKey = Keyboard.Key.Right;
-                    break;
-            }
-            if (sfmlKey == null) {
-                return false;
-            }
-            return Keyboard.IsKeyPressed((Keyboard.Key)sfmlKey);
+        public override bool IsKeyDown(KeyboardKey key) {
+            var sfmlKey = key.ToSFML();
+            return sfmlKey != Keyboard.Key.Unknown ? Keyboard.IsKeyPressed(sfmlKey) : false;
         }
     }
 }

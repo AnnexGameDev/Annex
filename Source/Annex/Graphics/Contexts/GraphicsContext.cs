@@ -10,7 +10,7 @@ namespace Annex.Graphics.Contexts
 
         // User Interface
         public abstract bool IsMouseButtonDown(MouseButton button);
-        public abstract bool IsKeyDown(Key key);
+        public abstract bool IsKeyDown(KeyboardKey key);
 
         public abstract void EndDrawing();
         public abstract void SetVisible(bool visible);

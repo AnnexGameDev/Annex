@@ -18,4 +18,8 @@
   <ItemGroup>
     <PackageReference Include="SFML.Net" Version="2.5.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="UserInterface\Layouts\" />
+  </ItemGroup>
 </Project>
