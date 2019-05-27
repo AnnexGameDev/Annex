@@ -1,4 +1,4 @@
-﻿using Annex.Data;
+﻿using Annex.Data.ReferenceTypes;
 using Annex.Graphics;
 using Annex.UserInterface.Controllers;
 
@@ -7,13 +7,13 @@ namespace Annex.UserInterface.Components
     public abstract class UIElement : InputController, IDrawableObject
     {
         private readonly string ElementID;
-        public readonly Vector2f Size;
-        public readonly Vector2f Position;
+        public readonly PVector Size;
+        public readonly PVector Position;
 
         public UIElement(string elementID) {
             this.ElementID = elementID;
-            this.Size = new Vector2f(100, 100);
-            this.Position = new Vector2f();
+            this.Size = new PVector(100, 100);
+            this.Position = new PVector();
         }
 
         public abstract void Draw(IDrawableContext surfaceContext);

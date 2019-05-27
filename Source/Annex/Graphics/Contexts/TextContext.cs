@@ -1,4 +1,5 @@
 ﻿using Annex.Data;
+using Annex.Data.ReferenceTypes;
 
 namespace Annex.Graphics.Contexts
 {
@@ -6,7 +7,7 @@ namespace Annex.Graphics.Contexts
     {
         public PString RenderText { get; set; }
 
-        public Vector2f RenderPosition { get; set; }
+        public PVector RenderPosition { get; set; }
         public TextAlignment? Alignment { get; set; }
 
         public PString FontName { get; set; }
@@ -21,7 +22,7 @@ namespace Annex.Graphics.Contexts
         public TextContext(PString text, PString font) {
             this.RenderText = text;
 
-            this.RenderPosition = new Vector2f();
+            this.RenderPosition = new PVector();
             this.Alignment = null;
 
             this.FontName = font;

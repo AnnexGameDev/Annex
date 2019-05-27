@@ -1,4 +1,4 @@
-﻿namespace Annex.Data
+﻿namespace Annex.Data.ReferenceTypes
 {
     public class PString
     {

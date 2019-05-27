@@ -1,4 +1,5 @@
 ﻿using Annex.Data;
+using Annex.Data.ReferenceTypes;
 using Annex.Graphics;
 using Annex.Graphics.Contexts;
 
@@ -28,7 +29,7 @@ namespace SampleProject.Data
             this._hoverName = new TextContext(this.PlayerName, this._hoverNameFont) {
                 RenderPosition = this.EntityPosition,
                 Alignment = new TextAlignment() {
-                    Size = new Vector2f(this.EntitySize.X, - 26),
+                    Size = new OffsetScalingPVector(this.EntitySize, new PVector(0, -26), new PVector(1, 0)),
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Bottom
                 },

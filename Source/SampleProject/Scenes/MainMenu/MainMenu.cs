@@ -67,6 +67,16 @@ namespace SampleProject.Scenes.MainMenu
             if (context.IsKeyDown(KeyboardKey.E)) {
                 Singleton.Get<GameWindow>().Context.GetCamera().ZoomOut(0.01f);
             }
+
+            if (context.IsKeyDown(KeyboardKey.W)) {
+                player.EntitySize.X += 1;
+                player.EntitySize.Y += 1;
+            }
+
+            if (context.IsKeyDown(KeyboardKey.S)) {
+                player.EntitySize.X += -1;
+                player.EntitySize.Y += -1;
+            }
         }
     }
 }

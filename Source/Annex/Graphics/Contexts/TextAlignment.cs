@@ -1,15 +1,15 @@
-﻿using Annex.Data;
+﻿using Annex.Data.ReferenceTypes;
 
 namespace Annex.Graphics.Contexts
 {
     public class TextAlignment
     {
-        public Vector2f Size;
+        public PVector Size;
         public HorizontalAlignment HorizontalAlignment;
         public VerticalAlignment VerticalAlignment;
 
         public TextAlignment() {
-            this.Size = new Vector2f();
+            this.Size = new PVector();
         }
     }
 
