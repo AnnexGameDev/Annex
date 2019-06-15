@@ -1,19 +1,11 @@
-﻿using Annex.UserInterface;
-using Annex.UserInterface.Scenes;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace Annex.Events
 {
-    public class EventQueue : Singleton
+    public class EventQueue
     {
         private readonly List<GameEvent>[] _queue;
-
-        static EventQueue() {
-            Create<EventQueue>();
-        }
-        public static EventQueue Singleton => Get<EventQueue>();
 
         public EventQueue() {
             this._queue = new List<GameEvent>[Priorities.Count];
@@ -33,31 +25,12 @@ namespace Annex.Events
             this.AddEvent(type, new GameEvent(e, interval_ms, delay_ms));
         }
 
-        public void Run() {
-            int tick;
-            int lastTick = Environment.TickCount;
-            var ui = UI.Singleton;
+        public List<GameEvent> GetPriority(PriorityType type) {
+            return this.GetPriority((int)type);
+        }
 
-            while (!ui.IsCurrentScene<GameClosing>()) {
-                tick = Environment.TickCount;
-                int diff = tick - lastTick;
-                lastTick = tick;
-
-                if (diff == 0) {
-                    Thread.Yield();
-                    continue;
-                }
-
-                foreach (int priority in Priorities.All) {
-                    for (int i = 0; i < this._queue[priority].Count; i++) {
-                        if (this._queue[priority][i].Probe(diff) == ControlEvent.REMOVE) {
-                            this._queue[priority].RemoveAt(i--);
-                        }
-                    }
-                }
-
-                Thread.Yield();
-            }
+        public List<GameEvent> GetPriority(int type) {
+            return this._queue[type];
         }
     }
 }

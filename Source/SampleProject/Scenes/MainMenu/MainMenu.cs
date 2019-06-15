@@ -1,5 +1,4 @@
-﻿using Annex;
-using Annex.Events;
+﻿using Annex.Events;
 using Annex.Graphics;
 using Annex.UserInterface;
 using Annex.UserInterface.Components;
@@ -15,17 +14,10 @@ namespace SampleProject.Scenes.MainMenu
 
         public MainMenu() {
             this._data = DataManager.Singleton;
-            var queue = EventQueue.Singleton;
             var ui = UI.Singleton;
 
             this.AddChild(new SampleButton());
-
-            queue.AddEvent(PriorityType.INPUT, () => {
-                if (ui.IsCurrentScene<MainMenu>()) {
-                    this.HandlePlayerMovement();
-                }
-                return ControlEvent.NONE;
-            }, 1);
+            this.Events.AddEvent(PriorityType.INPUT, this.HandlePlayerMovement, 1);
         }
 
         public override void DrawGameContent(IDrawableContext surfaceContext) {
@@ -37,7 +29,7 @@ namespace SampleProject.Scenes.MainMenu
             UI.Singleton.LoadScene<GameClosing>();
         }
 
-        private void HandlePlayerMovement() {
+        private ControlEvent HandlePlayerMovement() {
             float speed = 3;
             var player = this._data.Player;
             var window = GameWindow.Singleton;
@@ -76,6 +68,7 @@ namespace SampleProject.Scenes.MainMenu
                 player.EntitySize.X += -1;
                 player.EntitySize.Y += -1;
             }
+            return ControlEvent.NONE;
         }
     }
 }
