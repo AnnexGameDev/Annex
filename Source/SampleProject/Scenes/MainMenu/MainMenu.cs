@@ -14,13 +14,13 @@ namespace SampleProject.Scenes.MainMenu
         private readonly DataManager _data;
 
         public MainMenu() {
-            this._data = Singleton.Get<DataManager>();
-            var queue = Singleton.Get<EventQueue>();
-            var ui = Singleton.Get<UI>();
+            this._data = DataManager.Singleton;
+            var queue = EventQueue.Singleton;
+            var ui = UI.Singleton;
 
             this.AddChild(new SampleButton());
 
-            queue.AddEvent(PriorityType.LOGIC, () => {
+            queue.AddEvent(PriorityType.INPUT, () => {
                 if (ui.IsCurrentScene<MainMenu>()) {
                     this.HandlePlayerMovement();
                 }
@@ -34,13 +34,14 @@ namespace SampleProject.Scenes.MainMenu
         }
 
         public override void HandleCloseButtonPressed() {
-            Singleton.Get<UI>().LoadScene<GameClosing>();
+            UI.Singleton.LoadScene<GameClosing>();
         }
 
         private void HandlePlayerMovement() {
             float speed = 3;
             var player = this._data.Player;
-            var context = Singleton.Get<GameWindow>().Context;
+            var window = GameWindow.Singleton;
+            var context = window.Context;
 
             if (context.IsKeyDown(KeyboardKey.LShift) || context.IsKeyDown(KeyboardKey.RShift)) {
                 speed = 6;
@@ -60,10 +61,10 @@ namespace SampleProject.Scenes.MainMenu
             }
 
             if (context.IsKeyDown(KeyboardKey.Q)) {
-                Singleton.Get<GameWindow>().Context.GetCamera().ZoomIn(0.01f);
+                window.Context.GetCamera().ZoomIn(0.01f);
             }
             if (context.IsKeyDown(KeyboardKey.E)) {
-                Singleton.Get<GameWindow>().Context.GetCamera().ZoomOut(0.01f);
+                window.Context.GetCamera().ZoomOut(0.01f);
             }
 
             if (context.IsKeyDown(KeyboardKey.W)) {

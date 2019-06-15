@@ -7,5 +7,10 @@ namespace SampleProject.Data
     {
         public Player Player = new Player();
         public BasicMap Map = new BasicMap();
+
+        static DataManager() {
+            Create<DataManager>();
+        }
+        public static DataManager Singleton => Get<DataManager>();
     }
 }

@@ -11,28 +11,25 @@ namespace Annex
     public sealed class AnnexGame
     {
         public AnnexGame() {
-            Singleton.Create<Log>();
             this.CopyResources();
-            var events = Singleton.Create<EventQueue>();
-            var ui = Singleton.Create<UI>();
-            var window = Singleton.Create<GameWindow>();
 
-            events.AddEvent(PriorityType.GRAPHICS, () => {
+            var window = GameWindow.Singleton;
+            EventQueue.Singleton.AddEvent(PriorityType.GRAPHICS, () => {
                 window.Context.BeginDrawing();
-                ui.CurrentScene.Draw(window.Context);
+                UI.Singleton.CurrentScene.Draw(window.Context);
                 window.Context.EndDrawing();
                 return ControlEvent.NONE;
             }, 16, 0);
         }
 
         public void Start() {
-            Singleton.Get<GameWindow>().Context.SetVisible(true);
-            Singleton.Get<EventQueue>().Run();
+            GameWindow.Singleton.Context.SetVisible(true);
+            EventQueue.Singleton.Run();
         }
 
         [Conditional("DEBUG")]
         private void CopyResources() {
-            var log = Singleton.Get<Log>();
+            var log = Log.Singleton;
 
             var di = new DirectoryInfo(".");
             string solutionPath;

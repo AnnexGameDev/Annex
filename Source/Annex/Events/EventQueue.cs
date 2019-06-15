@@ -10,6 +10,11 @@ namespace Annex.Events
     {
         private readonly List<GameEvent>[] _queue;
 
+        static EventQueue() {
+            Create<EventQueue>();
+        }
+        public static EventQueue Singleton => Get<EventQueue>();
+
         public EventQueue() {
             this._queue = new List<GameEvent>[Priorities.Count];
 
@@ -31,7 +36,7 @@ namespace Annex.Events
         public void Run() {
             int tick;
             int lastTick = Environment.TickCount;
-            var ui = Singleton.Get<UI>();
+            var ui = UI.Singleton;
 
             while (!ui.IsCurrentScene<GameClosing>()) {
                 tick = Environment.TickCount;

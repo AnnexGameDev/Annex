@@ -12,6 +12,11 @@ namespace Annex.UserInterface
         private Type _currentSceneType;
         public Scene CurrentScene => this._scenes[this._currentSceneType];
 
+        static UI() {
+            Create<UI>();
+        }
+        public static UI Singleton => Get<UI>();
+
 #pragma warning disable CS8618 // Non-nullable field is uninitialized.
         public UI() {           // Field is initialized in the LoadScene method.
 #pragma warning restore CS8618 // Non-nullable field is uninitialized.

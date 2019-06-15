@@ -11,9 +11,8 @@ namespace SampleProject
         private static void Main() {
             var game = new AnnexGame();
 
-            Singleton.Create<DataManager>();
-            Singleton.Get<UI>().LoadScene<MainMenu>();
-            Singleton.Get<GameWindow>().Context.GetCamera().Follow(Singleton.Get<DataManager>().Player);
+            UI.Singleton.LoadScene<MainMenu>();
+            GameWindow.Singleton.Context.GetCamera().Follow(DataManager.Singleton.Player);
 
             game.Start();
         }

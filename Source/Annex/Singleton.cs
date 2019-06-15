@@ -16,22 +16,22 @@ namespace Annex
         /// <typeparam name="B">Key type.</typeparam>
         /// <typeparam name="A">Actual instance.</typeparam>
         /// <returns></returns>
-        public static A Create<B, A>() where A : Singleton, new() {
+        protected static A Create<B, A>() where A : Singleton, new() {
             Debug.Assert(!SingletonExists<B>());
             _singletons.Add(typeof(B), new A());
             return (A)_singletons[typeof(B)];
         }
 
-        public static T Create<T>() where T : Singleton, new() {
+        protected static T Create<T>() where T : Singleton, new() {
             return Create<T, T>();
         }
 
-        public static T Get<T>() where T : Singleton {
+        protected static T Get<T>() where T : Singleton {
             Debug.Assert(SingletonExists<T>());
             return (T)_singletons[typeof(T)];
         }
 
-        private static bool SingletonExists<T>() {
+        protected static bool SingletonExists<T>() {
             return _singletons.ContainsKey(typeof(T));
         }
     }

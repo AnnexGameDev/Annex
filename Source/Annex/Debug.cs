@@ -1,5 +1,4 @@
-﻿using Annex.Logging;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace Annex
@@ -16,7 +15,7 @@ namespace Annex
 
         [Conditional("DEBUG")]
         public static void Log(string line) {
-            Singleton.Get<Log>().WriteLine(line);
+            Logging.Log.Singleton.WriteLine(line);
         }
     }
 }

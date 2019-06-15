@@ -27,7 +27,7 @@ namespace Annex.Graphics.Contexts.Sfml
             this._fonts = new LazyResourceManager<Font>("fonts/", (path) => new Font(path), (path) => path.EndsWith(".ttf"));
             this._buffer = new RenderWindow(new VideoMode(GameWindow.RESOLUTION_WIDTH, GameWindow.RESOLUTION_HEIGHT), "Window");
 
-            var ui = Singleton.Get<UI>();
+            var ui = UI.Singleton;
             this._buffer.Closed += (sender, e) => { ui.CurrentScene.HandleCloseButtonPressed(); };
             this._buffer.KeyPressed += (sender, e) => { ui.CurrentScene.HandleKeyboardKeyPressed(e.Code.ToNonSFML()); };
             this._buffer.KeyReleased += (sender, e) => { ui.CurrentScene.HandleKeyboardKeyReleased(e.Code.ToNonSFML()); };

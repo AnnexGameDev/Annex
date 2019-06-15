@@ -9,8 +9,13 @@ namespace Annex.Graphics
         public const uint RESOLUTION_WIDTH = 960;
         public const uint RESOLUTION_HEIGHT = 640;
 
+        static GameWindow() {
+            Create<GameWindow>();
+        }
+
         public GameWindow() {
             this.Context = new SfmlContext();
         }
+        public static GameWindow Singleton => Get<GameWindow>();
     }
 }

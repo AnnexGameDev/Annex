@@ -7,6 +7,11 @@ namespace Annex.Logging
     {
         private readonly DecoratableLog _log;
 
+        public static Log Singleton => Get<Log>();
+        static Log() {
+            Create<Log>();
+        }
+
         public Log() {
             if (this.ConsoleExists()) {
                 this._log = new FileLog(new ConsoleLog());
