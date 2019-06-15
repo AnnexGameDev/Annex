@@ -6,11 +6,11 @@
 
         }
 
-        public virtual void HandleMouseButtonPressed(MouseButton button) {
+        public virtual void HandleMouseButtonPressed(MouseButton button, float worldX, float worldY, int mouseX, int mouseY) {
 
         }
 
-        public virtual void HandleMouseButtonReleased(MouseButton button) {
+        public virtual void HandleMouseButtonReleased(MouseButton button, float worldX, float worldY, int mouseX, int mouseY) {
 
         }
 

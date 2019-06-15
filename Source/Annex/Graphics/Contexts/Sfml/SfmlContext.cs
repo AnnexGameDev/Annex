@@ -31,8 +31,16 @@ namespace Annex.Graphics.Contexts.Sfml
             this._buffer.Closed += (sender, e) => { ui.CurrentScene.HandleCloseButtonPressed(); };
             this._buffer.KeyPressed += (sender, e) => { ui.CurrentScene.HandleKeyboardKeyPressed(e.Code.ToNonSFML()); };
             this._buffer.KeyReleased += (sender, e) => { ui.CurrentScene.HandleKeyboardKeyReleased(e.Code.ToNonSFML()); };
-            this._buffer.MouseButtonPressed += (sender, e) => { ui.CurrentScene.HandleMouseButtonReleased(e.Button.ToNonSFML()); };
-            this._buffer.MouseButtonReleased += (sender, e) => { ui.CurrentScene.HandleMouseButtonReleased(e.Button.ToNonSFML()); };
+            this._buffer.MouseButtonPressed += (sender, e) => {
+                var mousePos = Mouse.GetPosition(this._buffer);
+                var gamePos = _buffer.MapPixelToCoords(mousePos, this._gameContentView);
+                ui.CurrentScene.HandleMouseButtonPressed(e.Button.ToNonSFML(), gamePos.X, gamePos.Y, mousePos.X, mousePos.Y);
+            };
+            this._buffer.MouseButtonReleased += (sender, e) => {
+                var mousePos = Mouse.GetPosition(this._buffer);
+                var gamePos = _buffer.MapPixelToCoords(mousePos, this._gameContentView);
+                ui.CurrentScene.HandleMouseButtonReleased(e.Button.ToNonSFML(), gamePos.X, gamePos.Y, mousePos.X, mousePos.Y);
+            };
 
             // TODO: Attach event handlers.
             //this._buffer.JoystickButtonPressed += ();
