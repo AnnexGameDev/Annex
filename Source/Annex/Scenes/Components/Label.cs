@@ -4,7 +4,7 @@ using Annex.Graphics.Contexts;
 
 namespace Annex.Scenes.Components
 {
-    public class Label : RenderBoxElement
+    public class Label : Image
     {
         protected readonly TextContext RenderText;
         public readonly String Caption;

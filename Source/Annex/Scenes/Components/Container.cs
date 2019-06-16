@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Annex.Scenes.Components
 {
-    public class Container : RenderBoxElement
+    public class Container : Image
     {
         protected readonly List<UIElement> _children;
 
