@@ -1,4 +1,4 @@
-﻿using Annex.Data.Binding;
+﻿using Annex.Data.Shared;
 using Annex.Graphics;
 using Annex.UserInterface.Controllers;
 
@@ -7,14 +7,14 @@ namespace Annex.UserInterface.Components
     public abstract class UIElement : InputController, IDrawableObject
     {
         private readonly string ElementID;
-        public readonly PVector Size;
-        public readonly PVector Position;
+        public readonly Vector Size;
+        public readonly Vector Position;
         public bool IsFocus { get; internal set; }
 
         public UIElement(string elementID) {
             this.ElementID = elementID;
-            this.Size = new PVector(100, 100);
-            this.Position = new PVector();
+            this.Size = new Vector(100, 100);
+            this.Position = new Vector();
         }
 
         public abstract void Draw(IDrawableContext surfaceContext);

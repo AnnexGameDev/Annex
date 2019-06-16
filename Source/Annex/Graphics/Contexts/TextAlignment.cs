@@ -1,15 +1,15 @@
-﻿using Annex.Data.Binding;
+﻿using Annex.Data.Shared;
 
 namespace Annex.Graphics.Contexts
 {
     public class TextAlignment
     {
-        public PVector Size;
+        public Vector Size;
         public HorizontalAlignment HorizontalAlignment;
         public VerticalAlignment VerticalAlignment;
 
         public TextAlignment() {
-            this.Size = new PVector();
+            this.Size = new Vector();
         }
     }
 

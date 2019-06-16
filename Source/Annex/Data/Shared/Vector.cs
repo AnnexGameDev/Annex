@@ -1,20 +1,20 @@
-﻿namespace Annex.Data.Binding
+﻿namespace Annex.Data.Shared
 {
-    public class PVector
+    public class Vector
     {
         public virtual float X { get; set; }
         public virtual float Y { get; set; }
 
-        public PVector() {
+        public Vector() {
 
         }
 
-        public PVector(float x, float y) {
+        public Vector(float x, float y) {
             this.X = x;
             this.Y = y;
         }
 
-        public static implicit operator SFML.System.Vector2f(PVector source) {
+        public static implicit operator SFML.System.Vector2f(Vector source) {
             return new SFML.System.Vector2f(source.X, source.Y);
         }
 

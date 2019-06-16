@@ -1,9 +1,9 @@
-﻿namespace Annex.Data.Binding
+﻿namespace Annex.Data.Shared
 {
-    public class OffsetPVector : PVector
+    public class OffsetVector : Vector
     {
-        public readonly PVector Original;
-        public readonly PVector Offset;
+        public readonly Vector Original;
+        public readonly Vector Offset;
 
         public override float X {
             get => this.Offset.X + this.Original.X;
@@ -19,7 +19,7 @@
             }
         }
 
-        public OffsetPVector(PVector original, PVector offset) {
+        public OffsetVector(Vector original, Vector offset) {
             this.Original = original;
             this.Offset = offset;
         }

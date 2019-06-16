@@ -1,4 +1,4 @@
-﻿namespace Annex.Data.Binding
+﻿namespace Annex.Data.Shared
 {
     public class IntRect
     {

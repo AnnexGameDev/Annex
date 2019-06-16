@@ -1,4 +1,4 @@
-﻿using Annex.Data.Binding;
+﻿using Annex.Data.Shared;
 using Annex.Graphics;
 using Annex.Graphics.Contexts;
 
@@ -7,12 +7,12 @@ namespace SampleProject.Data.Map
     public class BasicMap : IDrawableObject
     {
         private SurfaceContext _backgroundSprite;
-        private PString _backgroundSurface;
+        private String _backgroundSurface;
 
         public BasicMap() {
-            this._backgroundSurface = new PString("gui/backgrounds/main.png");
+            this._backgroundSurface = new String("gui/backgrounds/main.png");
             this._backgroundSprite = new SurfaceContext(this._backgroundSurface) {
-                RenderSize = new PVector(2000, 2000)
+                RenderSize = new Vector(2000, 2000)
             };
         }
 

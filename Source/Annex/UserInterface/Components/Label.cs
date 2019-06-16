@@ -1,4 +1,4 @@
-﻿using Annex.Data.Binding;
+﻿using Annex.Data.Shared;
 using Annex.Graphics;
 using Annex.Graphics.Contexts;
 
@@ -7,12 +7,12 @@ namespace Annex.UserInterface.Components
     public class Label : RenderBoxElement
     {
         protected readonly TextContext RenderText;
-        public readonly PString Caption;
-        public readonly PString Font;
+        public readonly String Caption;
+        public readonly String Font;
 
         public Label(string elementID = "") : base(elementID) {
-            this.Caption = new PString();
-            this.Font = new PString();
+            this.Caption = new String();
+            this.Font = new String();
 
             this.RenderText = new TextContext(this.Caption, this.Font) {
                 RenderPosition = this.Position,

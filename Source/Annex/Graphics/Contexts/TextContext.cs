@@ -1,16 +1,16 @@
 ﻿using Annex.Data;
-using Annex.Data.Binding;
+using Annex.Data.Shared;
 
 namespace Annex.Graphics.Contexts
 {
     public class TextContext
     {
-        public PString RenderText { get; set; }
+        public String RenderText { get; set; }
 
-        public PVector RenderPosition { get; set; }
+        public Vector RenderPosition { get; set; }
         public TextAlignment? Alignment { get; set; }
 
-        public PString FontName { get; set; }
+        public String FontName { get; set; }
         public uint FontSize { get; set; }
         public RGBA FontColor { get; set; }
 
@@ -19,10 +19,10 @@ namespace Annex.Graphics.Contexts
 
         public bool UseUIView { get; set; }
 
-        public TextContext(PString text, PString font) {
+        public TextContext(String text, String font) {
             this.RenderText = text;
 
-            this.RenderPosition = new PVector();
+            this.RenderPosition = new Vector();
             this.Alignment = null;
 
             this.FontName = font;

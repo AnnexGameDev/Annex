@@ -1,4 +1,4 @@
-﻿using Annex.Data.Binding;
+﻿using Annex.Data.Shared;
 using Annex.Graphics;
 using Annex.Graphics.Contexts;
 
@@ -7,12 +7,12 @@ namespace Annex.UserInterface.Components
     public class Textbox : RenderBoxElement
     {
         protected readonly TextContext RenderText;
-        public readonly PString Text;
-        public readonly PString Font;
+        public readonly String Text;
+        public readonly String Font;
 
         public Textbox(string elementID = "") : base(elementID) {
-            this.Text = new PString();
-            this.Font = new PString();
+            this.Text = new String();
+            this.Font = new String();
 
             this.RenderText = new TextContext(this.Text, this.Font) {
                 RenderPosition = this.Position,
@@ -32,7 +32,7 @@ namespace Annex.UserInterface.Components
 
         public override void HandleKeyboardKeyPressed(KeyboardKey key) {
             if (key == KeyboardKey.BackSpace) {
-                if (string.IsNullOrEmpty(this.Text.Value)) {
+                if (System.String.IsNullOrEmpty(this.Text.Value)) {
                     return;
                 }
                 this.Text.Set(this.Text.Value[0..^1]);

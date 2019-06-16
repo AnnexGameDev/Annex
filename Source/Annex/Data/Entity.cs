@@ -1,15 +1,15 @@
-﻿using Annex.Data.Binding;
+﻿using Annex.Data.Shared;
 
 namespace Annex.Data
 {
     public class Entity
     {
-        public readonly PVector EntityPosition;
-        public readonly PVector EntitySize;
+        public readonly Vector EntityPosition;
+        public readonly Vector EntitySize;
 
         public Entity() {
-            this.EntityPosition = new PVector();
-            this.EntitySize = new PVector();
+            this.EntityPosition = new Vector();
+            this.EntitySize = new Vector();
         }
     }
 }

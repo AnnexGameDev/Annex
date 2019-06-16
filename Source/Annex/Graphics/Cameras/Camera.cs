@@ -1,18 +1,18 @@
 ﻿using Annex.Data;
-using Annex.Data.Binding;
+using Annex.Data.Shared;
 
 namespace Annex.Graphics.Cameras
 {
     public class Camera
     {
         //public Vector2f TopLeft => new Vector2f(this.Centerpoint.X - this.Size.X / 2, this.Centerpoint.Y - this.Size.Y / 2);
-        public PVector Centerpoint { get; private set; }
-        public PVector Size { get; private set; }
+        public Vector Centerpoint { get; private set; }
+        public Vector Size { get; private set; }
         public float CurrentZoom { get; private set; }
 
         public Camera() {
-            this.Size = new PVector(GameWindow.RESOLUTION_WIDTH, GameWindow.RESOLUTION_HEIGHT);
-            this.Centerpoint = new PVector(this.Size.X / 2, this.Size.Y / 2);
+            this.Size = new Vector(GameWindow.RESOLUTION_WIDTH, GameWindow.RESOLUTION_HEIGHT);
+            this.Centerpoint = new Vector(this.Size.X / 2, this.Size.Y / 2);
             this.CurrentZoom = 1;
         }
 
@@ -22,7 +22,7 @@ namespace Annex.Graphics.Cameras
         }
 
         public void Follow(Entity entity) {
-            this.Centerpoint = new ScalingOffsetPVector(entity.EntityPosition, entity.EntitySize, 0.5f, 0.5f);
+            this.Centerpoint = new ScalingOffsetVector(entity.EntityPosition, entity.EntitySize, 0.5f, 0.5f);
         }
 
         public void SetPosition(float x, float y) {

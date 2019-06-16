@@ -4,6 +4,7 @@ namespace Annex.Data
 {
     public class RGBA
     {
+        // TODO: Why are these not const?
         public static RGBA White = new RGBA(255, 255, 255);
         public static RGBA Black = new RGBA(0, 0, 0);
         public static RGBA Red = new RGBA(255, 0, 0);

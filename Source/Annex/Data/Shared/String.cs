@@ -1,22 +1,22 @@
-﻿namespace Annex.Data.Binding
+﻿namespace Annex.Data.Shared
 {
-    public class PString
+    public class String
     {
         public string? Value { get; private set; }
 
-        public PString() {
+        public String() {
             this.Value = null;
         }
 
-        public PString(PString copy) {
+        public String(String copy) {
             this.Value = copy.Value;
         }
 
-        public PString(string value) {
+        public String(string value) {
             this.Value = value;
         }
 
-        public static implicit operator string?(PString pstr) {
+        public static implicit operator string?(String pstr) {
             return pstr?.Value;
         }
 

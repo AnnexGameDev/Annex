@@ -1,5 +1,5 @@
 ﻿using Annex.Data;
-using Annex.Data.Binding;
+using Annex.Data.Shared;
 using Annex.Graphics;
 using Annex.Graphics.Contexts;
 
@@ -7,17 +7,17 @@ namespace SampleProject.Data
 {
     public class Player : Entity, IDrawableObject
     {
-        public readonly PString PlayerName;
-        public readonly PString PlayerSprite;
+        public readonly String PlayerName;
+        public readonly String PlayerSprite;
 
         private readonly SurfaceContext _sprite;
         private readonly TextContext _hoverName;
-        private readonly PString _hoverNameFont;
+        private readonly String _hoverNameFont;
 
         public Player() {
-            this.PlayerName = new PString("Dragon Player");
-            this.PlayerSprite = new PString("dragon.png");
-            this._hoverNameFont = new PString("Augusta.ttf");
+            this.PlayerName = new String("Dragon Player");
+            this.PlayerSprite = new String("dragon.png");
+            this._hoverNameFont = new String("Augusta.ttf");
 
             this.EntityPosition.Set(300, 300);
             this.EntitySize.Set(150, 150);
@@ -29,7 +29,7 @@ namespace SampleProject.Data
             this._hoverName = new TextContext(this.PlayerName, this._hoverNameFont) {
                 RenderPosition = this.EntityPosition,
                 Alignment = new TextAlignment() {
-                    Size = new OffsetScalingPVector(this.EntitySize, new PVector(0, -26), new PVector(1, 0)),
+                    Size = new OffsetScalingVector(this.EntitySize, new Vector(0, -26), new Vector(1, 0)),
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Bottom
                 },

@@ -1,28 +1,28 @@
 ﻿using Annex.Data;
-using Annex.Data.Binding;
+using Annex.Data.Shared;
 
 namespace Annex.Graphics.Contexts
 {
     public class SurfaceContext
     {
-        public PString SourceSurfaceName { get; set; }
-        public PVector RenderPosition { get; set; }
-        public PVector RenderSize { get; set; }
+        public String SourceSurfaceName { get; set; }
+        public Vector RenderPosition { get; set; }
+        public Vector RenderSize { get; set; }
         public IntRect? SourceSurfaceRect { get; set; }
         public RGBA? RenderColor { get; set; }
         public float Rotation { get; set; }
-        public PVector RelativeRotationOrigin { get; set; }
+        public Vector RelativeRotationOrigin { get; set; }
         public bool UseUIView { get; set; }
 
-        public SurfaceContext(PString surfaceName) {
+        public SurfaceContext(String surfaceName) {
             this.SourceSurfaceName = surfaceName;
-            this.RenderPosition = new PVector();
-            this.RenderSize = new PVector();
+            this.RenderPosition = new Vector();
+            this.RenderSize = new Vector();
             this.SourceSurfaceRect = null;
             this.Rotation = 0;
             this.UseUIView = false;
             this.RenderColor = null;
-            this.RelativeRotationOrigin = new PVector();
+            this.RelativeRotationOrigin = new Vector();
         }
     }
 }
