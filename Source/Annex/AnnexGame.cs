@@ -2,7 +2,7 @@
 using Annex.Graphics;
 using Annex.IO.Hashing;
 using Annex.Logging;
-using Annex.UserInterface;
+using Annex.Scenes;
 using System.Diagnostics;
 using System.IO;
 
@@ -16,7 +16,7 @@ namespace Annex
             var window = GameWindow.Singleton;
             GameEvents.Singleton.AddEvent(PriorityType.GRAPHICS, () => {
                 window.Context.BeginDrawing();
-                UI.Singleton.CurrentScene.Draw(window.Context);
+                SceneManager.Singleton.CurrentScene.Draw(window.Context);
                 window.Context.EndDrawing();
                 return ControlEvent.NONE;
             }, 16, 0);

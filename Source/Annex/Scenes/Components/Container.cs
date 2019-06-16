@@ -1,7 +1,7 @@
 ﻿using Annex.Graphics;
 using System.Collections.Generic;
 
-namespace Annex.UserInterface.Components
+namespace Annex.Scenes.Components
 {
     public class Container : RenderBoxElement
     {

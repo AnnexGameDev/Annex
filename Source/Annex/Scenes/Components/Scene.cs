@@ -1,7 +1,7 @@
 ﻿using Annex.Events;
 using Annex.Graphics;
 
-namespace Annex.UserInterface.Components
+namespace Annex.Scenes.Components
 {
     public class Scene : Container
     {

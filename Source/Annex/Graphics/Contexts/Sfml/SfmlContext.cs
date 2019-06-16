@@ -1,6 +1,6 @@
 ﻿using Annex.Graphics.Cameras;
 using Annex.Resources;
-using Annex.UserInterface;
+using Annex.Scenes;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -27,21 +27,21 @@ namespace Annex.Graphics.Contexts.Sfml
             this._fonts = new LazyResourceManager<Font>("fonts/", (path) => new Font(path), (path) => path.EndsWith(".ttf"));
             this._buffer = new RenderWindow(new VideoMode(GameWindow.RESOLUTION_WIDTH, GameWindow.RESOLUTION_HEIGHT), "Window");
 
-            var ui = UI.Singleton;
-            this._buffer.Closed += (sender, e) => { ui.CurrentScene.HandleCloseButtonPressed(); };
-            this._buffer.KeyPressed += (sender, e) => { ui.CurrentScene.HandleKeyboardKeyPressed(e.Code.ToNonSFML()); };
-            this._buffer.KeyReleased += (sender, e) => { ui.CurrentScene.HandleKeyboardKeyReleased(e.Code.ToNonSFML()); };
+            var scenes = SceneManager.Singleton;
+            this._buffer.Closed += (sender, e) => { scenes.CurrentScene.HandleCloseButtonPressed(); };
+            this._buffer.KeyPressed += (sender, e) => { scenes.CurrentScene.HandleKeyboardKeyPressed(e.Code.ToNonSFML()); };
+            this._buffer.KeyReleased += (sender, e) => { scenes.CurrentScene.HandleKeyboardKeyReleased(e.Code.ToNonSFML()); };
             this._buffer.MouseButtonPressed += (sender, e) => {
                 var mousePos = Mouse.GetPosition(this._buffer);
                 var gamePos = _buffer.MapPixelToCoords(mousePos, this._gameContentView);
-                var scene = ui.CurrentScene;
+                var scene = scenes.CurrentScene;
                 scene.HandleSceneFocusMouseDown(mousePos.X, mousePos.Y);
                 scene.HandleMouseButtonPressed(e.Button.ToNonSFML(), gamePos.X, gamePos.Y, mousePos.X, mousePos.Y);
             };
             this._buffer.MouseButtonReleased += (sender, e) => {
                 var mousePos = Mouse.GetPosition(this._buffer);
                 var gamePos = _buffer.MapPixelToCoords(mousePos, this._gameContentView);
-                ui.CurrentScene.HandleMouseButtonReleased(e.Button.ToNonSFML(), gamePos.X, gamePos.Y, mousePos.X, mousePos.Y);
+                scenes.CurrentScene.HandleMouseButtonReleased(e.Button.ToNonSFML(), gamePos.X, gamePos.Y, mousePos.X, mousePos.Y);
             };
 
             // TODO: Attach event handlers.

@@ -1,5 +1,5 @@
 ﻿using Annex.Data;
-using Annex.UserInterface.Components;
+using Annex.Scenes.Components;
 
 namespace SampleProject.Scenes.MainMenu.Buttons
 {

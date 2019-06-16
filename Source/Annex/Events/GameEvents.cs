@@ -1,5 +1,5 @@
-﻿using Annex.UserInterface;
-using Annex.UserInterface.Scenes;
+﻿using Annex.Scenes;
+using Annex.Scenes.Scenes;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -30,9 +30,9 @@ namespace Annex.Events
         public void Run() {
             int tick;
             int lastTick = Environment.TickCount;
-            var ui = UI.Singleton;
+            var scenes = SceneManager.Singleton;
 
-            while (!ui.IsCurrentScene<GameClosing>()) {
+            while (!scenes.IsCurrentScene<GameClosing>()) {
                 tick = Environment.TickCount;
                 int diff = tick - lastTick;
                 lastTick = tick;
@@ -44,7 +44,7 @@ namespace Annex.Events
 
                 foreach (int priority in Priorities.All) {
                     this.RunQueueLevel(this._queue.GetPriority(priority), diff);
-                    this.RunQueueLevel(ui.CurrentScene.Events.GetPriority(priority), diff);
+                    this.RunQueueLevel(scenes.CurrentScene.Events.GetPriority(priority), diff);
                 }
 
                 Thread.Yield();

@@ -2,7 +2,7 @@
 using Annex.Graphics;
 using Annex.Graphics.Contexts;
 
-namespace Annex.UserInterface.Components
+namespace Annex.Scenes.Components
 {
     public abstract class RenderBoxElement : UIElement
     {

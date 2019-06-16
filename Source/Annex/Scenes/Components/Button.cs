@@ -1,4 +1,4 @@
-﻿namespace Annex.UserInterface.Components
+﻿namespace Annex.Scenes.Components
 {
     public class Button : Label
     {

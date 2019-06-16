@@ -1,4 +1,4 @@
-﻿namespace Annex.UserInterface
+﻿namespace Annex.Scenes
 {
     public enum MouseButton
     {

@@ -1,8 +1,8 @@
 ﻿using Annex.Events;
 using Annex.Graphics;
-using Annex.UserInterface;
-using Annex.UserInterface.Components;
-using Annex.UserInterface.Scenes;
+using Annex.Scenes;
+using Annex.Scenes.Components;
+using Annex.Scenes.Scenes;
 using SampleProject.Data;
 using SampleProject.Scenes.MainMenu.Buttons;
 using SampleProject.Scenes.MainMenu.Textboxes;
@@ -15,7 +15,7 @@ namespace SampleProject.Scenes.MainMenu
 
         public MainMenu() {
             this._data = DataManager.Singleton;
-            var ui = UI.Singleton;
+            var scenes = SceneManager.Singleton;
 
             this.AddChild(new SampleButton());
             this.AddChild(new SampleTextbox());
@@ -28,7 +28,7 @@ namespace SampleProject.Scenes.MainMenu
         }
 
         public override void HandleCloseButtonPressed() {
-            UI.Singleton.LoadScene<GameClosing>();
+            SceneManager.Singleton.LoadScene<GameClosing>();
         }
 
         private ControlEvent HandlePlayerMovement() {

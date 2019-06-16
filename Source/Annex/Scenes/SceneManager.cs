@@ -1,24 +1,24 @@
-﻿using Annex.UserInterface.Components;
-using Annex.UserInterface.Scenes;
+﻿using Annex.Scenes.Components;
+using Annex.Scenes.Scenes;
 using System;
 using System.Collections.Generic;
 
-namespace Annex.UserInterface
+namespace Annex.Scenes
 {
-    public class UI : Singleton
+    public class SceneManager : Singleton
     {
         private readonly Dictionary<Type, Scene> _scenes;
 
         private Type _currentSceneType;
         public Scene CurrentScene => this._scenes[this._currentSceneType];
 
-        static UI() {
-            Create<UI>();
+        static SceneManager() {
+            Create<SceneManager>();
         }
-        public static UI Singleton => Get<UI>();
+        public static SceneManager Singleton => Get<SceneManager>();
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized.
-        public UI() {           // Field is initialized in the LoadScene method.
+        public SceneManager() {           // Field is initialized in the LoadScene method.
 #pragma warning restore CS8618 // Non-nullable field is uninitialized.
             this._scenes = new Dictionary<Type, Scene>();
             this.LoadScene<EmptyScene>();

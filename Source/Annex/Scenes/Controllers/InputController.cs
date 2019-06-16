@@ -1,4 +1,4 @@
-﻿namespace Annex.UserInterface.Controllers
+﻿namespace Annex.Scenes.Controllers
 {
     public abstract class InputController
     {

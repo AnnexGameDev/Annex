@@ -1,5 +1,5 @@
 ﻿using Annex.Graphics.Cameras;
-using Annex.UserInterface;
+using Annex.Scenes;
 
 namespace Annex.Graphics.Contexts
 {

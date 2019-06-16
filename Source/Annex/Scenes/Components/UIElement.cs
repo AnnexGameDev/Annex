@@ -1,8 +1,8 @@
 ﻿using Annex.Data.Shared;
 using Annex.Graphics;
-using Annex.UserInterface.Controllers;
+using Annex.Scenes.Controllers;
 
-namespace Annex.UserInterface.Components
+namespace Annex.Scenes.Components
 {
     public abstract class UIElement : InputController, IDrawableObject
     {
@@ -40,7 +40,7 @@ namespace Annex.UserInterface.Components
                 return false;
             }
             this.IsFocus = true;
-            UI.Singleton.CurrentScene.FocusObject = this;
+            SceneManager.Singleton.CurrentScene.FocusObject = this;
             return true;
         }
     }
