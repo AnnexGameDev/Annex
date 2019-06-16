@@ -5,6 +5,7 @@ using Annex.UserInterface.Components;
 using Annex.UserInterface.Scenes;
 using SampleProject.Data;
 using SampleProject.Scenes.MainMenu.Buttons;
+using SampleProject.Scenes.MainMenu.Textboxes;
 
 namespace SampleProject.Scenes.MainMenu
 {
@@ -17,6 +18,7 @@ namespace SampleProject.Scenes.MainMenu
             var ui = UI.Singleton;
 
             this.AddChild(new SampleButton());
+            this.AddChild(new SampleTextbox());
             this.Events.AddEvent(PriorityType.INPUT, this.HandlePlayerMovement, 1);
         }
 

@@ -21,5 +21,9 @@
         public virtual void HandleKeyboardKeyReleased(KeyboardKey key) {
 
         }
+
+        internal virtual bool HandleSceneFocusMouseDown(int x, int y) {
+            return false;
+        }
     }
 }

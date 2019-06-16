@@ -4,7 +4,7 @@ using Annex.Graphics.Contexts;
 
 namespace Annex.UserInterface.Components
 {
-    public class RenderBoxElement : UIElement
+    public abstract class RenderBoxElement : UIElement
     {
         protected readonly SurfaceContext RenderBox;
         public readonly PString RenderBoxSurface;

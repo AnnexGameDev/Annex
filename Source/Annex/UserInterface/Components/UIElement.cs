@@ -9,6 +9,7 @@ namespace Annex.UserInterface.Components
         private readonly string ElementID;
         public readonly PVector Size;
         public readonly PVector Position;
+        public bool IsFocus { get; internal set; }
 
         public UIElement(string elementID) {
             this.ElementID = elementID;
@@ -23,6 +24,24 @@ namespace Annex.UserInterface.Components
                 return this;
             }
             return null;
+        }
+
+        internal override bool HandleSceneFocusMouseDown(int x, int y) {
+            if (x < this.Position.X) {
+                return false;
+            }
+            if (y < this.Position.Y) {
+                return false;
+            }
+            if (x > this.Position.X + this.Size.X) {
+                return false;
+            }
+            if (y > this.Position.Y + this.Size.Y) {
+                return false;
+            }
+            this.IsFocus = true;
+            UI.Singleton.CurrentScene.FocusObject = this;
+            return true;
         }
     }
 }

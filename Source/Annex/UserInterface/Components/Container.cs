@@ -21,5 +21,15 @@ namespace Annex.UserInterface.Components
         public void AddChild(UIElement child) {
             this._children.Add(child);
         }
+
+        internal override bool HandleSceneFocusMouseDown(int x, int y) {
+            // z-index from last to first.
+            for (int i = _children.Count - 1; i >= 0; i--) {
+                if (_children[i].HandleSceneFocusMouseDown(x, y)) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

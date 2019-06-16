@@ -34,7 +34,9 @@ namespace Annex.Graphics.Contexts.Sfml
             this._buffer.MouseButtonPressed += (sender, e) => {
                 var mousePos = Mouse.GetPosition(this._buffer);
                 var gamePos = _buffer.MapPixelToCoords(mousePos, this._gameContentView);
-                ui.CurrentScene.HandleMouseButtonPressed(e.Button.ToNonSFML(), gamePos.X, gamePos.Y, mousePos.X, mousePos.Y);
+                var scene = ui.CurrentScene;
+                scene.HandleSceneFocusMouseDown(mousePos.X, mousePos.Y);
+                scene.HandleMouseButtonPressed(e.Button.ToNonSFML(), gamePos.X, gamePos.Y, mousePos.X, mousePos.Y);
             };
             this._buffer.MouseButtonReleased += (sender, e) => {
                 var mousePos = Mouse.GetPosition(this._buffer);
