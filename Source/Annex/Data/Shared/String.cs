@@ -5,7 +5,7 @@
         public string? Value { get; private set; }
 
         public String() {
-            this.Value = null;
+
         }
 
         public String(String copy) {
@@ -18,6 +18,10 @@
 
         public static implicit operator string?(String pstr) {
             return pstr?.Value;
+        }
+
+        public static implicit operator String(string? value) {
+            return new String(value);
         }
 
         public void Set(string value) {

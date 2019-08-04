@@ -15,9 +15,9 @@ namespace SampleProject.Data
         private readonly String _hoverNameFont;
 
         public Player() {
-            this.PlayerName = new String("Dragon Player");
-            this.PlayerSprite = new String("dragon.png");
-            this._hoverNameFont = new String("Augusta.ttf");
+            this.PlayerName = "Dragon Player";
+            this.PlayerSprite = "dragon.png";
+            this._hoverNameFont = "Augusta.ttf";
 
             this.EntityPosition.Set(300, 300);
             this.EntitySize.Set(150, 150);

@@ -15,7 +15,6 @@ namespace SampleProject.Scenes.MainMenu
 
         public MainMenu() {
             this._data = DataManager.Singleton;
-            var scenes = SceneManager.Singleton;
 
             this.AddChild(new SampleButton());
             this.AddChild(new SampleTextbox());
