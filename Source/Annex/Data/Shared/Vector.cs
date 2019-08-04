@@ -22,5 +22,10 @@
             this.X = x;
             this.Y = y;
         }
+
+        public void Add(float x, float y) {
+            this.X += x;
+            this.Y += y;
+        }
     }
 }
