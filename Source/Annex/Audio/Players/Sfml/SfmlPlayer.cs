@@ -7,15 +7,12 @@ namespace Annex.Audio.Players.Sfml
 {
     public class SfmlPlayer : IAudioPlayer
     {
-        private readonly ResourceManager<SoundBuffer> _audio;
-
         private List<Music> _playingMusic;
         private List<Sound> _playingSounds;
 
         private object _lock = new object();
 
         public SfmlPlayer() {
-            this._audio = new LazyResourceManager<SoundBuffer>("audio/", path => new SoundBuffer(path), path => path.EndsWith("flac"));
             this._playingSounds = new List<Sound>();
             this._playingMusic = new List<Music>();
 
@@ -55,7 +52,7 @@ namespace Annex.Audio.Players.Sfml
 
         public void PlaySound(string name, bool loop = false, float volume = 100) {
             lock (this._lock) {
-                var sound = new Sound(this._audio.GetResource(name)) {
+                var sound = new Sound(new SoundBuffer("resources/audio/" + name)) {
                     Loop = false,
                     Volume = volume
                 };
