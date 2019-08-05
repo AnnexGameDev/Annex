@@ -6,7 +6,7 @@ namespace Tests.Data.Shared
     public class ScalingIntTests
     {
         [Test]
-        public void Constructor() {
+        public void Constructor_SharedInt_SharedInt() {
             Int original = 3;
             Int scale = 2;
             int expected = original.Value * scale.Value;
@@ -50,6 +50,7 @@ namespace Tests.Data.Shared
 
             source.Value = newScale;
 
+            Assert.AreEqual(source.Scale.Value, newScale);
             Assert.AreEqual(source.Value, expected);
             Assert.AreEqual(source.Original.Value, original);
         }
