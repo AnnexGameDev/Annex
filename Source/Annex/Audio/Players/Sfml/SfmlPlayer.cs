@@ -1,5 +1,4 @@
 ﻿using Annex.Events;
-using Annex.Resources;
 using SFML.Audio;
 using System.Collections.Generic;
 
