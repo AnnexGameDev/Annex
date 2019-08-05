@@ -21,6 +21,9 @@
         }
 
         public static implicit operator String(string? value) {
+            if (value == null) {
+                return new String();
+            }
             return new String(value);
         }
 
