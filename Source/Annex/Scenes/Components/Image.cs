@@ -6,20 +6,20 @@ namespace Annex.Scenes.Components
 {
     public class Image : UIElement
     {
-        protected readonly SurfaceContext ImageContext;
-        public readonly String ImageSurface;
+        protected readonly TextureContext ImageContext;
+        public readonly String ImageTextureName;
 
         public Image(string elementID = "") : base(elementID) {
-            this.ImageSurface = new String();
-            this.ImageContext = new SurfaceContext(this.ImageSurface) {
+            this.ImageTextureName = new String();
+            this.ImageContext = new TextureContext(this.ImageTextureName) {
                 RenderPosition = this.Position,
                 RenderSize = this.Size,
                 UseUIView = true
             };
         }
 
-        public override void Draw(IDrawableContext surfaceContext) {
-            surfaceContext.Draw(this.ImageContext);
+        public override void Draw(IDrawableContext context) {
+            context.Draw(this.ImageContext);
         }
     }
 }

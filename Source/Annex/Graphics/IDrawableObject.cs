@@ -2,6 +2,6 @@
 {
     public interface IDrawableObject
     {
-        void Draw(IDrawableContext surfaceContext);
+        void Draw(IDrawableContext context);
     }
 }

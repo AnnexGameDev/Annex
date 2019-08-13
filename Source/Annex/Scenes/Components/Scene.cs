@@ -16,12 +16,12 @@ namespace Annex.Scenes.Components
 
         public UIElement? FocusObject { get; internal set; }
 
-        public override void Draw(IDrawableContext surfaceContext) {
-            this.DrawGameContent(surfaceContext);
-            base.Draw(surfaceContext);
+        public override void Draw(IDrawableContext context) {
+            this.DrawGameContent(context);
+            base.Draw(context);
         }
 
-        public virtual void DrawGameContent(IDrawableContext surfaceContext) {
+        public virtual void DrawGameContent(IDrawableContext context) {
 
         }
 

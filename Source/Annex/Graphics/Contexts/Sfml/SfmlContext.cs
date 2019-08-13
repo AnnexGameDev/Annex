@@ -114,9 +114,9 @@ namespace Annex.Graphics.Contexts.Sfml
             this._buffer.Draw(text);
         }
 
-        public override void Draw(SurfaceContext ctx) {
+        public override void Draw(TextureContext ctx) {
 
-            if (String.IsNullOrEmpty(ctx.SourceSurfaceName)) {
+            if (String.IsNullOrEmpty(ctx.SourceTextureName)) {
                 return;
             }
 
@@ -133,14 +133,14 @@ namespace Annex.Graphics.Contexts.Sfml
 
 #pragma warning disable CS8604 // Possible null reference argument.
             // Prevented because of the null or empty check at the top.x`
-            var sprite = this.GetSprite(ctx.SourceSurfaceName);
+            var sprite = this.GetSprite(ctx.SourceTextureName);
 #pragma warning restore CS8604 // Possible null reference argument.
 
             sprite.Position = ctx.RenderPosition;
 
-            if (ctx.SourceSurfaceRect != null) {
-                sprite.TextureRect = ctx.SourceSurfaceRect;
-                sprite.Scale = new Vector2f(ctx.RenderSize.X / ctx.SourceSurfaceRect.Width, ctx.RenderSize.Y / ctx.SourceSurfaceRect.Height);
+            if (ctx.SourceTextureRect != null) {
+                sprite.TextureRect = ctx.SourceTextureRect;
+                sprite.Scale = new Vector2f(ctx.RenderSize.X / ctx.SourceTextureRect.Width, ctx.RenderSize.Y / ctx.SourceTextureRect.Height);
             } else {
                 sprite.Scale = new Vector2f(ctx.RenderSize.X / sprite.Texture.Size.X, ctx.RenderSize.Y / sprite.Texture.Size.Y);
             }
@@ -158,8 +158,8 @@ namespace Annex.Graphics.Contexts.Sfml
             this._buffer.Draw(sprite);
         }
 
-        private Sprite GetSprite(string surfaceName) {
-            return new Sprite(this._textures.GetResource(surfaceName));
+        private Sprite GetSprite(string textureName) {
+            return new Sprite(this._textures.GetResource(textureName));
         }
 
         private Font GetFont(string fontName) {

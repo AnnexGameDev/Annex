@@ -7,9 +7,12 @@ namespace Annex.Data
         public readonly Vector EntityPosition;
         public readonly Vector EntitySize;
 
-        public Entity() {
-            this.EntityPosition = new Vector();
-            this.EntitySize = new Vector();
+        public Entity() : this(new Vector(), new Vector()) {
+        }
+
+        public Entity(Vector position, Vector size) {
+            this.EntityPosition = position;
+            this.EntitySize = size;
         }
     }
 }

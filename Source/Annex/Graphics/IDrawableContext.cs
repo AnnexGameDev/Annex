@@ -5,7 +5,7 @@ namespace Annex.Graphics
     public interface IDrawableContext
     {
         void Draw(TextContext ctx);
-        void Draw(SurfaceContext ctx);
+        void Draw(TextureContext ctx);
 
         void BeginDrawing();
         void EndDrawing();

@@ -3,22 +3,22 @@ using Annex.Data.Shared;
 
 namespace Annex.Graphics.Contexts
 {
-    public class SurfaceContext
+    public class TextureContext
     {
-        public String SourceSurfaceName { get; set; }
+        public String SourceTextureName { get; set; }
         public Vector RenderPosition { get; set; }
         public Vector RenderSize { get; set; }
-        public IntRect? SourceSurfaceRect { get; set; }
+        public IntRect? SourceTextureRect { get; set; }
         public RGBA? RenderColor { get; set; }
         public float Rotation { get; set; }
         public Vector RelativeRotationOrigin { get; set; }
         public bool UseUIView { get; set; }
 
-        public SurfaceContext(String surfaceName) {
-            this.SourceSurfaceName = surfaceName;
+        public TextureContext(String textureName) {
+            this.SourceTextureName = textureName;
             this.RenderPosition = new Vector();
             this.RenderSize = new Vector();
-            this.SourceSurfaceRect = null;
+            this.SourceTextureRect = null;
             this.Rotation = 0;
             this.UseUIView = false;
             this.RenderColor = null;

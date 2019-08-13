@@ -11,10 +11,10 @@ namespace Annex.Scenes.Components
             this._children = new List<UIElement>();
         }
 
-        public override void Draw(IDrawableContext surfaceContext) {
-            base.Draw(surfaceContext);
+        public override void Draw(IDrawableContext context) {
+            base.Draw(context);
             foreach (var child in this._children) {
-                child.Draw(surfaceContext);
+                child.Draw(context);
             }
         }
 

@@ -25,9 +25,9 @@ namespace Annex.Scenes.Components
             };
         }
 
-        public override void Draw(IDrawableContext surfaceContext) {
-            base.Draw(surfaceContext);
-            surfaceContext.Draw(this.RenderText);
+        public override void Draw(IDrawableContext context) {
+            base.Draw(context);
+            context.Draw(this.RenderText);
         }
 
         public override void HandleKeyboardKeyPressed(KeyboardKey key) {

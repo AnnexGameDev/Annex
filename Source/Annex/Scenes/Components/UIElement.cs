@@ -17,7 +17,7 @@ namespace Annex.Scenes.Components
             this.Position = new Vector();
         }
 
-        public abstract void Draw(IDrawableContext surfaceContext);
+        public abstract void Draw(IDrawableContext context);
 
         public virtual UIElement? GetElementById(string id) {
             if (this.ElementID == id) {
