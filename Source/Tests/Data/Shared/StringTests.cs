@@ -62,7 +62,7 @@ namespace Tests.Data.Shared
 
         [Test]
         public void Operator_ImplicitCast_StringToSharedString_NullCase() {
-            string source = null;
+            string? source = null;
 
             String copy = source;
 
@@ -84,17 +84,17 @@ namespace Tests.Data.Shared
             string expected = "Foo";
             String source = new String(expected);
 
-            string copy = source;
+            string? copy = source;
 
             Assert.AreEqual(copy, expected);
         }
 
         [Test]
         public void Operator_Implicit_SharedStringToString_NullCase() {
-            string expected = null;
+            string? expected = null;
             String source = new String(expected);
 
-            string copy = source;
+            string? copy = source;
 
             Assert.AreEqual(copy, expected);
         }
