@@ -3,6 +3,7 @@ using Annex.Graphics;
 using Annex.IO.Hashing;
 using Annex.Logging;
 using Annex.Scenes;
+using Annex.Scenes.Components;
 using System.Diagnostics;
 using System.IO;
 
@@ -22,7 +23,8 @@ namespace Annex
             }, 16, 0);
         }
 
-        public void Start() {
+        public void Start<T>() where T : Scene, new() {
+            SceneManager.Singleton.LoadScene<T>();
             GameWindow.Singleton.Context.SetVisible(true);
             GameEvents.Singleton.Run();
         }

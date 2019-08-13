@@ -12,7 +12,7 @@
             this.Value = copy.Value;
         }
 
-        public String(string value) {
+        public String(string? value) {
             this.Value = value;
         }
 
