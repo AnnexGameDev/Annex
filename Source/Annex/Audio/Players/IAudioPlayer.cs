@@ -2,10 +2,9 @@
 {
     public interface IAudioPlayer
     {
-        void PlaySound(string name, bool loop = false, float volume = 100.0f);
-        void PlayMusic(string name, bool loop = false, float volume = 100.0f);
-
-        void StopAllMusic();
-        void StopAllSound();
+        void PlayBufferedAudio(string name, string id = "", bool loop = false, float volume = 100);
+        void PlayAudio(string name, string id = "", bool loop = false, float volume = 100);
+        void StopAllAudio();
+        void StopById(string id);
     }
 }

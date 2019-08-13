@@ -6,31 +6,20 @@ namespace Annex.Audio.Players.Sfml
 {
     internal sealed class SfmlPlayer : IAudioPlayer
     {
-        private readonly List<Music> _playingMusic;
-        private readonly List<Sound> _playingSounds;
-
+        private readonly List<PlayingAudio> _playingAudio;
         private readonly object _lock = new object();
 
         internal SfmlPlayer() {
-            this._playingSounds = new List<Sound>();
-            this._playingMusic = new List<Music>();
+            this._playingAudio = new List<PlayingAudio>();
 
             GameEvents.Singleton.AddEvent(PriorityType.SOUNDS, () => {
                 lock (this._lock) {
-                    for (int i = 0; i < this._playingMusic.Count; i++) {
-                        var music = this._playingMusic[i];
-                        if (music.Status == SoundStatus.Stopped) {
-                            music.Stop();
-                            music.Dispose();
-                            this._playingMusic.RemoveAt(i--);
-                        }
-                    }
-                    for (int i = 0; i < this._playingSounds.Count; i++) {
-                        var sound = this._playingSounds[i];
-                        if (sound.Status == SoundStatus.Stopped) {
-                            sound.Stop();
-                            sound.Dispose();
-                            this._playingSounds.RemoveAt(i--);
+                    for (int i = 0; i < this._playingAudio.Count; i++) {
+                        var audio = this._playingAudio[i];
+                        if (audio.IsStopped()) {
+                            audio.Stop();
+                            audio.Dispose();
+                            this._playingAudio.RemoveAt(i--);
                         }
                     }
                     return ControlEvent.NONE;
@@ -38,43 +27,48 @@ namespace Annex.Audio.Players.Sfml
             }, 5000);
         }
 
-        public void PlayMusic(string name, bool loop = false, float volume = 100) {
+        public void StopAllAudio() {
+            lock (this._lock) {
+                foreach (var audio in this._playingAudio) {
+                    audio.Stop();
+                    audio.Dispose();
+                }
+                this._playingAudio.Clear();
+            }
+        }
+
+        public void PlayBufferedAudio(string name, string id, bool loop, float volume) {
             lock (this._lock) {
                 var music = new Music("resources/audio/" + name) {
                     Loop = loop,
                     Volume = volume
                 };
                 music.Play();
-                this._playingMusic.Add(music);
+                this._playingAudio.Add(new PlayingAudio(id, music));
             }
         }
 
-        public void PlaySound(string name, bool loop = false, float volume = 100) {
+        public void PlayAudio(string name, string id, bool loop, float volume) {
             lock (this._lock) {
                 var sound = new Sound(new SoundBuffer("resources/audio/" + name)) {
                     Loop = false,
                     Volume = volume
                 };
                 sound.Play();
-                this._playingSounds.Add(sound);
+                this._playingAudio.Add(new PlayingAudio(id, sound));
             }
         }
 
-        public void StopAllMusic() {
-            for (int i = 0; i < this._playingMusic.Count; i++) {
-                var music = this._playingMusic[i];
-                music.Stop();
-                music.Dispose();
-                this._playingMusic.RemoveAt(i--);
-            }
-        }
-
-        public void StopAllSound() {
-            for (int i = 0; i < this._playingSounds.Count; i++) {
-                var sound = this._playingSounds[i];
-                sound.Stop();
-                sound.Dispose();
-                this._playingSounds.RemoveAt(i--);
+        public void StopById(string id) {
+            lock (this._lock) {
+                for (int i = 0; i < this._playingAudio.Count; i++) {
+                    var audio = this._playingAudio[i];
+                    if (audio.Id == id) {
+                        audio.Stop();
+                        audio.Dispose();
+                        this._playingAudio.RemoveAt(i--);
+                    }
+                }
             }
         }
     }
