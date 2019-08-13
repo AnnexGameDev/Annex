@@ -3,7 +3,7 @@ using Annex.Audio.Players.Sfml;
 
 namespace Annex.Audio
 {
-    public class AudioManager : Singleton
+    public sealed class AudioManager : Singleton
     {
         private IAudioPlayer _player;
 

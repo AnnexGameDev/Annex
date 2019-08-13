@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Annex.IO.Hashing
 {
-    public class MD5 : IDisposable
+    public sealed class MD5 : IDisposable
     {
         private readonly System.Security.Cryptography.MD5 _algorithm;
 

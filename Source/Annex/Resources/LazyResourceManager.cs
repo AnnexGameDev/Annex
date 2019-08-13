@@ -4,16 +4,16 @@ using System.IO;
 
 namespace Annex.Resources
 {
-    public class LazyResourceManager<T> : ResourceManager<T>
+    internal class LazyResourceManager<T> : ResourceManager<T>
     {
         private readonly HashSet<string> _failedLoads;
 
-        public LazyResourceManager(string localDirectory, Func<string, T> resourceLoader, Func<string, bool>? resourceValidator = null)
+        internal LazyResourceManager(string localDirectory, Func<string, T> resourceLoader, Func<string, bool>? resourceValidator = null)
             : base(localDirectory, resourceLoader, resourceValidator) {
             this._failedLoads = new HashSet<string>();
         }
 
-        public override T GetResource(string resourceKey) {
+        internal override T GetResource(string resourceKey) {
             resourceKey = resourceKey.ToLower();
             Debug.Assert(!this._failedLoads.Contains(resourceKey));
             if (!this._resources.ContainsKey(resourceKey)) {

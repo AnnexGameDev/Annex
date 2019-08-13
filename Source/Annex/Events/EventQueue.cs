@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Annex.Events
 {
-    public class EventQueue
+    public sealed class EventQueue
     {
         private readonly List<GameEvent>[] _queue;
 
-        public EventQueue() {
+        internal EventQueue() {
             this._queue = new List<GameEvent>[Priorities.Count];
 
             foreach (int priority in Priorities.All) {
@@ -28,7 +28,7 @@ namespace Annex.Events
         public List<GameEvent> GetPriority(PriorityType type) {
             return this.GetPriority((int)type);
         }
-
+        
         public List<GameEvent> GetPriority(int type) {
             return this._queue[type];
         }

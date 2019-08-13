@@ -24,8 +24,8 @@ namespace Annex.Scenes.Components
 
         internal override bool HandleSceneFocusMouseDown(int x, int y) {
             // z-index from last to first.
-            for (int i = _children.Count - 1; i >= 0; i--) {
-                if (_children[i].HandleSceneFocusMouseDown(x, y)) {
+            for (int i = this._children.Count - 1; i >= 0; i--) {
+                if (this._children[i].HandleSceneFocusMouseDown(x, y)) {
                     return true;
                 }
             }

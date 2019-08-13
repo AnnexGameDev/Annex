@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 namespace Annex.Audio.Players.Sfml
 {
-    public class SfmlPlayer : IAudioPlayer
+    internal sealed class SfmlPlayer : IAudioPlayer
     {
-        private List<Music> _playingMusic;
-        private List<Sound> _playingSounds;
+        private readonly List<Music> _playingMusic;
+        private readonly List<Sound> _playingSounds;
 
-        private object _lock = new object();
+        private readonly object _lock = new object();
 
-        public SfmlPlayer() {
+        internal SfmlPlayer() {
             this._playingSounds = new List<Sound>();
             this._playingMusic = new List<Music>();
 

@@ -1,12 +1,11 @@
 ﻿using Annex.Scenes;
-using Annex.Scenes.Scenes;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 
 namespace Annex.Events
 {
-    public class GameEvents : Singleton
+    public sealed class GameEvents : Singleton
     {
         private readonly EventQueue _queue;
 
@@ -27,7 +26,7 @@ namespace Annex.Events
             this._queue.AddEvent(type, e);
         }
 
-        public void Run() {
+        internal void Run() {
             int tick;
             int lastTick = Environment.TickCount;
             var scenes = SceneManager.Singleton;

@@ -4,14 +4,14 @@ using System.IO;
 
 namespace Annex.Resources
 {
-    public abstract class ResourceManager<T>
+    internal abstract class ResourceManager<T>
     {
         private protected readonly Dictionary<string, T> _resources;
         private readonly Func<string, T> _resourceLoader;
         private readonly Func<string, bool>? _resourceValidator;
         private protected readonly string _fullResourceDirectory;
 
-        public ResourceManager(string localDirectory, Func<string, T> resourceLoader, Func<string, bool>? resourceValidator = null) {
+        internal ResourceManager(string localDirectory, Func<string, T> resourceLoader, Func<string, bool>? resourceValidator = null) {
             this._resources = new Dictionary<string, T>();
             this._fullResourceDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources/", localDirectory);
             this._resourceLoader = resourceLoader;
@@ -31,7 +31,7 @@ namespace Annex.Resources
             }
         }
 
-        public virtual T GetResource(string resourceKey) {
+        internal virtual T GetResource(string resourceKey) {
             resourceKey = resourceKey.ToLower();
             Debug.Assert(this._resources.ContainsKey(resourceKey));
             return this._resources[resourceKey];

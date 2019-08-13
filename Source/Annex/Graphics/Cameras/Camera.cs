@@ -5,7 +5,6 @@ namespace Annex.Graphics.Cameras
 {
     public class Camera
     {
-        //public Vector2f TopLeft => new Vector2f(this.Centerpoint.X - this.Size.X / 2, this.Centerpoint.Y - this.Size.Y / 2);
         public Vector Centerpoint { get; private set; }
         public Vector Size { get; private set; }
         public float CurrentZoom { get; private set; }

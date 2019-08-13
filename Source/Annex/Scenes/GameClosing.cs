@@ -1,6 +1,6 @@
 ﻿using Annex.Scenes.Components;
 
-namespace Annex.Scenes.Scenes
+namespace Annex.Scenes
 {
     public class GameClosing : Scene
     {

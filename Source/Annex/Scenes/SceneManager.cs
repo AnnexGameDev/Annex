@@ -1,5 +1,4 @@
 ﻿using Annex.Scenes.Components;
-using Annex.Scenes.Scenes;
 using System;
 using System.Collections.Generic;
 
@@ -21,7 +20,10 @@ namespace Annex.Scenes
         public SceneManager() {           // Field is initialized in the LoadScene method.
 #pragma warning restore CS8618 // Non-nullable field is uninitialized.
             this._scenes = new Dictionary<Type, Scene>();
-            this.LoadScene<EmptyScene>();
+
+            // Even though the default scene is GameClosing, AnnexGame.Start<>() will override 
+            // it before it causes the game loop to exit.
+            this.LoadScene<GameClosing>();
         }
 
         public void LoadScene<T>() where T : Scene, new() {

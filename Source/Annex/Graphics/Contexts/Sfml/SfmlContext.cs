@@ -8,7 +8,7 @@ using System;
 
 namespace Annex.Graphics.Contexts.Sfml
 {
-    public class SfmlContext : GraphicsContext
+    internal class SfmlContext : GraphicsContext
     {
         private bool _usingUiView;
         private readonly View _uiView;
@@ -18,7 +18,7 @@ namespace Annex.Graphics.Contexts.Sfml
         private readonly ResourceManager<Texture> _textures;
         private readonly ResourceManager<Font> _fonts;
 
-        public SfmlContext() {
+        internal SfmlContext() {
             this._camera = new Camera();
             this._uiView = new View(new Vector2f(GameWindow.RESOLUTION_WIDTH / 2, GameWindow.RESOLUTION_HEIGHT / 2), new Vector2f(GameWindow.RESOLUTION_WIDTH, GameWindow.RESOLUTION_HEIGHT));
             this._gameContentView = new View();
@@ -33,14 +33,14 @@ namespace Annex.Graphics.Contexts.Sfml
             this._buffer.KeyReleased += (sender, e) => { scenes.CurrentScene.HandleKeyboardKeyReleased(e.Code.ToNonSFML()); };
             this._buffer.MouseButtonPressed += (sender, e) => {
                 var mousePos = Mouse.GetPosition(this._buffer);
-                var gamePos = _buffer.MapPixelToCoords(mousePos, this._gameContentView);
+                var gamePos = this._buffer.MapPixelToCoords(mousePos, this._gameContentView);
                 var scene = scenes.CurrentScene;
                 scene.HandleSceneFocusMouseDown(mousePos.X, mousePos.Y);
                 scene.HandleMouseButtonPressed(e.Button.ToNonSFML(), gamePos.X, gamePos.Y, mousePos.X, mousePos.Y);
             };
             this._buffer.MouseButtonReleased += (sender, e) => {
                 var mousePos = Mouse.GetPosition(this._buffer);
-                var gamePos = _buffer.MapPixelToCoords(mousePos, this._gameContentView);
+                var gamePos = this._buffer.MapPixelToCoords(mousePos, this._gameContentView);
                 scenes.CurrentScene.HandleMouseButtonReleased(e.Button.ToNonSFML(), gamePos.X, gamePos.Y, mousePos.X, mousePos.Y);
             };
 

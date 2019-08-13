@@ -3,7 +3,7 @@ using Annex.Graphics.Contexts.Sfml;
 
 namespace Annex.Graphics
 {
-    public class GameWindow : Singleton
+    public sealed class GameWindow : Singleton
     {
         public GraphicsContext Context { get; private set; }
         public const uint RESOLUTION_WIDTH = 960;

@@ -6,6 +6,7 @@ namespace Annex.Scenes.Components
     public class Scene : Container
     {
         public readonly EventQueue Events;
+        public UIElement? FocusObject { get; internal set; }
 
         public Scene() {
             this.FocusObject = null;
@@ -14,14 +15,12 @@ namespace Annex.Scenes.Components
             this.Size.Set(GameWindow.RESOLUTION_WIDTH, GameWindow.RESOLUTION_HEIGHT);
         }
 
-        public UIElement? FocusObject { get; internal set; }
-
         public override void Draw(IDrawableContext context) {
-            this.DrawGameContent(context);
+            this.DrawScene(context);
             base.Draw(context);
         }
 
-        public virtual void DrawGameContent(IDrawableContext context) {
+        public virtual void DrawScene(IDrawableContext context) {
 
         }
 
