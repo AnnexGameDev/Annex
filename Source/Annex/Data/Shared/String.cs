@@ -1,4 +1,6 @@
-﻿namespace Annex.Data.Shared
+﻿#nullable enable
+
+namespace Annex.Data.Shared
 {
     public class String
     {

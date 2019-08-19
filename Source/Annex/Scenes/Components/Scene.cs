@@ -1,4 +1,5 @@
-﻿using Annex.Events;
+﻿#nullable enable
+using Annex.Events;
 using Annex.Graphics;
 
 namespace Annex.Scenes.Components

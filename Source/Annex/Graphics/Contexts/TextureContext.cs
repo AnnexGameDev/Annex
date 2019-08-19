@@ -1,4 +1,5 @@
-﻿using Annex.Data;
+﻿#nullable enable
+using Annex.Data;
 using Annex.Data.Shared;
 
 namespace Annex.Graphics.Contexts
