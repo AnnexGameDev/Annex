@@ -138,7 +138,16 @@ namespace Annex.Graphics.Contexts.Sfml
 
             sprite.Position = ctx.RenderPosition;
 
-            var renderSize = ctx.RenderSize ?? new Vector2f(sprite.Texture.Size.X, sprite.Texture.Size.Y);
+            Vector2f renderSize;
+            if (ctx.RenderSize == null) {
+                if (ctx.SourceTextureRect == null) {
+                    renderSize = new Vector2f(sprite.Texture.Size.X, sprite.Texture.Size.Y);
+                } else {
+                    renderSize = new Vector2f(ctx.SourceTextureRect.Width, ctx.SourceTextureRect.Height);
+                }
+            } else {
+                renderSize = ctx.RenderSize;
+            }
 
             if (ctx.SourceTextureRect != null) {
                 sprite.TextureRect = ctx.SourceTextureRect;
