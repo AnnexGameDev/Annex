@@ -20,8 +20,13 @@ namespace Annex.Graphics.Cameras
             this.Size.Set(newWidth, newHeight);
         }
 
+<<<<<<< HEAD
         public void Follow(Vector position) {
             this.Centerpoint = position;
+=======
+        public void Follow(Entity entity) {
+            this.Centerpoint = new ScalingOffsetVector(entity.EntityPosition, entity.EntitySize, 0.5f, 0.5f);
+>>>>>>> 1681279fd3c0b78685fe137155ae535bbe391b02
         }
 
         public void SetPosition(float x, float y) {

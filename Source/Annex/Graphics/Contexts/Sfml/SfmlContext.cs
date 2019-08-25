@@ -138,6 +138,7 @@ namespace Annex.Graphics.Contexts.Sfml
 
             sprite.Position = ctx.RenderPosition;
 
+<<<<<<< HEAD
             Vector2f renderSize;
             if (ctx.RenderSize == null) {
                 if (ctx.SourceTextureRect == null) {
@@ -154,6 +155,13 @@ namespace Annex.Graphics.Contexts.Sfml
                 sprite.Scale = new Vector2f(renderSize.X / ctx.SourceTextureRect.Width, renderSize.Y / ctx.SourceTextureRect.Height);
             } else {
                 sprite.Scale = new Vector2f(renderSize.X / sprite.Texture.Size.X, renderSize.Y / sprite.Texture.Size.Y);
+=======
+            if (ctx.SourceTextureRect != null) {
+                sprite.TextureRect = ctx.SourceTextureRect;
+                sprite.Scale = new Vector2f(ctx.RenderSize.X / ctx.SourceTextureRect.Width, ctx.RenderSize.Y / ctx.SourceTextureRect.Height);
+            } else {
+                sprite.Scale = new Vector2f(ctx.RenderSize.X / sprite.Texture.Size.X, ctx.RenderSize.Y / sprite.Texture.Size.Y);
+>>>>>>> 1681279fd3c0b78685fe137155ae535bbe391b02
             }
 
             if (ctx.RenderColor != null) {
