@@ -8,7 +8,7 @@ namespace Annex.Graphics.Contexts
     {
         public String SourceTextureName { get; set; }
         public Vector RenderPosition { get; set; }
-        public Vector RenderSize { get; set; }
+        public Vector? RenderSize { get; set; }
         public IntRect? SourceTextureRect { get; set; }
         public RGBA? RenderColor { get; set; }
         public float Rotation { get; set; }
@@ -18,7 +18,7 @@ namespace Annex.Graphics.Contexts
         public TextureContext(String textureName) {
             this.SourceTextureName = textureName;
             this.RenderPosition = new Vector();
-            this.RenderSize = new Vector();
+            this.RenderSize = null;
             this.SourceTextureRect = null;
             this.Rotation = 0;
             this.UseUIView = false;
