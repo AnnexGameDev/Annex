@@ -1,5 +1,5 @@
 # Annex
-Annex is an open source 2D game development framework for .Net Core applications. It provides a lifecycle model for your games, and offers utility for rendering graphics, playing audio, and managing user interfaces and game events.
+Annex is an open source 2D game development framework for .Net Core applications. It provides a game lifecycle, and offers utility for rendering graphics, playing audio, and managing user interfaces and game events.
 
 # Install
 Find instructions on [how to get set up with Annex here](https://github.com/MatthewChrobak/Annex/wiki/Setting-Up).
