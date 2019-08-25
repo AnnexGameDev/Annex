@@ -16,7 +16,7 @@ namespace SampleProject.Models
 
         public Player() {
             this.Position = new Vector(0, 0);
-            this.Name = "Laurie";
+            this.Name = "Player Name";
             
             this._sprite = new TextureContext("player.png") {
                 SourceTextureRect = new IntRect(0, 0, 96, 96),
