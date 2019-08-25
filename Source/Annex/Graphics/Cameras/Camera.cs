@@ -1,5 +1,4 @@
-﻿using Annex.Data;
-using Annex.Data.Shared;
+﻿using Annex.Data.Shared;
 
 namespace Annex.Graphics.Cameras
 {
