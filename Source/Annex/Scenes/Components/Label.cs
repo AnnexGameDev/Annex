@@ -9,10 +9,12 @@ namespace Annex.Scenes.Components
         protected readonly TextContext RenderText;
         public readonly String Caption;
         public readonly String Font;
+        public readonly Int FontSize;
 
         public Label(string elementID = "") : base(elementID) {
             this.Caption = new String();
             this.Font = new String();
+            this.FontSize = new Int(12);
 
             this.RenderText = new TextContext(this.Caption, this.Font) {
                 RenderPosition = this.Position,
@@ -21,7 +23,8 @@ namespace Annex.Scenes.Components
                     Size = this.Size,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Middle
-                }
+                },
+                FontSize = this.FontSize
             };
         }
 

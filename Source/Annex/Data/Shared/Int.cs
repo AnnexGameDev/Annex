@@ -27,5 +27,9 @@
         public static implicit operator Int(int val) {
             return new Int(val);
         }
+
+        public static explicit operator uint(Int val) {
+            return (uint)val.Value;
+        }
     }
 }

@@ -73,12 +73,14 @@ namespace Annex.Graphics.Contexts.Sfml
                 }
             }
 
+            int fontsize = ctx.FontSize ?? 12;
+
 #pragma warning disable CS8604 // Possible null reference argument.
             // Prevented because of the null or empty check at the top.
             var font = this.GetFont(ctx.FontName);
 #pragma warning restore CS8604 // Possible null reference argument.
             var text = new Text(ctx.RenderText, font) {
-                CharacterSize = ctx.FontSize,
+                CharacterSize = (uint)ctx.FontSize,
                 FillColor = ctx.FontColor,
                 OutlineThickness = ctx.BorderThickness,
                 OutlineColor = ctx.BorderColor,
@@ -102,10 +104,10 @@ namespace Annex.Graphics.Contexts.Sfml
                 }
                 switch (ctx.Alignment.VerticalAlignment) {
                     case VerticalAlignment.Middle:
-                        offset.Y += (ctx.Alignment.Size.Y / 2) - (end.Y / 2);
+                        offset.Y += (ctx.Alignment.Size.Y / 2) - (ctx.FontSize.Value / 2);
                         break;
                     case VerticalAlignment.Bottom:
-                        offset.Y += ctx.Alignment.Size.Y - end.Y;
+                        offset.Y += ctx.Alignment.Size.Y - ctx.FontSize.Value;
                         break;
                 }
                 text.Position += offset;

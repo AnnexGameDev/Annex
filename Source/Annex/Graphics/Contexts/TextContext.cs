@@ -12,7 +12,7 @@ namespace Annex.Graphics.Contexts
         public TextAlignment? Alignment { get; set; }
 
         public String FontName { get; set; }
-        public uint FontSize { get; set; }
+        public Int FontSize { get; set; }
         public RGBA FontColor { get; set; }
 
         public float BorderThickness { get; set; }
