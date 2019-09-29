@@ -23,6 +23,11 @@
             this.Y = y;
         }
 
+        public void Add(Vector vector) {
+            this.X += vector.X;
+            this.Y += vector.Y;
+        }
+
         public void Add(float x, float y) {
             this.X += x;
             this.Y += y;
