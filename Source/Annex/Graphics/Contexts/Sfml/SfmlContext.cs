@@ -215,5 +215,9 @@ namespace Annex.Graphics.Contexts.Sfml
         public override Camera GetCamera() {
             return this._camera;
         }
+
+        public override void Destroy() {
+            this._buffer.Close();
+        }
     }
 }

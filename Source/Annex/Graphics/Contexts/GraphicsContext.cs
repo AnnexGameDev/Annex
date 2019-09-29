@@ -17,5 +17,7 @@ namespace Annex.Graphics.Contexts
         public abstract void SetVisible(bool visible);
 
         public abstract Camera GetCamera();
+
+        public abstract void Destroy();
     }
 }

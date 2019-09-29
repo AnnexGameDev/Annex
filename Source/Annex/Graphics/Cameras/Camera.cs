@@ -34,5 +34,11 @@ namespace Annex.Graphics.Cameras
         public void ZoomOut(float delta) {
             this.Resize((1 - delta) * this.Size.X, (1 - delta) * this.Size.Y);
         }
+
+        public void Copy(Camera camera) {
+            this.Centerpoint = camera.Centerpoint;
+            this.Size = camera.Size;
+            this.CurrentZoom = camera.CurrentZoom;
+        }
     }
 }
