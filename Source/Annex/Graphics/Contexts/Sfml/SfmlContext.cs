@@ -34,14 +34,28 @@ namespace Annex.Graphics.Contexts.Sfml
             this._buffer.MouseButtonPressed += (sender, e) => {
                 var mousePos = Mouse.GetPosition(this._buffer);
                 var gamePos = this._buffer.MapPixelToCoords(mousePos, this._gameContentView);
+                var uiPos = this._buffer.MapPixelToCoords(mousePos, this._uiView);
                 var scene = scenes.CurrentScene;
-                scene.HandleSceneFocusMouseDown(mousePos.X, mousePos.Y);
-                scene.HandleMouseButtonPressed(e.Button.ToNonSFML(), gamePos.X, gamePos.Y, mousePos.X, mousePos.Y);
+                scene.HandleSceneFocusMouseDown((int)uiPos.X, (int)uiPos.Y);
+                scene.HandleMouseButtonPressed(new MouseButtonPressedEvent() {
+                    Button = e.Button.ToNonSFML(),
+                    MouseX = (int)uiPos.X,
+                    MouseY = (int)uiPos.Y,
+                    WorldX = gamePos.X,
+                    WorldY = gamePos.Y
+                });
             };
             this._buffer.MouseButtonReleased += (sender, e) => {
                 var mousePos = Mouse.GetPosition(this._buffer);
                 var gamePos = this._buffer.MapPixelToCoords(mousePos, this._gameContentView);
-                scenes.CurrentScene.HandleMouseButtonReleased(e.Button.ToNonSFML(), gamePos.X, gamePos.Y, mousePos.X, mousePos.Y);
+                var uiPos = this._buffer.MapPixelToCoords(mousePos, this._uiView);
+                scenes.CurrentScene.HandleMouseButtonReleased(new MouseButtonReleasedEvent() {
+                    Button = e.Button.ToNonSFML(),
+                    MouseX = (int)uiPos.X,
+                    MouseY = (int)uiPos.Y,
+                    WorldX = gamePos.X,
+                    WorldY = gamePos.Y
+                });
             };
 
             // TODO: Attach event handlers.
@@ -218,6 +232,12 @@ namespace Annex.Graphics.Contexts.Sfml
 
         public override void Destroy() {
             this._buffer.Close();
+        }
+
+        public override Data.Shared.Vector GetRealMousePos() {
+            var realpos = Mouse.GetPosition(this._buffer);
+            var pos = this._buffer.MapPixelToCoords(realpos, this._uiView);
+            return new Data.Shared.Vector(pos.X, pos.Y);
         }
     }
 }

@@ -12,6 +12,9 @@ namespace Annex.Scenes.Components
         }
 
         public override void Draw(IDrawableContext context) {
+            if (!this.Visible) {
+                return;
+            }
             base.Draw(context);
             foreach (var child in this._children) {
                 child.Draw(context);

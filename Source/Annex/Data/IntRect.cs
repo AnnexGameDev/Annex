@@ -1,11 +1,17 @@
-﻿namespace Annex.Data.Shared
+﻿using System;
+
+namespace Annex.Data.Shared
 {
+    [Serializable]
     public class IntRect
     {
         public Int Top { get; set; }
         public Int Left { get; set; }
         public Int Width { get; set; }
         public Int Height { get; set; }
+
+        public IntRect() : this(0, 0, 0, 0) {
+        }
 
         public IntRect(Int top, Int left, Int width, Int height) {
             this.Top = top;

@@ -11,11 +11,13 @@ namespace Annex.Scenes.Components
         public readonly Vector Size;
         public readonly Vector Position;
         public bool IsFocus { get; internal set; }
+        public bool Visible;
 
         public UIElement(string elementID) {
             this.ElementID = elementID;
             this.Size = new Vector(100, 100);
             this.Position = new Vector();
+            this.Visible = true;
         }
 
         public abstract void Draw(IDrawableContext context);
@@ -28,6 +30,9 @@ namespace Annex.Scenes.Components
         }
 
         internal override bool HandleSceneFocusMouseDown(int x, int y) {
+            if (!this.Visible) {
+                return false;
+            }
             if (x < this.Position.X) {
                 return false;
             }

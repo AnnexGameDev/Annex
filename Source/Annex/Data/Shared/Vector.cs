@@ -1,4 +1,6 @@
-﻿namespace Annex.Data.Shared
+﻿using System;
+
+namespace Annex.Data.Shared
 {
     public class Vector
     {
@@ -31,6 +33,11 @@
         public void Add(float x, float y) {
             this.X += x;
             this.Y += y;
+        }
+
+        public void Set(Vector position) {
+            this.X = position.X;
+            this.Y = position.Y;
         }
     }
 }

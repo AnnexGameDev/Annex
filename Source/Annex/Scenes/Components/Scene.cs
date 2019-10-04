@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using Annex.Events;
 using Annex.Graphics;
+using Annex.Graphics.Contexts;
 
 namespace Annex.Scenes.Components
 {
@@ -17,6 +18,9 @@ namespace Annex.Scenes.Components
         }
 
         public override void Draw(IDrawableContext context) {
+            if (!this.Visible) {
+                return;
+            }
             this.DrawScene(context);
             base.Draw(context);
         }
@@ -35,6 +39,14 @@ namespace Annex.Scenes.Components
 
         public override void HandleKeyboardKeyPressed(KeyboardKey key) {
             this.FocusObject?.HandleKeyboardKeyPressed(key);
+        }
+
+        public override void HandleMouseButtonPressed(MouseButtonPressedEvent e) {
+            this.FocusObject?.HandleMouseButtonPressed(e);
+        }
+
+        public override void HandleMouseButtonReleased(MouseButtonReleasedEvent e) {
+            this.FocusObject?.HandleMouseButtonReleased(e);
         }
     }
 }

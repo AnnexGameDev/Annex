@@ -1,4 +1,5 @@
-﻿using Annex.Graphics.Cameras;
+﻿using Annex.Data.Shared;
+using Annex.Graphics.Cameras;
 using Annex.Scenes;
 
 namespace Annex.Graphics.Contexts
@@ -19,5 +20,7 @@ namespace Annex.Graphics.Contexts
         public abstract Camera GetCamera();
 
         public abstract void Destroy();
+
+        public abstract Vector GetRealMousePos();
     }
 }

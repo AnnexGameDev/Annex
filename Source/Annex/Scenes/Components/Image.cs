@@ -19,6 +19,9 @@ namespace Annex.Scenes.Components
         }
 
         public override void Draw(IDrawableContext context) {
+            if (!this.Visible) {
+                return;
+            }
             context.Draw(this.ImageContext);
         }
     }

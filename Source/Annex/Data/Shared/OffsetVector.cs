@@ -23,5 +23,10 @@
             this.Original = original;
             this.Offset = offset;
         }
+
+        public OffsetVector(Vector original, float offsetX, float offsetY) {
+            this.Original = original;
+            this.Offset = new Vector(offsetX, offsetY);
+        }
     }
 }
