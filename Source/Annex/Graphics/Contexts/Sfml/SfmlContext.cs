@@ -1,4 +1,5 @@
-﻿using Annex.Graphics.Cameras;
+﻿using Annex.Events;
+using Annex.Graphics.Cameras;
 using Annex.Resources;
 using Annex.Scenes;
 using SFML.Graphics;
@@ -18,6 +19,10 @@ namespace Annex.Graphics.Contexts.Sfml
         private readonly ResourceManager<Texture> _textures;
         private readonly ResourceManager<Font> _fonts;
 
+        private float _lastMouseClickX;
+        private float _lastMouseClickY;
+        private int _lastMouseClick;
+
         internal SfmlContext() {
             this._camera = new Camera();
             this._uiView = new View(new Vector2f(GameWindow.RESOLUTION_WIDTH / 2, GameWindow.RESOLUTION_HEIGHT / 2), new Vector2f(GameWindow.RESOLUTION_WIDTH, GameWindow.RESOLUTION_HEIGHT));
@@ -35,6 +40,22 @@ namespace Annex.Graphics.Contexts.Sfml
                 var mousePos = Mouse.GetPosition(this._buffer);
                 var gamePos = this._buffer.MapPixelToCoords(mousePos, this._gameContentView);
                 var uiPos = this._buffer.MapPixelToCoords(mousePos, this._uiView);
+
+                bool doubleClick = false;
+                float dx = uiPos.X - this._lastMouseClickX;
+                float dy = uiPos.Y - this._lastMouseClickY;
+                int dt = GameEvents.CurrentTime - this._lastMouseClick;
+                int distanceThreshold = 10;
+                int timeThreshold = 250;
+
+                if (Math.Sqrt(dx * dx + dy * dy) < distanceThreshold && dt < timeThreshold) {
+                    doubleClick = true;
+                }
+
+                this._lastMouseClickX = uiPos.X;
+                this._lastMouseClickY = uiPos.Y;
+                this._lastMouseClick = GameEvents.CurrentTime;
+
                 var scene = scenes.CurrentScene;
                 scene.HandleSceneFocusMouseDown((int)uiPos.X, (int)uiPos.Y);
                 scene.HandleMouseButtonPressed(new MouseButtonPressedEvent() {
@@ -42,7 +63,8 @@ namespace Annex.Graphics.Contexts.Sfml
                     MouseX = (int)uiPos.X,
                     MouseY = (int)uiPos.Y,
                     WorldX = gamePos.X,
-                    WorldY = gamePos.Y
+                    WorldY = gamePos.Y,
+                    DoubleClick = doubleClick
                 });
             };
             this._buffer.MouseButtonReleased += (sender, e) => {
@@ -54,7 +76,8 @@ namespace Annex.Graphics.Contexts.Sfml
                     MouseX = (int)uiPos.X,
                     MouseY = (int)uiPos.Y,
                     WorldX = gamePos.X,
-                    WorldY = gamePos.Y
+                    WorldY = gamePos.Y,
+                    TimeSinceClick = GameEvents.CurrentTime - this._lastMouseClick
                 });
             };
 
@@ -77,15 +100,7 @@ namespace Annex.Graphics.Contexts.Sfml
             }
 
             // We need to update the camera.
-            if (ctx.UseUIView != this._usingUiView) {
-                if (ctx.UseUIView) {
-                    this._buffer.SetView(this._uiView);
-                    this._usingUiView = true;
-                } else {
-                    this._buffer.SetView(this._gameContentView);
-                    this._usingUiView = false;
-                }
-            }
+            UpdateView(ctx);
 
             int fontsize = ctx.FontSize ?? 12;
 
@@ -106,14 +121,15 @@ namespace Annex.Graphics.Contexts.Sfml
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
                 // Prevented because of the null or empty check at the top.
                 var end = text.FindCharacterPos((uint)(ctx.RenderText.Value.Length - 1));
+                var bound = text.GetLocalBounds();
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 
                 switch (ctx.Alignment.HorizontalAlignment) {
                     case HorizontalAlignment.Center:
-                        offset.X += (ctx.Alignment.Size.X / 2) - (end.X / 2);
+                        offset.X += (ctx.Alignment.Size.X / 2) - (bound.Width / 2);
                         break;
                     case HorizontalAlignment.Right:
-                        offset.X += ctx.Alignment.Size.X - end.X;
+                        offset.X += ctx.Alignment.Size.X - bound.Width;
                         break;
                 }
                 switch (ctx.Alignment.VerticalAlignment) {
@@ -130,6 +146,29 @@ namespace Annex.Graphics.Contexts.Sfml
             this._buffer.Draw(text);
         }
 
+        public override void Draw(SpriteSheet sheet) {
+
+            if (String.IsNullOrEmpty(sheet.SourceTextureName)) {
+                return;
+            }
+
+            if (sheet.SourceTextureRect == null) {
+                var sprite = this.GetSprite(sheet.SourceTextureName);
+                var size = sprite.Texture.Size;
+
+                sheet.SourceTextureRect = new Data.Shared.IntRect();
+                int width = (int)(size.X / sheet.NumColumns);
+                int height = (int)(size.Y / sheet.NumRows);
+                sheet.SourceTextureRect.Width = width;
+                sheet.SourceTextureRect.Height = height;
+            }
+
+            sheet.SourceTextureRect.Top = sheet.SourceTextureRect.Height * (int)sheet.Row;
+            sheet.SourceTextureRect.Left = sheet.SourceTextureRect.Width * (int)sheet.Column;
+
+            this.Draw(sheet._internalTexture);
+        }
+
         public override void Draw(TextureContext ctx) {
 
             if (String.IsNullOrEmpty(ctx.SourceTextureName)) {
@@ -137,15 +176,7 @@ namespace Annex.Graphics.Contexts.Sfml
             }
 
             // We need to update the camera.
-            if (ctx.UseUIView != this._usingUiView) {
-                if (ctx.UseUIView) {
-                    this._buffer.SetView(this._uiView);
-                    this._usingUiView = true;
-                } else {
-                    this._buffer.SetView(this._gameContentView);
-                    this._usingUiView = false;
-                }
-            }
+            UpdateView(ctx);
 
 #pragma warning disable CS8604 // Possible null reference argument.
             // Prevented because of the null or empty check at the top.x`
@@ -207,7 +238,7 @@ namespace Annex.Graphics.Contexts.Sfml
             this._gameContentView.Reset(new FloatRect(0, 0, 1, 1));
             this._gameContentView.Size = this._camera.Size;
             this._gameContentView.Zoom(this._camera.CurrentZoom);
-            this._gameContentView.Center = this._camera.Centerpoint;
+            this._gameContentView.Center = new Vector2f((int)this._camera.Centerpoint.X, (int)this._camera.Centerpoint.Y);
             this._buffer.SetView(this._gameContentView);
             this._usingUiView = false;
         }
@@ -238,6 +269,18 @@ namespace Annex.Graphics.Contexts.Sfml
             var realpos = Mouse.GetPosition(this._buffer);
             var pos = this._buffer.MapPixelToCoords(realpos, this._uiView);
             return new Data.Shared.Vector(pos.X, pos.Y);
+        }
+
+        private void UpdateView(DrawingContext ctx) {
+            if (ctx.UseUIView != this._usingUiView) {
+                if (ctx.UseUIView) {
+                    this._buffer.SetView(this._uiView);
+                    this._usingUiView = true;
+                } else {
+                    this._buffer.SetView(this._gameContentView);
+                    this._usingUiView = false;
+                }
+            }
         }
     }
 }

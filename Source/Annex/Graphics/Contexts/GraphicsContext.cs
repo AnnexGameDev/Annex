@@ -8,6 +8,7 @@ namespace Annex.Graphics.Contexts
     {
         public abstract void Draw(TextContext ctx);
         public abstract void Draw(TextureContext ctx);
+        public abstract void Draw(SpriteSheet sheet);
         public abstract void BeginDrawing();
 
         // User Interface

@@ -10,6 +10,7 @@ namespace Annex.Data
         public static RGBA Red = new RGBA(255, 0, 0);
         public static RGBA Green = new RGBA(0, 255, 0);
         public static RGBA Blue = new RGBA(0, 0, 255);
+        public static RGBA Yellow = new RGBA(255, 255, 0);
 
         public byte R { get; set; }
         public byte G { get; set; }

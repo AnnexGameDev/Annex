@@ -4,7 +4,7 @@ using Annex.Data.Shared;
 
 namespace Annex.Graphics.Contexts
 {
-    public class TextContext
+    public class TextContext : DrawingContext
     {
         public String RenderText { get; set; }
 
@@ -18,7 +18,7 @@ namespace Annex.Graphics.Contexts
         public float BorderThickness { get; set; }
         public RGBA BorderColor { get; set; }
 
-        public bool UseUIView { get; set; }
+        
 
         public TextContext(String text, String font) {
             this.RenderText = text;
@@ -32,8 +32,6 @@ namespace Annex.Graphics.Contexts
 
             this.BorderThickness = 0;
             this.BorderColor = new RGBA();
-
-            this.UseUIView = false;
         }
     }
 }

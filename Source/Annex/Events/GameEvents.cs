@@ -8,6 +8,7 @@ namespace Annex.Events
     public sealed class GameEvents : Singleton
     {
         private readonly EventQueue _queue;
+        public static int CurrentTime => Environment.TickCount;
 
         static GameEvents() {
             Create<GameEvents>();
