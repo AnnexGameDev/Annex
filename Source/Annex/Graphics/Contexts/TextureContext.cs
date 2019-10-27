@@ -16,12 +16,12 @@ namespace Annex.Graphics.Contexts
 
         public TextureContext(String textureName) {
             this.SourceTextureName = textureName;
-            this.RenderPosition = Vector.Create(0, 0);
+            this.RenderPosition = Vector.Create();
             this.RenderSize = null;
             this.SourceTextureRect = null;
             this.Rotation = 0;
             this.RenderColor = null;
-            this.RelativeRotationOrigin = Vector.Create(0, 0);
+            this.RelativeRotationOrigin = Vector.Create();
         }
     }
 }
