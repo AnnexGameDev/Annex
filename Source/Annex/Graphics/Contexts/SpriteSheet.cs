@@ -65,32 +65,34 @@ namespace Annex.Graphics.Contexts
 
         internal TextureContext _internalTexture;
 
-        public uint Row { get; private set; }
-        public uint Column { get; private set; }
-        public readonly uint NumRows;
-        public readonly uint NumColumns;
+        public readonly Int Row;
+        public readonly Int Column;
+        public readonly int NumRows;
+        public readonly int NumColumns;
 
         public SpriteSheet(String textureName, uint numRows, uint numColumns) {
             this._internalTexture = new TextureContext(textureName);
-            this.NumColumns = numColumns;
-            this.NumRows = numRows;
+            this.Row = new Int();
+            this.Column = new Int();
+            this.NumColumns = (int)numColumns;
+            this.NumRows = (int)numRows;
             this.SourceTextureRect = null;
         }
 
         public void StepRow() {
-            this.SetRow(this.Row + 1);
+            this.SetRow(this.Row.Value + 1);
         }
 
         public void StepColumn() {
-            this.SetColumn(this.Column + 1);
+            this.SetColumn(this.Column.Value + 1);
         }
 
-        public void SetRow(uint row) {
-            this.Row = row % this.NumRows;
+        public void SetRow(int row) {
+            this.Row.Value = row % this.NumRows;
         }
 
-        public void SetColumn(uint column) {
-            this.Column = column % this.NumColumns;
+        public void SetColumn(int column) {
+            this.Column.Value = column % this.NumColumns;
         }
     }
 }
