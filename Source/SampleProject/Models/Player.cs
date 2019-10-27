@@ -15,18 +15,18 @@ namespace SampleProject.Models
         public readonly String Name;
 
         public Player() {
-            this.Position = new Vector(0, 0);
+            this.Position = Vector.Create(0, 0);
             this.Name = "Player Name";
 
             this._sprite = new TextureContext("player.png") {
                 SourceTextureRect = new IntRect(0, 0, 96, 96),
-                RenderPosition = new OffsetVector(this.Position, new Vector(-48, -90))
+                RenderPosition = new OffsetVector(this.Position, Vector.Create(-48, -90))
             };
             this._hoverText = new TextContext(this.Name, "Augusta.ttf") {
-                RenderPosition = new OffsetVector(this.Position, new Vector(-48, -100)),
+                RenderPosition = new OffsetVector(this.Position, Vector.Create(-48, -100)),
                 Alignment = new TextAlignment() {
                     HorizontalAlignment = HorizontalAlignment.Center,
-                    Size = new Vector(96, 0)
+                    Size = Vector.Create(96, 0)
                 },
                 FontColor = RGBA.White,
                 BorderColor = RGBA.Black,

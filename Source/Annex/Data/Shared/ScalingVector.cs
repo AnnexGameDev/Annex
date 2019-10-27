@@ -13,7 +13,7 @@
             set => this.Scale.Y = value;
         }
 
-        public ScalingVector(Vector original, float scaleX, float scaleY) : this(original, new Vector(scaleX, scaleY)) {
+        public ScalingVector(Vector original, float scaleX, float scaleY) : this(original, Create(scaleX, scaleY)) {
 
         }
 

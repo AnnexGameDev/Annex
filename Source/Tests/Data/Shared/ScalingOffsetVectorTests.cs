@@ -9,9 +9,9 @@ namespace Tests.Data.Shared
         public void Assignment_X_ModifiesScale_AndNotOriginalOrOffset() {
             float offsetX = 2;
             float originalX = 4;
-            Vector offset = new Vector(offsetX, 3);
-            Vector original = new Vector(originalX, 5);
-            Vector scale = new Vector(6, 7);
+            Vector offset = Vector.Create(offsetX, 3);
+            Vector original = Vector.Create(originalX, 5);
+            Vector scale = Vector.Create(6, 7);
             float newScaleX = 8;
             float expectedX = (offsetX * newScaleX) + originalX;
             var source = new ScalingOffsetVector(original, offset, scale);
@@ -28,9 +28,9 @@ namespace Tests.Data.Shared
         public void Assignment_Y_ModifiesScale_AndNotOriginalOrOffset() {
             float offsetY = 3;
             float originalY = 5;
-            Vector offset = new Vector(2, offsetY);
-            Vector original = new Vector(4, originalY);
-            Vector scale = new Vector(6, 7);
+            Vector offset = Vector.Create(2, offsetY);
+            Vector original = Vector.Create(4, originalY);
+            Vector scale = Vector.Create(6, 7);
             float newScaleY = 8;
             float expectedY = (offsetY * newScaleY) + originalY;
             var source = new ScalingOffsetVector(original, offset, scale);
@@ -54,9 +54,9 @@ namespace Tests.Data.Shared
             float expectedX = (offsetX * scaleX) + originalX;
             float expectedY = (offsetY * scaleY) + originalY;
 
-            Vector offset = new Vector(offsetX, offsetY);
-            Vector original = new Vector(originalX, originalY);
-            Vector scale = new Vector(scaleX, scaleY);
+            Vector offset = Vector.Create(offsetX, offsetY);
+            Vector original = Vector.Create(originalX, originalY);
+            Vector scale = Vector.Create(scaleX, scaleY);
 
             ScalingOffsetVector source = new ScalingOffsetVector(original, offset, scale);
 
@@ -75,8 +75,8 @@ namespace Tests.Data.Shared
             float expectedX = (offsetX * scaleX) + originalX;
             float expectedY = (offsetY * scaleY) + originalY;
 
-            Vector offset = new Vector(offsetX, offsetY);
-            Vector original = new Vector(originalX, originalY);
+            Vector offset = Vector.Create(offsetX, offsetY);
+            Vector original = Vector.Create(originalX, originalY);
 
             ScalingOffsetVector source = new ScalingOffsetVector(original, offset, scaleX, scaleY);
 
@@ -95,9 +95,9 @@ namespace Tests.Data.Shared
             float expectedX = (offsetX * scaleX) + ((offsetX * scaleX) + originalX);
             float expectedY = (offsetY * scaleY) + ((offsetY * scaleY) + originalY);
 
-            Vector scale = new Vector(scaleX, scaleY);
-            Vector offset = new Vector(offsetX, offsetY);
-            Vector original = new Vector(originalX, originalY);
+            Vector scale = Vector.Create(scaleX, scaleY);
+            Vector offset = Vector.Create(offsetX, offsetY);
+            Vector original = Vector.Create(originalX, originalY);
 
             Vector nestedOriginal = new ScalingOffsetVector(original, offset, scale);
 
@@ -118,9 +118,9 @@ namespace Tests.Data.Shared
             float expectedX = (((offsetX * scaleX) + originalX) * scaleX) + originalX;
             float expectedY = (((offsetY * scaleY) + originalY) * scaleY) + originalY;
 
-            Vector scale = new Vector(scaleX, scaleY);
-            Vector offset = new Vector(offsetX, offsetY);
-            Vector original = new Vector(originalX, originalY);
+            Vector scale = Vector.Create(scaleX, scaleY);
+            Vector offset = Vector.Create(offsetX, offsetY);
+            Vector original = Vector.Create(originalX, originalY);
 
             Vector nestedOffset = new ScalingOffsetVector(original, offset, scale);
 
@@ -141,9 +141,9 @@ namespace Tests.Data.Shared
             float expectedX = (offsetX * ((offsetX * scaleX) + originalX)) + originalX;
             float expectedY = (offsetY * ((offsetY * scaleY) + originalY)) + originalY;
 
-            Vector scale = new Vector(scaleX, scaleY);
-            Vector offset = new Vector(offsetX, offsetY);
-            Vector original = new Vector(originalX, originalY);
+            Vector scale = Vector.Create(scaleX, scaleY);
+            Vector offset = Vector.Create(offsetX, offsetY);
+            Vector original = Vector.Create(originalX, originalY);
 
             Vector nestedScale = new ScalingOffsetVector(original, offset, scale);
 

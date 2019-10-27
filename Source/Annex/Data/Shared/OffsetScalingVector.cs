@@ -17,7 +17,7 @@
             this.Offset = offset;
         }
 
-        public OffsetScalingVector(Vector original, Vector scale, float offsetX, float offsetY) : this(original, new Vector(offsetX, offsetY), scale) {
+        public OffsetScalingVector(Vector original, Vector scale, float offsetX, float offsetY) : this(original, Create(offsetX, offsetY), scale) {
 
         }
     }

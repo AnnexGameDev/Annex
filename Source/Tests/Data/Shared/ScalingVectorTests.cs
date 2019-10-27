@@ -13,8 +13,8 @@ namespace Tests.Data.Shared
             float scaleY = 40;
             float newScaleX = 50;
             float expected = originalX * newScaleX;
-            var original = new Vector(originalX, originalY);
-            var scale = new Vector(scaleX, scaleY);
+            var original = Vector.Create(originalX, originalY);
+            var scale = Vector.Create(scaleX, scaleY);
             var source = new ScalingVector(original, scale);
 
             source.X = newScaleX;
@@ -32,8 +32,8 @@ namespace Tests.Data.Shared
             float scaleY = 40;
             float newScaleY = 50;
             float expected = originalY * newScaleY;
-            var original = new Vector(originalX, originalY);
-            var scale = new Vector(scaleX, scaleY);
+            var original = Vector.Create(originalX, originalY);
+            var scale = Vector.Create(scaleX, scaleY);
             var source = new ScalingVector(original, scale);
 
             source.Y = newScaleY;
@@ -51,7 +51,7 @@ namespace Tests.Data.Shared
             float scaleY = 40;
             float expectedX = originalX * scaleX;
             float expectedY = originalY * scaleY;
-            var original = new Vector(originalX, originalY);
+            var original = Vector.Create(originalX, originalY);
             var source = new ScalingVector(original, scaleX, scaleY);
 
             Assert.AreEqual(source.Scale.X, scaleX);
@@ -70,8 +70,8 @@ namespace Tests.Data.Shared
             float scaleY = 40;
             float expectedX = originalX * scaleX;
             float expectedY = originalY * scaleY;
-            var original = new Vector(originalX, originalY);
-            var scale = new Vector(scaleX, scaleY);
+            var original = Vector.Create(originalX, originalY);
+            var scale = Vector.Create(scaleX, scaleY);
             var source = new ScalingVector(original, scale);
 
             Assert.AreEqual(source.Scale.X, scale.X);
@@ -91,8 +91,8 @@ namespace Tests.Data.Shared
             float expectedX = originalX * scaleX * scaleX;
             float expectedY = originalY * scaleY * scaleY;
 
-            var original = new Vector(originalX, originalY);
-            var scale = new Vector(scaleX, scaleY);
+            var original = Vector.Create(originalX, originalY);
+            var scale = Vector.Create(scaleX, scaleY);
 
             ScalingVector nestedOriginal = new ScalingVector(original, scale);
             ScalingVector source = new ScalingVector(nestedOriginal, scale);
@@ -110,8 +110,8 @@ namespace Tests.Data.Shared
             float expectedX = originalX * originalX * scaleX;
             float expectedY = originalY * originalY * scaleY;
 
-            var original = new Vector(originalX, originalY);
-            var scale = new Vector(scaleX, scaleY);
+            var original = Vector.Create(originalX, originalY);
+            var scale = Vector.Create(scaleX, scaleY);
 
             ScalingVector nestedScale = new ScalingVector(original, scale);
             ScalingVector source = new ScalingVector(original, nestedScale);

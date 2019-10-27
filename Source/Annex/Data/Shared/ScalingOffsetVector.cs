@@ -13,7 +13,7 @@
             set => this.Scale.Y = value;
         }
 
-        public ScalingOffsetVector(Vector original, Vector offset, float xScale, float yScale) : this(original, offset, new Vector(xScale, yScale)) {
+        public ScalingOffsetVector(Vector original, Vector offset, float xScale, float yScale) : this(original, offset, Create(xScale, yScale)) {
         }
 
         public ScalingOffsetVector(Vector original, Vector offset, Vector scale) : base(original, offset) {

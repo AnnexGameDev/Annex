@@ -23,7 +23,7 @@ namespace Annex.Graphics.Contexts
         public TextContext(String text, String font) {
             this.RenderText = text;
 
-            this.RenderPosition = new Vector();
+            this.RenderPosition = Vector.Create(0, 0);
             this.Alignment = null;
 
             this.FontName = font;

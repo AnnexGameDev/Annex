@@ -153,7 +153,7 @@ namespace Annex.Graphics.Contexts.Sfml
             }
 
             if (sheet.SourceTextureRect == null) {
-                var sprite = this.GetSprite(sheet.SourceTextureName);
+                using var sprite = this.GetSprite(sheet.SourceTextureName);
                 var size = sprite.Texture.Size;
 
                 sheet.SourceTextureRect = new Data.Shared.IntRect();
@@ -268,7 +268,7 @@ namespace Annex.Graphics.Contexts.Sfml
         public override Data.Shared.Vector GetRealMousePos() {
             var realpos = Mouse.GetPosition(this._buffer);
             var pos = this._buffer.MapPixelToCoords(realpos, this._uiView);
-            return new Data.Shared.Vector(pos.X, pos.Y);
+            return Data.Shared.Vector.Create(pos.X, pos.Y);
         }
 
         private void UpdateView(DrawingContext ctx) {

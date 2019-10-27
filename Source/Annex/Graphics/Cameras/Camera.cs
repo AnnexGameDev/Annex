@@ -9,8 +9,8 @@ namespace Annex.Graphics.Cameras
         public float CurrentZoom { get; private set; }
 
         public Camera() {
-            this.Size = new Vector(GameWindow.RESOLUTION_WIDTH, GameWindow.RESOLUTION_HEIGHT);
-            this.Centerpoint = new Vector(this.Size.X / 2, this.Size.Y / 2);
+            this.Size = Vector.Create(GameWindow.RESOLUTION_WIDTH, GameWindow.RESOLUTION_HEIGHT);
+            this.Centerpoint = Vector.Create(this.Size.X / 2, this.Size.Y / 2);
             this.CurrentZoom = 1;
         }
 

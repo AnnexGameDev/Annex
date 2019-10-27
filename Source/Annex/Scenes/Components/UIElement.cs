@@ -15,8 +15,8 @@ namespace Annex.Scenes.Components
 
         public UIElement(string elementID) {
             this.ElementID = elementID;
-            this.Size = new Vector(100, 100);
-            this.Position = new Vector();
+            this.Size = Vector.Create(100, 100);
+            this.Position = Vector.Create(0, 0);
             this.Visible = true;
         }
 
