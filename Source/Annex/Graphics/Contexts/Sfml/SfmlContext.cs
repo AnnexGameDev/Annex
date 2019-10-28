@@ -100,16 +100,14 @@ namespace Annex.Graphics.Contexts.Sfml
             }
 
             // We need to update the camera.
-            UpdateView(ctx);
-
-            int fontsize = ctx.FontSize ?? 12;
+            this.UpdateView(ctx);
 
 #pragma warning disable CS8604 // Possible null reference argument.
             // Prevented because of the null or empty check at the top.
             var font = this.GetFont(ctx.FontName);
 #pragma warning restore CS8604 // Possible null reference argument.
             var text = new Text(ctx.RenderText, font) {
-                CharacterSize = (uint)ctx.FontSize,
+                CharacterSize = (uint)(int)ctx.FontSize,
                 FillColor = ctx.FontColor,
                 OutlineThickness = ctx.BorderThickness,
                 OutlineColor = ctx.BorderColor,
@@ -120,7 +118,6 @@ namespace Annex.Graphics.Contexts.Sfml
 
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
                 // Prevented because of the null or empty check at the top.
-                var end = text.FindCharacterPos((uint)(ctx.RenderText.Value.Length - 1));
                 var bound = text.GetLocalBounds();
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 
@@ -159,12 +156,12 @@ namespace Annex.Graphics.Contexts.Sfml
                 sheet.SourceTextureRect = new Data.Shared.IntRect();
                 int width = (int)(size.X / sheet.NumColumns);
                 int height = (int)(size.Y / sheet.NumRows);
-                sheet.SourceTextureRect.Width = width;
-                sheet.SourceTextureRect.Height = height;
+                sheet.SourceTextureRect.Width.Set(width);
+                sheet.SourceTextureRect.Height.Set(height);
             }
 
-            sheet.SourceTextureRect.Top = sheet.SourceTextureRect.Height * (int)sheet.Row;
-            sheet.SourceTextureRect.Left = sheet.SourceTextureRect.Width * (int)sheet.Column;
+            sheet.SourceTextureRect.Top.Set(sheet.SourceTextureRect.Height * sheet.Row);
+            sheet.SourceTextureRect.Left.Set(sheet.SourceTextureRect.Width * sheet.Column);
 
             this.Draw(sheet._internalTexture);
         }
@@ -176,7 +173,7 @@ namespace Annex.Graphics.Contexts.Sfml
             }
 
             // We need to update the camera.
-            UpdateView(ctx);
+            this.UpdateView(ctx);
 
 #pragma warning disable CS8604 // Possible null reference argument.
             // Prevented because of the null or empty check at the top.x`

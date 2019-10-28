@@ -9,7 +9,7 @@ namespace Annex
             var xml = new XmlSerializer(typeof(T));
             
             if (!File.Exists(path)) {
-                result = default(T);
+                result = default;
                 return false;
             }
 

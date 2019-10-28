@@ -35,7 +35,7 @@ namespace Annex.Scenes.Components
                 if (System.String.IsNullOrEmpty(this.Text.Value)) {
                     return;
                 }
-                this.Text.Set(this.Text.Value.Substring(0, this.Text.Value.Length - 1));
+                this.Text.Set(this.Text.Value[0..^1]);
                 return;
             }
             if (key.ToString().Length == 1) {

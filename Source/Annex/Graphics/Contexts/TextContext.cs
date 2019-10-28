@@ -27,7 +27,7 @@ namespace Annex.Graphics.Contexts
             this.Alignment = null;
 
             this.FontName = font;
-            this.FontSize = 12;
+            this.FontSize = new Int(12);
             this.FontColor = new RGBA();
 
             this.BorderThickness = 0;

@@ -5,7 +5,7 @@ namespace Annex.Audio
 {
     public sealed class AudioManager : Singleton
     {
-        private IAudioPlayer _player;
+        private readonly IAudioPlayer _player;
 
         static AudioManager() {
             Create<AudioManager>();

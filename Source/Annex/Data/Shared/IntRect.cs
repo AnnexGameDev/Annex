@@ -10,7 +10,11 @@ namespace Annex.Data.Shared
         public Int Width { get; set; }
         public Int Height { get; set; }
 
-        public IntRect() : this(0, 0, 0, 0) {
+        public IntRect() {
+            this.Top = new Int();
+            this.Left = new Int();
+            this.Width = new Int();
+            this.Height = new Int();
         }
 
         public IntRect(Int top, Int left, Int width, Int height) {
