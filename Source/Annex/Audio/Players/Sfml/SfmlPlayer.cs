@@ -12,7 +12,7 @@ namespace Annex.Audio.Players.Sfml
         internal SfmlPlayer() {
             this._playingAudio = new List<PlayingAudio>();
 
-            GameEvents.Singleton.AddEvent(PriorityType.SOUNDS, () => {
+            EventManager.Singleton.AddEvent(PriorityType.SOUNDS, () => {
                 lock (this._lock) {
                     for (int i = 0; i < this._playingAudio.Count; i++) {
                         var audio = this._playingAudio[i];

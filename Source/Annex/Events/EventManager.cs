@@ -5,17 +5,17 @@ using System.Threading;
 
 namespace Annex.Events
 {
-    public sealed class GameEvents : Singleton
+    public sealed class EventManager : Singleton
     {
         private readonly EventQueue _queue;
         public static int CurrentTime => Environment.TickCount;
 
-        static GameEvents() {
-            Create<GameEvents>();
+        static EventManager() {
+            Create<EventManager>();
         }
-        public static GameEvents Singleton => Get<GameEvents>();
+        public static EventManager Singleton => Get<EventManager>();
 
-        public GameEvents() {
+        public EventManager() {
             this._queue = new EventQueue();
         }
 

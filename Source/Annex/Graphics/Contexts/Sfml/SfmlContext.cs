@@ -44,7 +44,7 @@ namespace Annex.Graphics.Contexts.Sfml
                 bool doubleClick = false;
                 float dx = uiPos.X - this._lastMouseClickX;
                 float dy = uiPos.Y - this._lastMouseClickY;
-                int dt = GameEvents.CurrentTime - this._lastMouseClick;
+                int dt = EventManager.CurrentTime - this._lastMouseClick;
                 int distanceThreshold = 10;
                 int timeThreshold = 250;
 
@@ -54,7 +54,7 @@ namespace Annex.Graphics.Contexts.Sfml
 
                 this._lastMouseClickX = uiPos.X;
                 this._lastMouseClickY = uiPos.Y;
-                this._lastMouseClick = GameEvents.CurrentTime;
+                this._lastMouseClick = EventManager.CurrentTime;
 
                 var scene = scenes.CurrentScene;
                 scene.HandleSceneFocusMouseDown((int)uiPos.X, (int)uiPos.Y);
@@ -77,7 +77,7 @@ namespace Annex.Graphics.Contexts.Sfml
                     MouseY = (int)uiPos.Y,
                     WorldX = gamePos.X,
                     WorldY = gamePos.Y,
-                    TimeSinceClick = GameEvents.CurrentTime - this._lastMouseClick
+                    TimeSinceClick = EventManager.CurrentTime - this._lastMouseClick
                 });
             };
 

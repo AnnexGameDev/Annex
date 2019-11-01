@@ -15,7 +15,7 @@ namespace Annex
             this.CopyResources();
 
             var window = GameWindow.Singleton;
-            GameEvents.Singleton.AddEvent(PriorityType.GRAPHICS, () => {
+            EventManager.Singleton.AddEvent(PriorityType.GRAPHICS, () => {
                 window.Context.BeginDrawing();
                 SceneManager.Singleton.CurrentScene.Draw(window.Context);
                 window.Context.EndDrawing();
@@ -26,7 +26,7 @@ namespace Annex
         public void Start<T>() where T : Scene, new() {
             SceneManager.Singleton.LoadScene<T>();
             GameWindow.Singleton.Context.SetVisible(true);
-            GameEvents.Singleton.Run();
+            EventManager.Singleton.Run();
         }
 
         [Conditional("DEBUG")]
