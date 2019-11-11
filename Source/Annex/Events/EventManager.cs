@@ -8,9 +8,13 @@ namespace Annex.Events
     public sealed class EventManager : Singleton
     {
         private readonly EventQueue _queue;
-        public static int CurrentTime => Environment.TickCount;
+        private static int _timeOffset;
+        public static int CurrentTime => Environment.TickCount + _timeOffset;
 
         static EventManager() {
+            // We want CurrentTime to be 0 at applicaiton start.
+            // Calculate an offset.
+            _timeOffset = -Environment.TickCount;
             Create<EventManager>();
         }
         public static EventManager Singleton => Get<EventManager>();
