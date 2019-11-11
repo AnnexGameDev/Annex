@@ -18,6 +18,6 @@ namespace Annex.Graphics.Contexts
 
     public class MouseButtonReleasedEvent : MouseButtonEvent
     {
-        public int TimeSinceClick;
+        public long TimeSinceClick;
     }
 }

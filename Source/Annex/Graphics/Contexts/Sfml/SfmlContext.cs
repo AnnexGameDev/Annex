@@ -21,7 +21,7 @@ namespace Annex.Graphics.Contexts.Sfml
 
         private float _lastMouseClickX;
         private float _lastMouseClickY;
-        private int _lastMouseClick;
+        private long _lastMouseClick;
 
         internal SfmlContext() {
             this._camera = new Camera();
@@ -44,7 +44,7 @@ namespace Annex.Graphics.Contexts.Sfml
                 bool doubleClick = false;
                 float dx = uiPos.X - this._lastMouseClickX;
                 float dy = uiPos.Y - this._lastMouseClickY;
-                int dt = EventManager.CurrentTime - this._lastMouseClick;
+                long dt = EventManager.CurrentTime - this._lastMouseClick;
                 int distanceThreshold = 10;
                 int timeThreshold = 250;
 
