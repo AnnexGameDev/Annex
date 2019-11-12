@@ -20,5 +20,9 @@ namespace Annex.Graphics.Contexts.Sfml
         public static MouseButton ToNonSFML(this Mouse.Button button) {
             return (MouseButton)button;
         }
+
+        public static JoystickAxis ToNonSFML(this Joystick.Axis axis) {
+            return (JoystickAxis)axis;
+        }
     }
 }

@@ -24,6 +24,26 @@ namespace Annex.Scenes.Controllers
 
         }
 
+        public virtual void HandleJoystickMoved(JoystickMovedEvent e) {
+
+        }
+
+        public virtual void HandleJoystickButtonPressed(JoystickButtonPressedEvent e) {
+
+        }
+
+        public virtual void HandleJoystickButtonReleased(JoystickButtonReleasedEvent e) {
+
+        }
+
+        public virtual void HandleJoystickDisconnected(JoystickDisconnectedEvent e) {
+
+        }
+
+        public virtual void HandleJoystickConnected(JoystickConnectedEvent e) {
+
+        }
+
         internal virtual bool HandleSceneFocusMouseDown(int x, int y) {
             return false;
         }

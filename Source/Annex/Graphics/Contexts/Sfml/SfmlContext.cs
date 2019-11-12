@@ -80,17 +80,35 @@ namespace Annex.Graphics.Contexts.Sfml
                     TimeSinceClick = EventManager.CurrentTime - this._lastMouseClick
                 });
             };
-
-            // TODO: Attach event handlers.
-            //this._buffer.JoystickButtonPressed += ();
-            //this._buffer.JoystickButtonReleased += ();
-            //this._buffer.JoystickConnected += ();
-            //this._buffer.JoystickDisconnected += ();
-            //this._buffer.JoystickMoved += ();
-
-            // TODO: Expose input state API.
-            //Joystick.IsButtonPressed(, );
-            //Joystick.IsConnected(, );
+            this._buffer.JoystickButtonPressed += (sender, e) => {
+                scenes.CurrentScene.HandleJoystickButtonPressed(new JoystickButtonPressedEvent() {
+                    JoystickID = e.JoystickId,
+                    Button = (JoystickButton)e.Button
+                });
+            };
+            this._buffer.JoystickButtonReleased += (sender, e) => {
+                scenes.CurrentScene.HandleJoystickButtonReleased(new JoystickButtonReleasedEvent() {
+                    JoystickID = e.JoystickId,
+                    Button = (JoystickButton)e.Button
+                });
+            };
+            this._buffer.JoystickConnected += (sender, e) => {
+                scenes.CurrentScene.HandleJoystickConnected(new JoystickConnectedEvent() {
+                    JoystickID = e.JoystickId
+                });
+            };
+            this._buffer.JoystickDisconnected += (sender, e) => {
+                scenes.CurrentScene.HandleJoystickDisconnected(new JoystickDisconnectedEvent() {
+                    JoystickID = e.JoystickId
+                });
+            };
+            this._buffer.JoystickMoved += (sender, e) => {
+                scenes.CurrentScene.HandleJoystickMoved(new JoystickMovedEvent() {
+                    JoystickID = e.JoystickId,
+                    Axis = e.Axis.ToNonSFML(),
+                    Delta = e.Position
+                });
+            };
         }
 
         public override void Draw(TextContext ctx) {
@@ -224,6 +242,7 @@ namespace Annex.Graphics.Contexts.Sfml
         public override void BeginDrawing() {
             this._buffer.Clear();
             this._buffer.DispatchEvents();
+            Joystick.Update();
             this.UpdateGameContentCamera();
         }
 
@@ -278,6 +297,18 @@ namespace Annex.Graphics.Contexts.Sfml
                     this._usingUiView = false;
                 }
             }
+        }
+
+        public override bool IsJoystickConnected(uint joystickId) {
+            return Joystick.IsConnected(joystickId);
+        }
+
+        public override bool IsJoystickButtonPressed(uint joystickId, JoystickButton button) {
+            return Joystick.IsButtonPressed(joystickId, (uint)button);
+        }
+
+        public override float GetJoystickAxis(uint joystickId, JoystickAxis axis) {
+            return Joystick.GetAxisPosition(joystickId, (Joystick.Axis)axis);
         }
     }
 }
