@@ -30,16 +30,16 @@ namespace Annex.Scenes.Components
             context.Draw(this.RenderText);
         }
 
-        public override void HandleKeyboardKeyPressed(KeyboardKey key) {
-            if (key == KeyboardKey.BackSpace) {
+        public override void HandleKeyboardKeyPressed(KeyboardKeyPressedEvent e) {
+            if (e.Key == KeyboardKey.BackSpace) {
                 if (System.String.IsNullOrEmpty(this.Text.Value)) {
                     return;
                 }
                 this.Text.Set(this.Text.Value[0..^1]);
                 return;
             }
-            if (key.ToString().Length == 1) {
-                this.Text.Set(this.Text.Value + key.ToString());
+            if (e.ToString().Length == 1) {
+                this.Text.Set(this.Text.Value + e.ToString());
             }
         }
     }

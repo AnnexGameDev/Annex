@@ -16,11 +16,11 @@ namespace Annex.Scenes.Controllers
 
         }
 
-        public virtual void HandleKeyboardKeyPressed(KeyboardKey key) {
+        public virtual void HandleKeyboardKeyPressed(KeyboardKeyPressedEvent e) {
 
         }
         
-        public virtual void HandleKeyboardKeyReleased(KeyboardKey key) {
+        public virtual void HandleKeyboardKeyReleased(KeyboardKeyReleasedEvent e) {
 
         }
 

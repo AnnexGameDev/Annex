@@ -37,8 +37,8 @@ namespace Annex.Scenes.Components
             return base.HandleSceneFocusMouseDown(x, y);
         }
 
-        public override void HandleKeyboardKeyPressed(KeyboardKey key) {
-            this.FocusObject?.HandleKeyboardKeyPressed(key);
+        public override void HandleKeyboardKeyPressed(KeyboardKeyPressedEvent e) {
+            this.FocusObject?.HandleKeyboardKeyPressed(e);
         }
 
         public override void HandleMouseButtonPressed(MouseButtonPressedEvent e) {

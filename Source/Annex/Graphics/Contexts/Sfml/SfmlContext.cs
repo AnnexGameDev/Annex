@@ -34,8 +34,16 @@ namespace Annex.Graphics.Contexts.Sfml
 
             var scenes = SceneManager.Singleton;
             this._buffer.Closed += (sender, e) => { scenes.CurrentScene.HandleCloseButtonPressed(); };
-            this._buffer.KeyPressed += (sender, e) => { scenes.CurrentScene.HandleKeyboardKeyPressed(e.Code.ToNonSFML()); };
-            this._buffer.KeyReleased += (sender, e) => { scenes.CurrentScene.HandleKeyboardKeyReleased(e.Code.ToNonSFML()); };
+            this._buffer.KeyPressed += (sender, e) => { 
+                scenes.CurrentScene.HandleKeyboardKeyPressed(new KeyboardKeyPressedEvent() {
+                    Key = e.Code.ToNonSFML()
+                }); 
+            };
+            this._buffer.KeyReleased += (sender, e) => { 
+                scenes.CurrentScene.HandleKeyboardKeyReleased(new KeyboardKeyReleasedEvent() {
+                    Key = e.Code.ToNonSFML()
+                });
+            };
             this._buffer.MouseButtonPressed += (sender, e) => {
                 var mousePos = Mouse.GetPosition(this._buffer);
                 var gamePos = this._buffer.MapPixelToCoords(mousePos, this._gameContentView);
