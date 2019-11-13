@@ -1,10 +1,29 @@
-﻿using System.Diagnostics;
+﻿using Annex.Scenes;
+using Annex.Scenes.Components;
+using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace Annex
 {
     public static class Debug
     {
+        [Conditional("DEBUG")]
+        public static void ToggleDebugOverlay() {
+            var scene = SceneManager.Singleton.CurrentScene;
+
+            if (scene.GetElementById("Debug-Overlay") == null) {
+                scene.AddChild(new DebugOverlay("Debug-Overlay"));
+            } else {
+                scene.RemoveElementById("Debug-Overlay");
+            }
+        }
+
+        [Conditional("DEBUG")]
+        public static void DisplayInformation(Func<string> worker) {
+            DebugOverlay._informationRetrievers.Add(worker);
+        }
+
         [Conditional("DEBUG")]
         public static void Assert(bool condition, [CallerLineNumber] int line = 0, [CallerMemberName] string callingMethod = "unknown", [CallerFilePath] string filePath = "unknown") {
             if (!condition) {

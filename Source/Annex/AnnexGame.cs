@@ -20,7 +20,7 @@ namespace Annex
                 SceneManager.Singleton.CurrentScene.Draw(window.Context);
                 window.Context.EndDrawing();
                 return ControlEvent.NONE;
-            }, 16, 0);
+            }, 16, 0, "draw-graphics");
         }
 
         public void Start<T>() where T : Scene, new() {

@@ -24,7 +24,7 @@ namespace Annex.Audio.Players.Sfml
                     }
                     return ControlEvent.NONE;
                 }
-            }, 5000);
+            }, 5000, eventID: "sfml-player-gc");
         }
 
         public void StopAllAudio() {

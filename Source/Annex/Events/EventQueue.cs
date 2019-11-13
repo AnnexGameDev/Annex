@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 
 namespace Annex.Events
@@ -21,8 +22,8 @@ namespace Annex.Events
             this._queue[(int)type].Add(e);
         }
 
-        public void AddEvent(PriorityType type, Func<ControlEvent> e, int interval_ms, int delay_ms = 0) {
-            this.AddEvent(type, new GameEvent(e, interval_ms, delay_ms));
+        public void AddEvent(string eventID, PriorityType type, Func<ControlEvent> e, int interval_ms, int delay_ms = 0) {
+            this.AddEvent(type, new GameEvent(eventID, e, interval_ms, delay_ms));
         }
 
         public List<GameEvent> GetPriority(PriorityType type) {
@@ -31,6 +32,17 @@ namespace Annex.Events
         
         public List<GameEvent> GetPriority(int type) {
             return this._queue[type];
+        }
+
+        public GameEvent? GetEvent(string id) {
+            foreach (var level in _queue) {
+                foreach (var e in level) {
+                    if (e.EventID == id) {
+                        return e;
+                    }
+                }
+            }
+            return null;
         }
     }
 }

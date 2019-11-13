@@ -1,4 +1,5 @@
-﻿using Annex.Scenes;
+﻿#nullable enable
+using Annex.Scenes;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -19,8 +20,8 @@ namespace Annex.Events
             this._queue = new EventQueue();
         }
 
-        public void AddEvent(PriorityType type, Func<ControlEvent> e, int interval_ms, int delay_ms = 0) {
-            this._queue.AddEvent(type, e, interval_ms, delay_ms);
+        public void AddEvent(PriorityType type, Func<ControlEvent> e, int interval_ms, int delay_ms = 0, string eventID = "") {
+            this._queue.AddEvent(eventID, type, e, interval_ms, delay_ms);
         }
 
         public void AddEvent(PriorityType type, GameEvent e) {
@@ -28,13 +29,13 @@ namespace Annex.Events
         }
 
         internal void Run() {
-            int tick;
-            int lastTick = Environment.TickCount;
+            long tick;
+            long lastTick = CurrentTime;
             var scenes = SceneManager.Singleton;
 
             while (!scenes.IsCurrentScene<GameClosing>()) {
-                tick = Environment.TickCount;
-                int diff = tick - lastTick;
+                tick = CurrentTime;
+                long diff = tick - lastTick;
                 lastTick = tick;
 
                 if (diff == 0) {
@@ -51,7 +52,11 @@ namespace Annex.Events
             }
         }
 
-        private void RunQueueLevel(List<GameEvent> level, int diff) {
+        public GameEvent? GetEvent(string id) {
+            return this._queue.GetEvent(id) ?? SceneManager.Singleton.CurrentScene.Events.GetEvent(id);
+        }
+
+        private void RunQueueLevel(List<GameEvent> level, long diff) {
             for (int i = 0; i < level.Count; i++) {
                 if (level[i].Probe(diff) == ControlEvent.REMOVE) {
                     level.RemoveAt(i--);

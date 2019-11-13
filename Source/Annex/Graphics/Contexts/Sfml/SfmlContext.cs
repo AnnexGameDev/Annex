@@ -239,6 +239,23 @@ namespace Annex.Graphics.Contexts.Sfml
             this._buffer.Draw(sprite);
         }
 
+        public override void Draw(SolidRectangleContext rectangle) {
+            this.UpdateView(rectangle);
+
+            var shape = new RectangleShape {
+                Size = rectangle.RenderSize,
+                Position = rectangle.RenderPosition,
+                FillColor = rectangle.RenderFillColor
+            };
+
+            if (rectangle.RenderBorderColor != null && rectangle.RenderBorderSize != 0) {
+                shape.OutlineColor = rectangle.RenderBorderColor;
+                shape.OutlineThickness = rectangle.RenderBorderSize;
+            }
+
+            this._buffer.Draw(shape);
+        }
+
         private Sprite GetSprite(string textureName) {
             return new Sprite(this._textures.GetResource(textureName));
         }

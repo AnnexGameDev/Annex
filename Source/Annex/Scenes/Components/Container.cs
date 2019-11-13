@@ -34,5 +34,43 @@ namespace Annex.Scenes.Components
             }
             return false;
         }
+
+        public override UIElement GetElementById(string id) {
+
+            if (this.ElementID == id) {
+                return this;
+            }
+
+            foreach (var child in this._children) {
+                var c = child.GetElementById(id);
+
+                if (c != null) {
+                    return c;
+                }
+            }
+
+            return null;
+        }
+
+        public override RemoveState RemoveElementById(string id) {
+
+            if (this.ElementID == id) {
+                return RemoveState.ShouldBeRemoved;
+            }
+
+            for (int i = 0; i < this._children.Count; i++) {
+                switch (this._children[i].RemoveElementById(id)) {
+                    case RemoveState.KeepSearching:
+                        continue;
+                    case RemoveState.WasRemoved:
+                        return RemoveState.WasRemoved;
+                    case RemoveState.ShouldBeRemoved:
+                        this._children.RemoveAt(i);
+                        return RemoveState.WasRemoved;
+                }
+            }
+
+            return RemoveState.KeepSearching;
+        }
     }
 }

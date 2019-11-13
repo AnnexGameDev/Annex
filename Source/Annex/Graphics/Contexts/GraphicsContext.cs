@@ -9,6 +9,7 @@ namespace Annex.Graphics.Contexts
         public abstract void Draw(TextContext ctx);
         public abstract void Draw(TextureContext ctx);
         public abstract void Draw(SpriteSheet sheet);
+        public abstract void Draw(SolidRectangleContext rectangle);
         public abstract void BeginDrawing();
 
         public abstract bool IsMouseButtonDown(MouseButton button);

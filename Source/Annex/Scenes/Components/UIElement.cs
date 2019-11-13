@@ -5,9 +5,16 @@ using Annex.Scenes.Controllers;
 
 namespace Annex.Scenes.Components
 {
+    public enum RemoveState
+    {
+        KeepSearching,
+        ShouldBeRemoved,
+        WasRemoved
+    }
+
     public abstract class UIElement : InputController, IDrawableObject
     {
-        private readonly string ElementID;
+        private protected readonly string ElementID;
         public readonly Vector Size;
         public readonly Vector Position;
         public bool IsFocus { get; internal set; }
@@ -27,6 +34,13 @@ namespace Annex.Scenes.Components
                 return this;
             }
             return null;
+        }
+
+        public virtual RemoveState RemoveElementById(string id) {
+            if (this.ElementID == id) {
+                return RemoveState.ShouldBeRemoved;
+            }
+            return RemoveState.KeepSearching;
         }
 
         internal override bool HandleSceneFocusMouseDown(int x, int y) {
