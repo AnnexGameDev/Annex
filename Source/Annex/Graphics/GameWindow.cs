@@ -1,11 +1,11 @@
 ﻿using Annex.Graphics.Contexts;
-using Annex.Graphics.Contexts.Sfml;
+using Annex.Graphics.Sfml;
 
 namespace Annex.Graphics
 {
     public sealed class GameWindow : Singleton
     {
-        public GraphicsContext Context { get; private set; }
+        public Canvas Canvas { get; private set; }
         public static uint RESOLUTION_WIDTH { get; private set; } = 960;
         public static uint RESOLUTION_HEIGHT { get; private set; } = 640;
 
@@ -15,18 +15,18 @@ namespace Annex.Graphics
         }
 
         public GameWindow() {
-            this.Context = new SfmlContext();
+            this.Canvas = new SfmlCanvas();
         }
 
         public void ChangeResolution(uint width, uint height) {
             GameWindow.RESOLUTION_WIDTH = width;
             GameWindow.RESOLUTION_HEIGHT = height;
 
-            var oldCamera = this.Context.GetCamera();
-            this.Context.Destroy();
+            var oldCamera = this.Canvas.GetCamera();
+            this.Canvas.Destroy();
 
-            this.Context = new SfmlContext();
-            this.Context.GetCamera().Copy(oldCamera);
+            this.Canvas = new SfmlCanvas();
+            this.Canvas.GetCamera().Copy(oldCamera);
         }
     }
 }

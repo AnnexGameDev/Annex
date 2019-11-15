@@ -35,7 +35,7 @@ namespace Annex.Events
             this._tracker = tracker;
         }
 
-        public void AdjustInterval(long interval) {
+        public void SetInterval(long interval) {
             this._nextEventInvocation -= this._interval;
             this._nextEventInvocation += interval;
             this._interval = interval;

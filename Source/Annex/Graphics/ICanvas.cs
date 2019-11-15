@@ -2,11 +2,11 @@
 
 namespace Annex.Graphics
 {
-    public interface IDrawableContext
+    public interface ICanvas
     {
         void Draw(TextContext ctx);
         void Draw(TextureContext ctx);
-        void Draw(SpriteSheet sheet);
+        void Draw(SpriteSheetContext sheet);
         void Draw(SolidRectangleContext rectangle);
 
         void BeginDrawing();

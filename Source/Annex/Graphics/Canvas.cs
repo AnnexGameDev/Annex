@@ -4,11 +4,11 @@ using Annex.Scenes;
 
 namespace Annex.Graphics.Contexts
 {
-    public abstract class GraphicsContext : IDrawableContext
+    public abstract class Canvas : ICanvas
     {
         public abstract void Draw(TextContext ctx);
         public abstract void Draw(TextureContext ctx);
-        public abstract void Draw(SpriteSheet sheet);
+        public abstract void Draw(SpriteSheetContext sheet);
         public abstract void Draw(SolidRectangleContext rectangle);
         public abstract void BeginDrawing();
 

@@ -32,7 +32,7 @@ namespace Annex.Scenes.Components
             };
         }
 
-        public override void Draw(IDrawableContext context) {
+        public override void Draw(ICanvas canvas) {
 
             var sb = new StringBuilder();
             foreach (var ir in _informationRetrievers) {
@@ -40,8 +40,8 @@ namespace Annex.Scenes.Components
             }
             _information.RenderText.Set(sb.ToString());
 
-            context.Draw(this._background);
-            context.Draw(this._information);
+            canvas.Draw(this._background);
+            canvas.Draw(this._information);
         }
     }
 }

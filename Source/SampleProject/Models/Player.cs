@@ -35,9 +35,9 @@ namespace SampleProject.Models
             };
         }
 
-        public void Draw(IDrawableContext context) {
-            context.Draw(this._sprite);
-            context.Draw(this._hoverText);
+        public void Draw(ICanvas canvas) {
+            canvas.Draw(this._sprite);
+            canvas.Draw(this._hoverText);
         }
     }
 }

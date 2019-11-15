@@ -27,7 +27,7 @@ namespace Annex.Scenes.Components
             this.Visible = true;
         }
 
-        public abstract void Draw(IDrawableContext context);
+        public abstract void Draw(ICanvas canvas);
 
         public virtual UIElement? GetElementById(string id) {
             if (this.ElementID == id) {

@@ -1,6 +1,7 @@
 ﻿using Annex.Data.Shared;
 using Annex.Graphics;
 using Annex.Graphics.Contexts;
+using Annex.Graphics.Events;
 
 namespace Annex.Scenes.Components
 {
@@ -25,9 +26,9 @@ namespace Annex.Scenes.Components
             };
         }
 
-        public override void Draw(IDrawableContext context) {
-            base.Draw(context);
-            context.Draw(this.RenderText);
+        public override void Draw(ICanvas canvas) {
+            base.Draw(canvas);
+            canvas.Draw(this.RenderText);
         }
 
         public override void HandleKeyboardKeyPressed(KeyboardKeyPressedEvent e) {

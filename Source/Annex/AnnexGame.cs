@@ -16,16 +16,16 @@ namespace Annex
 
             var window = GameWindow.Singleton;
             EventManager.Singleton.AddEvent(PriorityType.GRAPHICS, () => {
-                window.Context.BeginDrawing();
-                SceneManager.Singleton.CurrentScene.Draw(window.Context);
-                window.Context.EndDrawing();
+                window.Canvas.BeginDrawing();
+                SceneManager.Singleton.CurrentScene.Draw(window.Canvas);
+                window.Canvas.EndDrawing();
                 return ControlEvent.NONE;
             }, 16, 0, "draw-graphics");
         }
 
         public void Start<T>() where T : Scene, new() {
             SceneManager.Singleton.LoadScene<T>();
-            GameWindow.Singleton.Context.SetVisible(true);
+            GameWindow.Singleton.Canvas.SetVisible(true);
             EventManager.Singleton.Run();
         }
 

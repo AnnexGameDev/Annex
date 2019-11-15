@@ -28,12 +28,12 @@ namespace Annex.Scenes.Components
             };
         }
 
-        public override void Draw(IDrawableContext context) {
+        public override void Draw(ICanvas canvas) {
             if (!this.Visible) {
                 return;
             }
-            base.Draw(context);
-            context.Draw(this.RenderText);
+            base.Draw(canvas);
+            canvas.Draw(this.RenderText);
         }
     }
 }

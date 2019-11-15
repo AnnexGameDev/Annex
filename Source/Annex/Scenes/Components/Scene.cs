@@ -1,7 +1,7 @@
 ﻿#nullable enable
 using Annex.Events;
 using Annex.Graphics;
-using Annex.Graphics.Contexts;
+using Annex.Graphics.Events;
 
 namespace Annex.Scenes.Components
 {
@@ -17,15 +17,15 @@ namespace Annex.Scenes.Components
             this.Size.Set(GameWindow.RESOLUTION_WIDTH, GameWindow.RESOLUTION_HEIGHT);
         }
 
-        public override void Draw(IDrawableContext context) {
+        public override void Draw(ICanvas canvas) {
             if (!this.Visible) {
                 return;
             }
-            this.DrawScene(context);
-            base.Draw(context);
+            this.DrawScene(canvas);
+            base.Draw(canvas);
         }
 
-        public virtual void DrawScene(IDrawableContext context) {
+        public virtual void DrawScene(ICanvas canvas) {
 
         }
 

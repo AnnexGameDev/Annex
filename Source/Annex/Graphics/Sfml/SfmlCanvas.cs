@@ -1,5 +1,7 @@
 ﻿using Annex.Events;
 using Annex.Graphics.Cameras;
+using Annex.Graphics.Contexts;
+using Annex.Graphics.Events;
 using Annex.Resources;
 using Annex.Scenes;
 using SFML.Graphics;
@@ -7,9 +9,9 @@ using SFML.System;
 using SFML.Window;
 using System;
 
-namespace Annex.Graphics.Contexts.Sfml
+namespace Annex.Graphics.Sfml
 {
-    internal class SfmlContext : GraphicsContext
+    internal class SfmlCanvas : Canvas
     {
         private bool _usingUiView;
         private readonly View _uiView;
@@ -23,7 +25,7 @@ namespace Annex.Graphics.Contexts.Sfml
         private float _lastMouseClickY;
         private long _lastMouseClick;
 
-        internal SfmlContext() {
+        internal SfmlCanvas() {
             this._camera = new Camera();
             this._uiView = new View(new Vector2f(GameWindow.RESOLUTION_WIDTH / 2, GameWindow.RESOLUTION_HEIGHT / 2), new Vector2f(GameWindow.RESOLUTION_WIDTH, GameWindow.RESOLUTION_HEIGHT));
             this._gameContentView = new View();
@@ -169,7 +171,7 @@ namespace Annex.Graphics.Contexts.Sfml
             this._buffer.Draw(text);
         }
 
-        public override void Draw(SpriteSheet sheet) {
+        public override void Draw(SpriteSheetContext sheet) {
 
             if (String.IsNullOrEmpty(sheet.SourceTextureName)) {
                 return;

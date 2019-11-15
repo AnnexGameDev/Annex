@@ -15,14 +15,14 @@ namespace SampleProject.Scenes.Level1
             this._grassyPlain = new GrassyPlain();
             this._player = new Player();
 
-            var camera = GameWindow.Singleton.Context.GetCamera();
+            var camera = GameWindow.Singleton.Canvas.GetCamera();
             camera.Follow(this._player.Position);
 
             this.Events.AddEvent("", PriorityType.INPUT, this.HandlePlayerInput, 10);
         }
 
         private ControlEvent HandlePlayerInput() {
-            var ctx = GameWindow.Singleton.Context;
+            var ctx = GameWindow.Singleton.Canvas;
 
             float speed = 1;
             if (ctx.IsKeyDown(KeyboardKey.Up)) {
@@ -45,9 +45,9 @@ namespace SampleProject.Scenes.Level1
             SceneManager.Singleton.LoadScene<GameClosing>();
         }
 
-        public override void DrawScene(IDrawableContext surfaceContext) {
-            this._grassyPlain.Draw(surfaceContext);
-            this._player.Draw(surfaceContext);
+        public override void DrawScene(ICanvas canvas) {
+            this._grassyPlain.Draw(canvas);
+            this._player.Draw(canvas);
         }
     }
 }

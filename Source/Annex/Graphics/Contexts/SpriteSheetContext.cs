@@ -4,7 +4,7 @@ using Annex.Data.Shared;
 
 namespace Annex.Graphics.Contexts
 {
-    public class SpriteSheet : DrawingContext
+    public class SpriteSheetContext : DrawingContext
     {
         public String SourceTextureName {
             get {
@@ -70,7 +70,7 @@ namespace Annex.Graphics.Contexts
         public readonly int NumRows;
         public readonly int NumColumns;
 
-        public SpriteSheet(String textureName, uint numRows, uint numColumns) {
+        public SpriteSheetContext(String textureName, uint numRows, uint numColumns) {
             this._internalTexture = new TextureContext(textureName);
             this.Row = new Int();
             this.Column = new Int();

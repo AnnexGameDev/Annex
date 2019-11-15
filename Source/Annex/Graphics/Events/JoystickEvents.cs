@@ -1,6 +1,6 @@
 ﻿using Annex.Scenes;
 
-namespace Annex.Graphics.Contexts
+namespace Annex.Graphics.Events
 {
     public class JoystickEvent
     {

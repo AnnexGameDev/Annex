@@ -1,7 +1,7 @@
 ﻿using Annex.Scenes;
 using SFML.Window;
 
-namespace Annex.Graphics.Contexts.Sfml
+namespace Annex.Graphics.Sfml
 {
     public static class Extensions
     {
