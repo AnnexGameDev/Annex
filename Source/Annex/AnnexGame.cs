@@ -20,7 +20,7 @@ namespace Annex
                 SceneManager.Singleton.CurrentScene.Draw(window.Canvas);
                 window.Canvas.EndDrawing();
                 return ControlEvent.NONE;
-            }, 16, 0, "draw-graphics");
+            }, 16, 0, GameWindow.DrawGameEventID);
         }
 
         public void Start<T>() where T : Scene, new() {

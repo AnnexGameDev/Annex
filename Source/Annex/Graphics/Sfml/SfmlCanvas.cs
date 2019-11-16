@@ -11,7 +11,7 @@ using System;
 
 namespace Annex.Graphics.Sfml
 {
-    internal class SfmlCanvas : Canvas
+    internal class SfmlCanvas : ICanvas
     {
         private bool _usingUiView;
         private readonly View _uiView;
@@ -121,7 +121,7 @@ namespace Annex.Graphics.Sfml
             };
         }
 
-        public override void Draw(TextContext ctx) {
+        public void Draw(TextContext ctx) {
 
             if (String.IsNullOrEmpty(ctx.RenderText)) {
                 return;
@@ -171,7 +171,7 @@ namespace Annex.Graphics.Sfml
             this._buffer.Draw(text);
         }
 
-        public override void Draw(SpriteSheetContext sheet) {
+        public void Draw(SpriteSheetContext sheet) {
 
             if (String.IsNullOrEmpty(sheet.SourceTextureName)) {
                 return;
@@ -194,7 +194,7 @@ namespace Annex.Graphics.Sfml
             this.Draw(sheet._internalTexture);
         }
 
-        public override void Draw(TextureContext ctx) {
+        public void Draw(TextureContext ctx) {
 
             if (String.IsNullOrEmpty(ctx.SourceTextureName)) {
                 return;
@@ -241,7 +241,7 @@ namespace Annex.Graphics.Sfml
             this._buffer.Draw(sprite);
         }
 
-        public override void Draw(SolidRectangleContext rectangle) {
+        public void Draw(SolidRectangleContext rectangle) {
             this.UpdateView(rectangle);
 
             var shape = new RectangleShape {
@@ -266,14 +266,14 @@ namespace Annex.Graphics.Sfml
             return this._fonts.GetResource(fontName);
         }
 
-        public override void BeginDrawing() {
+        public void BeginDrawing() {
             this._buffer.Clear();
             this._buffer.DispatchEvents();
             Joystick.Update();
             this.UpdateGameContentCamera();
         }
 
-        public override void EndDrawing() {
+        public void EndDrawing() {
             this._buffer.Display();
         }
 
@@ -286,29 +286,29 @@ namespace Annex.Graphics.Sfml
             this._usingUiView = false;
         }
 
-        public override void SetVisible(bool visible) {
+        public void SetVisible(bool visible) {
             this._buffer.SetVisible(visible);
         }
 
-        public override bool IsMouseButtonDown(MouseButton button) {
+        public bool IsMouseButtonDown(MouseButton button) {
             var sfmlButton = button.ToSFML();
             return Mouse.IsButtonPressed(sfmlButton);
         }
 
-        public override bool IsKeyDown(KeyboardKey key) {
+        public bool IsKeyDown(KeyboardKey key) {
             var sfmlKey = key.ToSFML();
             return sfmlKey != Keyboard.Key.Unknown ? Keyboard.IsKeyPressed(sfmlKey) : false;
         }
 
-        public override Camera GetCamera() {
+        public Camera GetCamera() {
             return this._camera;
         }
 
-        public override void Destroy() {
+        public void Destroy() {
             this._buffer.Close();
         }
 
-        public override Data.Shared.Vector GetRealMousePos() {
+        public Data.Shared.Vector GetRealMousePos() {
             var realpos = Mouse.GetPosition(this._buffer);
             var pos = this._buffer.MapPixelToCoords(realpos, this._uiView);
             return Data.Shared.Vector.Create(pos.X, pos.Y);
@@ -326,15 +326,15 @@ namespace Annex.Graphics.Sfml
             }
         }
 
-        public override bool IsJoystickConnected(uint joystickId) {
+        public bool IsJoystickConnected(uint joystickId) {
             return Joystick.IsConnected(joystickId);
         }
 
-        public override bool IsJoystickButtonPressed(uint joystickId, JoystickButton button) {
+        public bool IsJoystickButtonPressed(uint joystickId, JoystickButton button) {
             return Joystick.IsButtonPressed(joystickId, (uint)button);
         }
 
-        public override float GetJoystickAxis(uint joystickId, JoystickAxis axis) {
+        public float GetJoystickAxis(uint joystickId, JoystickAxis axis) {
             return Joystick.GetAxisPosition(joystickId, (Joystick.Axis)axis);
         }
     }

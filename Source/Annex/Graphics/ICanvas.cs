@@ -1,17 +1,10 @@
-﻿using Annex.Graphics.Contexts;
+﻿using Annex.Graphics.Cameras;
 
 namespace Annex.Graphics
 {
-    public interface ICanvas
+    public interface ICanvas : IDrawableSurface, IHardwarePollable
     {
-        void Draw(TextContext ctx);
-        void Draw(TextureContext ctx);
-        void Draw(SpriteSheetContext sheet);
-        void Draw(SolidRectangleContext rectangle);
-
-        void BeginDrawing();
-        void EndDrawing();
-
+        Camera GetCamera();
         void SetVisible(bool visible);
     }
 }

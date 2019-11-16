@@ -21,12 +21,7 @@ namespace Annex.Scenes.Components
             if (!this.Visible) {
                 return;
             }
-            this.DrawScene(canvas);
             base.Draw(canvas);
-        }
-
-        public virtual void DrawScene(ICanvas canvas) {
-
         }
 
         internal override bool HandleSceneFocusMouseDown(int x, int y) {

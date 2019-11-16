@@ -45,9 +45,11 @@ namespace SampleProject.Scenes.Level1
             SceneManager.Singleton.LoadScene<GameClosing>();
         }
 
-        public override void DrawScene(ICanvas canvas) {
+        public override void Draw(ICanvas canvas) {
             this._grassyPlain.Draw(canvas);
             this._player.Draw(canvas);
+
+            base.Draw(canvas);
         }
     }
 }

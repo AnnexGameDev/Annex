@@ -1,4 +1,5 @@
-﻿using Annex.Events;
+﻿#nullable enable
+using Annex.Events;
 using SFML.Audio;
 using System.Collections.Generic;
 
@@ -6,6 +7,7 @@ namespace Annex.Audio.Players.Sfml
 {
     internal sealed class SfmlPlayer : IAudioPlayer
     {
+        public const string GameEventID = "sfml-audio-player-gc";
         private readonly List<PlayingAudio> _playingAudio;
         private readonly object _lock = new object();
 
@@ -24,16 +26,20 @@ namespace Annex.Audio.Players.Sfml
                     }
                     return ControlEvent.NONE;
                 }
-            }, 5000, eventID: "sfml-player-gc");
+            }, 5000, eventID: GameEventID);
         }
 
-        public void StopAllAudio() {
+        public void StopAllAudio(string? id = null) {
             lock (this._lock) {
-                foreach (var audio in this._playingAudio) {
+                for (int i = 0; i < this._playingAudio.Count; i++) {
+                    var audio = this._playingAudio[i];
+                    if (id != null && audio.Id != id) {
+                        continue;
+                    }
                     audio.Stop();
                     audio.Dispose();
+                    this._playingAudio.RemoveAt(i--);
                 }
-                this._playingAudio.Clear();
             }
         }
 
@@ -56,19 +62,6 @@ namespace Annex.Audio.Players.Sfml
                 };
                 sound.Play();
                 this._playingAudio.Add(new PlayingAudio(id, sound));
-            }
-        }
-
-        public void StopById(string id) {
-            lock (this._lock) {
-                for (int i = 0; i < this._playingAudio.Count; i++) {
-                    var audio = this._playingAudio[i];
-                    if (audio.Id == id) {
-                        audio.Stop();
-                        audio.Dispose();
-                        this._playingAudio.RemoveAt(i--);
-                    }
-                }
             }
         }
     }
