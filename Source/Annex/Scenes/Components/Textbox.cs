@@ -32,6 +32,7 @@ namespace Annex.Scenes.Components
         }
 
         public override void HandleKeyboardKeyPressed(KeyboardKeyPressedEvent e) {
+            e.Handled = true;
             if (e.Key == KeyboardKey.BackSpace) {
                 if (System.String.IsNullOrEmpty(this.Text.Value)) {
                     return;

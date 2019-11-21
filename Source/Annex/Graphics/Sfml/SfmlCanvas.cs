@@ -36,14 +36,16 @@ namespace Annex.Graphics.Sfml
 
             var scenes = SceneManager.Singleton;
             this._buffer.Closed += (sender, e) => { scenes.CurrentScene.HandleCloseButtonPressed(); };
-            this._buffer.KeyPressed += (sender, e) => { 
+            this._buffer.KeyPressed += (sender, e) => {
                 scenes.CurrentScene.HandleKeyboardKeyPressed(new KeyboardKeyPressedEvent() {
-                    Key = e.Code.ToNonSFML()
+                    Key = e.Code.ToNonSFML(),
+                    ShiftDown = e.Shift
                 }); 
             };
             this._buffer.KeyReleased += (sender, e) => { 
                 scenes.CurrentScene.HandleKeyboardKeyReleased(new KeyboardKeyReleasedEvent() {
-                    Key = e.Code.ToNonSFML()
+                    Key = e.Code.ToNonSFML(),
+                    ShiftDown = e.Shift
                 });
             };
             this._buffer.MouseButtonPressed += (sender, e) => {

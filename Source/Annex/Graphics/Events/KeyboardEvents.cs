@@ -2,9 +2,10 @@
 
 namespace Annex.Graphics.Events
 {
-    public class KeyboardEvent
+    public class KeyboardEvent : HardwareEvent
     {
         public KeyboardKey Key;
+        public bool ShiftDown;
     }
 
     public class KeyboardKeyPressedEvent : KeyboardEvent

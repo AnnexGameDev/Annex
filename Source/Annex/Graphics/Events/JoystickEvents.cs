@@ -2,7 +2,7 @@
 
 namespace Annex.Graphics.Events
 {
-    public class JoystickEvent
+    public class JoystickEvent : HardwareEvent
     {
         public uint JoystickID;
     }

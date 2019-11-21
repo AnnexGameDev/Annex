@@ -2,7 +2,7 @@
 
 namespace Annex.Graphics.Events
 {
-    public class MouseButtonEvent
+    public class MouseButtonEvent : HardwareEvent
     {
         public MouseButton Button;
         public float WorldX;

@@ -33,15 +33,21 @@ namespace Annex.Scenes.Components
         }
 
         public override void HandleKeyboardKeyPressed(KeyboardKeyPressedEvent e) {
-            this.FocusObject?.HandleKeyboardKeyPressed(e);
+            if (!e.Handled) {
+                this.FocusObject?.HandleKeyboardKeyPressed(e);
+            }
         }
 
         public override void HandleMouseButtonPressed(MouseButtonPressedEvent e) {
-            this.FocusObject?.HandleMouseButtonPressed(e);
+            if (!e.Handled) {
+                this.FocusObject?.HandleMouseButtonPressed(e);
+            }
         }
 
         public override void HandleMouseButtonReleased(MouseButtonReleasedEvent e) {
-            this.FocusObject?.HandleMouseButtonReleased(e);
+            if (!e.Handled) {
+                this.FocusObject?.HandleMouseButtonReleased(e);
+            }
         }
     }
 }

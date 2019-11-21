@@ -12,16 +12,24 @@ namespace Annex
         public static void ToggleDebugOverlay() {
             var scene = SceneManager.Singleton.CurrentScene;
 
-            if (scene.GetElementById("Debug-Overlay") == null) {
-                scene.AddChild(new DebugOverlay("Debug-Overlay"));
+            if (scene.GetElementById(DebugOverlay.ID) == null) {
+                var overlay = new DebugOverlay();
+                scene.AddChild(overlay);
+                scene.FocusObject = overlay;
             } else {
-                scene.RemoveElementById("Debug-Overlay");
+                scene.FocusObject = null;
+                scene.RemoveElementById(DebugOverlay.ID);
             }
         }
 
         [Conditional("DEBUG")]
-        public static void DisplayInformation(Func<string> worker) {
-            DebugOverlay._informationRetrievers.Add(worker);
+        public static void AddDebugInformation(Func<string> worker) {
+            DebugOverlay.AddInformation(worker);
+        }
+
+        [Conditional("DEBUG")]
+        public static void AddDebugCommand(string commandName, Action<string[]> worker) {
+            DebugOverlay.AddCommand(commandName, worker);
         }
 
         [Conditional("DEBUG")]
