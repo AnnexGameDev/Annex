@@ -35,8 +35,9 @@ namespace Annex
         [Conditional("DEBUG")]
         public static void Assert(bool condition, [CallerLineNumber] int line = 0, [CallerMemberName] string callingMethod = "unknown", [CallerFilePath] string filePath = "unknown") {
             if (!condition) {
-                Debug.Log($"Assertion failed in {filePath} on line {line} in the function {callingMethod}.");
-                throw new System.Exception("Assertion failed.");
+                string message = $"Assertion failed in {filePath} on line {line} in the function {callingMethod}.";
+                Debug.Log(message);
+                throw new System.Exception(message);
             }
         }
 
