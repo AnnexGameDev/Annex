@@ -7,6 +7,7 @@ namespace Annex.Graphics
     {
         // Mouse
         Vector GetRealMousePos();
+        Vector GetGameWorldMousePos();
         bool IsMouseButtonDown(MouseButton button);
 
         // Keyboard

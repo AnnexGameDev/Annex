@@ -316,6 +316,12 @@ namespace Annex.Graphics.Sfml
             return Data.Shared.Vector.Create(pos.X, pos.Y);
         }
 
+        public Data.Shared.Vector GetGameWorldMousePos() {
+            var mousePos = Mouse.GetPosition(this._buffer);
+            var gamePos = this._buffer.MapPixelToCoords(mousePos, this._gameContentView);
+            return Data.Shared.Vector.Create(gamePos.X, gamePos.Y);
+        }
+
         private void UpdateView(DrawingContext ctx) {
             if (ctx.UseUIView != this._usingUiView) {
                 if (ctx.UseUIView) {

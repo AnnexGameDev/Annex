@@ -4,7 +4,6 @@
     {
         A = 0,
         B,
-        C,
         X,
         Y,
         LeftBumper,
