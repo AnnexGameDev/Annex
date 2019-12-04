@@ -40,5 +40,9 @@ namespace Annex.Events
             this._nextEventInvocation += interval;
             this._interval = interval;
         }
+
+        public long GetInterval() {
+            return this._interval;
+        }
     }
 }
