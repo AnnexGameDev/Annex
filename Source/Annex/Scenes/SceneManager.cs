@@ -26,9 +26,9 @@ namespace Annex.Scenes
             this.LoadScene<GameClosing>();
         }
 
-        public void LoadScene<T>() where T : Scene, new() {
-            if (!this._scenes.ContainsKey(typeof(T))) {
-                this._scenes.Add(typeof(T), new T());
+        public void LoadScene<T>(bool overwrite = false) where T : Scene, new() {
+            if (overwrite || !this._scenes.ContainsKey(typeof(T))) {
+                this._scenes[typeof(T)] = new T();
             }
             this._currentSceneType = typeof(T);
         }
