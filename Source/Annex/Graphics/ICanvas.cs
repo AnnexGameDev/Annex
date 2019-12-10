@@ -6,5 +6,6 @@ namespace Annex.Graphics
     {
         Camera GetCamera();
         void SetVisible(bool visible);
+        void ProcessEvents();
     }
 }

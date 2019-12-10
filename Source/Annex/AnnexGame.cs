@@ -14,11 +14,16 @@ namespace Annex
         public AnnexGame() {
             this.CopyResources();
 
+            var events = EventManager.Singleton;
             var window = GameWindow.Singleton;
-            EventManager.Singleton.AddEvent(PriorityType.GRAPHICS, () => {
+            events.AddEvent(PriorityType.GRAPHICS, () => {
                 window.Canvas.BeginDrawing();
                 SceneManager.Singleton.CurrentScene.Draw(window.Canvas);
                 window.Canvas.EndDrawing();
+                return ControlEvent.NONE;
+            }, 16, 0, GameWindow.DrawGameEventID);
+            events.AddEvent(PriorityType.INPUT, () => {
+                window.Canvas.ProcessEvents();
                 return ControlEvent.NONE;
             }, 16, 0, GameWindow.DrawGameEventID);
         }

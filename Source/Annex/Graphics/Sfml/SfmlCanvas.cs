@@ -270,8 +270,6 @@ namespace Annex.Graphics.Sfml
 
         public void BeginDrawing() {
             this._buffer.Clear();
-            this._buffer.DispatchEvents();
-            Joystick.Update();
             this.UpdateGameContentCamera();
         }
 
@@ -344,6 +342,11 @@ namespace Annex.Graphics.Sfml
 
         public float GetJoystickAxis(uint joystickId, JoystickAxis axis) {
             return Joystick.GetAxisPosition(joystickId, (Joystick.Axis)axis);
+        }
+
+        public void ProcessEvents() {
+            this._buffer.DispatchEvents();
+            Joystick.Update();
         }
     }
 }

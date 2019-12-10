@@ -4,11 +4,12 @@
     {
         START,
         LOGIC,
-        ANIMATION,
         INPUT,
         CAMERA,
+        ANIMATION,
         GRAPHICS,
         SOUNDS,
+        NETWORK,
         END
     }
 }
