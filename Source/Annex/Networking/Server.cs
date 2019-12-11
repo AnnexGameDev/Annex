@@ -5,7 +5,7 @@ namespace Annex.Networking
 {
     public abstract class Server<T> : SocketEndpoint<T>, IServer where T : Connection
     {
-        private protected readonly ServerConfiguration Configuration;
+        public readonly ServerConfiguration Configuration;
 
         public const string NetworkEventID = "process-network-server";
 

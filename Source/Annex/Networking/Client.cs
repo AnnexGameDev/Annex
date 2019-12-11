@@ -5,7 +5,7 @@ namespace Annex.Networking
 {
     public abstract class Client<T> : SocketEndpoint<T>, IClient where T : Connection
     {
-        private protected readonly ClientConfiguration Configuration;
+        public readonly ClientConfiguration Configuration;
         public const string NetworkEventID = "process-network-client";
 
         public Client(ClientConfiguration config) {

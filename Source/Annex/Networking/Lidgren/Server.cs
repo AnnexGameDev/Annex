@@ -47,7 +47,6 @@ namespace Annex.Networking.Lidgren
         private void ProcessMessage(NetIncomingMessage message) {
             if (!this.Connections.Exists(message.SenderConnection)) {
                 var connection = new T();
-                Console.WriteLine(message.SenderConnection.RemoteUniqueIdentifier);
                 connection.SetBaseConnection(message.SenderConnection);
                 connection.SetID(this.Connections.GetFreeID());
                 connection.SetEndpoint(this);
