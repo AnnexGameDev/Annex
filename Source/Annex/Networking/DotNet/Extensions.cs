@@ -1,6 +1,6 @@
 ﻿using System.Net.Sockets;
 
-namespace Annex.Networking.Core
+namespace Annex.Networking.DotNet
 {
     public static class Extensions
     {

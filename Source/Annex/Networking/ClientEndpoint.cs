@@ -3,12 +3,12 @@ using Annex.Networking.Packets;
 
 namespace Annex.Networking
 {
-    public abstract class Client<T> : SocketEndpoint<T>, IClient where T : Connection, new()
+    public abstract class ClientEndpoint<T> : SocketEndpoint<T>, IClient where T : Connection, new()
     {
         public readonly ClientConfiguration Configuration;
         public const string NetworkEventID = "process-network-client";
 
-        public Client(ClientConfiguration config) {
+        public ClientEndpoint(ClientConfiguration config) {
             this.Configuration = config;
         }
 

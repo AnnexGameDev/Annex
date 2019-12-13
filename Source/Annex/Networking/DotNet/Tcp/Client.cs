@@ -4,7 +4,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Annex.Networking.Core.Tcp
+namespace Annex.Networking.DotNet.Tcp
 {
     public class Client : CoreSocket
     {

@@ -3,14 +3,14 @@ using Annex.Networking.Configuration;
 using Annex.Networking.Packets;
 using System;
 
-namespace Annex.Networking.Core
+namespace Annex.Networking.DotNet
 {
-    public class Client<T> : Networking.Client<T>, IClient where T : Connection, new()
+    public class DotNetClient<T> : ClientEndpoint<T>, IClient where T : Connection, new()
     {
         private readonly CoreSocket _client;
         private readonly MessageQueue<T> _messageQueue;
 
-        public Client(ClientConfiguration config) : base(config) {
+        public DotNetClient(ClientConfiguration config) : base(config) {
             this._messageQueue = new MessageQueue<T>(this);
 
             if (config.Method == TransmissionType.UnreliableUnordered) {
@@ -36,7 +36,5 @@ namespace Annex.Networking.Core
             this._client.Start();
             EventManager.Singleton.AddEvent(PriorityType.NETWORK, this._messageQueue.ProcessQueue, 0, 0, "client-core-process-queue");
         }
-
-        
     }
 }

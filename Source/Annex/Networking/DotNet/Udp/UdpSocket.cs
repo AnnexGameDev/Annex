@@ -4,7 +4,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Annex.Networking.Core.Udp
+namespace Annex.Networking.DotNet.Udp
 {
     public class UdpSocket : CoreSocket
     {

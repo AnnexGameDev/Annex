@@ -1,9 +1,8 @@
 ﻿using Annex.Events;
-using Annex.Networking.Configuration;
 using Annex.Networking.Packets;
 using System.Collections.Generic;
 
-namespace Annex.Networking.Core
+namespace Annex.Networking.DotNet
 {
     public class MessageQueue<T> where T : Connection, new()
     {

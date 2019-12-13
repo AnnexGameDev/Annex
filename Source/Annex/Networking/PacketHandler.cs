@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Annex.Networking.Configuration
+namespace Annex.Networking
 {
     public class PacketHandler<T> where T : Connection
     {

@@ -2,7 +2,7 @@
 using Annex.Networking.Packets;
 using System.Net;
 
-namespace Annex.Networking.Core.Udp
+namespace Annex.Networking.DotNet.Udp
 {
     public class Client : UdpSocket
     {

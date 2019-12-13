@@ -1,6 +1,6 @@
 ﻿#nullable enable
 
-namespace Annex.Networking.Configuration
+namespace Annex.Networking
 {
     public abstract class Connection
     {

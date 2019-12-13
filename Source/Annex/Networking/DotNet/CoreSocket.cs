@@ -1,7 +1,7 @@
 ﻿using Annex.Networking.Configuration;
 using Annex.Networking.Packets;
 
-namespace Annex.Networking.Core
+namespace Annex.Networking.DotNet
 {
     public abstract class CoreSocket
     {

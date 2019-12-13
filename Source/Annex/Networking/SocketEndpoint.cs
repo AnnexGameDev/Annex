@@ -1,4 +1,4 @@
-﻿namespace Annex.Networking.Configuration
+﻿namespace Annex.Networking
 {
     public abstract class SocketEndpoint<T> where T : Connection, new()
     {

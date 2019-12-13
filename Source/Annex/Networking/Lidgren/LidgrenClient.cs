@@ -7,39 +7,35 @@ using System;
 
 namespace Annex.Networking.Lidgren
 {
-    public class Server<T> : Networking.Server<T> where T : Connection, new()
+    public class LidgrenClient<T> : ClientEndpoint<T> where T : Connection, new()
     {
         private NetPeerConfiguration _lidgrenConfig;
-        private NetServer _lidgrenServer;
+        private NetClient _lidgrenClient;
         private NetDeliveryMethod _method;
 
-        public Server(ServerConfiguration config) : base(config) {
+        public LidgrenClient(ClientConfiguration config) : base(config) {
             this._lidgrenConfig = config;
-            this._lidgrenConfig.EnableMessageType(NetIncomingMessageType.ConnectionApproval);
             this._method = config.Method == TransmissionType.ReliableOrdered ? NetDeliveryMethod.ReliableOrdered : NetDeliveryMethod.Unreliable;
         }
 
-        public override void Destroy() {
-            this._lidgrenServer.Shutdown("shutdown");
-        }
-
         public override void Start() {
-            Console.WriteLine($"Creating server: {this.Configuration}");
-            this._lidgrenServer = new NetServer(this._lidgrenConfig);
-            this._lidgrenServer.Start();
+            Console.WriteLine($"Creating client: {this.Configuration}");
+            this._lidgrenClient = new NetClient(this._lidgrenConfig);
+            this._lidgrenClient.Start();
+
+            this._lidgrenClient.Connect(this.Configuration.IP, this.Configuration.Port);
 
             EventManager.Singleton.AddEvent(PriorityType.NETWORK, this.OnReceive, 0, 0, NetworkEventID);
         }
 
         private ControlEvent OnReceive() {
-
             if (SceneManager.Singleton.IsCurrentScene<GameClosing>()) {
                 this.Destroy();
                 return ControlEvent.REMOVE;
             }
 
             NetIncomingMessage message;
-            while ((message = this._lidgrenServer.ReadMessage()) != null) {
+            while ((message = this._lidgrenClient.ReadMessage()) != null) {
                 this.ProcessMessage(message);
             }
 
@@ -56,10 +52,6 @@ namespace Annex.Networking.Lidgren
                     connection.SetState(state.ToConnectionState());
                     break;
                 }
-                case NetIncomingMessageType.ConnectionApproval: {
-                    message.SenderConnection.Approve(this._lidgrenServer.CreateMessage("Approve"));
-                    break;
-                }
                 case NetIncomingMessageType.Data: {
                     using var packet = new IncomingPacket(message.Data);
                     var connection = this.Connections.Get(message.SenderConnection);
@@ -70,19 +62,20 @@ namespace Annex.Networking.Lidgren
                     Console.WriteLine($"Warning Message: {message.ReadString()}");
                     break;
                 default:
-                    Console.WriteLine($"[NET SERVER LIDGREN] - processing {message.MessageType} message");
+                    Console.WriteLine($"[NET CLIENT LIDGREN] - processing {message.MessageType} message");
                     break;
             }
         }
 
-        public override void SendPacket(T client, int packetID, OutgoingPacket packet) {
-            var connection = client.BaseConnection as NetConnection;
-            Debug.Assert(connection != null);
+        public override void Destroy() {
+            this._lidgrenClient.Disconnect("shutdown");
+        }
 
-            var message = this._lidgrenServer.CreateMessage();
+        public override void SendPacket(int packetID, OutgoingPacket packet) {
+            var message = this._lidgrenClient.CreateMessage();
             message.Write(packetID);
             message.Write(packet.GetBytes());
-            this._lidgrenServer.SendMessage(message, connection, this._method);
+            this._lidgrenClient.SendMessage(message, this._method);
         }
     }
 }
