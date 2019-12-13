@@ -28,7 +28,7 @@ namespace Annex.Networking.Core.Udp
 
             var clientEndpoint = new IPEndPoint(IPAddress.Any, 0);
             byte[] data = this._socket.EndReceive(ar, ref clientEndpoint);
-            this.PacketReceived(clientEndpoint, data);
+            this.ReceivePacket(clientEndpoint, data);
         }
 
         public override void Destroy() {

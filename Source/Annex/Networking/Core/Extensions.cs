@@ -4,22 +4,22 @@ namespace Annex.Networking.Core
 {
     public static class Extensions
     {
-        public static SocketType GetSocketType(this Protocol protocol) {
+        public static SocketType GetSocketType(this TransmissionType protocol) {
             switch (protocol) {
-                case Protocol.TCP:
+                case TransmissionType.ReliableOrdered:
                     return SocketType.Stream;
-                case Protocol.UDP:
+                case TransmissionType.UnreliableUnordered:
                     return SocketType.Dgram;
                 default:
                     return SocketType.Unknown;
             }
         }
 
-        public static ProtocolType GetProtocolType(this Protocol protocol) {
+        public static ProtocolType GetProtocolType(this TransmissionType protocol) {
             switch (protocol) {
-                case Protocol.TCP:
+                case TransmissionType.ReliableOrdered:
                     return ProtocolType.Tcp;
-                case Protocol.UDP:
+                case TransmissionType.UnreliableUnordered:
                     return ProtocolType.Udp;
                 default:
                     return ProtocolType.Unknown;

@@ -11,9 +11,11 @@ namespace Annex.Networking.Lidgren
     {
         private NetPeerConfiguration _lidgrenConfig;
         private NetClient _lidgrenClient;
+        private NetDeliveryMethod _method;
 
         public Client(ClientConfiguration config) : base(config) {
             this._lidgrenConfig = config;
+            this._method = config.Method == TransmissionType.ReliableOrdered ? NetDeliveryMethod.ReliableOrdered : NetDeliveryMethod.Unreliable;
         }
 
         public override void Start() {
@@ -41,13 +43,7 @@ namespace Annex.Networking.Lidgren
         }
 
         private void ProcessMessage(NetIncomingMessage message) {
-            if (!this.Connections.Exists(message.SenderConnection)) {
-                var connection = new T();
-                connection.SetBaseConnection(message.SenderConnection);
-                connection.SetID(this.Connections.GetFreeID());
-                connection.SetEndpoint(this);
-                this.Connections.Add(connection);
-            }
+            this.Connections.CreateIfNotExistsAndGet(message.SenderConnection, this);
 
             switch (message.MessageType) {
                 case NetIncomingMessageType.StatusChanged: {
@@ -79,7 +75,7 @@ namespace Annex.Networking.Lidgren
             var message = this._lidgrenClient.CreateMessage();
             message.Write(packetID);
             message.Write(packet.GetBytes());
-            this._lidgrenClient.SendMessage(message, NetDeliveryMethod.ReliableOrdered);
+            this._lidgrenClient.SendMessage(message, this._method);
         }
     }
 }

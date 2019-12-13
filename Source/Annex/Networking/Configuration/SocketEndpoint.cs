@@ -1,6 +1,6 @@
 ﻿namespace Annex.Networking.Configuration
 {
-    public abstract class SocketEndpoint<T> where T : Connection
+    public abstract class SocketEndpoint<T> where T : Connection, new()
     {
         public readonly ConnectionList<T> Connections;
         public readonly PacketHandler<T> PacketHandler;

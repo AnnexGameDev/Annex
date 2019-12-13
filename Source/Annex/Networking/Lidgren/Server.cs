@@ -11,10 +11,12 @@ namespace Annex.Networking.Lidgren
     {
         private NetPeerConfiguration _lidgrenConfig;
         private NetServer _lidgrenServer;
+        private NetDeliveryMethod _method;
 
         public Server(ServerConfiguration config) : base(config) {
             this._lidgrenConfig = config;
             this._lidgrenConfig.EnableMessageType(NetIncomingMessageType.ConnectionApproval);
+            this._method = config.Method == TransmissionType.ReliableOrdered ? NetDeliveryMethod.ReliableOrdered : NetDeliveryMethod.Unreliable;
         }
 
         public override void Destroy() {
@@ -45,13 +47,7 @@ namespace Annex.Networking.Lidgren
         }
 
         private void ProcessMessage(NetIncomingMessage message) {
-            if (!this.Connections.Exists(message.SenderConnection)) {
-                var connection = new T();
-                connection.SetBaseConnection(message.SenderConnection);
-                connection.SetID(this.Connections.GetFreeID());
-                connection.SetEndpoint(this);
-                this.Connections.Add(connection);
-            }
+            this.Connections.CreateIfNotExistsAndGet(message.SenderConnection, this);
 
             switch (message.MessageType) {
                 case NetIncomingMessageType.StatusChanged: {
@@ -86,7 +82,7 @@ namespace Annex.Networking.Lidgren
             var message = this._lidgrenServer.CreateMessage();
             message.Write(packetID);
             message.Write(packet.GetBytes());
-            this._lidgrenServer.SendMessage(message, connection, NetDeliveryMethod.ReliableOrdered);
+            this._lidgrenServer.SendMessage(message, connection, this._method);
         }
     }
 }

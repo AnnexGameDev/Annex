@@ -3,7 +3,7 @@ using Annex.Networking.Packets;
 
 namespace Annex.Networking
 {
-    public abstract class Server<T> : SocketEndpoint<T>, IServer where T : Connection
+    public abstract class Server<T> : SocketEndpoint<T>, IServer where T : Connection, new()
     {
         public readonly ServerConfiguration Configuration;
 

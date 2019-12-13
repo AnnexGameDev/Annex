@@ -18,7 +18,7 @@ namespace Annex.Networking.Core
         public abstract void Destroy();
         public abstract void SendPacket(object baseConnection, int packetID, OutgoingPacket packet);
 
-        private protected void PacketReceived(object baseConnection, byte[] data) {
+        public void ReceivePacket(object baseConnection, byte[] data) {
             this.OnReceive?.Invoke(baseConnection, data);
         }
     }

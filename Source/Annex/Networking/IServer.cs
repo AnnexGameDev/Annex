@@ -4,6 +4,6 @@ namespace Annex.Networking
 {
     public interface IServer
     {
-        public abstract void SendPacket(object client, int packetID, OutgoingPacket packet);
+        void SendPacket(object client, int packetID, OutgoingPacket packet);
     }
 }

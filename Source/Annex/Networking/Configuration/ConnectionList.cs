@@ -2,7 +2,7 @@
 
 namespace Annex.Networking.Configuration
 {
-    public class ConnectionList<T> where T : Connection
+    public class ConnectionList<T> where T : Connection, new()
     {
         private readonly List<T> _connections;
         private readonly Dictionary<object, int> _connectionMap;
@@ -22,7 +22,7 @@ namespace Annex.Networking.Configuration
             return id;
         }
 
-        public void Add(T connection) {
+        private void Add(T connection) {
             Debug.Assert(connection.ID >= 0);
             Debug.Assert(connection.ID <= this._connections.Count);
 
@@ -35,6 +35,17 @@ namespace Annex.Networking.Configuration
 
             this._connections[(int)connection.ID] = connection;
             this._connectionMap[connection.BaseConnection] = (int)connection.ID;
+        }
+
+        public T CreateIfNotExistsAndGet(object baseConnection, SocketEndpoint<T> endpoint) {
+            if (!this.Exists(baseConnection)) {
+                var connection = new T();
+                connection.SetBaseConnection(baseConnection);
+                connection.SetID(this.GetFreeID());
+                connection.SetEndpoint(endpoint);
+                this.Add(connection);
+            }
+            return this.Get(baseConnection);
         }
 
         public T Get(int index) {
