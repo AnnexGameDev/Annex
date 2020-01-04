@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Annex.Game</id>
+    <version>0.0.2</version>
+    <authors>Matthew Chrobak</authors>
+    <owners>Matthew Chrobak</owners>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="file">LICENSE</license>
+    <description>2D game development framework</description>
+    <dependencies>
+      <group targetFramework=".NETCoreApp3.0">
+        <dependency id="SFML.Net" version="2.5.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <!-- Dummy -->
+    <!-- <file src=".\Source\Annex\bin\Release\netcoreapp3.0\Annex.dll" target="lib\netcoreapp3.0" />
+    <file src=".\Annex.Game.Test.targets" target="build" /> -->
+
+    <!-- Release -->
+    <!-- <file src=".\Source\Annex\bin\Release\netcoreapp3.0\Annex.dll" target="lib\netcoreapp3.0\Release" />
+    <file src=".\Source\Annex\bin\x64\Release\netcoreapp3.0\Annex.dll" target="runtimes\win-x64\lib\netcoreapp3.0\Release" />
+    <file src=".\Source\Annex\bin\x86\Release\netcoreapp3.0\Annex.dll" target="runtimes\win-x86\lib\netcoreapp3.0\Release" /> -->
+
+    <!-- Debug -->
+    <!-- <file src=".\Source\Annex\bin\Debug\netcoreapp3.0\Annex.dll" target="lib\netcoreapp3.0\Debug" />
+    <file src=".\Source\Annex\bin\x64\Debug\netcoreapp3.0\Annex.dll" target="runtimes\win-x64\lib\netcoreapp3.0\Debug" />
+    <file src=".\Source\Annex\bin\x86\Debug\netcoreapp3.0\Annex.dll" target="runtimes\win-x86\lib\netcoreapp3.0\Debug" /> -->
+    
+    <file src=".\Source\Annex\bin\Release\netcoreapp3.0\Annex.dll" target="lib\netcoreapp3.0" />
+    <file src=".\Source\Annex\bin\x64\Release\netcoreapp3.0\Annex.dll" target="runtimes\win-x64\lib\netcoreapp3.0" />
+    <file src=".\Source\Annex\bin\x86\Release\netcoreapp3.0\Annex.dll" target="runtimes\win-x86\lib\netcoreapp3.0" />
+
+    <file src=".\LICENSE" target="LICENSE" />
+  </files>
+</package>

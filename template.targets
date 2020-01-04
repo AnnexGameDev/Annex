@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <Reference Include="__app_id__">
+      <HintPath>$(NuGetPackageRoot)\packages\__app_id__\__version__\lib\Debug\Annex.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <Reference Include="__app_id__">
+      <HintPath>$(NuGetPackageRoot)\packages\__app_id__\__version__\lib\Release\Annex.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <Reference Include="__app_id__">
+      <HintPath>$(NuGetPackageRoot)\packages\__app_id__\__version__\win-x86\lib\__framework__\Release\Annex.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <Reference Include="__app_id__">
+      <HintPath>$(NuGetPackageRoot)\packages\__app_id__\__version__\win-x86\lib\__framework__\Debug\Annex.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <Reference Include="__app_id__">
+      <HintPath>$(NuGetPackageRoot)\packages\__app_id__\__version__\win-x64\lib\__framework__\Release\Annex.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <Reference Include="__app_id__">
+      <HintPath>$(NuGetPackageRoot)\packages\__app_id__\__version__\win-x64\lib\__framework__\Debug\Annex.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
