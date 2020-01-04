@@ -1,11 +1,11 @@
 ﻿using System.IO;
 using System.Xml.Serialization;
 
-namespace Annex
+namespace Annex.Data.Serialization
 {
     public static class XML
     {
-        public static bool Deserialize<T>(string path, out T result) {
+        public static bool XmlDeserialize<T>(string path, out T result) {
             var xml = new XmlSerializer(typeof(T));
             
             if (!File.Exists(path)) {
@@ -18,7 +18,7 @@ namespace Annex
             return true;
         }
 
-        public static void Serialize<T>(T instance, string path) {
+        public static void XmlSerialize<T>(T instance, string path) {
             var xml = new XmlSerializer(typeof(T));
             using var fs = new FileStream(path, FileMode.Create);
             xml.Serialize(fs, instance);

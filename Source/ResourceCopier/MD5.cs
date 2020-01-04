@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace Annex.IO.Hashing
+namespace ResourceCopier
 {
     public sealed class MD5 : IDisposable
     {
@@ -17,12 +17,10 @@ namespace Annex.IO.Hashing
         }
 
         public string ComputeFileHash(string filepath) {
-            Debug.Assert(File.Exists(filepath));
             return this.Compute(File.ReadAllBytes(filepath));
         }
 
         public string Compute(byte[] data) {
-            Debug.Assert(data.Length != 0);
             byte[] hash = this._algorithm.ComputeHash(data);
             var sb = new StringBuilder();
             foreach (byte val in hash) {

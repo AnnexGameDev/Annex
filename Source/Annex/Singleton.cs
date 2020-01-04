@@ -5,11 +5,8 @@ namespace Annex
 {
     public abstract class Singleton
     {
-        private static readonly Dictionary<Type, Singleton> _singletons;
+        private static readonly Dictionary<Type, Singleton> _singletons = new Dictionary<Type, Singleton>();
 
-        static Singleton() {
-            _singletons = new Dictionary<Type, Singleton>();
-        }
         /// <summary>
         /// Creates a singleton of type A under the key of B.
         /// </summary>

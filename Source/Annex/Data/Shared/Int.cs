@@ -1,5 +1,8 @@
-﻿namespace Annex.Data.Shared
+﻿using System;
+
+namespace Annex.Data.Shared
 {
+    [Serializable]
     public class Int : Shared<int>
     {
         public Int() {
