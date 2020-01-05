@@ -1,4 +1,5 @@
-﻿using Annex.Events;
+﻿using Annex;
+using Annex.Events;
 using Annex.Graphics;
 using Annex.Scenes;
 using Annex.Scenes.Components;
@@ -15,14 +16,14 @@ namespace SampleProject.Scenes.Level1
             this._grassyPlain = new GrassyPlain();
             this._player = new Player();
 
-            var camera = GameWindow.Singleton.Canvas.GetCamera();
+            var camera = ServiceProvider.Canvas.GetCamera();
             camera.Follow(this._player.Position);
 
             this.Events.AddEvent("", PriorityType.INPUT, this.HandlePlayerInput, 10);
         }
 
         private ControlEvent HandlePlayerInput() {
-            var ctx = GameWindow.Singleton.Canvas;
+            var ctx = ServiceProvider.Canvas;
 
             float speed = 1;
             if (ctx.IsKeyDown(KeyboardKey.Up)) {
@@ -42,7 +43,7 @@ namespace SampleProject.Scenes.Level1
         }
 
         public override void HandleCloseButtonPressed() {
-            SceneManager.Singleton.LoadScene<GameClosing>();
+            ServiceProvider.SceneManager.LoadScene<GameClosing>();
         }
 
         public override void Draw(ICanvas canvas) {

@@ -14,7 +14,7 @@ namespace Annex.Scenes.Components
             this.FocusObject = null;
             this.Events = new EventQueue();
             this.Position.Set(0, 0);
-            this.Size.Set(GameWindow.RESOLUTION_WIDTH, GameWindow.RESOLUTION_HEIGHT);
+            this.Size.Set(ServiceProvider.Canvas.GetResolution());
         }
 
         public override void Draw(ICanvas canvas) {

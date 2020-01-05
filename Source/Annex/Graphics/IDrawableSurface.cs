@@ -9,7 +9,6 @@ namespace Annex.Graphics
         void Draw(SpriteSheetContext sheet);
         void Draw(SolidRectangleContext rectangle);
 
-        void Destroy();
         void BeginDrawing();
         void EndDrawing();
     }

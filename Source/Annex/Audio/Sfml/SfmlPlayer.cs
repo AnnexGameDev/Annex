@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Annex.Audio.Players.Sfml
+namespace Annex.Audio.Sfml
 {
     internal sealed class SfmlPlayer : IAudioPlayer
     {
@@ -20,17 +20,17 @@ namespace Annex.Audio.Players.Sfml
         private byte[] AudioLoader_Bytes(byte[] data) => data;
         private bool AudioValidator(string path) => path.EndsWith(".flac") || path.EndsWith(".wav");
 
-        internal SfmlPlayer() {
+        public SfmlPlayer() {
             this._playingAudio = new List<PlayingAudio>();
 
-            var resources = ResourceManagerRegistry.Singleton;
+            var resources = ServiceProvider.ResourceManagerRegistry;
             var audio = resources.GetOrCreateResourceManager<FSResourceManager>(ResourceType.Audio);
             audio.SetResourcePath(this.AudioPath);
             audio.SetResourceLoader(this.AudioLoader_Bytes);
             audio.SetResourceLoader(this.AudioLoader_String);
             audio.SetResourceValidator(this.AudioValidator);
 
-            EventManager.Singleton.AddEvent(PriorityType.SOUNDS, () => {
+            ServiceProvider.EventManager.AddEvent(PriorityType.SOUNDS, () => {
                 lock (this._lock) {
                     for (int i = 0; i < this._playingAudio.Count; i++) {
                         var audio = this._playingAudio[i];
@@ -62,7 +62,7 @@ namespace Annex.Audio.Players.Sfml
         public void PlayBufferedAudio(string name, string id, bool loop, float volume) {
             name = name.ToLower();
             lock (this._lock) {
-                var audio = ResourceManagerRegistry.Singleton.GetResourceManager(ResourceType.Audio);
+                var audio = ServiceProvider.ResourceManagerRegistry.GetResourceManager(ResourceType.Audio);
                 var resource = audio.GetResource(name);
                 Music? music = null;
                 if (resource is string path) {
@@ -85,7 +85,7 @@ namespace Annex.Audio.Players.Sfml
         public void PlayAudio(string name, string id, bool loop, float volume) {
             name = name.ToLower();
             lock (this._lock) {
-                var audio = ResourceManagerRegistry.Singleton.GetResourceManager(ResourceType.Audio);
+                var audio = ServiceProvider.ResourceManagerRegistry.GetResourceManager(ResourceType.Audio);
                 var resource = audio.GetResource(name);
                 Sound? sound = null;
                 if (resource is string path) {
@@ -103,6 +103,10 @@ namespace Annex.Audio.Players.Sfml
                 sound.Play();
                 this._playingAudio.Add(new PlayingAudio(id, sound));
             }
+        }
+
+        public void Destroy() {
+            this.StopAllAudio();
         }
     }
 }

@@ -8,14 +8,14 @@ namespace Annex.Graphics.Cameras
         public Vector Size { get; private set; }
         public float CurrentZoom { get; private set; }
 
-        public Camera() {
-            this.Size = Vector.Create(GameWindow.RESOLUTION_WIDTH, GameWindow.RESOLUTION_HEIGHT);
+        public Camera(Vector resolution) {
+            this.Size = Vector.Create(resolution.X, resolution.Y);
             this.Centerpoint = Vector.Create(this.Size.X / 2, this.Size.Y / 2);
             this.CurrentZoom = 1;
         }
 
         public void Resize(float newWidth, float newHeight) {
-            this.CurrentZoom = newHeight / GameWindow.RESOLUTION_HEIGHT;
+            this.CurrentZoom = newHeight / ServiceProvider.Canvas.GetResolution().Y;
             this.Size.Set(newWidth, newHeight);
         }
 

@@ -1,4 +1,5 @@
-﻿using Annex.Networking.Packets;
+﻿#nullable enable
+using Annex.Networking.Packets;
 using System;
 using System.Net.Sockets;
 

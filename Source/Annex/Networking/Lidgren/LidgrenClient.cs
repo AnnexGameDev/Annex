@@ -25,11 +25,11 @@ namespace Annex.Networking.Lidgren
 
             this._lidgrenClient.Connect(this.Configuration.IP, this.Configuration.Port);
 
-            EventManager.Singleton.AddEvent(PriorityType.NETWORK, this.OnReceive, 0, 0, NetworkEventID);
+            ServiceProvider.EventManager.AddEvent(PriorityType.NETWORK, this.OnReceive, 0, 0, NetworkEventID);
         }
 
         private ControlEvent OnReceive() {
-            if (SceneManager.Singleton.IsCurrentScene<GameClosing>()) {
+            if (ServiceProvider.SceneManager.IsCurrentScene<GameClosing>()) {
                 this.Destroy();
                 return ControlEvent.REMOVE;
             }

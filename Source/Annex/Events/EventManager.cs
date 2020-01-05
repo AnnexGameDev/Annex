@@ -7,16 +7,11 @@ using System.Threading;
 
 namespace Annex.Events
 {
-    public sealed class EventManager : Singleton
+    public sealed class EventManager : IService
     {
         private readonly EventQueue _queue;
-        public static long CurrentTime => Singleton._sw.ElapsedMilliseconds;
+        public static long CurrentTime => ServiceProvider.Locate<EventManager>()?._sw.ElapsedMilliseconds ?? 0;
         private readonly Stopwatch _sw;
-
-        static EventManager() {
-            Create<EventManager>();
-        }
-        public static EventManager Singleton => Get<EventManager>();
 
         public EventManager() {
             this._queue = new EventQueue();
@@ -40,7 +35,7 @@ namespace Annex.Events
             // Source: https://stackoverflow.com/questions/243351/environment-tickcount-vs-datetime-now/6308701#6308701
             long tick;
             long lastTick = CurrentTime;
-            var scenes = SceneManager.Singleton;
+            var scenes = ServiceProvider.SceneManager;
             long timeDelta;
 
             while (!scenes.IsCurrentScene<GameClosing>()) {
@@ -61,7 +56,7 @@ namespace Annex.Events
         }
 
         public GameEvent? GetEvent(string id) {
-            return this._queue.GetEvent(id) ?? SceneManager.Singleton.CurrentScene.Events.GetEvent(id);
+            return this._queue.GetEvent(id) ?? ServiceProvider.SceneManager.CurrentScene.Events.GetEvent(id);
         }
 
         private void RunQueueLevel(List<GameEvent> level, long diff) {
@@ -70,6 +65,10 @@ namespace Annex.Events
                     level.RemoveAt(i--);
                 }
             }
+        }
+
+        public void Destroy() {
+
         }
     }
 }

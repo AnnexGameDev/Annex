@@ -7,6 +7,7 @@ namespace SampleProject
     {
         static void Main(string[] args) {
             AnnexGame.Initialize();
+            Debug.PackageResourcesToBinary();
             AnnexGame.Start<Level1>();
         }
     }

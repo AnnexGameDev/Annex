@@ -29,7 +29,7 @@ namespace Annex.Networking.DotNet
         public override void Start() {
             Console.WriteLine($"Creating server: {this.Configuration}");
             this._server.Start();
-            EventManager.Singleton.AddEvent(PriorityType.NETWORK, this._messageQueue.ProcessQueue, 0, 0, "server-core-process-queue");
+            ServiceProvider.EventManager.AddEvent(PriorityType.NETWORK, this._messageQueue.ProcessQueue, 0, 0, "server-core-process-queue");
         }
 
         private protected override void SendPacket(T client, int packetID, OutgoingPacket packet) {

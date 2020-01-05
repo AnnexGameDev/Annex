@@ -3,21 +3,20 @@ using System;
 
 namespace Annex.Logging
 {
-    public class Log : Singleton, ILogable
+    public class Log : IService, ILogable
     {
         private readonly DecoratableLog _log;
-
-        public static Log Singleton => Get<Log>();
-        static Log() {
-            Create<Log>();
-        }
-
+        
         public Log() {
             if (this.ConsoleExists()) {
                 this._log = new FileLog(new ConsoleLog());
             } else {
                 this._log = new FileLog();
             }
+        }
+
+        public void Destroy() {
+
         }
 
         public void Write(string content) {

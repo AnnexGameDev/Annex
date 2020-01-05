@@ -3,13 +3,8 @@ using System.Collections.Generic;
 
 namespace Annex.Resources
 {
-    public class ResourceManagerRegistry : Singleton
+    public class ResourceManagerRegistry : IService
     {
-        public static ResourceManagerRegistry Singleton => Get<ResourceManagerRegistry>();
-        static ResourceManagerRegistry() {
-            Create<ResourceManagerRegistry>();
-        }
-
         private readonly Dictionary<ResourceType, ResourceManager> _resourceManagers;
 
         public ResourceManagerRegistry() {
@@ -34,6 +29,10 @@ namespace Annex.Resources
                 this.Register<T>(resourceType);
             }
             return this._resourceManagers[resourceType];
+        }
+
+        public void Destroy() {
+
         }
     }
 }

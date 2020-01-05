@@ -1,7 +1,7 @@
 ﻿using SFML.Audio;
 using System;
 
-namespace Annex.Audio.Players.Sfml
+namespace Annex.Audio.Sfml
 {
     internal class PlayingAudio : IDisposable
     {

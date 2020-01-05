@@ -34,7 +34,7 @@ namespace Annex.Scenes.Components
 
         public DebugOverlay() : base(ID) {
             this._background = new SolidRectangleContext(new RGBA(0, 0, 0, 150)) {
-                RenderSize = Vector.Create(GameWindow.RESOLUTION_WIDTH, GameWindow.RESOLUTION_HEIGHT),
+                RenderSize = ServiceProvider.Canvas.GetResolution(),
                 UseUIView = true
             };
             this._information = new TextContext("", "default.ttf") {

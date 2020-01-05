@@ -4,17 +4,12 @@ using System.Collections.Generic;
 
 namespace Annex.Scenes
 {
-    public class SceneManager : Singleton
+    public class SceneManager : IService
     {
         private readonly Dictionary<Type, Scene> _scenes;
 
         private Type _currentSceneType;
         public Scene CurrentScene => this._scenes[this._currentSceneType];
-
-        static SceneManager() {
-            Create<SceneManager>();
-        }
-        public static SceneManager Singleton => Get<SceneManager>();
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized.
         public SceneManager() {           // Field is initialized in the LoadScene method.
@@ -36,6 +31,10 @@ namespace Annex.Scenes
 
         public bool IsCurrentScene<T>() {
             return this.CurrentScene.GetType() == typeof(T);
+        }
+
+        public void Destroy() {
+
         }
     }
 }

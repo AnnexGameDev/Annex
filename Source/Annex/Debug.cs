@@ -12,7 +12,7 @@ namespace Annex
     {
         [Conditional("DEBUG")]
         public static void ToggleDebugOverlay() {
-            var scene = SceneManager.Singleton.CurrentScene;
+            var scene = ServiceProvider.SceneManager.CurrentScene;
 
             if (scene.GetElementById(DebugOverlay.ID) == null) {
                 var overlay = new DebugOverlay();
@@ -45,7 +45,7 @@ namespace Annex
 
         [Conditional("DEBUG")]
         public static void Log(string line) {
-            Logging.Log.Singleton.WriteLine(line);
+            ServiceProvider.Log.WriteLine(line);
         }
 
         [Conditional("DEBUG")]
@@ -62,7 +62,14 @@ namespace Annex
             string resourcePath = Path.Combine(solutionPath, "resources");
             Directory.CreateDirectory(resourcePath);
 
-            ResourceManagerRegistry.Singleton.GetResourceManager(resourceType)?.PackageResourcesToBinary(resourcePath);
+            ServiceProvider.ResourceManagerRegistry.GetResourceManager(resourceType)?.PackageResourcesToBinary(resourcePath);
+        }
+
+        [Conditional("DEBUG")]
+        public static void PackageResourcesToBinary() {
+            PackageResourcesToBinary(ResourceType.Audio);
+            PackageResourcesToBinary(ResourceType.Font);
+            PackageResourcesToBinary(ResourceType.Textures);
         }
     }
 }

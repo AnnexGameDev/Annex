@@ -1,4 +1,5 @@
-﻿using Annex.Events;
+﻿#nullable enable
+using Annex.Events;
 using Annex.Graphics.Cameras;
 using Annex.Graphics.Contexts;
 using Annex.Graphics.Events;
@@ -25,6 +26,8 @@ namespace Annex.Graphics.Sfml
         private float _lastMouseClickY;
         private long _lastMouseClick;
 
+        private readonly Data.Shared.Vector _resolution;
+
         private readonly string TexturePath = Path.Combine(AppContext.BaseDirectory, "textures/");
         private Texture TextureLoader_FromString(string path) => new Texture(path);
         private Texture TextureLoader_FromBytes(byte[] data) => new Texture(data);
@@ -35,15 +38,15 @@ namespace Annex.Graphics.Sfml
         private Font FontLoader_FromBytes(byte[] data) => new Font(data);
         private bool FontValidator(string path) => path.EndsWith(".ttf");
 
-
-        internal SfmlCanvas() {
-            this._camera = new Camera();
-            this._uiView = new View(new Vector2f(GameWindow.RESOLUTION_WIDTH / 2, GameWindow.RESOLUTION_HEIGHT / 2), new Vector2f(GameWindow.RESOLUTION_WIDTH, GameWindow.RESOLUTION_HEIGHT));
+        public SfmlCanvas(float resolutionWidth, float resolutionHeight)  {
+            this._resolution = Data.Shared.Vector.Create(resolutionWidth, resolutionHeight);
+            this._camera = new Camera(this._resolution);
+            this._uiView = new View(new Vector2f(this._resolution.X / 2, this._resolution.Y / 2), new Vector2f(this._resolution.X, this._resolution.Y));
             this._gameContentView = new View();
-            this._buffer = new RenderWindow(new VideoMode(GameWindow.RESOLUTION_WIDTH, GameWindow.RESOLUTION_HEIGHT), "Window");
+            this._buffer = new RenderWindow(new VideoMode((uint)this._resolution.X, (uint)this._resolution.Y), "Window");
 
             // Resources
-            var resources = ResourceManagerRegistry.Singleton;
+            var resources = ServiceProvider.ResourceManagerRegistry;
 
             // Textures
             var textures = resources.GetOrCreateResourceManager<FSResourceManager>(ResourceType.Textures);
@@ -60,16 +63,15 @@ namespace Annex.Graphics.Sfml
             fonts.SetResourceLoader(this.FontLoader_FromBytes);
 
             // Hook up UI events
-            var scenes = SceneManager.Singleton;
-            this._buffer.Closed += (sender, e) => { scenes.CurrentScene.HandleCloseButtonPressed(); };
+            this._buffer.Closed += (sender, e) => { ServiceProvider.SceneManager.CurrentScene.HandleCloseButtonPressed(); };
             this._buffer.KeyPressed += (sender, e) => {
-                scenes.CurrentScene.HandleKeyboardKeyPressed(new KeyboardKeyPressedEvent() {
+                ServiceProvider.SceneManager.CurrentScene.HandleKeyboardKeyPressed(new KeyboardKeyPressedEvent() {
                     Key = e.Code.ToNonSFML(),
                     ShiftDown = e.Shift
                 }); 
             };
-            this._buffer.KeyReleased += (sender, e) => { 
-                scenes.CurrentScene.HandleKeyboardKeyReleased(new KeyboardKeyReleasedEvent() {
+            this._buffer.KeyReleased += (sender, e) => {
+                ServiceProvider.SceneManager.CurrentScene.HandleKeyboardKeyReleased(new KeyboardKeyReleasedEvent() {
                     Key = e.Code.ToNonSFML(),
                     ShiftDown = e.Shift
                 });
@@ -94,7 +96,7 @@ namespace Annex.Graphics.Sfml
                 this._lastMouseClickY = uiPos.Y;
                 this._lastMouseClick = EventManager.CurrentTime;
 
-                var scene = scenes.CurrentScene;
+                var scene = ServiceProvider.SceneManager.CurrentScene;
                 scene.HandleSceneFocusMouseDown((int)uiPos.X, (int)uiPos.Y);
                 scene.HandleMouseButtonPressed(new MouseButtonPressedEvent() {
                     Button = e.Button.ToNonSFML(),
@@ -109,7 +111,7 @@ namespace Annex.Graphics.Sfml
                 var mousePos = Mouse.GetPosition(this._buffer);
                 var gamePos = this._buffer.MapPixelToCoords(mousePos, this._gameContentView);
                 var uiPos = this._buffer.MapPixelToCoords(mousePos, this._uiView);
-                scenes.CurrentScene.HandleMouseButtonReleased(new MouseButtonReleasedEvent() {
+                ServiceProvider.SceneManager.CurrentScene.HandleMouseButtonReleased(new MouseButtonReleasedEvent() {
                     Button = e.Button.ToNonSFML(),
                     MouseX = (int)uiPos.X,
                     MouseY = (int)uiPos.Y,
@@ -119,29 +121,29 @@ namespace Annex.Graphics.Sfml
                 });
             };
             this._buffer.JoystickButtonPressed += (sender, e) => {
-                scenes.CurrentScene.HandleJoystickButtonPressed(new JoystickButtonPressedEvent() {
+                ServiceProvider.SceneManager.CurrentScene.HandleJoystickButtonPressed(new JoystickButtonPressedEvent() {
                     JoystickID = e.JoystickId,
                     Button = (JoystickButton)e.Button
                 });
             };
             this._buffer.JoystickButtonReleased += (sender, e) => {
-                scenes.CurrentScene.HandleJoystickButtonReleased(new JoystickButtonReleasedEvent() {
+                ServiceProvider.SceneManager.CurrentScene.HandleJoystickButtonReleased(new JoystickButtonReleasedEvent() {
                     JoystickID = e.JoystickId,
                     Button = (JoystickButton)e.Button
                 });
             };
             this._buffer.JoystickConnected += (sender, e) => {
-                scenes.CurrentScene.HandleJoystickConnected(new JoystickConnectedEvent() {
+                ServiceProvider.SceneManager.CurrentScene.HandleJoystickConnected(new JoystickConnectedEvent() {
                     JoystickID = e.JoystickId
                 });
             };
             this._buffer.JoystickDisconnected += (sender, e) => {
-                scenes.CurrentScene.HandleJoystickDisconnected(new JoystickDisconnectedEvent() {
+                ServiceProvider.SceneManager.CurrentScene.HandleJoystickDisconnected(new JoystickDisconnectedEvent() {
                     JoystickID = e.JoystickId
                 });
             };
             this._buffer.JoystickMoved += (sender, e) => {
-                scenes.CurrentScene.HandleJoystickMoved(new JoystickMovedEvent() {
+                ServiceProvider.SceneManager.CurrentScene.HandleJoystickMoved(new JoystickMovedEvent() {
                     JoystickID = e.JoystickId,
                     Axis = e.Axis.ToNonSFML(),
                     Delta = e.Position
@@ -287,13 +289,13 @@ namespace Annex.Graphics.Sfml
         }
 
         private Sprite GetSprite(string textureName) {
-            var resources = ResourceManagerRegistry.Singleton;
+            var resources = ServiceProvider.ResourceManagerRegistry;
             var textures = resources.GetResourceManager(ResourceType.Textures);
             return new Sprite(textures.GetResource(textureName) as Texture);
         }
 
         private Font GetFont(string fontName) {
-            var resources = ResourceManagerRegistry.Singleton;
+            var resources = ServiceProvider.ResourceManagerRegistry;
             var fonts = resources.GetResourceManager(ResourceType.Font);
             return fonts.GetResource(fontName) as Font;
         }
@@ -377,6 +379,19 @@ namespace Annex.Graphics.Sfml
         public void ProcessEvents() {
             this._buffer.DispatchEvents();
             Joystick.Update();
+        }
+
+        public ICanvas ReCreate() {
+            return new SfmlCanvas(960, 640);
+        }
+
+        public void ChangeResolution(uint width, uint height) {
+            var newCanvas = new SfmlCanvas(width, height);
+            ServiceProvider.Provide<ICanvas>(newCanvas);
+        }
+
+        public Data.Shared.Vector GetResolution() {
+            return this._resolution;
         }
     }
 }
