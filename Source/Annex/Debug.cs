@@ -1,7 +1,9 @@
-﻿using Annex.Scenes;
+﻿using Annex.Resources;
+using Annex.Scenes;
 using Annex.Scenes.Components;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.CompilerServices;
 
 namespace Annex
@@ -44,6 +46,23 @@ namespace Annex
         [Conditional("DEBUG")]
         public static void Log(string line) {
             Logging.Log.Singleton.WriteLine(line);
+        }
+
+        [Conditional("DEBUG")]
+        public static void PackageResourcesToBinary(ResourceType resourceType) {
+            var di = new DirectoryInfo(".");
+            string solutionPath;
+            while (true) {
+                if (Directory.GetFiles(di.FullName, "*.sln").Length != 0) {
+                    solutionPath = di.FullName;
+                    break;
+                }
+                di = di.Parent;
+            }
+            string resourcePath = Path.Combine(solutionPath, "resources");
+            Directory.CreateDirectory(resourcePath);
+
+            ResourceManagerRegistry.Singleton.GetResourceManager(resourceType)?.PackageResourcesToBinary(resourcePath);
         }
     }
 }

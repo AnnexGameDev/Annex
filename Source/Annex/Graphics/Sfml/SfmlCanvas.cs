@@ -3,11 +3,13 @@ using Annex.Graphics.Cameras;
 using Annex.Graphics.Contexts;
 using Annex.Graphics.Events;
 using Annex.Resources;
+using Annex.Resources.FS;
 using Annex.Scenes;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 using System;
+using System.IO;
 
 namespace Annex.Graphics.Sfml
 {
@@ -18,22 +20,46 @@ namespace Annex.Graphics.Sfml
         private readonly View _gameContentView;
         private readonly Camera _camera;
         private readonly RenderWindow _buffer;
-        private readonly ResourceManager<Texture> _textures;
-        private readonly ResourceManager<Font> _fonts;
 
         private float _lastMouseClickX;
         private float _lastMouseClickY;
         private long _lastMouseClick;
 
+        private readonly string TexturePath = Path.Combine(AppContext.BaseDirectory, "textures/");
+        private Texture TextureLoader_FromString(string path) => new Texture(path);
+        private Texture TextureLoader_FromBytes(byte[] data) => new Texture(data);
+        private bool TextureValidator(string path) => path.EndsWith(".png");
+
+        private readonly string FontPath = Path.Combine(AppContext.BaseDirectory, "fonts/");
+        private Font FontLoader_FromString(string path) => new Font(path);
+        private Font FontLoader_FromBytes(byte[] data) => new Font(data);
+        private bool FontValidator(string path) => path.EndsWith(".ttf");
+
+
         internal SfmlCanvas() {
             this._camera = new Camera();
             this._uiView = new View(new Vector2f(GameWindow.RESOLUTION_WIDTH / 2, GameWindow.RESOLUTION_HEIGHT / 2), new Vector2f(GameWindow.RESOLUTION_WIDTH, GameWindow.RESOLUTION_HEIGHT));
             this._gameContentView = new View();
-
-            this._textures = new LazyResourceManager<Texture>("textures/", (path) => new Texture(path), (path) => path.EndsWith("png"));
-            this._fonts = new LazyResourceManager<Font>("fonts/", (path) => new Font(path), (path) => path.EndsWith(".ttf"));
             this._buffer = new RenderWindow(new VideoMode(GameWindow.RESOLUTION_WIDTH, GameWindow.RESOLUTION_HEIGHT), "Window");
 
+            // Resources
+            var resources = ResourceManagerRegistry.Singleton;
+
+            // Textures
+            var textures = resources.GetOrCreateResourceManager<FSResourceManager>(ResourceType.Textures);
+            textures.SetResourcePath(this.TexturePath);
+            textures.SetResourceValidator(this.TextureValidator);
+            textures.SetResourceLoader(this.TextureLoader_FromString);
+            textures.SetResourceLoader(this.TextureLoader_FromBytes);
+
+            // Fonts
+            var fonts = resources.GetOrCreateResourceManager<FSResourceManager>(ResourceType.Font);
+            fonts.SetResourcePath(this.FontPath);
+            fonts.SetResourceValidator(this.FontValidator);
+            fonts.SetResourceLoader(this.FontLoader_FromString);
+            fonts.SetResourceLoader(this.FontLoader_FromBytes);
+
+            // Hook up UI events
             var scenes = SceneManager.Singleton;
             this._buffer.Closed += (sender, e) => { scenes.CurrentScene.HandleCloseButtonPressed(); };
             this._buffer.KeyPressed += (sender, e) => {
@@ -261,11 +287,15 @@ namespace Annex.Graphics.Sfml
         }
 
         private Sprite GetSprite(string textureName) {
-            return new Sprite(this._textures.GetResource(textureName));
+            var resources = ResourceManagerRegistry.Singleton;
+            var textures = resources.GetResourceManager(ResourceType.Textures);
+            return new Sprite(textures.GetResource(textureName) as Texture);
         }
 
         private Font GetFont(string fontName) {
-            return this._fonts.GetResource(fontName);
+            var resources = ResourceManagerRegistry.Singleton;
+            var fonts = resources.GetResourceManager(ResourceType.Font);
+            return fonts.GetResource(fontName) as Font;
         }
 
         public void BeginDrawing() {

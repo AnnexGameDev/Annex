@@ -6,9 +6,8 @@ namespace SampleProject
     class Program
     {
         static void Main(string[] args) {
-            var game = new AnnexGame();
-
-            game.Start<Level1>();
+            AnnexGame.Initialize();
+            AnnexGame.Start<Level1>();
         }
     }
 }

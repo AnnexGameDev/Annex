@@ -1,41 +1,47 @@
 ﻿#nullable enable
-using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Annex.Resources
 {
-    internal abstract class ResourceManager<T>
+    public abstract class ResourceManager
     {
-        private protected readonly Dictionary<string, T> _resources;
-        private readonly Func<string, T> _resourceLoader;
-        private readonly Func<string, bool>? _resourceValidator;
-        private protected readonly string _fullResourceDirectory;
+        public delegate object ResourceLoader_Bytes(byte[] data);
+        public delegate object ResourceLoader_String(string id);
+        public delegate bool ResourceValidator(string id);
 
-        internal ResourceManager(string localDirectory, Func<string, T> resourceLoader, Func<string, bool>? resourceValidator = null) {
-            this._resources = new Dictionary<string, T>();
-            this._fullResourceDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources/", localDirectory);
-            this._resourceLoader = resourceLoader;
-            this._resourceValidator = resourceValidator;
-        }
+        protected string? _resourcePath;
+        protected ResourceLoader_Bytes? _resourceLoader_FromBytes;
+        protected ResourceLoader_String? _resourceLoader_FromString;
+        protected ResourceValidator? _resourceValidator;
 
-        private protected void Load(IEnumerable<string> files) {
-            foreach (string file in files) {
-                this.Load(file);
+        protected virtual void Load(IEnumerable<string> keys) {
+            foreach (var key in keys) {
+                this.Load(key);
             }
         }
+        protected abstract void Load(string key);
+        public abstract object GetResource(string key);
 
-        private protected void Load(string file) {
-            if (this._resourceValidator == null || this._resourceValidator.Invoke(file)) {
-                string key = file.Remove(0, this._fullResourceDirectory.Length).ToLower().Replace('\\', '/');
-                this._resources.Add(key, this._resourceLoader(file));
-            }
+        public void SetResourcePath(string resourcePath) {
+            Debug.Assert(this._resourcePath == null);
+            this._resourcePath = resourcePath;
         }
 
-        internal virtual T GetResource(string resourceKey) {
-            resourceKey = resourceKey.ToLower();
-            Debug.Assert(this._resources.ContainsKey(resourceKey));
-            return this._resources[resourceKey];
+        public void SetResourceLoader(ResourceLoader_String loader) {
+            Debug.Assert(this._resourceLoader_FromString == null);
+            this._resourceLoader_FromString = loader;
         }
+
+        public void SetResourceLoader(ResourceLoader_Bytes loader) {
+            Debug.Assert(this._resourceLoader_FromBytes == null);
+            this._resourceLoader_FromBytes = loader;
+        }
+
+        public void SetResourceValidator(ResourceValidator validator) {
+            Debug.Assert(this._resourceValidator == null);
+            this._resourceValidator = validator;
+        }
+
+        protected internal abstract void PackageResourcesToBinary(string baseDir);
     }
 }
