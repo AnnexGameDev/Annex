@@ -1,4 +1,5 @@
-﻿using Annex.Events;
+﻿using Annex.Audio;
+using Annex.Events;
 using Annex.Graphics;
 using Annex.Scenes;
 using Annex.Scenes.Components;
@@ -10,6 +11,7 @@ namespace Annex
         public static void Initialize() {
             var events = EventManager.Singleton;
             var window = GameWindow.Singleton;
+            var audio = AudioManager.Singleton;
             events.AddEvent(PriorityType.GRAPHICS, () => {
                 window.Canvas.BeginDrawing();
                 SceneManager.Singleton.CurrentScene.Draw(window.Canvas);
