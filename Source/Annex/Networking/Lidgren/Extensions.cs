@@ -9,7 +9,6 @@ namespace Annex.Networking.Lidgren
                 case NetConnectionStatus.Connected:
                     return ConnectionState.Connected;
                 case NetConnectionStatus.Disconnected:
-                    return ConnectionState.Disconnected;
                 case NetConnectionStatus.Disconnecting:
                     return ConnectionState.Disconnected;
                 case NetConnectionStatus.InitiatedConnect:

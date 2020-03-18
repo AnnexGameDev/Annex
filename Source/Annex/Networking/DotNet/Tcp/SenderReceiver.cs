@@ -17,7 +17,7 @@ namespace Annex.Networking.DotNet.Tcp
             this._endpoint = endpoint;
 
             this._receiveBuffer = new byte[this._socket.ReceiveBufferSize];
-            this._processingBuffer = new byte[0];
+            this._processingBuffer = Array.Empty<byte>();
 
             this._socket.BeginReceive(this._receiveBuffer, 0, this._receiveBuffer.Length, SocketFlags.None, ReceiveCallback, null);
         }
@@ -29,7 +29,7 @@ namespace Annex.Networking.DotNet.Tcp
             try {
                 lengthOfIncomingData = this._socket.EndReceive(ar);
             } catch (SocketException e) {
-                int x = 0;
+                // TODO: Handle this
             }
 
             if (lengthOfIncomingData == 0) {

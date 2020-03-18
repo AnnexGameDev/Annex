@@ -30,7 +30,10 @@ namespace Annex.Networking.DotNet.Tcp
         }
 
         public override void SendPacket(object baseConnection, int packetID, OutgoingPacket packet) {
-            while (this._senderReceiver == null) ;
+            while (this._senderReceiver == null) {
+                ;
+            }
+
             this._senderReceiver.SendPacket(packetID, packet);
         }
     }
