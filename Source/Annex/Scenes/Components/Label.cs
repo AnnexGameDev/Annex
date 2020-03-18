@@ -28,7 +28,7 @@ namespace Annex.Scenes.Components
             };
         }
 
-        public override void Draw(ICanvas canvas) {
+        public override void Draw(Canvas canvas) {
             if (!this.Visible) {
                 return;
             }

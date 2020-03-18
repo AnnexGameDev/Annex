@@ -16,11 +16,11 @@ namespace Annex
                 ServiceProvider.SceneManager.CurrentScene.Draw(canvas);
                 canvas.EndDrawing();
                 return ControlEvent.NONE;
-            }, 16, 0, ICanvas.DrawGameEventID);
+            }, 16, 0, Canvas.DrawGameEventID);
             events.AddEvent(PriorityType.INPUT, () => {
                 canvas.ProcessEvents();
                 return ControlEvent.NONE;
-            }, 16, 0, ICanvas.DrawGameEventID);
+            }, 16, 0, Canvas.DrawGameEventID);
         }
 
         public static void Start<T>() where T : Scene, new() {

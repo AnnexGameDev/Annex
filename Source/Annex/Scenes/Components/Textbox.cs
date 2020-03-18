@@ -26,7 +26,7 @@ namespace Annex.Scenes.Components
             };
         }
 
-        public override void Draw(ICanvas canvas) {
+        public override void Draw(Canvas canvas) {
             base.Draw(canvas);
             canvas.Draw(this.RenderText);
         }

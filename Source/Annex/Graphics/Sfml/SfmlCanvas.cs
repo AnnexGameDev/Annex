@@ -14,7 +14,7 @@ using System.IO;
 
 namespace Annex.Graphics.Sfml
 {
-    internal class SfmlCanvas : ICanvas
+    internal class SfmlCanvas : Canvas
     {
         private bool _usingUiView;
         private readonly View _uiView;
@@ -38,7 +38,7 @@ namespace Annex.Graphics.Sfml
         private Font FontLoader_FromBytes(byte[] data) => new Font(data);
         private bool FontValidator(string path) => path.EndsWith(".ttf");
 
-        public SfmlCanvas(float resolutionWidth, float resolutionHeight)  {
+        public SfmlCanvas(float resolutionWidth, float resolutionHeight) {
             this._resolution = Data.Shared.Vector.Create(resolutionWidth, resolutionHeight);
             this._camera = new Camera(this._resolution);
             this._uiView = new View(new Vector2f(this._resolution.X / 2, this._resolution.Y / 2), new Vector2f(this._resolution.X, this._resolution.Y));
@@ -68,7 +68,7 @@ namespace Annex.Graphics.Sfml
                 ServiceProvider.SceneManager.CurrentScene.HandleKeyboardKeyPressed(new KeyboardKeyPressedEvent() {
                     Key = e.Code.ToNonSFML(),
                     ShiftDown = e.Shift
-                }); 
+                });
             };
             this._buffer.KeyReleased += (sender, e) => {
                 ServiceProvider.SceneManager.CurrentScene.HandleKeyboardKeyReleased(new KeyboardKeyReleasedEvent() {
@@ -151,7 +151,7 @@ namespace Annex.Graphics.Sfml
             };
         }
 
-        public void Draw(TextContext ctx) {
+        public override void Draw(TextContext ctx) {
 
             if (String.IsNullOrEmpty(ctx.RenderText)) {
                 return;
@@ -201,7 +201,7 @@ namespace Annex.Graphics.Sfml
             this._buffer.Draw(text);
         }
 
-        public void Draw(SpriteSheetContext sheet) {
+        public override void Draw(SpriteSheetContext sheet) {
 
             if (String.IsNullOrEmpty(sheet.SourceTextureName)) {
                 return;
@@ -224,7 +224,7 @@ namespace Annex.Graphics.Sfml
             this.Draw(sheet._internalTexture);
         }
 
-        public void Draw(TextureContext ctx) {
+        public override void Draw(TextureContext ctx) {
 
             if (String.IsNullOrEmpty(ctx.SourceTextureName)) {
                 return;
@@ -271,7 +271,7 @@ namespace Annex.Graphics.Sfml
             this._buffer.Draw(sprite);
         }
 
-        public void Draw(SolidRectangleContext rectangle) {
+        public override void Draw(SolidRectangleContext rectangle) {
             this.UpdateView(rectangle);
 
             var shape = new RectangleShape {
@@ -300,12 +300,12 @@ namespace Annex.Graphics.Sfml
             return fonts.GetResource(fontName) as Font;
         }
 
-        public void BeginDrawing() {
+        internal override void BeginDrawing() {
             this._buffer.Clear();
             this.UpdateGameContentCamera();
         }
 
-        public void EndDrawing() {
+        internal override void EndDrawing() {
             this._buffer.Display();
         }
 
@@ -318,35 +318,35 @@ namespace Annex.Graphics.Sfml
             this._usingUiView = false;
         }
 
-        public void SetVisible(bool visible) {
+        public override void SetVisible(bool visible) {
             this._buffer.SetVisible(visible);
         }
 
-        public bool IsMouseButtonDown(MouseButton button) {
+        public override bool IsMouseButtonDown(MouseButton button) {
             var sfmlButton = button.ToSFML();
             return Mouse.IsButtonPressed(sfmlButton);
         }
 
-        public bool IsKeyDown(KeyboardKey key) {
+        public override bool IsKeyDown(KeyboardKey key) {
             var sfmlKey = key.ToSFML();
             return sfmlKey != Keyboard.Key.Unknown ? Keyboard.IsKeyPressed(sfmlKey) : false;
         }
 
-        public Camera GetCamera() {
+        public override Camera GetCamera() {
             return this._camera;
         }
 
-        public void Destroy() {
+        public override void Destroy() {
             this._buffer.Close();
         }
 
-        public Data.Shared.Vector GetRealMousePos() {
+        public override Data.Shared.Vector GetRealMousePos() {
             var realpos = Mouse.GetPosition(this._buffer);
             var pos = this._buffer.MapPixelToCoords(realpos, this._uiView);
             return Data.Shared.Vector.Create(pos.X, pos.Y);
         }
 
-        public Data.Shared.Vector GetGameWorldMousePos() {
+        public override Data.Shared.Vector GetGameWorldMousePos() {
             var mousePos = Mouse.GetPosition(this._buffer);
             var gamePos = this._buffer.MapPixelToCoords(mousePos, this._gameContentView);
             return Data.Shared.Vector.Create(gamePos.X, gamePos.Y);
@@ -364,33 +364,33 @@ namespace Annex.Graphics.Sfml
             }
         }
 
-        public bool IsJoystickConnected(uint joystickId) {
+        public override bool IsJoystickConnected(uint joystickId) {
             return Joystick.IsConnected(joystickId);
         }
 
-        public bool IsJoystickButtonPressed(uint joystickId, JoystickButton button) {
+        public override bool IsJoystickButtonPressed(uint joystickId, JoystickButton button) {
             return Joystick.IsButtonPressed(joystickId, (uint)button);
         }
 
-        public float GetJoystickAxis(uint joystickId, JoystickAxis axis) {
+        public override float GetJoystickAxis(uint joystickId, JoystickAxis axis) {
             return Joystick.GetAxisPosition(joystickId, (Joystick.Axis)axis);
         }
 
-        public void ProcessEvents() {
+        public override void ProcessEvents() {
             this._buffer.DispatchEvents();
             Joystick.Update();
         }
 
-        public ICanvas ReCreate() {
+        public Canvas ReCreate() {
             return new SfmlCanvas(960, 640);
         }
 
-        public void ChangeResolution(uint width, uint height) {
+        public override void ChangeResolution(uint width, uint height) {
             var newCanvas = new SfmlCanvas(width, height);
-            ServiceProvider.Provide<ICanvas>(newCanvas);
+            ServiceProvider.Provide<Canvas>(newCanvas);
         }
 
-        public Data.Shared.Vector GetResolution() {
+        public override Data.Shared.Vector GetResolution() {
             return this._resolution;
         }
     }
