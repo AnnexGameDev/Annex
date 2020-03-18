@@ -90,13 +90,13 @@ namespace Annex.Audio.Sfml
                 Sound? sound = null;
                 if (resource is string path) {
                     sound = new Sound(new SoundBuffer(path)) {
-                        Loop = false,
+                        Loop = loop,
                         Volume = volume
                     };
                 }
                 if (resource is byte[] data) {
                     sound = new Sound(new SoundBuffer(data)) {
-                        Loop = false,
+                        Loop = loop,
                         Volume = volume
                     };
                 }
