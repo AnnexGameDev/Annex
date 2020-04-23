@@ -1,11 +1,20 @@
-You can interact with Annex's audio module by using the Audio Manager singleton. 
+---
+layout: default
+title: Audio
+nav_order: 2
+parent: v0.0.2
+grand_parent: Annex Home
+# search_exclude: true
+---
 
-``` CSharp
+You can interact with Annex's audio module by using the Audio Manager singleton.
+
+```cs
 var audio = AudioManager.Singleton;
 ```
 # Playing and Stopping Audio
 
-``` CSharp
+```cs
 // Play audio
 audio.PlayBufferedAudio("music.flac");
 audio.PlayAudio("sfx.flac");
@@ -15,14 +24,14 @@ audio.StopAllAudio();
 ```
 You can specify three other optional parameters when playing audio.
 
-``` CSharp
-// whether or not the audio loops. 
+```cs
+// whether or not the audio loops.
 // By default, loop is set to false.
-bool loop = true; 
+bool loop = true;
 
 // how loud the audio is ranging from 0 (no volume) to 100 (max volume).
 // By default, volume is set to 100.
-float volume = 100.0f; 
+float volume = 100.0f;
 
 // some identifier to assign to the audio
 string id = "background music";

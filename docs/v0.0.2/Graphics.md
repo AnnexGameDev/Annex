@@ -1,13 +1,22 @@
+---
+layout: default
+title: Graphics
+nav_order: 2
+parent: v0.0.2
+grand_parent: Annex Home
+# search_exclude: true
+---
+
 # Game Window
 Before talking about game graphics, it's important to understand its containing element which is the game window. The game window can be accessed through its singleton.
 
-``` CSharp
+```cs
 var window = GameWindow.Singleton;
 ```
 
 The game window contains an object which is the context to perform graphical operations (canvas). 
 
-``` CSharp
+```cs
 var canvas = window.Canvas;
 ```
 
@@ -15,7 +24,7 @@ var canvas = window.Canvas;
 Rendering any text or images is done through the Draw function, which is a part of the canvas.
 Its parameters are a _TextContext_ or _TextureContext_. Both of which are intermediate objects that contain information about **what** needs to be rendered, and **how**.
 
-``` CSharp
+```cs
 canvas.Draw(ctx);
 ```
 
@@ -25,7 +34,7 @@ But you shouldn't call this function just _anywhere_ in your code. There's a cer
 
 There is a game event that gets generated in the Graphics priority which lets you know when its safe to start drawing. The game event take care of the necessary preparations, and then calls the Draw function in the current scene when it's ready. All of your draw calls should stem from the Draw function in the scene.
 
-``` CSharp
+```cs
 public class Foo : Scene
 {
     public override void Draw(ICanvas canvas) {
@@ -40,7 +49,7 @@ As mentioned before, a text or texture context is an intermediate object that de
 ## Text Context
 A text context specifies text that needs to be drawn to the screen. Not all these properties need to be specified, but you will find yourself using a few of them fairly often. Keep in mind that font files should be stored in the appropriate Resources/Fonts/ folder as .ttf files.
 
-``` CSharp
+```cs
 var ctx = new TextContext("Text that has to be rendered.", "Font.ttf");
 
 // always absolute positioning. By default, (0, 0).
@@ -72,7 +81,7 @@ ctx.BorderColor = RGBA.Red;
 ## Texture context
 A texture context specifies an image that needs to be drawn to the screen. Not all these properties need to be specified, but you will find yourself using a few of them fairly often. Keep in mind that image files should be stored in the appropriate Resources/Textures/ folder as .png files.
 
-``` CSharp
+```cs
 var ctx = new TextureContext("image.png");
 
 // always absolute positioning. By default, (0, 0).
@@ -97,7 +106,7 @@ ctx.RelativeRotationOrigin = Vector.Create(0, 0);
 # Organizing Draw Calls
 Ideally, each entity that can be drawn will be responsible for creating its own contexts and making appropriate draw calls.
 
-``` CSharp
+```cs
 public class Player : IDrawableObject
 {
     private readonly TextureContext _textureContext;
@@ -124,13 +133,13 @@ public class ExampleScene : Scene
 # Camera
 The camera is a data structure belonging to the canvas that is responsible for specifying the current view of the content in your scene. It specifies what area of the scene you're in (position), and how much of the region to show (size). You can retrieve the camera through the canvas.
 
-``` CSharp
+```cs
 var camera = GameWindow.Singleton.Canvas.GetCamera();
 ```
 
 The camera object supports various manipulations.
 
-``` CSharp
+```csharp
 // Should respect the resolution ratio. 
 // After resizing, the camera re-centers based on the current location.
 camera.Resize(GameWindow.RESOLUTION_WIDTH / 2, GameWindow.RESOLUTION_HEIGHT / 2);
@@ -150,7 +159,7 @@ camera.ZoomOut(0.1f);
 ## Hardware Probing
 You can use the canvas to check the current state of IO devices like the mouse, keyboard, or controllers.
 
-``` CSharp
+```cs
 if (canvas.IsKeyDown(KeyboardKey.BackSlash)) { ... }
 if (canvas.IsMouseButtonDown(MouseButton.Left)) { ... }
 if (canvas.IsJoystickConnected(0)) { ... }

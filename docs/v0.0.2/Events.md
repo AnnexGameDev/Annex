@@ -1,7 +1,16 @@
+---
+layout: default
+title: Events
+nav_order: 2
+parent: v0.0.2
+grand_parent: Annex Home
+# search_exclude: true
+---
+
 The backbone of any game is the gameloop, and all the game events that the gameloop kicks off.
 A gameloop is a while-loop which is in charge of the flow of game-logic.
 
-```
+```cs
 // pseudo-code
 while game.IsOpen:
     userInput.Process()
@@ -20,7 +29,7 @@ The queue cycles through all the priority levels, starting with START and finish
 
 You can see all the priority types in Annex.Events.PriorityTypes.cs
 
-``` CSharp
+```cs
     public enum PriorityType
     {
         START,
@@ -43,7 +52,7 @@ Each game event is given an interval, which tells Annex how often the event shou
 
 Let's say you want to implement a passive healing system in your game where your player gains 10hp every five seconds. The game event function might look like this.
 
-``` CSharp
+```cs
 public ControlEvent PassiveHeal() {
     player.HP += 10;
     return ControlEvent.None;
@@ -52,7 +61,7 @@ public ControlEvent PassiveHeal() {
 
 In this case, you should set the interval value to 5000 (5000 milliseconds == 5 seconds). 
 
-``` CSharp
+```cs
 var gameEvent = PassiveHeal;
 int interval = 5000;
 int delay = 0;
@@ -67,7 +76,7 @@ Sometimes when you create an event, you don't want it to run right away. The del
 
 For example, if you want your passive healing function to run but only 10 seconds from now, specify a delay of 10000 (10000 milliseconds == 10 seconds).
 
-``` CSharp
+```cs
 var gameEvent = PassiveHeal;
 int interval = 5000;
 int delay = 0;
@@ -78,7 +87,7 @@ events.AddEvent(priority, gameEvent, interval, delay);
 ## Control Events
 The return value for game events is a ControlEvent enumeration value. This value tells the queue what to do with the game event when it's done running. 
 
-``` CSharp
+```cs
 public enum ControlEvent
 {
     NONE,
@@ -94,7 +103,7 @@ public enum ControlEvent
 
 Adding game events is simple.
 
-``` CSharp
+```cs
     ...
     var events = EventManager.Singleton;
     var priority = PriorityType.LOGIC;
@@ -110,7 +119,7 @@ public ControlEvent GameEvent() {
 ```
 but this form of event creation can be quite verbose. While not required, it would be more clean to not use neatly written variables, and use lambdas instead of writing member functions.
 
-``` CSharp
+```cs
 var events = EventManager.Singleton;
 events.AddEvent(PriorityType.LOGIC, () => { 
     return ControlEvent.NONE;

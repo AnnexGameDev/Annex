@@ -1,8 +1,17 @@
+---
+layout: default
+title: Data
+nav_order: 2
+parent: v0.0.2
+grand_parent: Annex Home
+# search_exclude: true
+---
+
 Shared data structures are wrappers around primitive data types which help different objects in your game look at the same primitive data, even when that primitive data changes.
 
 The goal of shared data structures is to share values across multiple objects.
 
-``` CSharp
+```cs
 public class Player
 {
     public string Name;
@@ -23,7 +32,7 @@ public static void Main() {
 
 To help share string values between different objects, Annex introduces the shared string.
 
-``` CSharp
+```cs
 using Annex.Data.Shared;
 
 public class Player
@@ -45,7 +54,7 @@ public static void Main() {
 ```
 There is a lot of use for shared data types in graphical components when attributes can change dynamically. For example, if you're rendering a player, where you render his sprite depends on where the player is.
 
-``` CSharp
+```cs
 public class Player : IDrawableObject
 {
     private readonly TextureContext _sprite;
@@ -76,7 +85,7 @@ public class Player : IDrawableObject
 Defines a string that can be shared across objects.
 
 Example: Rendering a player name above their head.
-``` CSharp
+```cs
 using Annex.Data.Shared;
 
 public class Player : IDrawableObject

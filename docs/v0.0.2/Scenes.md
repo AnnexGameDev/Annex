@@ -1,10 +1,19 @@
+---
+layout: default
+title: Scenes
+nav_order: 2
+parent: v0.0.2
+grand_parent: Annex Home
+# search_exclude: true
+---
+
 Most games usually change their state pretty frequently. You start up your game, and see a loading screen followed by a main menu. You then hit "play now" and get thrown into some game world. Without realizing it, your game is switching between different states.
 
 ![Example state changing](https://i.imgur.com/aCfsysf.png)
 
 In Annex, a scene is a game state. You can interact with the game scenes using the SceneManager singleton.
 
-``` CSharp
+```CSharp
 var scenes = SceneManager.Singleton;
 ```
 
@@ -12,7 +21,7 @@ Scenes have various responsibilities, like exposing a user interface, handling u
 
 ## Creating a scene
 You can create a scene by inheriting from the Scene class.
-``` CSharp
+```cs
 using Annex.Scenes.Components;
 
 public class MainMenu : Scene 
@@ -23,13 +32,13 @@ public class MainMenu : Scene
 
 ## Changing scenes
 You can change the scene your game is currently in by calling the LoadScene method.
-``` CSharp
+```cs
 var scenes = SceneManager.Singleton;
 scenes.LoadScene<MainMenu>();
 ```
 
 Likewise, you can also retrieve the current scene by using the CurrentScene accessor.
-``` CSharp
+```cs
 var scenes = SceneManager.Singleton;
 var mainMenu = scenes.CurrentScene as MainMenu;
 ```
@@ -37,14 +46,14 @@ var mainMenu = scenes.CurrentScene as MainMenu;
 ## Closing the game
 One of the scenes defined by Annex is the 'GameClosing' scene. Once Annex loads the GameClosing scene, game events will stop running and your game will close.
 
-``` CSharp
+```cs
 SceneManager.Singleton.LoadScene<GameClosing>();
 ```
 
 ## Starting your game
 In order to start your game, Annex requires that you specify the initial scene to use on startup.
 
-``` CSharp
+```cs
 private static void Main() {
     var game = new AnnexGame();
     game.Start<MainMenu>();
@@ -53,7 +62,7 @@ private static void Main() {
 
 ## User Input
 As mentioned before, user input is another one of the responsibilities of the scene. You can get user input by overriding the scene's input handlers.
-``` CSharp
+```cs
 using Annex.Scenes;
 using Annex.Scenes.Components;
 
@@ -116,7 +125,7 @@ One of the primary responsibilities of a scene is the user interface that it exp
 
 You can build on these fundamental controls, or create your own, and add them to your scene.
 
-``` CSharp
+```cs
 using Annex.Data;
 using Annex.Scenes.Components;
 
@@ -145,7 +154,7 @@ public class MainMenu : Scene
 
 ## Custom controls
 If you're interested in making your own custom control, inherit from the UIElement class. It is highly recommended to understand how the common controls provided by Annex work before making your own controls from scratch.
-``` CSharp
+```cs
 public class ListBox : UIElement {
 
 }

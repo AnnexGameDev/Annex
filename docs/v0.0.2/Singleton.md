@@ -1,6 +1,15 @@
+---
+layout: default
+title: Singleton
+nav_order: 2
+parent: v0.0.2
+grand_parent: Annex Home
+# search_exclude: true
+---
+
 The Annex framework operates largely on the singleton pattern.
 
-``` CSharp
+```cs
 // Retrieve a singleton
 var events = GameEvents.Singleton;
 ```
@@ -14,7 +23,7 @@ The singletons already set up by Annex are
 
 If you are defining your own singletons, it's recommended to follow the convention that Annex uses which guarantees that a singleton will exist whenever you need it.
 
-``` CSharp
+```cs
 using Annex;
 
 public class Foo : Singleton

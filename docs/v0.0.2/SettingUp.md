@@ -1,3 +1,12 @@
+---
+layout: default
+title: Setting Up
+nav_order: 2
+parent: v0.0.2
+grand_parent: Annex Home
+# search_exclude: true
+---
+
 # Installing Annex Through NuGet
 [How to install packages with NuGet](https://docs.microsoft.com/en-us/nuget/quickstart/install-and-use-a-package-in-visual-studio)
 
@@ -7,7 +16,7 @@
 Create a new .Net Core project and reference Annex the above method.
 In your main, instantiate a new AnnexGame object and call the Start function to let Annex start running your game. It is important to specify the starting scene when calling the Start function. For more information about scenes, read [here](https://github.com/MatthewChrobak/Annex/wiki/Scenes).
 
-``` CSharp
+```cs
 using Annex;
 
 public class Game
