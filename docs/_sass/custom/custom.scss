@@ -1,0 +1,29 @@
+$link-color: $blue-100;
+
+// Normal words
+.highlight .n {
+    color: #4f4f4f !important;
+}
+
+// Keywords
+.highlight .kt { 
+    color: #0003ff !important; 
+}
+.highlight .k { 
+    color: #3b3dff !important;
+}
+
+// String
+.highlight .s { 
+    color: #bf3939 !important;
+}
+
+// Literal
+.highlight .m {
+    color: #000 !important;
+}
+
+// Comment
+.highlight .c1 { 
+    color: #2aa131 !important;
+}
