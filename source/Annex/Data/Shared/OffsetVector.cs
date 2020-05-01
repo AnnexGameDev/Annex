@@ -2,30 +2,26 @@
 {
     public class OffsetVector : Vector
     {
-        public readonly Vector Original;
+        public readonly Vector Base;
         public readonly Vector Offset;
 
         public override float X {
-            get => this.Offset.X + this.Original.X;
+            get => this.Offset.X + this.Base.X;
             set => this.Offset.X = value;
         }
 
         public override float Y {
-            get {
-                return this.Offset.Y + this.Original.Y;
-            }
-            set {
-                this.Offset.Y = value;
-            }
+            get => this.Offset.Y + this.Base.Y;
+            set => this.Offset.Y = value;
         }
 
-        public OffsetVector(Vector original, Vector offset) {
-            this.Original = original;
-            this.Offset = offset;
+        public OffsetVector(Vector baseVector, Vector offsetVector) {
+            this.Base = baseVector;
+            this.Offset = offsetVector;
         }
 
-        public OffsetVector(Vector original, float offsetX, float offsetY) {
-            this.Original = original;
+        public OffsetVector(Vector baseVector, float offsetX, float offsetY) {
+            this.Base = baseVector;
             this.Offset = Create(offsetX, offsetY);
         }
     }

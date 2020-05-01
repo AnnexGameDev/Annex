@@ -21,7 +21,7 @@ namespace Tests.Data.Shared
 
             Assert.AreEqual(source.Scale.X, newScaleX);
             Assert.AreEqual(source.X, expected);
-            Assert.AreEqual(source.Original.X, originalX);
+            Assert.AreEqual(source.Base.X, originalX);
         }
 
         [Test]
@@ -40,7 +40,7 @@ namespace Tests.Data.Shared
 
             Assert.AreEqual(source.Scale.Y, newScaleY);
             Assert.AreEqual(source.Y, expected);
-            Assert.AreEqual(source.Original.Y, originalY);
+            Assert.AreEqual(source.Base.Y, originalY);
         }
 
         [Test]
@@ -56,8 +56,8 @@ namespace Tests.Data.Shared
 
             Assert.AreEqual(source.Scale.X, scaleX);
             Assert.AreEqual(source.Scale.Y, scaleY);
-            Assert.AreEqual(source.Original.X, originalX);
-            Assert.AreEqual(source.Original.Y, originalY);
+            Assert.AreEqual(source.Base.X, originalX);
+            Assert.AreEqual(source.Base.Y, originalY);
             Assert.AreEqual(source.X, expectedX);
             Assert.AreEqual(source.Y, expectedY);
         }
@@ -76,8 +76,8 @@ namespace Tests.Data.Shared
 
             Assert.AreEqual(source.Scale.X, scale.X);
             Assert.AreEqual(source.Scale.Y, scale.Y);
-            Assert.AreEqual(source.Original.X, originalX);
-            Assert.AreEqual(source.Original.Y, originalY);
+            Assert.AreEqual(source.Base.X, originalX);
+            Assert.AreEqual(source.Base.Y, originalY);
             Assert.AreEqual(source.X, expectedX);
             Assert.AreEqual(source.Y, expectedY);
         }

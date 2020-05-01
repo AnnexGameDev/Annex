@@ -2,16 +2,16 @@
 {
     public class ScalingInt : Int
     {
-        public readonly Int Original;
+        public readonly Int Base;
         public readonly Int Scale;
 
         public override int Value {
-            get => this.Original.Value * this.Scale.Value;
+            get => this.Base.Value * this.Scale.Value;
             set => this.Scale.Value = value;
         }
 
-        public ScalingInt(Int original, Int scale) {
-            this.Original = original;
+        public ScalingInt(Int baseInt, Int scale) {
+            this.Base = baseInt;
             this.Scale = scale;
         }
     }

@@ -21,7 +21,7 @@ namespace Tests.Data.Shared
 
             Assert.AreEqual(source.Offset.X, newOffsetX);
             Assert.AreEqual(source.X, expected);
-            Assert.AreEqual(source.Original.X, originalX);
+            Assert.AreEqual(source.Base.X, originalX);
         }
 
         [Test]
@@ -40,7 +40,7 @@ namespace Tests.Data.Shared
 
             Assert.AreEqual(source.Offset.Y, newOffsetY);
             Assert.AreEqual(source.Y, expected);
-            Assert.AreEqual(source.Original.Y, originalY);
+            Assert.AreEqual(source.Base.Y, originalY);
         }
 
         [Test]
@@ -57,8 +57,8 @@ namespace Tests.Data.Shared
 
             Assert.AreEqual(source.Offset.X, offset.X);
             Assert.AreEqual(source.Offset.Y, offset.Y);
-            Assert.AreEqual(source.Original.X, originalX);
-            Assert.AreEqual(source.Original.Y, originalY);
+            Assert.AreEqual(source.Base.X, originalX);
+            Assert.AreEqual(source.Base.Y, originalY);
             Assert.AreEqual(source.X, expectedX);
             Assert.AreEqual(source.Y, expectedY);
         }

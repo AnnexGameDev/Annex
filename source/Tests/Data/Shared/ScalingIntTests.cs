@@ -52,7 +52,7 @@ namespace Tests.Data.Shared
 
             Assert.AreEqual(source.Scale.Value, newScale);
             Assert.AreEqual(source.Value, expected);
-            Assert.AreEqual(source.Original.Value, original);
+            Assert.AreEqual(source.Base.Value, original);
         }
     }
 }
