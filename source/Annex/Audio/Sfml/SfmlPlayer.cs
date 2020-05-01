@@ -45,7 +45,7 @@ namespace Annex.Audio.Sfml
             }, 5000, eventID: GameEventID);
         }
 
-        public void StopAllAudio(string? id = null) {
+        public void StopAudio(string? id = null) {
             lock (this._lock) {
                 for (int i = 0; i < this._playingAudio.Count; i++) {
                     var audio = this._playingAudio[i];
@@ -59,7 +59,7 @@ namespace Annex.Audio.Sfml
             }
         }
 
-        public void PlayBufferedAudio(string name, string id, bool loop, float volume) {
+        private void PlayBufferedAudio(string name, string id, bool loop, float volume) {
             name = name.ToLower();
             lock (this._lock) {
                 var audio = ServiceProvider.ResourceManagerRegistry.GetResourceManager(ResourceType.Audio);
@@ -82,7 +82,7 @@ namespace Annex.Audio.Sfml
             }
         }
 
-        public void PlayAudio(string name, string id, bool loop, float volume) {
+        private void PlayUnbufferedAudio(string name, string id, bool loop, float volume) {
             name = name.ToLower();
             lock (this._lock) {
                 var audio = ServiceProvider.ResourceManagerRegistry.GetResourceManager(ResourceType.Audio);
@@ -106,7 +106,25 @@ namespace Annex.Audio.Sfml
         }
 
         public void Destroy() {
-            this.StopAllAudio();
+            this.StopAudio();
+        }
+
+        public void PlayAudio(string audioFilePath) {
+            this.PlayAudio(audioFilePath, new AudioContext());
+        }
+
+        public void PlayAudio(string audioFilePath, AudioContext context) {
+            switch (context.BufferMode) {
+                case BufferMode.Buffered:
+                    PlayBufferedAudio(audioFilePath, context.ID ?? string.Empty, context.Loop, context.Volume);
+                    break;
+                case BufferMode.None:
+                    PlayUnbufferedAudio(audioFilePath, context.ID ?? string.Empty, context.Loop, context.Volume);
+                    break;
+                default:
+                    Debug.Assert(false);
+                    break;
+            }
         }
     }
 }

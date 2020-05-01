@@ -4,8 +4,8 @@ namespace Annex.Audio
 {
     public interface IAudioPlayer : IService
     {
-        void PlayBufferedAudio(string name, string id = "", bool loop = false, float volume = 100);
-        void PlayAudio(string name, string id = "", bool loop = false, float volume = 100);
-        void StopAllAudio(string? id = null);
+        void PlayAudio(string audioFilePath);
+        void PlayAudio(string audioFilePath, AudioContext context);
+        void StopAudio(string? id = null);
     }
 }
