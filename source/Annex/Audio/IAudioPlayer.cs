@@ -1,11 +1,14 @@
 ﻿#nullable enable
 
+using System.Collections.Generic;
+
 namespace Annex.Audio
 {
     public interface IAudioPlayer : IService
     {
-        void PlayAudio(string audioFilePath);
-        void PlayAudio(string audioFilePath, AudioContext context);
-        void StopAudio(string? id = null);
+        IPlayingAudio PlayAudio(string audioFilePath);
+        IPlayingAudio PlayAudio(string audioFilePath, AudioContext context);
+        void StopPlayingAudio(string? id = null);
+        IEnumerable<IPlayingAudio> GetPlayingAudio(string? id = null);
     }
 }

@@ -6,7 +6,7 @@ namespace Annex
 {
     public static partial class ServiceProvider
     {
-        private static Dictionary<Type, IService> _services;
+        private static readonly Dictionary<Type, IService> _services;
 
         static ServiceProvider() {
             _services = new Dictionary<Type, IService>();
@@ -28,7 +28,7 @@ namespace Annex
             return _services[typeof(T)] as T;
         }
     }
-
+    
     public interface IService
     {
         void Destroy();

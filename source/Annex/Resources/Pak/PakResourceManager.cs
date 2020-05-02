@@ -16,7 +16,7 @@ namespace Annex.Resources.Pak
 
         public override object GetResource(string key) {
             if (this._pak == null) {
-                Debug.Assert(this._resourcePath != null);
+                Debug.Assert(this._resourcePath != null, $"Resource path is not set");
                 this._pak = PakFile.CreateForInput(this.PakFilePath);
             }
 
@@ -24,12 +24,12 @@ namespace Annex.Resources.Pak
             if (!this._resources.ContainsKey(key)) {
                 this.Load(key);
             }
-            Debug.Assert(this._resources.ContainsKey(key));
+            Debug.Assert(this._resources.ContainsKey(key), $"Resource {key} is not contained in the pak file");
             return this._resources[key];
         }
 
         protected override void Load(string key) {
-            Debug.Assert(this._resourceLoader_FromBytes != null);
+            Debug.Assert(this._resourceLoader_FromBytes != null, $"ResourceLoader_FromBytes is not set");
 
             if (this._resourceValidator == null || this._resourceValidator(key)) {
                 this._resources.Add(key, this._resourceLoader_FromBytes(this._pak.GetEntry(key)));
@@ -37,7 +37,7 @@ namespace Annex.Resources.Pak
         }
 
         protected internal override void PackageResourcesToBinary(string baseDir) {
-            Debug.Assert(this._resourcePath != null);
+            Debug.Assert(this._resourcePath != null, "Resource path is not set");
 
 
             var directoryInfo = new DirectoryInfo(this._resourcePath);

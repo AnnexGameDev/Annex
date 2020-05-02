@@ -17,8 +17,7 @@ namespace Annex.Events
         }
 
         public void AddEvent(PriorityType type, GameEvent e) {
-            Debug.Assert((int)type < this._queue.Length);
-            Debug.Assert((int)type >= 0);
+            Debug.Assert((int)type < this._queue.Length && type >= 0, $"Attempt to add event with invalid priority {type}");
             this._queue[(int)type].Add(e);
         }
 

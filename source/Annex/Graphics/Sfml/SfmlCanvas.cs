@@ -49,14 +49,14 @@ namespace Annex.Graphics.Sfml
             var resources = ServiceProvider.ResourceManagerRegistry;
 
             // Textures
-            var textures = resources.GetOrCreateResourceManager<FSResourceManager>(ResourceType.Textures);
+            var textures = resources.GetOrCreate<FSResourceManager>(ResourceType.Textures);
             textures.SetResourcePath(this.TexturePath);
             textures.SetResourceValidator(this.TextureValidator);
             textures.SetResourceLoader(this.TextureLoader_FromString);
             textures.SetResourceLoader(this.TextureLoader_FromBytes);
 
             // Fonts
-            var fonts = resources.GetOrCreateResourceManager<FSResourceManager>(ResourceType.Font);
+            var fonts = resources.GetOrCreate<FSResourceManager>(ResourceType.Font);
             fonts.SetResourcePath(this.FontPath);
             fonts.SetResourceValidator(this.FontValidator);
             fonts.SetResourceLoader(this.FontLoader_FromString);

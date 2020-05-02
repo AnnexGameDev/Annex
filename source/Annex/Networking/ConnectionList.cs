@@ -23,11 +23,10 @@ namespace Annex.Networking
         }
 
         private void Add(T connection) {
-            Debug.Assert(connection.ID >= 0);
-            Debug.Assert(connection.ID <= this._connections.Count);
+            Debug.Assert(connection.ID >= 0 && connection.ID <= this._connections.Count, $"New connection ID:{connection.ID} is not within the bounds of the connection list [0-{this._connections.Count}]");
 
             // If we're overwriting an existing index, it needs to be false.
-            Debug.Assert(connection.ID < this._connections.Count ? this._connections[(int)connection.ID] == null : true);
+            Debug.Assert(connection.ID < this._connections.Count ? this._connections[(int)connection.ID] == null : true, $"Attempt to overwrite connection list member at {connection.ID} which is not null with a new connection");
 
             if (this._connections.Count == connection.ID) {
                 this._connections.Add(null);
@@ -49,14 +48,13 @@ namespace Annex.Networking
         }
 
         public T Get(int index) {
-            Debug.Assert(index >= 0);
-            Debug.Assert(index < this._connections.Count);
+            Debug.Assert(index >= 0 && index < this._connections.Count, $"Connection index {index} is out of bounds [{0}-{this._connections.Count}]");
 
             return this._connections[index];
         }
 
         public T Get(object baseConnection) {
-            Debug.Assert(Exists(baseConnection));
+            Debug.Assert(Exists(baseConnection), $"Connection does not exist");
             return this.Get(this._connectionMap[baseConnection]);
         }
 

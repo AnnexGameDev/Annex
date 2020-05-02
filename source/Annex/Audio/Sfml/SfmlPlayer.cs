@@ -9,7 +9,7 @@ using System.IO;
 
 namespace Annex.Audio.Sfml
 {
-    internal sealed class SfmlPlayer : IAudioPlayer
+    public sealed class SfmlPlayer : IAudioPlayer
     {
         public const string GameEventID = "sfml-audio-player-gc";
         private readonly List<PlayingAudio> _playingAudio;
@@ -23,8 +23,9 @@ namespace Annex.Audio.Sfml
         public SfmlPlayer() {
             this._playingAudio = new List<PlayingAudio>();
 
+            // Create the resource manager for audio if it does not already exist.
             var resources = ServiceProvider.ResourceManagerRegistry;
-            var audio = resources.GetOrCreateResourceManager<FSResourceManager>(ResourceType.Audio);
+            var audio = resources.GetOrCreate<FSResourceManager>(ResourceType.Audio);
             audio.SetResourcePath(this.AudioPath);
             audio.SetResourceLoader(this.AudioLoader_Bytes);
             audio.SetResourceLoader(this.AudioLoader_String);
@@ -34,7 +35,7 @@ namespace Annex.Audio.Sfml
                 lock (this._lock) {
                     for (int i = 0; i < this._playingAudio.Count; i++) {
                         var audio = this._playingAudio[i];
-                        if (audio.IsStopped()) {
+                        if (audio.IsStopped) {
                             audio.Stop();
                             audio.Dispose();
                             this._playingAudio.RemoveAt(i--);
@@ -45,7 +46,7 @@ namespace Annex.Audio.Sfml
             }, 5000, eventID: GameEventID);
         }
 
-        public void StopAudio(string? id = null) {
+        public void StopPlayingAudio(string? id = null) {
             lock (this._lock) {
                 for (int i = 0; i < this._playingAudio.Count; i++) {
                     var audio = this._playingAudio[i];
@@ -59,7 +60,7 @@ namespace Annex.Audio.Sfml
             }
         }
 
-        private void PlayBufferedAudio(string name, string id, bool loop, float volume) {
+        private IPlayingAudio PlayBufferedAudio(string name, string id, bool loop, float volume) {
             name = name.ToLower();
             lock (this._lock) {
                 var audio = ServiceProvider.ResourceManagerRegistry.GetResourceManager(ResourceType.Audio);
@@ -77,12 +78,14 @@ namespace Annex.Audio.Sfml
                         Volume = volume
                     };
                 }
+                var playingAudio = new PlayingAudio(id, music);
                 music.Play();
-                this._playingAudio.Add(new PlayingAudio(id, music));
+                this._playingAudio.Add(playingAudio);
+                return playingAudio;
             }
         }
 
-        private void PlayUnbufferedAudio(string name, string id, bool loop, float volume) {
+        private IPlayingAudio PlayUnbufferedAudio(string name, string id, bool loop, float volume) {
             name = name.ToLower();
             lock (this._lock) {
                 var audio = ServiceProvider.ResourceManagerRegistry.GetResourceManager(ResourceType.Audio);
@@ -100,30 +103,44 @@ namespace Annex.Audio.Sfml
                         Volume = volume
                     };
                 }
+                var playingAudio = new PlayingAudio(id, sound);
                 sound.Play();
-                this._playingAudio.Add(new PlayingAudio(id, sound));
+                this._playingAudio.Add(playingAudio);
+                return playingAudio;
             }
         }
 
         public void Destroy() {
-            this.StopAudio();
+            this.StopPlayingAudio();
         }
 
-        public void PlayAudio(string audioFilePath) {
-            this.PlayAudio(audioFilePath, new AudioContext());
+        public IPlayingAudio PlayAudio(string audioFilePath) {
+            return this.PlayAudio(audioFilePath, new AudioContext());
         }
 
-        public void PlayAudio(string audioFilePath, AudioContext context) {
+        public IPlayingAudio PlayAudio(string audioFilePath, AudioContext context) {
             switch (context.BufferMode) {
                 case BufferMode.Buffered:
-                    PlayBufferedAudio(audioFilePath, context.ID ?? string.Empty, context.Loop, context.Volume);
-                    break;
+                    return PlayBufferedAudio(audioFilePath, context.ID ?? string.Empty, context.Loop, context.Volume);
                 case BufferMode.None:
-                    PlayUnbufferedAudio(audioFilePath, context.ID ?? string.Empty, context.Loop, context.Volume);
-                    break;
+                    return PlayUnbufferedAudio(audioFilePath, context.ID ?? string.Empty, context.Loop, context.Volume);
                 default:
-                    Debug.Assert(false);
-                    break;
+                    Debug.Assert(false, $"BufferMode: {context.BufferMode} is unsupported");
+#pragma warning disable CS8603 // Possible null reference return.
+                    return null;
+#pragma warning restore CS8603 // Possible null reference return.
+            }
+        }
+
+        public IEnumerable<IPlayingAudio> GetPlayingAudio(string? id = null) {
+            lock (this._lock) {
+                for (int i = 0; i < this._playingAudio.Count; i++) {
+                    var playingAudio = this._playingAudio[i];
+                    if (id != null && playingAudio.ID != id) {
+                        continue;
+                    }
+                    yield return playingAudio;
+                }
             }
         }
     }

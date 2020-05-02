@@ -12,7 +12,7 @@ namespace Annex.Resources
         }
 
         private void Register<T>(ResourceType resourceType) where T : ResourceManager, new() {
-            Debug.Assert(!this._resourceManagers.ContainsKey(resourceType));
+            Debug.Assert(!this._resourceManagers.ContainsKey(resourceType), $"The resource manager for {resourceType} already exists");
             this._resourceManagers[resourceType] = new T();
         }
 
@@ -23,12 +23,16 @@ namespace Annex.Resources
             return null;
         }
 
-        public ResourceManager GetOrCreateResourceManager<T>(ResourceType resourceType) where T : ResourceManager, new() {
+        public ResourceManager GetOrCreate<T>(ResourceType resourceType) where T : ResourceManager, new() {
             // Is it the first register?
             if (!this._resourceManagers.ContainsKey(resourceType)) {
                 this.Register<T>(resourceType);
             }
             return this._resourceManagers[resourceType];
+        }
+
+        public bool Contains(ResourceType resourceType) {
+            return this._resourceManagers.ContainsKey(resourceType);
         }
 
         public void Destroy() {

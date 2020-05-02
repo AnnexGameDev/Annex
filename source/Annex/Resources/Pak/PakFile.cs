@@ -27,7 +27,7 @@ namespace Annex.Resources.Pak
         }
 
         private PakFile(string path) {
-            Debug.Assert(File.Exists(path));
+            Debug.Assert(File.Exists(path), $"The pak file {path} does not exist");
             this._canWrite = false;
             this._entries = new Dictionary<string, PakFileEntry>();
             this._fs = new FileStream(path, FileMode.Open);
@@ -45,7 +45,7 @@ namespace Annex.Resources.Pak
         }
 
         public byte[] GetEntry(string id) {
-            Debug.Assert(this._entries.ContainsKey(id));
+            Debug.Assert(this._entries.ContainsKey(id), $"Entry is not contained in the pak file");
             if (this._canWrite) {
                 // TODO: Throw?
                 return null;

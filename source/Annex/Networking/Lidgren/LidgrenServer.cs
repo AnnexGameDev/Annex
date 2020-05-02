@@ -77,7 +77,7 @@ namespace Annex.Networking.Lidgren
 
         private protected override void SendPacket(T client, int packetID, OutgoingPacket packet) {
             var connection = client.BaseConnection as NetConnection;
-            Debug.Assert(connection != null);
+            Debug.Assert(connection != null, $"Client was null");
 
             var message = this._lidgrenServer.CreateMessage();
             message.Write(packetID);

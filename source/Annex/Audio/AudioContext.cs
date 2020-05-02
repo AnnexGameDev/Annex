@@ -4,18 +4,10 @@ namespace Annex.Audio
 {
     public class AudioContext
     {
-        public bool Loop = false;
-        private float _volume = 100;
-        public string? ID = null;
-        public BufferMode BufferMode = BufferMode.None;
-        public float Volume {
-            get => this._volume;
-            set {
-                Debug.Assert(value > 0);
-                Debug.Assert(value <= 100);
-                this._volume = value;
-            }
-        }
+        public bool Loop { get; set; } = false;
+        public string? ID { get; set; } = null;
+        public BufferMode BufferMode { get; set; } = BufferMode.None;
+        public float Volume { get; set; } = 100;
     }
 
     public enum BufferMode

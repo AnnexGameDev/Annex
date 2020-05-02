@@ -17,14 +17,14 @@ namespace Annex.Resources.FS
             if (!this._resources.ContainsKey(key)) {
                 this.Load(Path.Join(this._resourcePath, key));
             }
-            Debug.Assert(this._resources.ContainsKey(key));
+            Debug.Assert(this._resources.ContainsKey(key), $"");
             return this._resources[key];
         }
 
         protected override void Load(string fullFilePath) {
-            Debug.Assert(this._resourcePath != null);
-            Debug.Assert(this._resourceLoader_FromString != null);
-            Debug.Assert(File.Exists(fullFilePath));
+            Debug.Assert(this._resourcePath != null, $"Resource path is not set");
+            Debug.Assert(this._resourceLoader_FromString != null, $"ResourceLoader_FromString is not set");
+            Debug.Assert(File.Exists(fullFilePath), $"The resource {fullFilePath} does not exist");
 
             if (this._resourceValidator == null || this._resourceValidator(fullFilePath)) {
                 string key = fullFilePath.Remove(0, this._resourcePath.Length).ToLowerInvariant().Replace('\\', '/');
@@ -33,8 +33,7 @@ namespace Annex.Resources.FS
         }
 
         protected internal override void PackageResourcesToBinary(string baseDir) {
-            Debug.Assert(this._resourcePath != null);
-
+            Debug.Assert(this._resourcePath != null, $"Resource path is not set");
 
             var localResourceFolderInfo = new DirectoryInfo(this._resourcePath);
             string folderName = localResourceFolderInfo.Name;

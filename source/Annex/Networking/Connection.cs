@@ -18,17 +18,17 @@ namespace Annex.Networking
         }
 
         public void SetBaseConnection(object baseConnection) {
-            Debug.Assert(this.BaseConnection == null);
+            Debug.Assert(this.BaseConnection == null, "Base connection has already been set");
             this.BaseConnection = baseConnection;
         }
 
         public void SetID(int id) {
-            Debug.Assert(this.ID == null);
+            Debug.Assert(this.ID == null, "ID has already been set");
             this.ID = id;
         }
 
         public void SetEndpoint(object endpoint) {
-            Debug.Assert(this.Endpoint == null);
+            Debug.Assert(this.Endpoint == null, "Endpoint has already been set");
             this.Endpoint = endpoint;
         }
     }

@@ -23,22 +23,22 @@ namespace Annex.Resources
         public abstract object GetResource(string key);
 
         public void SetResourcePath(string resourcePath) {
-            Debug.Assert(this._resourcePath == null);
+            Debug.Assert(this._resourcePath == null, $"Resource path is not set");
             this._resourcePath = resourcePath;
         }
 
         public void SetResourceLoader(ResourceLoader_String loader) {
-            Debug.Assert(this._resourceLoader_FromString == null);
+            Debug.Assert(this._resourceLoader_FromString == null, $"ResourceLoader_FromString is not set");
             this._resourceLoader_FromString = loader;
         }
 
         public void SetResourceLoader(ResourceLoader_Bytes loader) {
-            Debug.Assert(this._resourceLoader_FromBytes == null);
+            Debug.Assert(this._resourceLoader_FromBytes == null, $"ResourceLoader_FromBytes is not set");
             this._resourceLoader_FromBytes = loader;
         }
 
         public void SetResourceValidator(ResourceValidator validator) {
-            Debug.Assert(this._resourceValidator == null);
+            Debug.Assert(this._resourceValidator == null, $"Resource validator is not set");
             this._resourceValidator = validator;
         }
 
