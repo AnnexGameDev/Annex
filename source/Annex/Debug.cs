@@ -37,14 +37,9 @@ namespace Annex
         public static void Assert(bool condition, string reason, [CallerLineNumber] int line = 0, [CallerMemberName] string callingMethod = "unknown", [CallerFilePath] string filePath = "unknown") {
             if (!condition) {
                 string message = $"Assertion failed in {filePath} on line {line} in the function {callingMethod}: {reason}";
-                Debug.Log(message);
+                ServiceProvider.Log.WriteLineError(message);
                 throw new AssertionFailedException(message);
             }
-        }
-
-        [Conditional("DEBUG")]
-        public static void Log(string line) {
-            ServiceProvider.Log.WriteLine(line);
         }
 
         [Conditional("DEBUG")]
