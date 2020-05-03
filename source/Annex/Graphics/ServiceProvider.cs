@@ -5,6 +5,6 @@ namespace Annex
 {
     public static partial class ServiceProvider
     {
-        public static Canvas Canvas => Locate<Canvas>() ?? Provide<Canvas>(new SfmlCanvas(960, 640));
+        public static Canvas Canvas => Locate<Canvas>() ?? Provide<Canvas, SfmlCanvas>();
     }
 }

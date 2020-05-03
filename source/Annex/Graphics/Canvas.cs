@@ -12,6 +12,7 @@ namespace Annex.Graphics
 
         public abstract Vector GetResolution();
         public abstract Camera GetCamera();
+        public abstract void SetVideoMode(VideoMode mode);
         public abstract void ChangeResolution(uint width, uint height);
         public abstract void SetVisible(bool visible);
         public abstract void ProcessEvents();

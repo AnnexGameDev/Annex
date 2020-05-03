@@ -1,10 +1,11 @@
 ﻿using Annex.Logging.Decorator;
 using System;
+using System.Diagnostics;
+using System.Threading;
 
 namespace Annex.Logging
 {
-    public class Log : IService
-    {
+    public class Log : IService {
         private readonly object _lock;
         private readonly DecoratableLog _log;
         private readonly bool[] _allowedChannels;
@@ -21,7 +22,7 @@ namespace Annex.Logging
             }
         }
 
-        private void EnableChannel(OutputChannel channel) {
+        public void EnableChannel(OutputChannel channel) {
             this._allowedChannels[(int)channel] = true;
         }
 
@@ -37,11 +38,11 @@ namespace Annex.Logging
 
         public void WriteLineClean(string line) {
             lock (this._lock) {
-                this._log.WriteLine(line);
+                this._log.WriteLine($"{GetCurrentTime()} - {line}");
             }
         }
 
-        public void WriteLineverbose(string message) {
+        public void WriteLineVerbose(string message) {
             this.WriteLineChannel(message, OutputChannel.Verbose);
         }
 
@@ -51,6 +52,14 @@ namespace Annex.Logging
 
         public void WriteLineError(string message) {
             this.WriteLineChannel(message, OutputChannel.Error);
+        }
+
+        public void WriteLineTrace(object sender, string message) {
+            this.WriteLineTrace_Module(sender.GetType().Name, message);
+        }
+
+        public void WriteLineTrace_Module(string moduleName, string message) {
+            this.WriteLineChannel($"{Process.GetCurrentProcess().Id}.{Thread.CurrentThread.ManagedThreadId} - [{moduleName}] - {message}", OutputChannel.Trace);
         }
 
         public void WriteLineChannel(string message, OutputChannel channel) {
@@ -64,6 +73,19 @@ namespace Annex.Logging
             } catch (Exception) {
                 return false;
             }
+        }
+
+        private string GetCurrentTime() {
+            var now = DateTime.Now;
+            return $"{ZeroPadNumber(now.Hour, 2)}:{ZeroPadNumber(now.Minute, 2)}:{ZeroPadNumber(now.Second, 2)}.{ZeroPadNumber(now.Millisecond, 3)}";
+        }
+
+        private string ZeroPadNumber(int val, int length) {
+            string num = val.ToString();
+            while (num.Length < length) {
+                num = "0" + num;
+            }
+            return num;
         }
     }
 }

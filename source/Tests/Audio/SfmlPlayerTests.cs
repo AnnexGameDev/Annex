@@ -1,14 +1,14 @@
 ﻿using Annex;
 using Annex.Audio;
 using Annex.Audio.Sfml;
+using Annex.Resources;
 using NUnit.Framework;
-using System;
 using System.Linq;
 
 namespace Tests.Audio
 {
     [TestFixture]
-    public class SfmlTests
+    public class SfmlPlayerTests
     {
         private IAudioPlayer _audio;
         private const string Cold = "test/Cold2.wav";
@@ -20,8 +20,8 @@ namespace Tests.Audio
 
         [OneTimeSetUp]
         public void SuiteSetUp() {
-            this._audio = ServiceProvider.Provide<IAudioPlayer>(new SfmlPlayer());
-            Debug.PackageResourcesToBinary();
+            this._audio = ServiceProvider.Provide<IAudioPlayer, SfmlPlayer>();
+            Debug.PackageResourcesToBinary(ResourceType.Audio);
         }
 
         [OneTimeTearDown]

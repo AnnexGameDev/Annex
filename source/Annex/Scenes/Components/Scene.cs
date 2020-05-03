@@ -10,6 +10,13 @@ namespace Annex.Scenes.Components
         public readonly EventQueue Events;
         public UIElement? FocusObject { get; internal set; }
 
+        public Scene(int width, int height) {
+            this.FocusObject = null;
+            this.Events = new EventQueue();
+            this.Position.Set(0, 0);
+            this.Size.Set(width, height);
+        }
+
         public Scene() {
             this.FocusObject = null;
             this.Events = new EventQueue();

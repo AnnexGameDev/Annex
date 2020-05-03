@@ -14,12 +14,18 @@ namespace Annex.Data.Shared
             this.Y += instance.Y;
         }
 
+        public abstract Vector Clone();
+
         public static implicit operator Vector2f(Vector instance) {
             return new Vector2f(instance.X, instance.Y);
         }
 
         public static Vector Create() {
             return new Vector_Val_Val();
+        }
+
+        public static Vector Create(Vector vector) {
+            return vector.Clone();
         }
 
         public static Vector Create(float x, float y) {
@@ -48,6 +54,10 @@ namespace Annex.Data.Shared
                 this.X = x;
                 this.Y = y;
             }
+
+            public override Vector Clone() {
+                return new Vector_Val_Val(this.X, this.Y);
+            }
         }
 
         private class Vector_Ref_Val : Vector
@@ -63,6 +73,10 @@ namespace Annex.Data.Shared
                 this._x = x;
                 this.Y = y;
             }
+
+            public override Vector Clone() {
+                return new Vector_Ref_Val(this._x, this.Y);
+            }
         }
 
         private class Vector_Val_Ref : Vector
@@ -77,6 +91,10 @@ namespace Annex.Data.Shared
             public Vector_Val_Ref(float x, Float y) {
                 this.X = x;
                 this._y = y;
+            }
+
+            public override Vector Clone() {
+                return new Vector_Val_Ref(this.X, this._y);
             }
         }
 
@@ -96,6 +114,10 @@ namespace Annex.Data.Shared
             public Vector_Ref_Ref(Float x, Float y) {
                 this._x = x;
                 this._y = y;
+            }
+
+            public override Vector Clone() {
+                return new Vector_Ref_Ref(this._x, this._y);
             }
         }
     }

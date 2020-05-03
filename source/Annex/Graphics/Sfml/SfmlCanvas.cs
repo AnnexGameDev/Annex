@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using Annex.Data.Shared;
 using Annex.Events;
 using Annex.Graphics.Cameras;
 using Annex.Graphics.Contexts;
@@ -11,22 +12,26 @@ using SFML.System;
 using SFML.Window;
 using System;
 using System.IO;
+using System.Threading;
 
 namespace Annex.Graphics.Sfml
 {
-    internal class SfmlCanvas : Canvas
+    public class SfmlCanvas : Canvas
     {
+        private Mutex _bufferAccess;
         private bool _usingUiView;
         private readonly View _uiView;
         private readonly View _gameContentView;
         private readonly Camera _camera;
-        private readonly RenderWindow _buffer;
+        private RenderWindow _buffer;
 
         private float _lastMouseClickX;
         private float _lastMouseClickY;
         private long _lastMouseClick;
 
         private readonly Data.Shared.Vector _resolution;
+        private string _title { get; set; }
+        private Styles _style { get; set; }
 
         private readonly string TexturePath = Path.Combine(AppContext.BaseDirectory, "textures/");
         private Texture TextureLoader_FromString(string path) => new Texture(path);
@@ -38,30 +43,79 @@ namespace Annex.Graphics.Sfml
         private Font FontLoader_FromBytes(byte[] data) => new Font(data);
         private bool FontValidator(string path) => path.EndsWith(".ttf");
 
-        public SfmlCanvas(float resolutionWidth, float resolutionHeight) {
+        public SfmlCanvas() : this(960, 640) {
+
+        }
+
+        internal SfmlCanvas(float resolutionWidth, float resolutionHeight) {
+            this._bufferAccess = new Mutex();
             this._resolution = Data.Shared.Vector.Create(resolutionWidth, resolutionHeight);
             this._camera = new Camera(this._resolution);
             this._uiView = new View(new Vector2f(this._resolution.X / 2, this._resolution.Y / 2), new Vector2f(this._resolution.X, this._resolution.Y));
             this._gameContentView = new View();
-            this._buffer = new RenderWindow(new VideoMode((uint)this._resolution.X, (uint)this._resolution.Y), "Window");
+            this._buffer = new RenderWindow(new SFML.Window.VideoMode((uint)this._resolution.X, (uint)this._resolution.Y), "", Styles.Default);
+            this._style = Styles.Default;
+            this.SetTitle("Window");
 
+            SetupResourceManagers();
+            AttachUIHandlers();
+        }
+
+        private void SetTitle(string title) {
+            this._buffer.SetTitle(title);
+            this._title = title;
+        }
+
+        private void ModifyBuffer(Data.Shared.Vector size, Styles style) {
+            this.ModifyBuffer((uint)size.X, (uint)size.Y, style);
+        }
+
+        private void ModifyBuffer(uint x, uint y, Styles style) {
+            this._bufferAccess.WaitOne();
+
+            var ratio = Vector.Create();
+            ratio.X = x / this._resolution.X;
+            ratio.Y = y / this._resolution.Y;
+
+            this._camera.Size.X *= ratio.X;
+            this._camera.Size.Y *= ratio.Y;
+
+            this._buffer.Close();
+            this._buffer = new RenderWindow(new SFML.Window.VideoMode(x, y), this._title, style);
+            this._style = style;
+            this._resolution.Set(x, y);
+            this.AttachUIHandlers();
+            this._bufferAccess.ReleaseMutex();
+        }
+
+        private void SetupResourceManagers() {
             // Resources
             var resources = ServiceProvider.ResourceManagerRegistry;
 
             // Textures
-            var textures = resources.GetOrCreate<FSResourceManager>(ResourceType.Textures);
-            textures.SetResourcePath(this.TexturePath);
-            textures.SetResourceValidator(this.TextureValidator);
-            textures.SetResourceLoader(this.TextureLoader_FromString);
-            textures.SetResourceLoader(this.TextureLoader_FromBytes);
+            if (!resources.Exists(ResourceType.Textures)) {
+                var textures = resources.GetOrCreate<FSResourceManager>(ResourceType.Textures);
+                textures.SetResourcePath(this.TexturePath);
+                textures.SetResourceValidator(this.TextureValidator);
+                textures.SetResourceLoader(this.TextureLoader_FromString);
+                textures.SetResourceLoader(this.TextureLoader_FromBytes);
+            } else {
+                ServiceProvider.Log.WriteLineWarning($"Resource manager for {ResourceType.Textures} already was set.");
+            }
 
             // Fonts
-            var fonts = resources.GetOrCreate<FSResourceManager>(ResourceType.Font);
-            fonts.SetResourcePath(this.FontPath);
-            fonts.SetResourceValidator(this.FontValidator);
-            fonts.SetResourceLoader(this.FontLoader_FromString);
-            fonts.SetResourceLoader(this.FontLoader_FromBytes);
+            if (!resources.Exists(ResourceType.Font)) {
+                var fonts = resources.GetOrCreate<FSResourceManager>(ResourceType.Font);
+                fonts.SetResourcePath(this.FontPath);
+                fonts.SetResourceValidator(this.FontValidator);
+                fonts.SetResourceLoader(this.FontLoader_FromString);
+                fonts.SetResourceLoader(this.FontLoader_FromBytes);
+            } else {
+                ServiceProvider.Log.WriteLineWarning($"Resource manager for {ResourceType.Font} already was set.");
+            }
+        }
 
+        private void AttachUIHandlers() {
             // Hook up UI events
             this._buffer.Closed += (sender, e) => { ServiceProvider.SceneManager.CurrentScene.HandleCloseButtonPressed(); };
             this._buffer.KeyPressed += (sender, e) => {
@@ -153,7 +207,7 @@ namespace Annex.Graphics.Sfml
 
         public override void Draw(TextContext ctx) {
 
-            if (String.IsNullOrEmpty(ctx.RenderText)) {
+            if (System.String.IsNullOrEmpty(ctx.RenderText)) {
                 return;
             }
 
@@ -203,7 +257,7 @@ namespace Annex.Graphics.Sfml
 
         public override void Draw(SpriteSheetContext sheet) {
 
-            if (String.IsNullOrEmpty(sheet.SourceTextureName)) {
+            if (System.String.IsNullOrEmpty(sheet.SourceTextureName)) {
                 return;
             }
 
@@ -226,7 +280,7 @@ namespace Annex.Graphics.Sfml
 
         public override void Draw(TextureContext ctx) {
 
-            if (String.IsNullOrEmpty(ctx.SourceTextureName)) {
+            if (System.String.IsNullOrEmpty(ctx.SourceTextureName)) {
                 return;
             }
 
@@ -301,12 +355,32 @@ namespace Annex.Graphics.Sfml
         }
 
         internal override void BeginDrawing() {
+            this._bufferAccess.WaitOne();
             this._buffer.Clear();
             this.UpdateGameContentCamera();
         }
 
         internal override void EndDrawing() {
             this._buffer.Display();
+            this._bufferAccess.ReleaseMutex();
+        }
+
+        public override void SetVideoMode(VideoMode mode) {
+            var style = Styles.Default;
+
+            switch (mode) {
+                case VideoMode.FullScreen:
+                    style = Styles.Fullscreen;
+                    break;
+                case VideoMode.Window:
+                    style = Styles.Default;
+                    break;
+                default:
+                    Debug.Assert(false, $"Unknown VideoMode:{mode}");
+                    break;
+            }
+
+            this.ModifyBuffer(this._resolution, style);
         }
 
         private void UpdateGameContentCamera() {
@@ -323,13 +397,19 @@ namespace Annex.Graphics.Sfml
         }
 
         public override bool IsMouseButtonDown(MouseButton button) {
+            this._bufferAccess.WaitOne();
             var sfmlButton = button.ToSFML();
-            return Mouse.IsButtonPressed(sfmlButton);
+            var isMouseButtonDown = Mouse.IsButtonPressed(sfmlButton);
+            this._bufferAccess.ReleaseMutex();
+            return isMouseButtonDown;
         }
 
         public override bool IsKeyDown(KeyboardKey key) {
+            this._bufferAccess.WaitOne();
             var sfmlKey = key.ToSFML();
-            return sfmlKey != Keyboard.Key.Unknown ? Keyboard.IsKeyPressed(sfmlKey) : false;
+            var isKeyDown = sfmlKey != Keyboard.Key.Unknown ? Keyboard.IsKeyPressed(sfmlKey) : false;
+            this._bufferAccess.ReleaseMutex();
+            return isKeyDown;
         }
 
         public override Camera GetCamera() {
@@ -341,15 +421,21 @@ namespace Annex.Graphics.Sfml
         }
 
         public override Data.Shared.Vector GetRealMousePos() {
+            this._bufferAccess.WaitOne();
             var realpos = Mouse.GetPosition(this._buffer);
             var pos = this._buffer.MapPixelToCoords(realpos, this._uiView);
-            return Data.Shared.Vector.Create(pos.X, pos.Y);
+            var realMousePos = Data.Shared.Vector.Create(pos.X, pos.Y);
+            this._bufferAccess.ReleaseMutex();
+            return realMousePos;
         }
 
         public override Data.Shared.Vector GetGameWorldMousePos() {
+            this._bufferAccess.WaitOne();
             var mousePos = Mouse.GetPosition(this._buffer);
             var gamePos = this._buffer.MapPixelToCoords(mousePos, this._gameContentView);
-            return Data.Shared.Vector.Create(gamePos.X, gamePos.Y);
+            var gameWorldMousePos = Data.Shared.Vector.Create(gamePos.X, gamePos.Y);
+            this._bufferAccess.ReleaseMutex();
+            return gameWorldMousePos;
         }
 
         private void UpdateView(DrawingContext ctx) {
@@ -365,29 +451,35 @@ namespace Annex.Graphics.Sfml
         }
 
         public override bool IsJoystickConnected(uint joystickId) {
-            return Joystick.IsConnected(joystickId);
+            this._bufferAccess.WaitOne();
+            var isConnected = Joystick.IsConnected(joystickId);
+            this._bufferAccess.ReleaseMutex();
+            return isConnected;
         }
 
         public override bool IsJoystickButtonPressed(uint joystickId, JoystickButton button) {
-            return Joystick.IsButtonPressed(joystickId, (uint)button);
+            this._bufferAccess.WaitOne();
+            var isPressed = Joystick.IsButtonPressed(joystickId, (uint)button);
+            this._bufferAccess.ReleaseMutex();
+            return isPressed;
         }
 
         public override float GetJoystickAxis(uint joystickId, JoystickAxis axis) {
-            return Joystick.GetAxisPosition(joystickId, (Joystick.Axis)axis);
+            this._bufferAccess.WaitOne();
+            var position = Joystick.GetAxisPosition(joystickId, (Joystick.Axis)axis);
+            this._bufferAccess.ReleaseMutex();
+            return position;
         }
 
         public override void ProcessEvents() {
+            this._bufferAccess.WaitOne();
             this._buffer.DispatchEvents();
             Joystick.Update();
-        }
-
-        public Canvas ReCreate() {
-            return new SfmlCanvas(960, 640);
+            this._bufferAccess.ReleaseMutex();
         }
 
         public override void ChangeResolution(uint width, uint height) {
-            var newCanvas = new SfmlCanvas(width, height);
-            ServiceProvider.Provide<Canvas>(newCanvas);
+            this.ModifyBuffer(width, height, this._style);
         }
 
         public override Data.Shared.Vector GetResolution() {

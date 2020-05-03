@@ -1,6 +1,6 @@
 ﻿using Annex.Data.Shared;
 
-namespace Annex.Graphics
+namespace Annex.Graphics.Contexts
 {
     public class TextAlignment
     {

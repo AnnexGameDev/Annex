@@ -3,6 +3,7 @@
     public enum OutputChannel
     {
         Verbose,
+        Trace,
         Warning,
         Error
     }

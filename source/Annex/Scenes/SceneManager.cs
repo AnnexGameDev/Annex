@@ -11,26 +11,27 @@ namespace Annex.Scenes
         private Type _currentSceneType;
         public Scene CurrentScene => this._scenes[this._currentSceneType];
 
-#pragma warning disable CS8618 // Non-nullable field is uninitialized.
-        public SceneManager() {           // Field is initialized in the LoadScene method.
-#pragma warning restore CS8618 // Non-nullable field is uninitialized.
+        public SceneManager() {
             this._scenes = new Dictionary<Type, Scene>();
-
-            // Even though the default scene is GameClosing, AnnexGame.Start<>() will override 
-            // it before it causes the game loop to exit.
-            this.LoadScene<GameClosing>();
+            this.LoadScene<Unknown>();
         }
 
         public T LoadScene<T>(bool overwrite = false) where T : Scene, new() {
             if (overwrite || !this._scenes.ContainsKey(typeof(T))) {
+                ServiceProvider.Log.WriteLineTrace(this, $"Creating new instance of scene {typeof(T).Name}");
                 this._scenes[typeof(T)] = new T();
             }
+            ServiceProvider.Log.WriteLineTrace(this, $"Loading scene {typeof(T).Name}");
             this._currentSceneType = typeof(T);
             return (T)this.CurrentScene;
         }
 
         public bool IsCurrentScene<T>() {
-            return this.CurrentScene.GetType() == typeof(T);
+            return typeof(T) == this.CurrentScene.GetType();
+        }
+
+        public void LoadGameClosingScene() {
+            this.LoadScene<GameClosing>();
         }
 
         public void Destroy() {

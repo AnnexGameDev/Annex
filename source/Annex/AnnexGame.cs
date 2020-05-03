@@ -1,6 +1,5 @@
 ﻿using Annex.Events;
 using Annex.Graphics;
-using Annex.Scenes;
 using Annex.Scenes.Components;
 
 namespace Annex
@@ -8,9 +7,9 @@ namespace Annex
     public static class AnnexGame
     {
         public static void Initialize() {
+            ServiceProvider.Log.WriteLineTrace_Module("AnnexGame", "Initializing...");
             var events = ServiceProvider.EventManager;
             var canvas = ServiceProvider.Canvas;
-            var audio = ServiceProvider.AudioManager;
             events.AddEvent(PriorityType.GRAPHICS, () => {
                 canvas.BeginDrawing();
                 ServiceProvider.SceneManager.CurrentScene.Draw(canvas);

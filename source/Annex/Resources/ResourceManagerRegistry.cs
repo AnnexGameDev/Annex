@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using System;
 using System.Collections.Generic;
 
 namespace Annex.Resources
@@ -17,7 +18,7 @@ namespace Annex.Resources
         }
 
         public ResourceManager? GetResourceManager(ResourceType resourceType) {
-            if (this._resourceManagers.ContainsKey(resourceType)) {
+            if (this.Exists(resourceType)) {
                 return this._resourceManagers[resourceType];
             }
             return null;
@@ -25,13 +26,13 @@ namespace Annex.Resources
 
         public ResourceManager GetOrCreate<T>(ResourceType resourceType) where T : ResourceManager, new() {
             // Is it the first register?
-            if (!this._resourceManagers.ContainsKey(resourceType)) {
+            if (!this.Exists(resourceType)) {
                 this.Register<T>(resourceType);
             }
             return this._resourceManagers[resourceType];
         }
 
-        public bool Contains(ResourceType resourceType) {
+        public bool Exists(ResourceType resourceType) {
             return this._resourceManagers.ContainsKey(resourceType);
         }
 
