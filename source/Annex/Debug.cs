@@ -84,4 +84,11 @@ namespace Annex
             PackageResourcesToBinary(ResourceType.Textures);
         }
     }
+
+    public enum ResourceType
+    {
+        Audio,
+        Font,
+        Textures
+    }
 }

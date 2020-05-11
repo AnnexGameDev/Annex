@@ -11,9 +11,9 @@ namespace Annex
     {
         public static IAudioPlayer AudioManager => Locate<IAudioPlayer>();
 
-        public class DefaultAudioResourceManager : UncachedResourceManager {
+        public class DefaultAudioManager : UncachedResourceManager {
         
-            public DefaultAudioResourceManager()
+            public DefaultAudioManager()
                 : base(new FileLoader(), new SfmlAudioLoader(Path.Combine(ApplicationPath, "audio/"))) {
             }
         }

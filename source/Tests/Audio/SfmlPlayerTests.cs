@@ -22,7 +22,7 @@ namespace Tests.Audio
         [OneTimeSetUp]
         public void SuiteSetUp() {
             ServiceProvider.Provide<Log>(new Log());
-            this._audio = ServiceProvider.Provide<IAudioPlayer>(new SfmlPlayer(new ServiceProvider.DefaultAudioResourceManager()));
+            this._audio = ServiceProvider.Provide<IAudioPlayer>(new SfmlPlayer(new ServiceProvider.DefaultAudioManager()));
             Debug.PackageResourcesToBinary(ResourceType.Audio);
         }
 

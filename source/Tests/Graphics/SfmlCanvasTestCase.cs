@@ -28,7 +28,7 @@ namespace Tests.Graphics
             this.Scenes = ServiceProvider.Provide<SceneManager>();
 
             this._backgroundThread = new Thread(() => {
-                this.Canvas = ServiceProvider.Provide<Canvas, SfmlCanvas>();
+                this.Canvas = ServiceProvider.Provide<Canvas>(new SfmlCanvas(new ServiceProvider.DefaultTextureManager(), new ServiceProvider.DefaultFontManager()));
                 AnnexGame.Initialize();
                 Debug.PackageResourcesToBinary(ResourceType.Textures);
                 AnnexGame.Start<T>();

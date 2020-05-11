@@ -10,7 +10,6 @@ using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 using System;
-using System.IO;
 using System.Threading;
 
 namespace Annex.Graphics.Sfml
@@ -28,20 +27,21 @@ namespace Annex.Graphics.Sfml
         private float _lastMouseClickY;
         private long _lastMouseClick;
 
-        private readonly Data.Shared.Vector _resolution;
+        private readonly Vector _resolution;
         private string _title { get; set; }
         private Styles _style { get; set; }
 
         public readonly ResourceManager FontManager;
         public readonly ResourceManager TextureManager;
 
-        public SfmlCanvas() : this(960, 640) {
-
+        public SfmlCanvas(ResourceManager textureManager, ResourceManager fontManager) : this(960, 640) {
+            this.TextureManager = textureManager;
+            this.FontManager = fontManager;
         }
 
         internal SfmlCanvas(float resolutionWidth, float resolutionHeight) {
             this._bufferAccess = new Mutex();
-            this._resolution = Data.Shared.Vector.Create(resolutionWidth, resolutionHeight);
+            this._resolution = Vector.Create(resolutionWidth, resolutionHeight);
             this._camera = new Camera(this._resolution);
             this._uiView = new View(new Vector2f(this._resolution.X / 2, this._resolution.Y / 2), new Vector2f(this._resolution.X, this._resolution.Y));
             this._gameContentView = new View();
@@ -49,7 +49,6 @@ namespace Annex.Graphics.Sfml
             this._style = Styles.Default;
             this.SetTitle("Window");
 
-            SetupResourceManagers();
             AttachUIHandlers();
         }
 
@@ -58,7 +57,7 @@ namespace Annex.Graphics.Sfml
             this._title = title;
         }
 
-        private void ModifyBuffer(Data.Shared.Vector size, Styles style) {
+        private void ModifyBuffer(Vector size, Styles style) {
             this.ModifyBuffer((uint)size.X, (uint)size.Y, style);
         }
 
@@ -78,33 +77,6 @@ namespace Annex.Graphics.Sfml
             this._resolution.Set(x, y);
             this.AttachUIHandlers();
             this._bufferAccess.ReleaseMutex();
-        }
-
-        private void SetupResourceManagers() {
-            // Resources
-            var resources = ServiceProvider.ResourceManagerRegistry;
-
-            // TODO: Textures
-            //if (!resources.Exists(ResourceType.Textures)) {
-            //    var textures = resources.GetOrCreate<FSResourceManager>(ResourceType.Textures);
-            //    textures.SetResourcePath(this.TexturePath);
-            //    textures.SetResourceValidator(this.TextureValidator);
-            //    textures.SetResourceLoader(this.TextureLoader_FromString);
-            //    textures.SetResourceLoader(this.TextureLoader_FromBytes);
-            //} else {
-            //    ServiceProvider.Log.WriteLineWarning($"Resource manager for {ResourceType.Textures} already was set.");
-            //}
-
-            //// Fonts
-            //if (!resources.Exists(ResourceType.Font)) {
-            //    var fonts = resources.GetOrCreate<FSResourceManager>(ResourceType.Font);
-            //    fonts.SetResourcePath(this.FontPath);
-            //    fonts.SetResourceValidator(this.FontValidator);
-            //    fonts.SetResourceLoader(this.FontLoader_FromString);
-            //    fonts.SetResourceLoader(this.FontLoader_FromBytes);
-            //} else {
-            //    ServiceProvider.Log.WriteLineWarning($"Resource manager for {ResourceType.Font} already was set.");
-            //}
         }
 
         private void AttachUIHandlers() {
@@ -206,10 +178,9 @@ namespace Annex.Graphics.Sfml
             // We need to update the camera.
             this.UpdateView(ctx);
 
-#pragma warning disable CS8604 // Possible null reference argument.
-            // Prevented because of the null or empty check at the top.
-            var font = new Font("");
-#pragma warning restore CS8604 // Possible null reference argument.
+            var args = new SfmlFontLoaderArgs(ctx.FontName.Value);
+            this.FontManager.GetResource(args, out var resource);
+            var font = (Font)resource;
             var text = new Text(ctx.RenderText, font) {
                 CharacterSize = (uint)(int)ctx.FontSize,
                 FillColor = ctx.FontColor,
@@ -254,8 +225,9 @@ namespace Annex.Graphics.Sfml
             }
 
             if (sheet.SourceTextureRect == null) {
-                //using var sprite = this.GetSprite(sheet.SourceTextureName);
-                using var sprite = new Sprite();
+                var args = new SfmlTextureLoaderArgs(sheet.SourceTextureName.Value);
+                Debug.Assert(this.TextureManager.GetResource(args, out var resource), "Failed to load texture");
+                using var sprite = new Sprite((Texture)resource);
                 var size = sprite.Texture.Size;
 
                 sheet.SourceTextureRect = new Data.Shared.IntRect();
@@ -280,13 +252,11 @@ namespace Annex.Graphics.Sfml
             // We need to update the camera.
             this.UpdateView(ctx);
 
-#pragma warning disable CS8604 // Possible null reference argument.
-            // Prevented because of the null or empty check at the top.x`
-            //var sprite = this.GetSprite(ctx.SourceTextureName);
-            using var sprite = new Sprite();
-#pragma warning restore CS8604 // Possible null reference argument.
-
-            sprite.Position = ctx.RenderPosition;
+            var args = new SfmlTextureLoaderArgs(ctx.SourceTextureName.Value);
+            Debug.Assert(this.TextureManager.GetResource(args, out var resource), "Failed to load texture");
+            using var sprite = new Sprite((Texture)resource) {
+                Position = ctx.RenderPosition
+            };
 
             Vector2f renderSize;
             if (ctx.RenderSize == null) {
@@ -402,7 +372,7 @@ namespace Annex.Graphics.Sfml
             this._buffer.Close();
         }
 
-        public override Data.Shared.Vector GetRealMousePos() {
+        public override Vector GetRealMousePos() {
             this._bufferAccess.WaitOne();
             var realpos = Mouse.GetPosition(this._buffer);
             var pos = this._buffer.MapPixelToCoords(realpos, this._uiView);
@@ -411,7 +381,7 @@ namespace Annex.Graphics.Sfml
             return realMousePos;
         }
 
-        public override Data.Shared.Vector GetGameWorldMousePos() {
+        public override Vector GetGameWorldMousePos() {
             this._bufferAccess.WaitOne();
             var mousePos = Mouse.GetPosition(this._buffer);
             var gamePos = this._buffer.MapPixelToCoords(mousePos, this._gameContentView);
@@ -464,7 +434,7 @@ namespace Annex.Graphics.Sfml
             this.ModifyBuffer(width, height, this._style);
         }
 
-        public override Data.Shared.Vector GetResolution() {
+        public override Vector GetResolution() {
             return this._resolution;
         }
     }
