@@ -1,6 +1,4 @@
 ﻿#nullable enable
-using Annex.Audio;
-using Annex.Audio.Sfml;
 using Annex.Logging;
 using System;
 using System.Collections.Generic;
@@ -13,9 +11,6 @@ namespace Annex
 
         static ServiceProvider() {
             _services = new Dictionary<Type, IService>();
-
-            // Initialize services
-            Provide<IAudioPlayer>(new SfmlPlayer(new DefaultAudioResourceManager()));
         }
 
         public static T Provide<T>() where T : class, IService, new() {

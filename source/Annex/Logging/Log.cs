@@ -42,28 +42,28 @@ namespace Annex.Logging
             }
         }
 
-        public void WriteLineVerbose(string message) {
-            this.WriteLineChannel(message, OutputChannel.Verbose);
+        public void WriteLineVerbose(string line) {
+            this.WriteLineChannel(line, OutputChannel.Verbose);
         }
 
-        public void WriteLineWarning(string message) {
-            this.WriteLineChannel(message, OutputChannel.Warning);
+        public void WriteLineWarning(string line) {
+            this.WriteLineChannel(line, OutputChannel.Warning);
         }
 
-        public void WriteLineError(string message) {
-            this.WriteLineChannel(message, OutputChannel.Error);
+        public void WriteLineError(string line) {
+            this.WriteLineChannel(line, OutputChannel.Error);
         }
 
-        public void WriteLineTrace(object sender, string message) {
-            this.WriteLineTrace_Module(sender.GetType().Name, message);
+        public void WriteLineTrace(object sender, string line) {
+            this.WriteLineTrace_Module(sender.GetType().Name, line);
         }
 
-        public void WriteLineTrace_Module(string moduleName, string message) {
-            this.WriteLineChannel($"{Process.GetCurrentProcess().Id}.{Thread.CurrentThread.ManagedThreadId} - [{moduleName}] - {message}", OutputChannel.Trace);
+        public void WriteLineTrace_Module(string moduleName, string line) {
+            this.WriteLineChannel($"{Process.GetCurrentProcess().Id}.{Thread.CurrentThread.ManagedThreadId} - [{moduleName}] - {line}", OutputChannel.Trace);
         }
 
-        public void WriteLineChannel(string message, OutputChannel channel) {
-            this.WriteLineClean($"[{channel}] - {message}");
+        public void WriteLineChannel(string line, OutputChannel channel) {
+            this.WriteLineClean($"[{channel}] - {line}");
         }
 
         private bool ConsoleExists() {

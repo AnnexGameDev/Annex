@@ -2,6 +2,7 @@
 using Annex.Events;
 using Annex.Graphics;
 using Annex.Graphics.Sfml;
+using Annex.Logging;
 using Annex.Resources;
 using Annex.Scenes;
 using Annex.Scenes.Components;
@@ -17,6 +18,10 @@ namespace Tests.Graphics
         protected SceneManager Scenes;
 
         private Thread _backgroundThread;
+
+        public SfmlCanvasTestCase() {
+            ServiceProvider.Provide<Log>(new Log());
+        }
 
         protected void StartTest<T>() where T : Scene, new() {
             this.EventManager = ServiceProvider.Provide<EventManager>();
