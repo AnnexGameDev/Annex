@@ -23,7 +23,7 @@ namespace Annex.Audio.Sfml
         }
 
         public void Dispose() {
-            Debug.Assert(!this._isDisposed, PERFORMED_OPERATION_WHILE_DISPOSED.Format(nameof(Dispose)));
+            Debug.ErrorIf(this._isDisposed, PERFORMED_OPERATION_WHILE_DISPOSED.Format(nameof(Dispose)));
             lock (this) {
                 this.Audio.Dispose();
                 this._isDisposed = true;
@@ -32,7 +32,7 @@ namespace Annex.Audio.Sfml
 
         internal void Play() {
             if (this._isDisposed) {
-                Debug.Fail(PERFORMED_OPERATION_WHILE_DISPOSED.Format(nameof(Play)));
+                Debug.Error(PERFORMED_OPERATION_WHILE_DISPOSED.Format(nameof(Play)));
             }
             lock (this) {
                 this.Audio.Play();
@@ -41,7 +41,7 @@ namespace Annex.Audio.Sfml
 
         internal void Stop() {
             if (this._isDisposed) {
-                Debug.Fail(PERFORMED_OPERATION_WHILE_DISPOSED.Format(nameof(Stop)));
+                Debug.Error(PERFORMED_OPERATION_WHILE_DISPOSED.Format(nameof(Stop)));
             }
             lock (this) {
                 this.Audio.Stop();
@@ -69,7 +69,7 @@ namespace Annex.Audio.Sfml
         }
 
         private void SetVolume(float volume) {
-            Debug.Assert(volume >= 0 && volume <= 100, INVALID_VOLUME_VALUE.Format(volume));
+            Debug.ErrorIf(volume < 0 || volume > 100, INVALID_VOLUME_VALUE.Format(volume));
             if (this._isDisposed) {
                 ServiceProvider.Log.WriteLineWarning(PERFORMED_OPERATION_WHILE_DISPOSED.Format(nameof(SetVolume)));
                 return;

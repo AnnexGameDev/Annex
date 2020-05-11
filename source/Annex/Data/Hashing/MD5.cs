@@ -23,7 +23,7 @@ namespace Annex.Data.Hashing
         }
 
         public string Compute(byte[] data) {
-            Debug.Assert(data.Length != 0, $"Attempt to compute MD5 hash on data with 0 length");
+            Debug.ErrorIf(data.Length == 0, $"Attempt to compute MD5 hash on data with 0 length");
             byte[] hash = this._algorithm.ComputeHash(data);
             var sb = new StringBuilder();
             foreach (byte val in hash) {

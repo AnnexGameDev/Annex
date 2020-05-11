@@ -59,7 +59,7 @@ namespace Annex.Audio.Sfml
             lock (this._lock) {
                 var args = new SfmlAudioLoaderArgs(audioFilePath, context.BufferMode);
                 if (!this.AudioResourceManager.GetResource(args, out var resource)) {
-                    Debug.Fail(RESOURCE_LOAD_FAILED.Format(audioFilePath));
+                    Debug.Error(RESOURCE_LOAD_FAILED.Format(audioFilePath));
                 }
                 // TODO: Wait for https://github.com/SFML/SFML/pull/1185 support in C#
                 var playingAudio = new SfmlPlayingAudio(context.ID, resource);

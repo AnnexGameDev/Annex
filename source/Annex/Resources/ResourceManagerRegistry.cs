@@ -13,7 +13,7 @@ namespace Annex.Resources
         }
 
         private void Register<T>(ResourceType resourceType) where T : ResourceManager, new() {
-            Debug.Assert(!this._resourceManagers.ContainsKey(resourceType), $"The resource manager for {resourceType} already exists");
+            Debug.ErrorIf(this._resourceManagers.ContainsKey(resourceType), $"The resource manager for {resourceType} already exists");
             this._resourceManagers[resourceType] = new T();
         }
 

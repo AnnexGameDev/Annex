@@ -15,7 +15,7 @@ namespace Annex.Resources.Loaders
         }
 
         public string GetString(string key) {
-            Debug.Fail($"PakResourceLoader does not support string loading");
+            Debug.Error($"PakResourceLoader does not support string loading");
             return string.Empty;
         }
     }

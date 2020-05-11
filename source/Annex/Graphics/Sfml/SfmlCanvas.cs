@@ -358,7 +358,7 @@ namespace Annex.Graphics.Sfml
                     style = Styles.Default;
                     break;
                 default:
-                    Debug.Assert(false, $"Unknown VideoMode:{mode}");
+                    Debug.Error($"Unknown VideoMode:{mode}");
                     break;
             }
 

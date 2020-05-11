@@ -15,7 +15,7 @@ namespace Annex.Audio.Sfml
 
         public object? Load(IResourceLoaderArgs args, IDataLoader resourceLoader) {
             if (!(args is SfmlAudioLoaderArgs sfmlArgs)) {
-                Debug.Fail($"{nameof(SfmlAudioLoader)} requires {nameof(SfmlAudioLoaderArgs)} args");
+                Debug.Error($"{nameof(SfmlAudioLoader)} requires {nameof(SfmlAudioLoaderArgs)} args");
                 return null;
             }
 

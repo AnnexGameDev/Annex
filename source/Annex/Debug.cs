@@ -37,17 +37,26 @@ namespace Annex
         [Conditional("DEBUG")]
         public static void Assert(bool condition, string reason, [CallerLineNumber] int line = 0, [CallerMemberName] string callingMethod = "unknown", [CallerFilePath] string filePath = "unknown") {
             if (!condition) {
-                string message = $"Assertion failed in {filePath.Substring(SolutionFolder.Length)} on line {line} in the function {callingMethod}: {reason}";
-                ServiceProvider.Log.WriteLineError(message);
-                throw new AssertionFailedException(message);
+                throw new AssertionFailedException(FormatAndLog(reason, line, callingMethod, filePath));
             }
         }
 
         [Conditional("DEBUG")]
-        public static void Fail(string reason, [CallerLineNumber] int line = 0, [CallerMemberName] string callingMethod = "unknown", [CallerFilePath] string filePath = "unknown") {
+        public static void ErrorIf(bool condition, string reason, [CallerLineNumber] int line = 0, [CallerMemberName] string callingMethod = "unknown", [CallerFilePath] string filePath = "unknown") {
+            if (condition) {
+                throw new AssertionFailedException(FormatAndLog(reason, line, callingMethod, filePath));
+            }
+        }
+
+        [Conditional("DEBUG")]
+        public static void Error(string reason, [CallerLineNumber] int line = 0, [CallerMemberName] string callingMethod = "unknown", [CallerFilePath] string filePath = "unknown") {
+            throw new AssertionFailedException(FormatAndLog(reason, line, callingMethod, filePath));
+        }
+
+        private static string FormatAndLog(string reason, int line, string callingMethod, string filePath) {
             string message = $"Failure in {filePath.Substring(SolutionFolder.Length)} on line {line} in the function {callingMethod}: {reason}";
             ServiceProvider.Log.WriteLineError(message);
-            throw new AssertionFailedException(message);
+            return message;
         }
 
         [Conditional("DEBUG")]

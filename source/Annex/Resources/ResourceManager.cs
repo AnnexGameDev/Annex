@@ -21,7 +21,7 @@ namespace Annex.Resources
 
             if (!this.ContainsCachedResource(args.Key)) {
                 var loadedResource = this.ResourceLoader.Load(args, this.DataLoader);
-                Debug.Assert(loadedResource != null, $"Loaded resource {args.Key} is null");
+                Debug.ErrorIf(loadedResource == null, $"Loaded resource {args.Key} is null");
 #pragma warning disable CS8604 // Possible null reference argument.
                 this.CacheResource(args.Key, loadedResource);
 #pragma warning restore CS8604 // Possible null reference argument.
