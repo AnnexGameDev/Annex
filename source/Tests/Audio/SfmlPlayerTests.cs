@@ -20,7 +20,7 @@ namespace Tests.Audio
 
         [OneTimeSetUp]
         public void SuiteSetUp() {
-            this._audio = ServiceProvider.Provide<IAudioPlayer, SfmlPlayer>();
+            this._audio = ServiceProvider.Provide<IAudioPlayer>(new SfmlPlayer(new ServiceProvider.DefaultAudioResourceManager()));
             Debug.PackageResourcesToBinary(ResourceType.Audio);
         }
 
@@ -118,6 +118,13 @@ namespace Tests.Audio
 
             Wait(2000);
             Assert.IsTrue(audio.IsPlaying);
+        }
+
+        [Test]
+        public void ModifyAfterDispose() {
+            var audio = this._audio.PlayAudio(Cold);
+            this._audio.StopPlayingAudio();
+            audio.Volume = 20;
         }
     }
 }

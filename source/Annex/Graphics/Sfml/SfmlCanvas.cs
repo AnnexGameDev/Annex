@@ -5,7 +5,6 @@ using Annex.Graphics.Cameras;
 using Annex.Graphics.Contexts;
 using Annex.Graphics.Events;
 using Annex.Resources;
-using Annex.Resources.FS;
 using Annex.Scenes;
 using SFML.Graphics;
 using SFML.System;
@@ -33,15 +32,8 @@ namespace Annex.Graphics.Sfml
         private string _title { get; set; }
         private Styles _style { get; set; }
 
-        private readonly string TexturePath = Path.Combine(AppContext.BaseDirectory, "textures/");
-        private Texture TextureLoader_FromString(string path) => new Texture(path);
-        private Texture TextureLoader_FromBytes(byte[] data) => new Texture(data);
-        private bool TextureValidator(string path) => path.EndsWith(".png");
-
-        private readonly string FontPath = Path.Combine(AppContext.BaseDirectory, "fonts/");
-        private Font FontLoader_FromString(string path) => new Font(path);
-        private Font FontLoader_FromBytes(byte[] data) => new Font(data);
-        private bool FontValidator(string path) => path.EndsWith(".ttf");
+        public readonly ResourceManager FontManager;
+        public readonly ResourceManager TextureManager;
 
         public SfmlCanvas() : this(960, 640) {
 
@@ -92,27 +84,27 @@ namespace Annex.Graphics.Sfml
             // Resources
             var resources = ServiceProvider.ResourceManagerRegistry;
 
-            // Textures
-            if (!resources.Exists(ResourceType.Textures)) {
-                var textures = resources.GetOrCreate<FSResourceManager>(ResourceType.Textures);
-                textures.SetResourcePath(this.TexturePath);
-                textures.SetResourceValidator(this.TextureValidator);
-                textures.SetResourceLoader(this.TextureLoader_FromString);
-                textures.SetResourceLoader(this.TextureLoader_FromBytes);
-            } else {
-                ServiceProvider.Log.WriteLineWarning($"Resource manager for {ResourceType.Textures} already was set.");
-            }
+            // TODO: Textures
+            //if (!resources.Exists(ResourceType.Textures)) {
+            //    var textures = resources.GetOrCreate<FSResourceManager>(ResourceType.Textures);
+            //    textures.SetResourcePath(this.TexturePath);
+            //    textures.SetResourceValidator(this.TextureValidator);
+            //    textures.SetResourceLoader(this.TextureLoader_FromString);
+            //    textures.SetResourceLoader(this.TextureLoader_FromBytes);
+            //} else {
+            //    ServiceProvider.Log.WriteLineWarning($"Resource manager for {ResourceType.Textures} already was set.");
+            //}
 
-            // Fonts
-            if (!resources.Exists(ResourceType.Font)) {
-                var fonts = resources.GetOrCreate<FSResourceManager>(ResourceType.Font);
-                fonts.SetResourcePath(this.FontPath);
-                fonts.SetResourceValidator(this.FontValidator);
-                fonts.SetResourceLoader(this.FontLoader_FromString);
-                fonts.SetResourceLoader(this.FontLoader_FromBytes);
-            } else {
-                ServiceProvider.Log.WriteLineWarning($"Resource manager for {ResourceType.Font} already was set.");
-            }
+            //// Fonts
+            //if (!resources.Exists(ResourceType.Font)) {
+            //    var fonts = resources.GetOrCreate<FSResourceManager>(ResourceType.Font);
+            //    fonts.SetResourcePath(this.FontPath);
+            //    fonts.SetResourceValidator(this.FontValidator);
+            //    fonts.SetResourceLoader(this.FontLoader_FromString);
+            //    fonts.SetResourceLoader(this.FontLoader_FromBytes);
+            //} else {
+            //    ServiceProvider.Log.WriteLineWarning($"Resource manager for {ResourceType.Font} already was set.");
+            //}
         }
 
         private void AttachUIHandlers() {
@@ -216,7 +208,7 @@ namespace Annex.Graphics.Sfml
 
 #pragma warning disable CS8604 // Possible null reference argument.
             // Prevented because of the null or empty check at the top.
-            var font = this.GetFont(ctx.FontName);
+            var font = new Font("");
 #pragma warning restore CS8604 // Possible null reference argument.
             var text = new Text(ctx.RenderText, font) {
                 CharacterSize = (uint)(int)ctx.FontSize,
@@ -262,7 +254,8 @@ namespace Annex.Graphics.Sfml
             }
 
             if (sheet.SourceTextureRect == null) {
-                using var sprite = this.GetSprite(sheet.SourceTextureName);
+                //using var sprite = this.GetSprite(sheet.SourceTextureName);
+                using var sprite = new Sprite();
                 var size = sprite.Texture.Size;
 
                 sheet.SourceTextureRect = new Data.Shared.IntRect();
@@ -289,7 +282,8 @@ namespace Annex.Graphics.Sfml
 
 #pragma warning disable CS8604 // Possible null reference argument.
             // Prevented because of the null or empty check at the top.x`
-            var sprite = this.GetSprite(ctx.SourceTextureName);
+            //var sprite = this.GetSprite(ctx.SourceTextureName);
+            using var sprite = new Sprite();
 #pragma warning restore CS8604 // Possible null reference argument.
 
             sprite.Position = ctx.RenderPosition;
@@ -340,18 +334,6 @@ namespace Annex.Graphics.Sfml
             }
 
             this._buffer.Draw(shape);
-        }
-
-        private Sprite GetSprite(string textureName) {
-            var resources = ServiceProvider.ResourceManagerRegistry;
-            var textures = resources.GetResourceManager(ResourceType.Textures);
-            return new Sprite(textures.GetResource(textureName) as Texture);
-        }
-
-        private Font GetFont(string fontName) {
-            var resources = ServiceProvider.ResourceManagerRegistry;
-            var fonts = resources.GetResourceManager(ResourceType.Font);
-            return fonts.GetResource(fontName) as Font;
         }
 
         internal override void BeginDrawing() {

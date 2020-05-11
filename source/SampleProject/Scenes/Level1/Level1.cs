@@ -43,7 +43,7 @@ namespace SampleProject.Scenes.Level1
         }
 
         public override void HandleCloseButtonPressed() {
-            ServiceProvider.SceneManager.LoadScene<GameClosing>();
+            ServiceProvider.SceneManager.LoadGameClosingScene();
         }
 
         public override void Draw(Canvas canvas) {

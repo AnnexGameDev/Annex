@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
+using static Annex.Strings.Paths;
 
 namespace Annex
 {
@@ -36,10 +37,17 @@ namespace Annex
         [Conditional("DEBUG")]
         public static void Assert(bool condition, string reason, [CallerLineNumber] int line = 0, [CallerMemberName] string callingMethod = "unknown", [CallerFilePath] string filePath = "unknown") {
             if (!condition) {
-                string message = $"Assertion failed in {filePath} on line {line} in the function {callingMethod}: {reason}";
+                string message = $"Assertion failed in {filePath.Substring(SolutionFolder.Length)} on line {line} in the function {callingMethod}: {reason}";
                 ServiceProvider.Log.WriteLineError(message);
                 throw new AssertionFailedException(message);
             }
+        }
+
+        [Conditional("DEBUG")]
+        public static void Fail(string reason, [CallerLineNumber] int line = 0, [CallerMemberName] string callingMethod = "unknown", [CallerFilePath] string filePath = "unknown") {
+            string message = $"Failure in {filePath.Substring(SolutionFolder.Length)} on line {line} in the function {callingMethod}: {reason}";
+            ServiceProvider.Log.WriteLineError(message);
+            throw new AssertionFailedException(message);
         }
 
         [Conditional("DEBUG")]
@@ -56,7 +64,8 @@ namespace Annex
             string resourcePath = Path.Combine(solutionPath, "resources");
             Directory.CreateDirectory(resourcePath);
 
-            ServiceProvider.ResourceManagerRegistry.GetResourceManager(resourceType)?.PackageResourcesToBinary(resourcePath);
+            // TODO:
+            //ServiceProvider.ResourceManagerRegistry.GetResourceManager(resourceType)?.PackageResourcesToBinary(resourcePath);
         }
 
         [Conditional("DEBUG")]

@@ -1,47 +1,38 @@
 ﻿#nullable enable
-using System.Collections.Generic;
 
 namespace Annex.Resources
 {
-    public abstract class ResourceManager
+    public abstract class ResourceManager : IResourceManager
     {
-        public delegate object ResourceLoader_Bytes(byte[] data);
-        public delegate object ResourceLoader_String(string id);
-        public delegate bool ResourceValidator(string id);
+        public readonly IDataLoader DataLoader;
+        public readonly IResourceLoader ResourceLoader;
 
-        protected string? _resourcePath;
-        protected ResourceLoader_Bytes? _resourceLoader_FromBytes;
-        protected ResourceLoader_String? _resourceLoader_FromString;
-        protected ResourceValidator? _resourceValidator;
+        public ResourceManager(IDataLoader dataLoader, IResourceLoader resourceLoader) {
+            this.DataLoader = dataLoader;
+            this.ResourceLoader = resourceLoader;
+        }
 
-        protected virtual void Load(IEnumerable<string> keys) {
-            foreach (var key in keys) {
-                this.Load(key);
+        public bool GetResource(IResourceLoaderArgs args, out object? resource) {
+            if (!this.ResourceLoader.Validate(args)) {
+                ServiceProvider.Log.WriteLineWarning($"The resource '{args}' is not valid");
+                resource = default;
+                return false;
             }
-        }
-        protected abstract void Load(string key);
-        public abstract object GetResource(string key);
 
-        public void SetResourcePath(string resourcePath) {
-            Debug.Assert(this._resourcePath == null, $"Resource path is already set");
-            this._resourcePath = resourcePath;
-        }
+            if (!this.ContainsCachedResource(args.Key)) {
+                var loadedResource = this.ResourceLoader.Load(args, this.DataLoader);
+                Debug.Assert(loadedResource != null, $"Loaded resource {args.Key} is null");
+#pragma warning disable CS8604 // Possible null reference argument.
+                this.CacheResource(args.Key, loadedResource);
+#pragma warning restore CS8604 // Possible null reference argument.
+            }
 
-        public void SetResourceLoader(ResourceLoader_String loader) {
-            Debug.Assert(this._resourceLoader_FromString == null, $"ResourceLoader_FromString is already set");
-            this._resourceLoader_FromString = loader;
-        }
-
-        public void SetResourceLoader(ResourceLoader_Bytes loader) {
-            Debug.Assert(this._resourceLoader_FromBytes == null, $"ResourceLoader_FromBytes is already set");
-            this._resourceLoader_FromBytes = loader;
+            resource = this.RetrieveCachedResource(args.Key);
+            return true;
         }
 
-        public void SetResourceValidator(ResourceValidator validator) {
-            Debug.Assert(this._resourceValidator == null, $"Resource validator is already set");
-            this._resourceValidator = validator;
-        }
-
-        protected internal abstract void PackageResourcesToBinary(string baseDir);
+        protected abstract object RetrieveCachedResource(string key);
+        protected abstract void CacheResource(string key, object resource);
+        protected abstract bool ContainsCachedResource(string key);
     }
 }
