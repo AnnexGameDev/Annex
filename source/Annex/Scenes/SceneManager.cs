@@ -1,6 +1,8 @@
-﻿using Annex.Scenes.Components;
+﻿using Annex.Assets;
+using Annex.Scenes.Components;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Annex.Scenes
 {
@@ -36,6 +38,10 @@ namespace Annex.Scenes
 
         public void Destroy() {
 
+        }
+
+        public IEnumerable<IAssetManager> GetAssetManagers() {
+            return Enumerable.Empty<IAssetManager>();
         }
     }
 }

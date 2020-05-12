@@ -1,9 +1,12 @@
 ﻿using Annex;
+using Annex.Assets;
 using Annex.Audio;
 using Annex.Audio.Sfml;
 using Annex.Logging;
 using NUnit.Framework;
+using System.IO;
 using System.Linq;
+using static Annex.Paths;
 
 namespace Tests.Audio
 {
@@ -22,7 +25,7 @@ namespace Tests.Audio
         public void SuiteSetUp() {
             ServiceProvider.Provide<Log>(new Log());
             this._audio = ServiceProvider.Provide<IAudioPlayer>(new SfmlPlayer(new ServiceProvider.DefaultAudioManager()));
-            Debug.PackageAssetsToBinary(AssetType.Audio);
+            Debug.PackageAssetsToBinaryFrom(AssetType.Audio, Path.Combine(SolutionFolder, "assets/audio/"));
         }
 
         [OneTimeTearDown]

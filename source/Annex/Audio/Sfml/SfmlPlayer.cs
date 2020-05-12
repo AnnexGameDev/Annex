@@ -2,7 +2,7 @@
 using Annex.Assets;
 using Annex.Events;
 using System.Collections.Generic;
-using static Annex.Strings.Errors;
+using static Annex.Audio.Sfml.Errors;
 
 namespace Annex.Audio.Sfml
 {
@@ -81,6 +81,10 @@ namespace Annex.Audio.Sfml
                     yield return playingAudio;
                 }
             }
+        }
+
+        public IEnumerable<IAssetManager> GetAssetManagers() {
+            yield return AudioAssetManager;
         }
     }
 }

@@ -1,9 +1,10 @@
-﻿using Annex.Scenes.Components;
+﻿using Annex.Assets;
+using Annex.Scenes.Components;
 using System;
 using System.Diagnostics;
-using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
-using static Annex.Strings.Paths;
+using static Annex.Paths;
 
 namespace Annex
 {
@@ -53,41 +54,18 @@ namespace Annex
         }
 
         private static string FormatAndLog(string reason, int line, string callingMethod, string filePath) {
-            string message = $"Failure in {filePath.Substring(SolutionFolder.Length)} on line {line} in the function {callingMethod}: {reason}";
+            string message = $"Failure in {filePath.Substring(SourceFolder.Length)} on line {line} in the function {callingMethod}: {reason}";
             ServiceProvider.Log.WriteLineError(message);
             return message;
         }
 
         [Conditional("DEBUG")]
-        public static void PackageAssetsToBinary(AssetType assetType) {
-            // TODO:
-            var di = new DirectoryInfo(".");
-            string solutionPath;
-            while (true) {
-                if (Directory.GetFiles(di.FullName, "*.sln").Length != 0) {
-                    solutionPath = di.FullName;
-                    break;
+        public static void PackageAssetsToBinaryFrom(AssetType assetType, string path) {
+            foreach (var registeredService in ServiceProvider.RegisteredServices) {
+                foreach (var assetManager in registeredService.GetAssetManagers().Where(assetManager => assetManager.AssetType == assetType)) {
+                    assetManager.PackageAssetsToBinaryFrom(path);
                 }
-                di = di.Parent;
             }
-            string assetPath = Path.Combine(solutionPath, "assets");
-            Directory.CreateDirectory(assetPath);
-
-            //ServiceProvider.ResourceManagerRegistry.GetResourceManager(resourceType)?.PackageResourcesToBinary(resourcePath);
         }
-
-        [Conditional("DEBUG")]
-        public static void PackageAssetToBinary() {
-            PackageAssetsToBinary(AssetType.Audio);
-            PackageAssetsToBinary(AssetType.Font);
-            PackageAssetsToBinary(AssetType.Textures);
-        }
-    }
-
-    public enum AssetType
-    {
-        Audio,
-        Font,
-        Textures
     }
 }

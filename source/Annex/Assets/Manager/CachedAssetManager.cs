@@ -7,8 +7,8 @@ namespace Annex.Assets.Managers
     {
         private readonly Dictionary<string, object> _assets;
 
-        public CachedAssetManager(IAssetLoader dataLoader, IAssetInitializer assetLoader) 
-            : base(dataLoader, assetLoader) {
+        public CachedAssetManager(AssetType type, IAssetLoader assetLoader, IAssetInitializer assetInitializer)
+            : base(type, assetLoader, assetInitializer) {
             this._assets = new Dictionary<string, object>();
         }
 

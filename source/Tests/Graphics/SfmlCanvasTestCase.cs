@@ -1,4 +1,5 @@
 ﻿using Annex;
+using Annex.Assets;
 using Annex.Events;
 using Annex.Graphics;
 using Annex.Graphics.Sfml;
@@ -6,7 +7,9 @@ using Annex.Logging;
 using Annex.Scenes;
 using Annex.Scenes.Components;
 using System;
+using System.IO;
 using System.Threading;
+using static Annex.Paths;
 
 namespace Tests.Graphics
 {
@@ -17,6 +20,7 @@ namespace Tests.Graphics
         protected SceneManager Scenes;
 
         private Thread _backgroundThread;
+        private readonly string AssetFolder = Path.Combine(SolutionFolder, "assets/textures/");
 
         public SfmlCanvasTestCase() {
             ServiceProvider.Provide<Log>(new Log());
@@ -29,7 +33,7 @@ namespace Tests.Graphics
             this._backgroundThread = new Thread(() => {
                 this.Canvas = ServiceProvider.Provide<Canvas>(new SfmlCanvas(new ServiceProvider.DefaultTextureManager(), new ServiceProvider.DefaultFontManager()));
                 AnnexGame.Initialize();
-                Debug.PackageAssetsToBinary(AssetType.Textures);
+                Debug.PackageAssetsToBinaryFrom(AssetType.Textures, AssetFolder);
                 AnnexGame.Start<T>();
                 Console.WriteLine("Done!");
             });

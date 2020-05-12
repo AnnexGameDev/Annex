@@ -5,16 +5,20 @@ using static Annex.Graphics.Sfml.Errors;
 
 namespace Annex.Graphics.Sfml
 {
-    public class SfmlFontLoader : IAssetInitializer
+    public class SfmlFontInitializer : IAssetInitializer
     {
-        public readonly string AssetPath;
+        public string AssetPath { get; set; }
 
-        public SfmlFontLoader(string path) {
+        public SfmlFontInitializer(string path) {
             this.AssetPath = path;
         }
 
+        public void CopyAssetToBinary(string path, IAssetLoader assetLoader) {
+            throw new System.NotImplementedException();
+        }
+
         public object Load(IAssetInitializerArgs args, IAssetLoader assetLoader) {
-            Debug.Assert(args is SfmlFontLoaderArgs, INVALID_INITIALIZER_ARGS.Format(nameof(SfmlFontLoader), nameof(SfmlFontLoaderArgs)));
+            Debug.Assert(args is SfmlFontLoaderArgs, INVALID_INITIALIZER_ARGS.Format(nameof(SfmlFontInitializer), nameof(SfmlFontLoaderArgs)));
             return new Font(assetLoader.GetString(args.Key));
         }
 

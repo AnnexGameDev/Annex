@@ -14,5 +14,13 @@ namespace Annex.Assets.Loaders
             Debug.Assert(File.Exists(key), ASSET_FILE_DOESNT_EXIST.Format(key));
             return key;
         }
+
+        public void Write(string source, string destination) {
+            var parent = new FileInfo(destination).Directory.FullName;
+            if (!Directory.Exists(parent)) {
+                Directory.CreateDirectory(parent);
+            }
+            File.Copy(source, destination, true);
+        }
     }
 }

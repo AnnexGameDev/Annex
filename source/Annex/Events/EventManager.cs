@@ -1,8 +1,10 @@
 ﻿#nullable enable
+using Annex.Assets;
 using Annex.Scenes;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 
 namespace Annex.Events
@@ -69,6 +71,10 @@ namespace Annex.Events
 
         public void Destroy() {
 
+        }
+
+        public IEnumerable<IAssetManager> GetAssetManagers() {
+            return Enumerable.Empty<IAssetManager>();
         }
     }
 }

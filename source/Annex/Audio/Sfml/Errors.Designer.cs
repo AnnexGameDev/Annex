@@ -61,6 +61,15 @@ namespace Annex.Audio.Sfml {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to load asset {0}.
+        /// </summary>
+        internal static string ASSET_LOAD_FAILED {
+            get {
+                return ResourceManager.GetString("ASSET_LOAD_FAILED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to BufferMode {0} is unsupported.
         /// </summary>
         internal static string BufferMode_NotSupported {

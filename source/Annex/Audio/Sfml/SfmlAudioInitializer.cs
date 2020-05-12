@@ -8,10 +8,14 @@ namespace Annex.Audio.Sfml
 {
     public class SfmlAudioInitializer : IAssetInitializer
     {
-        public readonly string AssetPath;
+        public string AssetPath { get; set; }
 
         public SfmlAudioInitializer(string path) {
             this.AssetPath = path;
+        }
+
+        public void CopyAssetToBinary(string path, IAssetLoader assetLoader) {
+
         }
 
         public object? Load(IAssetInitializerArgs args, IAssetLoader assetLoader) {

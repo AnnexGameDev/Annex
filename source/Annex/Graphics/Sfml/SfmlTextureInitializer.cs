@@ -7,7 +7,7 @@ namespace Annex.Graphics.Sfml
 {
     public class SfmlTextureInitializer : IAssetInitializer
     {
-        public readonly string AssetPath;
+        public string AssetPath { get; set; }
 
         public SfmlTextureInitializer(string path) {
             this.AssetPath = path;

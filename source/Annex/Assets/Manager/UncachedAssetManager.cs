@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using System.Collections.Generic;
+using System.IO;
 
 namespace Annex.Assets.Managers
 {
@@ -7,7 +8,8 @@ namespace Annex.Assets.Managers
     {
         private Dictionary<string, object> _temp_cache;
 
-        public UncachedAssetManager(IAssetLoader dataLoader, IAssetInitializer assetLoader) : base(dataLoader, assetLoader) {
+        public UncachedAssetManager(AssetType type, IAssetLoader assetLoader, IAssetInitializer assetInitializer) 
+            : base(type, assetLoader, assetInitializer) {
             this._temp_cache = new Dictionary<string, object>();
         }
 

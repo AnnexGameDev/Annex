@@ -19,5 +19,9 @@ namespace Annex.Assets.Loaders
             Debug.Error(STRING_LOADING_NOT_SUPPORTED.Format(nameof(PakLoader)));
             return string.Empty;
         }
+
+        public void Write(string source, string destination) {
+            throw new System.NotImplementedException();
+        }
     }
 }

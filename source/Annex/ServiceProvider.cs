@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using Annex.Assets;
 using Annex.Logging;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ namespace Annex
     public static partial class ServiceProvider
     {
         private static readonly Dictionary<Type, IService> _services;
+        public static IEnumerable<IService> RegisteredServices => _services.Values;
 
         static ServiceProvider() {
             _services = new Dictionary<Type, IService>();
@@ -39,5 +41,6 @@ namespace Annex
     public interface IService
     {
         void Destroy();
+        IEnumerable<IAssetManager> GetAssetManagers();
     }
 }

@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ASSET_LOAD_FAILED" xml:space="preserve">
+    <value>Failed to load asset {0}</value>
+  </data>
   <data name="BufferMode_NotSupported" xml:space="preserve">
     <value>BufferMode {0} is unsupported</value>
   </data>

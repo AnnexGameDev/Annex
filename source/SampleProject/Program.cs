@@ -1,5 +1,8 @@
 ﻿using Annex;
+using Annex.Assets;
 using SampleProject.Scenes.Level1;
+using System.IO;
+using static Annex.Paths;
 
 namespace SampleProject
 {
@@ -7,7 +10,9 @@ namespace SampleProject
     {
         static void Main(string[] args) {
             AnnexGame.Initialize();
-            Debug.PackageAssetToBinary();
+            Debug.PackageAssetsToBinaryFrom(AssetType.Audio, Path.Combine(SolutionFolder, "assets/audio/"));
+            Debug.PackageAssetsToBinaryFrom(AssetType.Textures, Path.Combine(SolutionFolder, "assets/textures/"));
+            Debug.PackageAssetsToBinaryFrom(AssetType.Font, Path.Combine(SolutionFolder, "assets/fonts/"));
             AnnexGame.Start<Level1>();
         }
     }

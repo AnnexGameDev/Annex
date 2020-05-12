@@ -97,11 +97,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Errors.resx</DependentUpon>
     </Compile>
-    <Compile Update="Strings\Errors.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Errors.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -122,10 +117,6 @@
       <LastGenOutput>Errors.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Graphics\Sfml\Errors.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Errors.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Strings\Errors.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Errors.Designer.cs</LastGenOutput>
     </EmbeddedResource>

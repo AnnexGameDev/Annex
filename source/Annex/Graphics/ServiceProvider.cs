@@ -1,9 +1,10 @@
-﻿using Annex.Assets.Loaders;
+﻿using Annex.Assets;
+using Annex.Assets.Loaders;
 using Annex.Assets.Managers;
 using Annex.Graphics;
 using Annex.Graphics.Sfml;
 using System.IO;
-using static Annex.Strings.Paths;
+using static Annex.Paths;
 
 namespace Annex
 {
@@ -21,14 +22,14 @@ namespace Annex
         public class DefaultTextureManager : CachedAssetManager
         {
             public DefaultTextureManager() 
-                : base(new FileLoader(), new SfmlTextureInitializer(Path.Combine(ApplicationPath, "textures/"))) {
+                : base(AssetType.Textures, new FileLoader(), new SfmlTextureInitializer(Path.Combine(ApplicationPath, "textures/"))) {
             }
         }
 
         public class DefaultFontManager : CachedAssetManager
         {
             public DefaultFontManager() 
-                : base(new FileLoader(), new SfmlFontLoader(Path.Combine(ApplicationPath, "fonts/"))) {
+                : base(AssetType.Font, new FileLoader(), new SfmlFontInitializer(Path.Combine(ApplicationPath, "fonts/"))) {
             }
         }
     }

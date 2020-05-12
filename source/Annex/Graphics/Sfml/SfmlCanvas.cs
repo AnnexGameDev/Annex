@@ -10,6 +10,7 @@ using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using static Annex.Graphics.Sfml.Errors;
 
@@ -437,6 +438,11 @@ namespace Annex.Graphics.Sfml
 
         public override Vector GetResolution() {
             return this._resolution;
+        }
+
+        public override IEnumerable<IAssetManager> GetAssetManagers() {
+            yield return this.FontManager;
+            yield return this.TextureManager;
         }
     }
 }

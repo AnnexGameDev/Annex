@@ -1,11 +1,15 @@
-﻿using Annex.Logging.Decorator;
+﻿using Annex.Assets;
+using Annex.Logging.Decorator;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 
 namespace Annex.Logging
 {
-    public class Log : IService {
+    public class Log : IService
+    {
         private readonly object _lock;
         private readonly DecoratableLog _log;
         private readonly bool[] _allowedChannels;
@@ -86,6 +90,10 @@ namespace Annex.Logging
                 num = "0" + num;
             }
             return num;
+        }
+
+        public IEnumerable<IAssetManager> GetAssetManagers() {
+            return Enumerable.Empty<IAssetManager>();
         }
     }
 }

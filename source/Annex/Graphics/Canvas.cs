@@ -1,8 +1,10 @@
 ﻿#nullable enable
+using Annex.Assets;
 using Annex.Data.Shared;
 using Annex.Graphics.Cameras;
 using Annex.Graphics.Contexts;
 using Annex.Scenes;
+using System.Collections.Generic;
 
 namespace Annex.Graphics
 {
@@ -32,5 +34,6 @@ namespace Annex.Graphics
         public abstract void Draw(TextureContext ctx);
         public abstract void Draw(SpriteSheetContext sheet);
         public abstract void Draw(SolidRectangleContext rectangle);
+        public abstract IEnumerable<IAssetManager> GetAssetManagers();
     }
 }
