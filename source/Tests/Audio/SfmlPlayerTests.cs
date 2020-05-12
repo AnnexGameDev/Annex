@@ -2,7 +2,6 @@
 using Annex.Audio;
 using Annex.Audio.Sfml;
 using Annex.Logging;
-using Annex.Resources;
 using NUnit.Framework;
 using System.Linq;
 
@@ -23,7 +22,7 @@ namespace Tests.Audio
         public void SuiteSetUp() {
             ServiceProvider.Provide<Log>(new Log());
             this._audio = ServiceProvider.Provide<IAudioPlayer>(new SfmlPlayer(new ServiceProvider.DefaultAudioManager()));
-            Debug.PackageResourcesToBinary(ResourceType.Audio);
+            Debug.PackageAssetsToBinary(AssetType.Audio);
         }
 
         [OneTimeTearDown]

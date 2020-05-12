@@ -1,8 +1,8 @@
 ﻿#nullable enable
+using Annex.Assets;
 using Annex.Events;
-using Annex.Resources;
 using System.Collections.Generic;
-using static Annex.Strings.Errors.Audio;
+using static Annex.Strings.Errors;
 
 namespace Annex.Audio.Sfml
 {
@@ -12,11 +12,11 @@ namespace Annex.Audio.Sfml
         private readonly List<SfmlPlayingAudio> _playingAudio;
         private readonly object _lock = new object();
 
-        public readonly IResourceManager AudioResourceManager;
+        public readonly IAssetManager AudioAssetManager;
 
-        public SfmlPlayer(IResourceManager audioManager) {
+        public SfmlPlayer(IAssetManager audioManager) {
             this._playingAudio = new List<SfmlPlayingAudio>();
-            this.AudioResourceManager = audioManager;
+            this.AudioAssetManager = audioManager;
 
             ServiceProvider.EventManager.AddEvent(PriorityType.SOUNDS, () => {
                 lock (this._lock) {
@@ -57,12 +57,12 @@ namespace Annex.Audio.Sfml
 
         public IPlayingAudio PlayAudio(string audioFilePath, AudioContext context) {
             lock (this._lock) {
-                var args = new SfmlAudioLoaderArgs(audioFilePath, context.BufferMode);
-                if (!this.AudioResourceManager.GetResource(args, out var resource)) {
-                    Debug.Error(RESOURCE_LOAD_FAILED.Format(audioFilePath));
+                var args = new SfmlAudioInitializerArgs(audioFilePath, context.BufferMode);
+                if (!this.AudioAssetManager.GetAsset(args, out var asset)) {
+                    Debug.Error(ASSET_LOAD_FAILED.Format(audioFilePath));
                 }
                 // TODO: Wait for https://github.com/SFML/SFML/pull/1185 support in C#
-                var playingAudio = new SfmlPlayingAudio(context.ID, resource);
+                var playingAudio = new SfmlPlayingAudio(context.ID, asset);
                 playingAudio.Volume = context.Volume;
                 playingAudio.Loop = context.Loop;
                 playingAudio.Play();

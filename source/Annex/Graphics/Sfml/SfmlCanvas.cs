@@ -1,10 +1,10 @@
 ﻿#nullable enable
+using Annex.Assets;
 using Annex.Data.Shared;
 using Annex.Events;
 using Annex.Graphics.Cameras;
 using Annex.Graphics.Contexts;
 using Annex.Graphics.Events;
-using Annex.Resources;
 using Annex.Scenes;
 using SFML.Graphics;
 using SFML.System;
@@ -31,10 +31,10 @@ namespace Annex.Graphics.Sfml
         private string _title { get; set; }
         private Styles _style { get; set; }
 
-        public readonly ResourceManager FontManager;
-        public readonly ResourceManager TextureManager;
+        public readonly AssetManager FontManager;
+        public readonly AssetManager TextureManager;
 
-        public SfmlCanvas(ResourceManager textureManager, ResourceManager fontManager) : this(960, 640) {
+        public SfmlCanvas(AssetManager textureManager, AssetManager fontManager) : this(960, 640) {
             this.TextureManager = textureManager;
             this.FontManager = fontManager;
         }
@@ -179,8 +179,8 @@ namespace Annex.Graphics.Sfml
             this.UpdateView(ctx);
 
             var args = new SfmlFontLoaderArgs(ctx.FontName.Value);
-            this.FontManager.GetResource(args, out var resource);
-            var font = (Font)resource;
+            this.FontManager.GetAsset(args, out var asset);
+            var font = (Font)asset;
             var text = new Text(ctx.RenderText, font) {
                 CharacterSize = (uint)(int)ctx.FontSize,
                 FillColor = ctx.FontColor,
@@ -225,9 +225,9 @@ namespace Annex.Graphics.Sfml
             }
 
             if (sheet.SourceTextureRect == null) {
-                var args = new SfmlTextureLoaderArgs(sheet.SourceTextureName.Value);
-                Debug.Assert(this.TextureManager.GetResource(args, out var resource), "Failed to load texture");
-                using var sprite = new Sprite((Texture)resource);
+                var args = new SfmlTextureInitializerArgs(sheet.SourceTextureName.Value);
+                Debug.Assert(this.TextureManager.GetAsset(args, out var asset), "Failed to load texture");
+                using var sprite = new Sprite((Texture)asset);
                 var size = sprite.Texture.Size;
 
                 sheet.SourceTextureRect = new Data.Shared.IntRect();
@@ -252,9 +252,9 @@ namespace Annex.Graphics.Sfml
             // We need to update the camera.
             this.UpdateView(ctx);
 
-            var args = new SfmlTextureLoaderArgs(ctx.SourceTextureName.Value);
-            Debug.Assert(this.TextureManager.GetResource(args, out var resource), "Failed to load texture");
-            using var sprite = new Sprite((Texture)resource) {
+            var args = new SfmlTextureInitializerArgs(ctx.SourceTextureName.Value);
+            Debug.Assert(this.TextureManager.GetAsset(args, out var asset), "Failed to load texture");
+            using var sprite = new Sprite((Texture)asset) {
                 Position = ctx.RenderPosition
             };
 

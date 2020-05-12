@@ -1,6 +1,6 @@
 ﻿#nullable enable
 using SFML.Audio;
-using static Annex.Strings.Errors.Audio.Sfml;
+using static Annex.Audio.Sfml.Errors;
 
 namespace Annex.Audio.Sfml
 {
@@ -16,10 +16,10 @@ namespace Annex.Audio.Sfml
         public float Volume { get => this.GetVolume(); set => this.SetVolume(value); }
         public bool Loop { get => this.GetLoop(); set => this.SetLoop(value); }
 
-        internal SfmlPlayingAudio(string id, object resource) {
-            Debug.Assert(resource is Music || resource is Sound, INVALID_RESOURCE.Format(resource.GetType().Name));
+        internal SfmlPlayingAudio(string id, object asset) {
+            Debug.Assert(asset is Music || asset is Sound, INVALID_ASSET.Format(asset.GetType().Name));
             this.Id = id;
-            this.Audio = resource;
+            this.Audio = asset;
         }
 
         public void Dispose() {

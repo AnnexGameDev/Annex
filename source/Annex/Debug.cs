@@ -1,5 +1,4 @@
-﻿using Annex.Resources;
-using Annex.Scenes.Components;
+﻿using Annex.Scenes.Components;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -60,7 +59,8 @@ namespace Annex
         }
 
         [Conditional("DEBUG")]
-        public static void PackageResourcesToBinary(ResourceType resourceType) {
+        public static void PackageAssetsToBinary(AssetType assetType) {
+            // TODO:
             var di = new DirectoryInfo(".");
             string solutionPath;
             while (true) {
@@ -70,22 +70,21 @@ namespace Annex
                 }
                 di = di.Parent;
             }
-            string resourcePath = Path.Combine(solutionPath, "resources");
-            Directory.CreateDirectory(resourcePath);
+            string assetPath = Path.Combine(solutionPath, "assets");
+            Directory.CreateDirectory(assetPath);
 
-            // TODO:
             //ServiceProvider.ResourceManagerRegistry.GetResourceManager(resourceType)?.PackageResourcesToBinary(resourcePath);
         }
 
         [Conditional("DEBUG")]
-        public static void PackageResourcesToBinary() {
-            PackageResourcesToBinary(ResourceType.Audio);
-            PackageResourcesToBinary(ResourceType.Font);
-            PackageResourcesToBinary(ResourceType.Textures);
+        public static void PackageAssetToBinary() {
+            PackageAssetsToBinary(AssetType.Audio);
+            PackageAssetsToBinary(AssetType.Font);
+            PackageAssetsToBinary(AssetType.Textures);
         }
     }
 
-    public enum ResourceType
+    public enum AssetType
     {
         Audio,
         Font,

@@ -4,22 +4,22 @@ using System.IO;
 
 namespace Annex.Graphics.Sfml
 {
-    public class SfmlFontLoader : IAssetInitializer
+    public class SfmlTextureInitializer : IAssetInitializer
     {
         public readonly string AssetPath;
 
-        public SfmlFontLoader(string path) {
+        public SfmlTextureInitializer(string path) {
             this.AssetPath = path;
         }
 
         public object Load(IAssetInitializerArgs args, IAssetLoader assetLoader) {
-            Debug.Assert(args is SfmlFontLoaderArgs, $"{nameof(SfmlFontLoader)} requires {nameof(SfmlFontLoaderArgs)} args");
-            return new Font(assetLoader.GetString(args.Key));
+            Debug.Assert(args is SfmlTextureInitializerArgs, $"{nameof(SfmlTextureInitializer)} requires {nameof(SfmlTextureInitializerArgs)} args");
+            return new Texture(assetLoader.GetString(args.Key));
         }
 
         public bool Validate(IAssetInitializerArgs args) {
             args.Key = Path.Combine(this.AssetPath, args.Key);
-            return args.Key.EndsWith(".ttf");
+            return args.Key.EndsWith(".png");
         }
     }
 }

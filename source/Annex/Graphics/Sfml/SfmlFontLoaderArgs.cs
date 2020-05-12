@@ -1,9 +1,9 @@
 ﻿#nullable enable
-using Annex.Resources;
+using Annex.Assets;
 
 namespace Annex.Graphics.Sfml
 {
-    public class SfmlFontLoaderArgs : IResourceLoaderArgs
+    public class SfmlFontLoaderArgs : IAssetInitializerArgs
     {
         public string Key { get; set; }
         

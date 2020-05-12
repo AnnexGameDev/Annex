@@ -1,14 +1,14 @@
-﻿using Annex.Resources;
+﻿using Annex.Assets;
 
 namespace Annex.Graphics.Sfml
 {
-    public class SfmlFontConverter : IResourceLoader
+    public class SfmlFontConverter : IAssetInitializer
     {
-        public object Load(IResourceLoaderArgs args, IDataLoader resourceLoader) {
+        public object Load(IAssetInitializerArgs args, IAssetLoader assetLoader) {
             throw new System.NotImplementedException();
         }
 
-        public bool Validate(IResourceLoaderArgs key) {
+        public bool Validate(IAssetInitializerArgs key) {
             throw new System.NotImplementedException();
         }
     }

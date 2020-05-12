@@ -1,8 +1,8 @@
-﻿using Annex.Resources.Managers;
+﻿using Annex.Assets.Managers;
 
-namespace Annex.Resources.Loaders
+namespace Annex.Assets.Loaders
 {
-    public class PakLoader : IDataLoader
+    public class PakLoader : IAssetLoader
     {
         private readonly PakFile _pakFile;
 
@@ -15,7 +15,7 @@ namespace Annex.Resources.Loaders
         }
 
         public string GetString(string key) {
-            Debug.Error($"PakResourceLoader does not support string loading");
+            Debug.Error($"{nameof(PakLoader)} does not support string loading");
             return string.Empty;
         }
     }

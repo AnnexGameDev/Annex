@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Annex.Resources.Managers
+namespace Annex.Assets.Managers
 {
     public class PakFile : IDisposable
     {

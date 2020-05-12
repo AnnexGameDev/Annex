@@ -1,13 +1,13 @@
-﻿using Annex.Resources;
+﻿using Annex.Assets;
 
 namespace Annex.Audio.Sfml
 {
-    public class SfmlAudioLoaderArgs : IResourceLoaderArgs
+    public class SfmlAudioInitializerArgs : IAssetInitializerArgs
     {
         public string Key { get; set; }
         public BufferMode BufferMode { get; set; }
 
-        public SfmlAudioLoaderArgs(string key, BufferMode bufferMode) {
+        public SfmlAudioInitializerArgs(string key, BufferMode bufferMode) {
             this.Key = key;
             this.BufferMode = bufferMode;
         }

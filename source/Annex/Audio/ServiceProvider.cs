@@ -1,7 +1,7 @@
-﻿using Annex.Audio;
+﻿using Annex.Assets.Loaders;
+using Annex.Assets.Managers;
+using Annex.Audio;
 using Annex.Audio.Sfml;
-using Annex.Resources.Loaders;
-using Annex.Resources.Managers;
 using System.IO;
 using static Annex.Strings.Paths;
 
@@ -11,10 +11,10 @@ namespace Annex
     {
         public static IAudioPlayer AudioManager => Locate<IAudioPlayer>();
 
-        public class DefaultAudioManager : UncachedResourceManager {
+        public class DefaultAudioManager : UncachedAssetManager {
         
             public DefaultAudioManager()
-                : base(new FileLoader(), new SfmlAudioLoader(Path.Combine(ApplicationPath, "audio/"))) {
+                : base(new FileLoader(), new SfmlAudioInitializer(Path.Combine(ApplicationPath, "audio/"))) {
             }
         }
     }

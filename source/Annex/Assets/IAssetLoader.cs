@@ -1,7 +1,7 @@
 ﻿#nullable enable
-namespace Annex.Resources
+namespace Annex.Assets
 {
-    public interface IDataLoader
+    public interface IAssetLoader
     {
         string GetString(string key);
         byte[] GetBytes(string key);

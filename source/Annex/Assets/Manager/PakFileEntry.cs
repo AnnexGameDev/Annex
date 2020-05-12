@@ -1,5 +1,5 @@
 ﻿#nullable enable
-namespace Annex.Resources.Managers
+namespace Annex.Assets.Managers
 {
     public class PakFileEntry
     {

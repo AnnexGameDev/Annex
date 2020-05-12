@@ -3,7 +3,6 @@ using Annex.Events;
 using Annex.Graphics;
 using Annex.Graphics.Sfml;
 using Annex.Logging;
-using Annex.Resources;
 using Annex.Scenes;
 using Annex.Scenes.Components;
 using System;
@@ -30,7 +29,7 @@ namespace Tests.Graphics
             this._backgroundThread = new Thread(() => {
                 this.Canvas = ServiceProvider.Provide<Canvas>(new SfmlCanvas(new ServiceProvider.DefaultTextureManager(), new ServiceProvider.DefaultFontManager()));
                 AnnexGame.Initialize();
-                Debug.PackageResourcesToBinary(ResourceType.Textures);
+                Debug.PackageAssetsToBinary(AssetType.Textures);
                 AnnexGame.Start<T>();
                 Console.WriteLine("Done!");
             });
