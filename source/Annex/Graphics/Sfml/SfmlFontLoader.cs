@@ -1,6 +1,7 @@
 ﻿using Annex.Assets;
 using SFML.Graphics;
 using System.IO;
+using static Annex.Graphics.Sfml.Errors;
 
 namespace Annex.Graphics.Sfml
 {
@@ -13,7 +14,7 @@ namespace Annex.Graphics.Sfml
         }
 
         public object Load(IAssetInitializerArgs args, IAssetLoader assetLoader) {
-            Debug.Assert(args is SfmlFontLoaderArgs, $"{nameof(SfmlFontLoader)} requires {nameof(SfmlFontLoaderArgs)} args");
+            Debug.Assert(args is SfmlFontLoaderArgs, INVALID_INITIALIZER_ARGS.Format(nameof(SfmlFontLoader), nameof(SfmlFontLoaderArgs)));
             return new Font(assetLoader.GetString(args.Key));
         }
 

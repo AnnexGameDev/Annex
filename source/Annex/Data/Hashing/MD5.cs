@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Text;
+using static Annex.Data.Errors;
 
 namespace Annex.Data.Hashing
 {
@@ -18,12 +19,12 @@ namespace Annex.Data.Hashing
         }
 
         public string ComputeFileHash(string filepath) {
-            Debug.Assert(File.Exists(filepath), $"Attempt to compute MD5 hash on the file {filepath} which does not exist");
+            Debug.Assert(File.Exists(filepath), MD5_FILE_DOESNT_EXIST.Format(filepath));
             return this.Compute(File.ReadAllBytes(filepath));
         }
 
         public string Compute(byte[] data) {
-            Debug.ErrorIf(data.Length == 0, $"Attempt to compute MD5 hash on data with 0 length");
+            Debug.ErrorIf(data.Length == 0, MD5_0_LENGTH_HASH);
             byte[] hash = this._algorithm.ComputeHash(data);
             var sb = new StringBuilder();
             foreach (byte val in hash) {

@@ -1,4 +1,5 @@
 ﻿using Annex.Assets.Managers;
+using static Annex.Assets.Errors;
 
 namespace Annex.Assets.Loaders
 {
@@ -15,7 +16,7 @@ namespace Annex.Assets.Loaders
         }
 
         public string GetString(string key) {
-            Debug.Error($"{nameof(PakLoader)} does not support string loading");
+            Debug.Error(STRING_LOADING_NOT_SUPPORTED.Format(nameof(PakLoader)));
             return string.Empty;
         }
     }

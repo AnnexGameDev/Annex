@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using static Annex.Assets.Errors;
 
 namespace Annex.Assets.Managers
 {
@@ -27,7 +28,7 @@ namespace Annex.Assets.Managers
         }
 
         private PakFile(string path) {
-            Debug.Assert(File.Exists(path), $"The pak file {path} does not exist");
+            Debug.Assert(File.Exists(path), PAK_FILE_DOESNT_EXIST.Format(path));
             this._canWrite = false;
             this._entries = new Dictionary<string, PakFileEntry>();
             this._fs = new FileStream(path, FileMode.Open);
@@ -45,7 +46,7 @@ namespace Annex.Assets.Managers
         }
 
         public byte[] GetEntry(string id) {
-            Debug.Assert(this._entries.ContainsKey(id), $"Entry is not contained in the pak file");
+            Debug.Assert(this._entries.ContainsKey(id), PAK_FILE_ENTRY_DOESNT_EXIST.Format(id));
             if (this._canWrite) {
                 // TODO: Throw?
                 return null;

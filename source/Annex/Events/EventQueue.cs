@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using System;
 using System.Collections.Generic;
+using static Annex.Events.Errors;
 
 namespace Annex.Events
 {
@@ -17,7 +18,7 @@ namespace Annex.Events
         }
 
         public void AddEvent(PriorityType type, GameEvent e) {
-            Debug.ErrorIf((int)type >= this._queue.Length || type < 0, $"Attempt to add event with invalid priority {type}");
+            Debug.ErrorIf((int)type >= this._queue.Length || type < 0, INVALID_PRIORITY.Format(type));
             this._queue[(int)type].Add(e);
         }
 

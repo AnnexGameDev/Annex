@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Annex.Audio.Sfml {
+namespace Annex.Events {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Annex.Audio.Sfml {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Annex.Audio.Sfml.Errors", typeof(Errors).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Annex.Events.Errors", typeof(Errors).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,47 +61,11 @@ namespace Annex.Audio.Sfml {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to BufferMode {0} is unsupported.
+        ///   Looks up a localized string similar to Attempt to add event with invalid priority: {0}.
         /// </summary>
-        internal static string BufferMode_NotSupported {
+        internal static string INVALID_PRIORITY {
             get {
-                return ResourceManager.GetString("BufferMode_NotSupported", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Asset must be a sound or music and not {0}.
-        /// </summary>
-        internal static string INVALID_ASSET {
-            get {
-                return ResourceManager.GetString("INVALID_ASSET", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} requires {1} args.
-        /// </summary>
-        internal static string INVALID_INITIALIZER_ARGS {
-            get {
-                return ResourceManager.GetString("INVALID_INITIALIZER_ARGS", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid value for volume {0}. Must be in the range [0,100].
-        /// </summary>
-        internal static string INVALID_VOLUME_VALUE {
-            get {
-                return ResourceManager.GetString("INVALID_VOLUME_VALUE", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tried to perform operation {0} in a disposed state.
-        /// </summary>
-        internal static string PERFORMED_OPERATION_WHILE_DISPOSED {
-            get {
-                return ResourceManager.GetString("PERFORMED_OPERATION_WHILE_DISPOSED", resourceCulture);
+                return ResourceManager.GetString("INVALID_PRIORITY", resourceCulture);
             }
         }
     }

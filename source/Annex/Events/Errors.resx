@@ -117,19 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BufferMode_NotSupported" xml:space="preserve">
-    <value>BufferMode {0} is unsupported</value>
-  </data>
-  <data name="INVALID_ASSET" xml:space="preserve">
-    <value>Asset must be a sound or music and not {0}</value>
-  </data>
-  <data name="INVALID_INITIALIZER_ARGS" xml:space="preserve">
-    <value>{0} requires {1} args</value>
-  </data>
-  <data name="INVALID_VOLUME_VALUE" xml:space="preserve">
-    <value>Invalid value for volume {0}. Must be in the range [0,100]</value>
-  </data>
-  <data name="PERFORMED_OPERATION_WHILE_DISPOSED" xml:space="preserve">
-    <value>Tried to perform operation {0} in a disposed state</value>
+  <data name="INVALID_PRIORITY" xml:space="preserve">
+    <value>Attempt to add event with invalid priority: {0}</value>
   </data>
 </root>

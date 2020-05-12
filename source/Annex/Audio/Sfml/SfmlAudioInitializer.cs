@@ -2,6 +2,7 @@
 using Annex.Assets;
 using SFML.Audio;
 using System.IO;
+using static Annex.Audio.Sfml.Errors;
 
 namespace Annex.Audio.Sfml
 {
@@ -14,7 +15,7 @@ namespace Annex.Audio.Sfml
         }
 
         public object? Load(IAssetInitializerArgs args, IAssetLoader assetLoader) {
-            Debug.Assert(args is SfmlAudioInitializerArgs, $"{nameof(SfmlAudioInitializer)} requires {nameof(SfmlAudioInitializerArgs)} args");
+            Debug.Assert(args is SfmlAudioInitializerArgs, INVALID_INITIALIZER_ARGS.Format(nameof(SfmlAudioInitializer), nameof(SfmlAudioInitializerArgs)));
             var sfmlArgs = (SfmlAudioInitializerArgs)args;
 
             switch (sfmlArgs.BufferMode) {

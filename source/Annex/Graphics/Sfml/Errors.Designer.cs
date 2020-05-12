@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Annex.Audio.Sfml {
+namespace Annex.Graphics.Sfml {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Annex.Audio.Sfml {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Annex.Audio.Sfml.Errors", typeof(Errors).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Annex.Graphics.Sfml.Errors", typeof(Errors).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,20 +61,11 @@ namespace Annex.Audio.Sfml {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to BufferMode {0} is unsupported.
+        ///   Looks up a localized string similar to Failed to load font {0}.
         /// </summary>
-        internal static string BufferMode_NotSupported {
+        internal static string FONT_FAILED_TO_LOAD {
             get {
-                return ResourceManager.GetString("BufferMode_NotSupported", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Asset must be a sound or music and not {0}.
-        /// </summary>
-        internal static string INVALID_ASSET {
-            get {
-                return ResourceManager.GetString("INVALID_ASSET", resourceCulture);
+                return ResourceManager.GetString("FONT_FAILED_TO_LOAD", resourceCulture);
             }
         }
         
@@ -88,20 +79,20 @@ namespace Annex.Audio.Sfml {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid value for volume {0}. Must be in the range [0,100].
+        ///   Looks up a localized string similar to Failed to load texture {0}.
         /// </summary>
-        internal static string INVALID_VOLUME_VALUE {
+        internal static string TEXTURE_FAILED_TO_LOAD {
             get {
-                return ResourceManager.GetString("INVALID_VOLUME_VALUE", resourceCulture);
+                return ResourceManager.GetString("TEXTURE_FAILED_TO_LOAD", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tried to perform operation {0} in a disposed state.
+        ///   Looks up a localized string similar to Unknown VideoMode: {0}.
         /// </summary>
-        internal static string PERFORMED_OPERATION_WHILE_DISPOSED {
+        internal static string UNKNOWN_VIDEO_MODE {
             get {
-                return ResourceManager.GetString("PERFORMED_OPERATION_WHILE_DISPOSED", resourceCulture);
+                return ResourceManager.GetString("UNKNOWN_VIDEO_MODE", resourceCulture);
             }
         }
     }

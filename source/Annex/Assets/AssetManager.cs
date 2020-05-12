@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using static Annex.Assets.Errors;
 
 namespace Annex.Assets
 {
@@ -14,14 +15,14 @@ namespace Annex.Assets
 
         public bool GetAsset(IAssetInitializerArgs args, out object? asset) {
             if (!this.AssetLoader.Validate(args)) {
-                ServiceProvider.Log.WriteLineWarning($"The asset '{args}' is not valid");
+                ServiceProvider.Log.WriteLineWarning(ASSET_NOT_VALID.Format(args.Key));
                 asset = default;
                 return false;
             }
 
             if (!this.ContainsCachedAsset(args.Key)) {
                 var loadedAsset = this.AssetLoader.Load(args, this.DataLoader);
-                Debug.ErrorIf(loadedAsset == null, $"Loaded asset {args.Key} is null");
+                Debug.ErrorIf(loadedAsset == null, ASSET_IS_NULL.Format(args.Key));
 #pragma warning disable CS8604 // Possible null reference argument.
                 this.CacheAsset(args.Key, loadedAsset);
 #pragma warning restore CS8604 // Possible null reference argument.

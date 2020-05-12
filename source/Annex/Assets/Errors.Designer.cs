@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Annex.Audio.Sfml {
+namespace Annex.Assets {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Annex.Audio.Sfml {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Annex.Audio.Sfml.Errors", typeof(Errors).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Annex.Assets.Errors", typeof(Errors).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,47 +61,56 @@ namespace Annex.Audio.Sfml {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to BufferMode {0} is unsupported.
+        ///   Looks up a localized string similar to The asset file {0} does not exist.
         /// </summary>
-        internal static string BufferMode_NotSupported {
+        internal static string ASSET_FILE_DOESNT_EXIST {
             get {
-                return ResourceManager.GetString("BufferMode_NotSupported", resourceCulture);
+                return ResourceManager.GetString("ASSET_FILE_DOESNT_EXIST", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Asset must be a sound or music and not {0}.
+        ///   Looks up a localized string similar to The asset {0} is null.
         /// </summary>
-        internal static string INVALID_ASSET {
+        internal static string ASSET_IS_NULL {
             get {
-                return ResourceManager.GetString("INVALID_ASSET", resourceCulture);
+                return ResourceManager.GetString("ASSET_IS_NULL", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} requires {1} args.
+        ///   Looks up a localized string similar to The asset {0} is not valid.
         /// </summary>
-        internal static string INVALID_INITIALIZER_ARGS {
+        internal static string ASSET_NOT_VALID {
             get {
-                return ResourceManager.GetString("INVALID_INITIALIZER_ARGS", resourceCulture);
+                return ResourceManager.GetString("ASSET_NOT_VALID", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid value for volume {0}. Must be in the range [0,100].
+        ///   Looks up a localized string similar to The pak file {0} does not exist.
         /// </summary>
-        internal static string INVALID_VOLUME_VALUE {
+        internal static string PAK_FILE_DOESNT_EXIST {
             get {
-                return ResourceManager.GetString("INVALID_VOLUME_VALUE", resourceCulture);
+                return ResourceManager.GetString("PAK_FILE_DOESNT_EXIST", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tried to perform operation {0} in a disposed state.
+        ///   Looks up a localized string similar to Entry {0} is not contained in the pak file.
         /// </summary>
-        internal static string PERFORMED_OPERATION_WHILE_DISPOSED {
+        internal static string PAK_FILE_ENTRY_DOESNT_EXIST {
             get {
-                return ResourceManager.GetString("PERFORMED_OPERATION_WHILE_DISPOSED", resourceCulture);
+                return ResourceManager.GetString("PAK_FILE_ENTRY_DOESNT_EXIST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} does not support string loading.
+        /// </summary>
+        internal static string STRING_LOADING_NOT_SUPPORTED {
+            get {
+                return ResourceManager.GetString("STRING_LOADING_NOT_SUPPORTED", resourceCulture);
             }
         }
     }

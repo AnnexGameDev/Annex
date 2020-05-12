@@ -11,6 +11,7 @@ using SFML.System;
 using SFML.Window;
 using System;
 using System.Threading;
+using static Annex.Graphics.Sfml.Errors;
 
 namespace Annex.Graphics.Sfml
 {
@@ -226,7 +227,7 @@ namespace Annex.Graphics.Sfml
 
             if (sheet.SourceTextureRect == null) {
                 var args = new SfmlTextureInitializerArgs(sheet.SourceTextureName.Value);
-                Debug.Assert(this.TextureManager.GetAsset(args, out var asset), "Failed to load texture");
+                Debug.Assert(this.TextureManager.GetAsset(args, out var asset), TEXTURE_FAILED_TO_LOAD.Format(sheet.SourceTextureName.Value));
                 using var sprite = new Sprite((Texture)asset);
                 var size = sprite.Texture.Size;
 
@@ -253,7 +254,7 @@ namespace Annex.Graphics.Sfml
             this.UpdateView(ctx);
 
             var args = new SfmlTextureInitializerArgs(ctx.SourceTextureName.Value);
-            Debug.Assert(this.TextureManager.GetAsset(args, out var asset), "Failed to load texture");
+            Debug.Assert(this.TextureManager.GetAsset(args, out var asset), TEXTURE_FAILED_TO_LOAD.Format(ctx.SourceTextureName.Value));
             using var sprite = new Sprite((Texture)asset) {
                 Position = ctx.RenderPosition
             };
@@ -328,7 +329,7 @@ namespace Annex.Graphics.Sfml
                     style = Styles.Default;
                     break;
                 default:
-                    Debug.Error($"Unknown VideoMode:{mode}");
+                    Debug.Error(UNKNOWN_VIDEO_MODE.Format(mode));
                     break;
             }
 
