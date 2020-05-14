@@ -54,7 +54,7 @@ namespace Annex.Scenes.Components
             _informationRetrievers.Add(worker);
         }
 
-        public override void Draw(Canvas canvas) {
+        public override void Draw(ICanvas canvas) {
 
             var sb = new StringBuilder();
             foreach (var ir in _informationRetrievers) {

@@ -11,7 +11,7 @@ namespace Annex.Scenes.Components
             this._children = new List<UIElement>();
         }
 
-        public override void Draw(Canvas canvas) {
+        public override void Draw(ICanvas canvas) {
             if (!this.Visible) {
                 return;
             }

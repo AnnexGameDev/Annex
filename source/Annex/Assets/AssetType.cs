@@ -4,6 +4,7 @@
     {
         Audio,
         Font,
-        Textures
+        Texture,
+        Icon
     }
 }

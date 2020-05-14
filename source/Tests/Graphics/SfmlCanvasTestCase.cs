@@ -16,7 +16,7 @@ namespace Tests.Graphics
     public class SfmlCanvasTestCase
     {
         protected EventManager EventManager;
-        protected Canvas Canvas;
+        protected ICanvas Canvas;
         protected SceneManager Scenes;
 
         private Thread _backgroundThread;
@@ -31,9 +31,9 @@ namespace Tests.Graphics
             this.Scenes = ServiceProvider.Provide<SceneManager>();
 
             this._backgroundThread = new Thread(() => {
-                this.Canvas = ServiceProvider.Provide<Canvas>(new SfmlCanvas(new ServiceProvider.DefaultTextureManager(), new ServiceProvider.DefaultFontManager()));
+                this.Canvas = ServiceProvider.Provide<ICanvas>(new SfmlCanvas(new ServiceProvider.DefaultTextureManager(), new ServiceProvider.DefaultFontManager(), new ServiceProvider.DefaultIconManager()));
                 AnnexGame.Initialize();
-                Debug.PackageAssetsToBinaryFrom(AssetType.Textures, AssetFolder);
+                Debug.PackageAssetsToBinaryFrom(AssetType.Texture, AssetFolder);
                 AnnexGame.Start<T>();
                 Console.WriteLine("Done!");
             });

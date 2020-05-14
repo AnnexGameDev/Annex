@@ -4,7 +4,7 @@ namespace Annex.Assets
     public interface IAssetInitializer
     {
         string AssetPath { get; set; }
-        bool Validate(IAssetInitializerArgs args);
-        object? Load(IAssetInitializerArgs args, IAssetLoader assetLoader);
+        bool Validate(AssetInitializerArgs args);
+        object? Load(AssetInitializerArgs args, IAssetLoader assetLoader);
     }
 }

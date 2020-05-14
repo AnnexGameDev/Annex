@@ -10,19 +10,19 @@ namespace Annex
 {
     public static partial class ServiceProvider
     {
-        public static Canvas Canvas => Locate<Canvas>();
+        public static ICanvas Canvas => Locate<ICanvas>();
 
         public class DefaultCanvas : SfmlCanvas
         {
             public DefaultCanvas() 
-                : base(new DefaultTextureManager(), new DefaultFontManager()) {
+                : base(new DefaultTextureManager(), new DefaultFontManager(), new DefaultIconManager()) {
             }
         }
 
         public class DefaultTextureManager : CachedAssetManager
         {
             public DefaultTextureManager() 
-                : base(AssetType.Textures, new FileLoader(), new SfmlTextureInitializer(Path.Combine(ApplicationPath, "textures/"))) {
+                : base(AssetType.Texture, new FileLoader(), new SfmlTextureInitializer(Path.Combine(ApplicationPath, "textures/"))) {
             }
         }
 
@@ -30,6 +30,14 @@ namespace Annex
         {
             public DefaultFontManager() 
                 : base(AssetType.Font, new FileLoader(), new SfmlFontInitializer(Path.Combine(ApplicationPath, "fonts/"))) {
+            }
+        }
+
+        public class DefaultIconManager : UncachedAssetManager
+        {
+            public DefaultIconManager()
+                : base(AssetType.Icon, new FileLoader(), new SfmlIconInitializer(Path.Combine(ApplicationPath, "icons/"))) {
+
             }
         }
     }

@@ -4,7 +4,7 @@ namespace Annex.Assets
     public interface IAssetManager
     {
         AssetType AssetType { get; set; }
-        bool GetAsset(IAssetInitializerArgs args, out object? asset);
+        bool GetAsset(AssetInitializerArgs args, out object? asset);
         void PackageAssetsToBinaryFrom(string path);
     }
 }

@@ -16,7 +16,7 @@ namespace Annex.Assets
             this.AssetInitializer = assetInitializer;
         }
 
-        public bool GetAsset(IAssetInitializerArgs args, out object? asset) {
+        public bool GetAsset(AssetInitializerArgs args, out object? asset) {
             if (!this.AssetInitializer.Validate(args)) {
                 ServiceProvider.Log.WriteLineWarning(ASSET_NOT_VALID.Format(args.Key));
                 asset = default;

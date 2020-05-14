@@ -18,7 +18,7 @@ namespace Annex.Audio.Sfml
 
         }
 
-        public object? Load(IAssetInitializerArgs args, IAssetLoader assetLoader) {
+        public object? Load(AssetInitializerArgs args, IAssetLoader assetLoader) {
             Debug.Assert(args is SfmlAudioInitializerArgs, INVALID_INITIALIZER_ARGS.Format(nameof(SfmlAudioInitializer), nameof(SfmlAudioInitializerArgs)));
             var sfmlArgs = (SfmlAudioInitializerArgs)args;
 
@@ -31,7 +31,7 @@ namespace Annex.Audio.Sfml
             }
         }
 
-        public bool Validate(IAssetInitializerArgs args) {
+        public bool Validate(AssetInitializerArgs args) {
             args.Key = Path.Combine(this.AssetPath, args.Key);
             return args.Key.EndsWith(".wav") || args.Key.EndsWith(".flac");
         }

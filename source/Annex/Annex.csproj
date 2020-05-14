@@ -92,6 +92,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Errors.resx</DependentUpon>
     </Compile>
+    <Compile Update="Graphics\EventIDs.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EventIDs.resx</DependentUpon>
+    </Compile>
     <Compile Update="Graphics\Sfml\Errors.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -115,6 +120,10 @@
     <EmbeddedResource Update="Events\Errors.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Errors.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Graphics\EventIDs.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>EventIDs.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Graphics\Sfml\Errors.resx">
       <Generator>ResXFileCodeGenerator</Generator>

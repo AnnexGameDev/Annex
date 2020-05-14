@@ -2,13 +2,11 @@
 
 namespace Annex.Audio.Sfml
 {
-    public class SfmlAudioInitializerArgs : IAssetInitializerArgs
+    public class SfmlAudioInitializerArgs : AssetInitializerArgs
     {
-        public string Key { get; set; }
         public BufferMode BufferMode { get; set; }
 
-        public SfmlAudioInitializerArgs(string key, BufferMode bufferMode) {
-            this.Key = key;
+        public SfmlAudioInitializerArgs(string key, BufferMode bufferMode) : base(key) {
             this.BufferMode = bufferMode;
         }
     }

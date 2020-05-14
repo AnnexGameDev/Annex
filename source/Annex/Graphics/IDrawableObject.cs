@@ -2,6 +2,6 @@
 {
     public interface IDrawableObject
     {
-        void Draw(Canvas canvas);
+        void Draw(ICanvas canvas);
     }
 }

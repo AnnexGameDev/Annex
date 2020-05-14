@@ -11,8 +11,11 @@ namespace SampleProject
         static void Main(string[] args) {
             AnnexGame.Initialize();
             Debug.PackageAssetsToBinaryFrom(AssetType.Audio, Path.Combine(SolutionFolder, "assets/audio/"));
-            Debug.PackageAssetsToBinaryFrom(AssetType.Textures, Path.Combine(SolutionFolder, "assets/textures/"));
+            Debug.PackageAssetsToBinaryFrom(AssetType.Texture, Path.Combine(SolutionFolder, "assets/textures/"));
             Debug.PackageAssetsToBinaryFrom(AssetType.Font, Path.Combine(SolutionFolder, "assets/fonts/"));
+            Debug.PackageAssetsToBinaryFrom(AssetType.Icon, Path.Combine(SolutionFolder, "assets/icons/"));
+
+            ServiceProvider.Canvas.SetWindowIcon("icon.png");
             AnnexGame.Start<Level1>();
         }
     }

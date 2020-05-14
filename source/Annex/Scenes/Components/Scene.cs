@@ -24,7 +24,7 @@ namespace Annex.Scenes.Components
             this.Size.Set(ServiceProvider.Canvas.GetResolution());
         }
 
-        public override void Draw(Canvas canvas) {
+        public override void Draw(ICanvas canvas) {
             if (!this.Visible) {
                 return;
             }

@@ -35,7 +35,7 @@ namespace SampleProject.Models
             };
         }
 
-        public void Draw(Canvas canvas) {
+        public void Draw(ICanvas canvas) {
             canvas.Draw(this._sprite);
             canvas.Draw(this._hoverText);
         }
