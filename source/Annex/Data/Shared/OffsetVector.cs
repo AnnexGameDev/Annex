@@ -24,9 +24,5 @@
             this.Base = baseVector;
             this.Offset = Create(offsetX, offsetY);
         }
-
-        public override Vector Clone() {
-            return new OffsetVector(this.Base, this.Offset);
-        }
     }
 }

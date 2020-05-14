@@ -23,9 +23,5 @@
             this.Base = baseVector;
             this.Scale = scaleVector;
         }
-
-        public override Vector Clone() {
-            return new ScalingVector(this.Base, this.Scale);
-        }
     }
 }
