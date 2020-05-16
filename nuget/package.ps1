@@ -1,11 +1,11 @@
 $os = "win";
 $platforms = "AnyCPU", "x64", "x86";
-$configurations = "Release";
-$csproj = "$PSScriptRoot\Source\Annex\Annex.csproj";
-$unitTestsPath = "$PSScriptRoot\Source\Tests";
+$configurations = "Debug";
+$csproj = "$PSScriptRoot\..\Source\Annex\Annex.csproj";
+$unitTestsPath = "$PSScriptRoot\..\Source\Tests";
 $unitTestsCsProj = "$unitTestsPath\Tests.csproj";
 $unitTestsBin = "$unitTestsPath\bin";
-$nuspec = "$PSScriptRoot\nuspec.nuspec";
+$nuspec = "$PSScriptRoot\.nuspec";
 $err = $false;
 $test = $true;
 $build = $true;
@@ -76,16 +76,15 @@ foreach ($platform in $platforms) {
     }
 }
 
-# NOTE: Currently non-functional.
-# # Create targets file
-# $targetsSource = Get-Content "$PSScriptRoot\template.targets";
-# $xml = [xml] (Get-Content "$PSScriptRoot\nuspec.nuspec");
-# $annexVersion = $xml.package.metadata.version;
-# $annexId = $xml.package.metadata.id;
-# $targets = $targetsSource.Replace("__version__", $annexVersion);
-# $targets = $targets.Replace("__app_id__", $annexId);
-# $targets = $targets.Replace("__framework__", $framework);
-# Set-Content -path "$annexId.targets" -Value $targets;
+# Create targets file
+$targetsSource = Get-Content "$PSScriptRoot\template.targets";
+$xml = [xml] (Get-Content $nuspec);
+$annexVersion = $xml.package.metadata.version;
+$annexId = $xml.package.metadata.id;
+$targets = $targetsSource.Replace("__version__", $annexVersion);
+$targets = $targets.Replace("__app_id__", $annexId);
+$targets = $targets.Replace("__framework__", $framework);
+Set-Content -path "$annexId.targets" -Value $targets;
 
 if ($err -eq $true) {
     Write-Host "Errors found. Canceling pack.";

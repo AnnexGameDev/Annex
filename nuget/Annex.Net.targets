@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Condition="'$(Platform)' == 'AnyCPU'">
+    <Reference Include="Annex.Net">
+      <HintPath>$(NuGetPackageRoot)\packages\Annex.Net\0.0.2\win-x86\lib\netcoreapp3.1\Annex.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Platform)' == 'x86'">
+    <Reference Include="Annex.Net">
+      <HintPath>$(NuGetPackageRoot)\packages\Annex.Net\0.0.2\win-x86\lib\netcoreapp3.1\Annex.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Platform)' == 'x64'">
+    <Reference Include="Annex.Net">
+      <HintPath>$(NuGetPackageRoot)\packages\Annex.Net\0.0.2\win-x64\lib\netcoreapp3.1\Annex.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
