@@ -1,4 +1,5 @@
-﻿using Annex;
+﻿#define DEBUG
+using Annex;
 using Annex.Assets;
 using Annex.Events;
 using Annex.Graphics;

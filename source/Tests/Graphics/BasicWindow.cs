@@ -1,4 +1,5 @@
-﻿using Annex;
+﻿#define DEBUG
+using Annex;
 using Annex.Logging;
 using Annex.Scenes.Components;
 using NUnit.Framework;
