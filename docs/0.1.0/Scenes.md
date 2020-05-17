@@ -1,13 +1,10 @@
 ---
 layout: default
 title: Scenes
-nav_order: 2
-parent: v0.0.2
-search_exclude: true
+nav_order: 0
+parent: v0.1.0
+# search_exclude: true
 ---
-
-**Careful:** This page was for meant for an older version of Annex
-{: .deprecated }
 
 Most games usually change their state pretty frequently. You start up your game, and see a loading screen followed by a main menu. You then hit "play now" and get thrown into some game world. Without realizing it, your game is switching between different states.
 

@@ -25,12 +25,12 @@ namespace Annex
         }
 
         [Conditional("DEBUG")]
-        public static void AddDebugInformation(Func<string> worker) {
+        public static void AddDebugOverlayInformation(Func<string> worker) {
             DebugOverlay.AddInformation(worker);
         }
 
         [Conditional("DEBUG")]
-        public static void AddDebugCommand(string commandName, Action<string[]> worker) {
+        public static void AddDebugOverlayCommand(string commandName, Action<string[]> worker) {
             DebugOverlay.AddCommand(commandName, worker);
         }
 

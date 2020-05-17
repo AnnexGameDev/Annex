@@ -1,13 +1,27 @@
 ---
 layout: default
 title: Events
-nav_order: 2
-parent: v0.0.2
-search_exclude: true
+nav_order: 0
+parent: v0.1.0
+# search_exclude: true
 ---
 
-**Careful:** This page was for meant for an older version of Annex
-{: .deprecated }
+# Event Trackers
+In order to make sure certain critical game-events are meeting your expectations, you can attach performance trackers to them. Trackers keep track of how many times an event gets executed in a certain interval. 
+
+```cs
+long interval = 1000; // How often the interval resets.
+var tracker = new EventTracker(interval);
+
+tracker.CurrentCount; // How many times the event ran in this interval.
+tracker.LastCount; // How many times the event ran last interval.
+tracker.Interval; // Corresponds to interval.
+tracker.CurrentInterval; // How long the current interval has been running for.
+
+string eventID;
+var gameEvent = EventManager.Singleton.GetEvent(eventID);
+gameEvent.AttachTracker(tracker);
+```
 
 The backbone of any game is the gameloop, and all the game events that the gameloop kicks off.
 A gameloop is a while-loop which is in charge of the flow of game-logic.

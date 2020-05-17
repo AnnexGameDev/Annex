@@ -1,13 +1,10 @@
 ---
 layout: default
 title: Graphics
-nav_order: 2
-parent: v0.0.2
-search_exclude: true
+nav_order: 0
+parent: v0.1.0
+# search_exclude: true
 ---
-
-**Careful:** This page was for meant for an older version of Annex
-{: .deprecated }
 
 # Game Window
 Before talking about game graphics, it's important to understand its containing element which is the game window. The game window can be accessed through its singleton.

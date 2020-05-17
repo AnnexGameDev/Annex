@@ -1,13 +1,10 @@
 ---
 layout: default
-title: Singleton
-nav_order: 2
-parent: v0.0.2
-search_exclude: true
+title: Service Provider
+nav_order: 0
+parent: v0.1.0
+# search_exclude: true
 ---
-
-**Careful:** This page was for meant for an older version of Annex
-{: .deprecated }
 
 The Annex framework operates largely on the singleton pattern.
 

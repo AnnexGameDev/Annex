@@ -2,12 +2,10 @@
 layout: default
 title: Audio
 nav_order: 0
-parent: v0.0.1
-grand_parent: Annex Home
+parent: v0.1.0
 # search_exclude: true
 ---
 # Audio
-
 You can interact with Annex's audio module by using the Audio Manager in the service proider.
 
 ```cs
