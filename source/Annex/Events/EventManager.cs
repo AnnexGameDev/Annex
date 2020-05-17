@@ -22,7 +22,7 @@ namespace Annex.Events
         }
 
         public void AddEvent(PriorityType type, Func<ControlEvent> e, int interval_ms, int delay_ms = 0, string eventID = "") {
-            this._queue.AddEvent(eventID, type, e, interval_ms, delay_ms);
+            this._queue.AddEvent(type, e, interval_ms, delay_ms, eventID);
         }
 
         public void AddEvent(PriorityType type, GameEvent e) {

@@ -19,7 +19,7 @@ namespace SampleProject.Scenes.Level1
             var camera = ServiceProvider.Canvas.GetCamera();
             camera.Follow(this._player.Position);
 
-            this.Events.AddEvent("", PriorityType.INPUT, this.HandlePlayerInput, 10);
+            this.Events.AddEvent(PriorityType.INPUT, this.HandlePlayerInput, 10);
         }
 
         private ControlEvent HandlePlayerInput() {
