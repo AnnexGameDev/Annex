@@ -237,8 +237,10 @@ namespace Annex.Graphics.Sfml
             }
 
             if (sheet.SourceTextureRect == null) {
+                object? asset = null;
                 var args = new AssetInitializerArgs(sheet.SourceTextureName.Value);
-                Debug.Assert(this.TextureManager.GetAsset(args, out var asset), TEXTURE_FAILED_TO_LOAD.Format(sheet.SourceTextureName.Value));
+                bool loadSuccess = this.TextureManager.GetAsset(args, out asset);
+                Debug.Assert(loadSuccess, TEXTURE_FAILED_TO_LOAD.Format(sheet.SourceTextureName.Value));
                 using var sprite = new Sprite((Texture)asset);
                 var size = sprite.Texture.Size;
 
@@ -265,7 +267,9 @@ namespace Annex.Graphics.Sfml
             this.UpdateView(ctx);
 
             var args = new AssetInitializerArgs(ctx.SourceTextureName.Value);
-            Debug.Assert(this.TextureManager.GetAsset(args, out var asset), TEXTURE_FAILED_TO_LOAD.Format(ctx.SourceTextureName.Value));
+            bool loadSuccess = this.TextureManager.GetAsset(args, out var asset);
+            Debug.Assert(loadSuccess, TEXTURE_FAILED_TO_LOAD.Format(ctx.SourceTextureName.Value));
+
             using var sprite = new Sprite((Texture)asset) {
                 Position = ctx.RenderPosition
             };

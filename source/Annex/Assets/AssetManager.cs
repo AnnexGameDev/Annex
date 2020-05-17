@@ -17,6 +17,7 @@ namespace Annex.Assets
         }
 
         public bool GetAsset(AssetInitializerArgs args, out object? asset) {
+
             if (!this.AssetInitializer.Validate(args)) {
                 ServiceProvider.Log.WriteLineWarning(ASSET_NOT_VALID.Format(args.Key));
                 asset = default;
@@ -36,6 +37,7 @@ namespace Annex.Assets
         }
 
         public void PackageAssetsToBinaryFrom(string path) {
+
             Directory.CreateDirectory(path);
 
             foreach (var file in Directory.GetFiles(path, "*", SearchOption.AllDirectories)) {

@@ -12,7 +12,6 @@ namespace Annex
     public static class AnnexGame
     {
         public static void Initialize() {
-
             ServiceProvider.Provide<Log>(new Log());
             ServiceProvider.Log.WriteLineTrace_Module("AnnexGame", "Initializing services...");
             ServiceProvider.Provide<IAudioPlayer>(new SfmlPlayer(new ServiceProvider.DefaultAudioManager()));
