@@ -1,5 +1,4 @@
-﻿#nullable enable
-using Annex.Scenes;
+﻿using Annex.Scenes;
 
 namespace Annex
 {

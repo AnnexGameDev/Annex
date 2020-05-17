@@ -1,6 +1,4 @@
-﻿#nullable enable
-
-namespace Annex.Audio
+﻿namespace Annex.Audio
 {
     public class AudioContext
     {

@@ -1,5 +1,4 @@
-﻿#nullable enable
-using SFML.Audio;
+﻿using SFML.Audio;
 using static Annex.Audio.Sfml.Errors;
 
 namespace Annex.Audio.Sfml

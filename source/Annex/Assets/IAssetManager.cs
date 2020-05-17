@@ -1,5 +1,4 @@
-﻿#nullable enable
-namespace Annex.Assets
+﻿namespace Annex.Assets
 {
     public interface IAssetManager
     {

@@ -1,5 +1,4 @@
-﻿#nullable enable
-using System;
+﻿using System;
 using System.IO;
 
 namespace Annex.Logging.Decorator

@@ -1,6 +1,4 @@
-﻿#nullable enable
-
-namespace Annex.Data.Shared
+﻿namespace Annex.Data.Shared
 {
     public class String : Shared<string?>
     {

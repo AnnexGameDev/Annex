@@ -1,5 +1,4 @@
-﻿#nullable enable
-using Annex.Assets.Loaders;
+﻿using Annex.Assets.Loaders;
 
 namespace Annex.Assets.Managers
 {

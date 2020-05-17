@@ -1,5 +1,4 @@
-﻿#nullable enable
-using System.IO;
+﻿using System.IO;
 using static Annex.Assets.Errors;
 
 namespace Annex.Assets

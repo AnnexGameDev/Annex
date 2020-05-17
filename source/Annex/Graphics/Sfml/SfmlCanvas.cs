@@ -1,5 +1,4 @@
-﻿#nullable enable
-using Annex.Assets;
+﻿using Annex.Assets;
 using Annex.Data.Shared;
 using Annex.Events;
 using Annex.Graphics.Cameras;

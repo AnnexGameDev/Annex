@@ -1,5 +1,4 @@
-﻿#nullable enable
-using Annex.Data.Shared;
+﻿using Annex.Data.Shared;
 using Annex.Graphics;
 using Annex.Scenes.Controllers;
 

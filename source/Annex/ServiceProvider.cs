@@ -1,5 +1,4 @@
-﻿#nullable enable
-using Annex.Assets;
+﻿using Annex.Assets;
 using Annex.Logging;
 using System;
 using System.Collections.Generic;

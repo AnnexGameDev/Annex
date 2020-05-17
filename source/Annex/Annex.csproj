@@ -22,6 +22,7 @@
     <Copyright />
     <RepositoryUrl>https://github.com/MatthewChrobak/Annex/</RepositoryUrl>
     <Version>0.0.2</Version>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

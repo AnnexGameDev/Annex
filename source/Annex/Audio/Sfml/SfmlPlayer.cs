@@ -1,5 +1,4 @@
-﻿#nullable enable
-using Annex.Assets;
+﻿using Annex.Assets;
 using Annex.Events;
 using System.Collections.Generic;
 using static Annex.Audio.Sfml.Errors;

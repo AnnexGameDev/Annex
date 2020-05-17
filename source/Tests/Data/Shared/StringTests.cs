@@ -1,5 +1,4 @@
-﻿#nullable enable
-using Annex.Data.Shared;
+﻿using Annex.Data.Shared;
 using NUnit.Framework;
 
 namespace Tests.Data.Shared

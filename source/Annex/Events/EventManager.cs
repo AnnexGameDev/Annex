@@ -1,5 +1,4 @@
-﻿#nullable enable
-using Annex.Assets;
+﻿using Annex.Assets;
 using Annex.Scenes;
 using System;
 using System.Collections.Generic;

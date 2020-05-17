@@ -1,5 +1,4 @@
-﻿#nullable enable
-using Annex.Events;
+﻿using Annex.Events;
 using Annex.Graphics;
 using Annex.Graphics.Events;
 
