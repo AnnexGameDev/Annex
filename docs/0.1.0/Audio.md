@@ -6,25 +6,27 @@ parent: v0.1.0
 # search_exclude: true
 ---
 # Audio
-You can interact with Annex's audio module by using the Audio Manager in the service proider.
+You can access the audio service using the service proider.
 
 ```cs
-var audio = ServiceProvider.AudioManager;
+var audioService = ServiceProvider.AudioService;
 ```
 # Playing and Stopping Audio
 
 ```cs
-// Play audio
 var context = new AudioContext() {
     BufferMode = BufferMode.Buffered,
-    ID = "music", // some identifier to assign to the audio. Default: null
-    Loop = true, // whether or not the audio loops. Default: false
-    Volume = 100 // how loud the audio is ranging from 0 (no volume) to 100 (max volume). Default: 100
+    ID = "music",
+    Loop = true,
+    Volume = 100
 };
-var playingAudio = audio.PlayAudio("sound.flac", context);
+var playingAudio = audioService.PlayAudio("sound.flac", context);
 
-// Stop audio - optionally takes in an identifier
-audio.StopPlayingAudio();
+// Stops all playing audio
+audioService.StopPlayingAudio();
+
+// Stops all playing audio with the given id
+audioService.StopPlayingAudio("music");
 ```
 
 # Buffered vs NonBuffered

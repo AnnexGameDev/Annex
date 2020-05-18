@@ -11,12 +11,17 @@ has_toc: false
 
 [Annex.Game package link](https://www.nuget.org/packages/Annex.Net/)
 
-# Main
-Create a new .Net Core project and reference Annex the above method.
-In your main, all service providers and game events are created upon calling ``Initialize```. When calling ```Start```, that starting scene is specified. For more information about scenes, read [here](scenes).
+# Example
+A minimal Annex game is implemented with the code shown below.
+
+In your main, call ```AnnexGame.Initialize``` to initialize the necessary service providers. Calling ```AnnexGame.Start``` will start the game's event system, and show the canvas.
+
+Note that ```Start``` takes in a starting scene, which is user-defined. For more information about scenes, read [here](scenes).
+{: .note }
 
 ```cs
 using Annex;
+using Annex.Scenes.Components;
 
 public class Game
 {
@@ -24,6 +29,11 @@ public class Game
         AnnexGame.Initialize();
         AnnexGame.Start<StartingScene>();
     }
+}
+
+public class StartingScene : Scene
+{
+
 }
 ```
 

@@ -6,7 +6,7 @@ has_children: true
 has_toc: false
 ---
 
-Annex is a toy 2D game development framework targeted at software developers with little to no experience in game development.
+Annex is a toy .net core 2D game development framework targeted at software developers with little to no experience in game development.
 
 Games developed with Annex:
 * [BounceBack](https://github.com/MatthewChrobak/BounceBack)
