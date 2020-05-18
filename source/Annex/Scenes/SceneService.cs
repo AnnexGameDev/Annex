@@ -6,14 +6,14 @@ using System.Linq;
 
 namespace Annex.Scenes
 {
-    public class SceneManager : IService
+    public class SceneService : IService
     {
         private readonly Dictionary<Type, Scene> _scenes;
 
         private Type _currentSceneType;
         public Scene CurrentScene => this._scenes[this._currentSceneType];
 
-        public SceneManager() {
+        public SceneService() {
             this._scenes = new Dictionary<Type, Scene>();
             this.LoadScene<Unknown>();
         }

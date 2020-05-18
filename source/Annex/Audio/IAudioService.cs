@@ -2,7 +2,7 @@
 
 namespace Annex.Audio
 {
-    public interface IAudioPlayer : IService
+    public interface IAudioService : IService
     {
         IPlayingAudio PlayAudio(string audioFilePath);
         IPlayingAudio PlayAudio(string audioFilePath, AudioContext context);

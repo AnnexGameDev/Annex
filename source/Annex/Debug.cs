@@ -12,7 +12,7 @@ namespace Annex
     {
         [Conditional("DEBUG")]
         public static void ToggleDebugOverlay() {
-            var scene = ServiceProvider.SceneManager.CurrentScene;
+            var scene = ServiceProvider.SceneService.CurrentScene;
 
             if (scene.GetElementById(DebugOverlay.ID) == null) {
                 var overlay = new DebugOverlay();

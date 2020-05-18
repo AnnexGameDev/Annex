@@ -4,6 +4,6 @@ namespace Annex
 {
     public static partial class ServiceProvider
     {
-        public static EventManager EventManager => Locate<EventManager>() ?? Provide<EventManager>();
+        public static EventService EventService => Locate<EventService>() ?? Provide<EventService>();
     }
 }

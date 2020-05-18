@@ -5,7 +5,7 @@ using static Annex.Audio.Sfml.Errors;
 
 namespace Annex.Audio.Sfml
 {
-    public sealed class SfmlPlayer : IAudioPlayer
+    public sealed class SfmlPlayer : IAudioService
     {
         public const string GameEventID = "sfml-audio-player-gc";
         private readonly List<SfmlPlayingAudio> _playingAudio;
@@ -17,7 +17,7 @@ namespace Annex.Audio.Sfml
             this._playingAudio = new List<SfmlPlayingAudio>();
             this.AudioAssetManager = audioManager;
 
-            ServiceProvider.EventManager.AddEvent(PriorityType.SOUNDS, () => {
+            ServiceProvider.EventService.AddEvent(PriorityType.SOUNDS, () => {
                 lock (this._lock) {
                     for (int i = 0; i < this._playingAudio.Count; i++) {
                         var audio = this._playingAudio[i];

@@ -12,14 +12,14 @@ namespace Annex
         public static void Initialize() {
             ServiceProvider.Provide<Log>(new Log());
             ServiceProvider.Log.WriteLineTrace_Module("AnnexGame", "Initializing services...");
-            ServiceProvider.Provide<IAudioPlayer>(new SfmlPlayer(new ServiceProvider.DefaultAudioManager()));
+            ServiceProvider.Provide<IAudioService>(new SfmlPlayer(new ServiceProvider.DefaultAudioManager()));
             ServiceProvider.Provide<ICanvas>(new SfmlCanvas(new ServiceProvider.DefaultTextureManager(), new ServiceProvider.DefaultFontManager(), new ServiceProvider.DefaultIconManager()));
         }
 
         public static void Start<T>() where T : Scene, new() {
-            ServiceProvider.SceneManager.LoadScene<T>();
+            ServiceProvider.SceneService.LoadScene<T>();
             ServiceProvider.Canvas.SetVisible(true);
-            ServiceProvider.EventManager.Run();
+            ServiceProvider.EventService.Run();
         }
     }
 }

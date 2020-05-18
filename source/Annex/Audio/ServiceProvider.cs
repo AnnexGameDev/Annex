@@ -10,7 +10,7 @@ namespace Annex
 {
     public static partial class ServiceProvider
     {
-        public static IAudioPlayer AudioManager => Locate<IAudioPlayer>();
+        public static IAudioService AudioService => Locate<IAudioService>();
 
         public class DefaultAudioManager : UncachedAssetManager {
         

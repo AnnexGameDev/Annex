@@ -55,10 +55,10 @@ namespace Annex.Graphics.Sfml
             this.SetTitle("Window");
 
 
-            var events = ServiceProvider.EventManager;
+            var events = ServiceProvider.EventService;
             events.AddEvent(PriorityType.GRAPHICS, () => {
                 this.BeginDrawing();
-                ServiceProvider.SceneManager.CurrentScene.Draw(this);
+                ServiceProvider.SceneService.CurrentScene.Draw(this);
                 this.EndDrawing();
                 return ControlEvent.NONE;
             }, 16, 0, DrawGameEventID);
@@ -106,15 +106,15 @@ namespace Annex.Graphics.Sfml
 
         private void AttachUIHandlers() {
             // Hook up UI events
-            this._buffer.Closed += (sender, e) => { ServiceProvider.SceneManager.CurrentScene.HandleCloseButtonPressed(); };
+            this._buffer.Closed += (sender, e) => { ServiceProvider.SceneService.CurrentScene.HandleCloseButtonPressed(); };
             this._buffer.KeyPressed += (sender, e) => {
-                ServiceProvider.SceneManager.CurrentScene.HandleKeyboardKeyPressed(new KeyboardKeyPressedEvent() {
+                ServiceProvider.SceneService.CurrentScene.HandleKeyboardKeyPressed(new KeyboardKeyPressedEvent() {
                     Key = e.Code.ToNonSFML(),
                     ShiftDown = e.Shift
                 });
             };
             this._buffer.KeyReleased += (sender, e) => {
-                ServiceProvider.SceneManager.CurrentScene.HandleKeyboardKeyReleased(new KeyboardKeyReleasedEvent() {
+                ServiceProvider.SceneService.CurrentScene.HandleKeyboardKeyReleased(new KeyboardKeyReleasedEvent() {
                     Key = e.Code.ToNonSFML(),
                     ShiftDown = e.Shift
                 });
@@ -127,7 +127,7 @@ namespace Annex.Graphics.Sfml
                 bool doubleClick = false;
                 float dx = uiPos.X - this._lastMouseClickX;
                 float dy = uiPos.Y - this._lastMouseClickY;
-                long dt = EventManager.CurrentTime - this._lastMouseClick;
+                long dt = EventService.CurrentTime - this._lastMouseClick;
                 int distanceThreshold = 10;
                 int timeThreshold = 250;
 
@@ -137,9 +137,9 @@ namespace Annex.Graphics.Sfml
 
                 this._lastMouseClickX = uiPos.X;
                 this._lastMouseClickY = uiPos.Y;
-                this._lastMouseClick = EventManager.CurrentTime;
+                this._lastMouseClick = EventService.CurrentTime;
 
-                var scene = ServiceProvider.SceneManager.CurrentScene;
+                var scene = ServiceProvider.SceneService.CurrentScene;
                 scene.HandleSceneFocusMouseDown((int)uiPos.X, (int)uiPos.Y);
                 scene.HandleMouseButtonPressed(new MouseButtonPressedEvent() {
                     Button = e.Button.ToNonSFML(),
@@ -154,39 +154,39 @@ namespace Annex.Graphics.Sfml
                 var mousePos = Mouse.GetPosition(this._buffer);
                 var gamePos = this._buffer.MapPixelToCoords(mousePos, this._gameContentView);
                 var uiPos = this._buffer.MapPixelToCoords(mousePos, this._uiView);
-                ServiceProvider.SceneManager.CurrentScene.HandleMouseButtonReleased(new MouseButtonReleasedEvent() {
+                ServiceProvider.SceneService.CurrentScene.HandleMouseButtonReleased(new MouseButtonReleasedEvent() {
                     Button = e.Button.ToNonSFML(),
                     MouseX = (int)uiPos.X,
                     MouseY = (int)uiPos.Y,
                     WorldX = gamePos.X,
                     WorldY = gamePos.Y,
-                    TimeSinceClick = EventManager.CurrentTime - this._lastMouseClick
+                    TimeSinceClick = EventService.CurrentTime - this._lastMouseClick
                 });
             };
             this._buffer.JoystickButtonPressed += (sender, e) => {
-                ServiceProvider.SceneManager.CurrentScene.HandleJoystickButtonPressed(new JoystickButtonPressedEvent() {
+                ServiceProvider.SceneService.CurrentScene.HandleJoystickButtonPressed(new JoystickButtonPressedEvent() {
                     JoystickID = e.JoystickId,
                     Button = (JoystickButton)e.Button
                 });
             };
             this._buffer.JoystickButtonReleased += (sender, e) => {
-                ServiceProvider.SceneManager.CurrentScene.HandleJoystickButtonReleased(new JoystickButtonReleasedEvent() {
+                ServiceProvider.SceneService.CurrentScene.HandleJoystickButtonReleased(new JoystickButtonReleasedEvent() {
                     JoystickID = e.JoystickId,
                     Button = (JoystickButton)e.Button
                 });
             };
             this._buffer.JoystickConnected += (sender, e) => {
-                ServiceProvider.SceneManager.CurrentScene.HandleJoystickConnected(new JoystickConnectedEvent() {
+                ServiceProvider.SceneService.CurrentScene.HandleJoystickConnected(new JoystickConnectedEvent() {
                     JoystickID = e.JoystickId
                 });
             };
             this._buffer.JoystickDisconnected += (sender, e) => {
-                ServiceProvider.SceneManager.CurrentScene.HandleJoystickDisconnected(new JoystickDisconnectedEvent() {
+                ServiceProvider.SceneService.CurrentScene.HandleJoystickDisconnected(new JoystickDisconnectedEvent() {
                     JoystickID = e.JoystickId
                 });
             };
             this._buffer.JoystickMoved += (sender, e) => {
-                ServiceProvider.SceneManager.CurrentScene.HandleJoystickMoved(new JoystickMovedEvent() {
+                ServiceProvider.SceneService.CurrentScene.HandleJoystickMoved(new JoystickMovedEvent() {
                     JoystickID = e.JoystickId,
                     Axis = e.Axis.ToNonSFML(),
                     Delta = e.Position

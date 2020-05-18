@@ -16,9 +16,9 @@ namespace Tests.Graphics
 {
     public class SfmlCanvasTestCase
     {
-        protected EventManager EventManager;
+        protected EventService EventManager;
         protected ICanvas Canvas;
-        protected SceneManager Scenes;
+        protected SceneService Scenes;
 
         private Thread _backgroundThread;
         private readonly string AssetFolder = Path.Combine(SolutionFolder, "assets/textures/");
@@ -28,8 +28,8 @@ namespace Tests.Graphics
         }
 
         protected void StartTest<T>() where T : Scene, new() {
-            this.EventManager = ServiceProvider.Provide<EventManager>();
-            this.Scenes = ServiceProvider.Provide<SceneManager>();
+            this.EventManager = ServiceProvider.Provide<EventService>();
+            this.Scenes = ServiceProvider.Provide<SceneService>();
 
             this._backgroundThread = new Thread(() => {
                 this.Canvas = ServiceProvider.Provide<ICanvas>(new SfmlCanvas(new ServiceProvider.DefaultTextureManager(), new ServiceProvider.DefaultFontManager(), new ServiceProvider.DefaultIconManager()));

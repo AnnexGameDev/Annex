@@ -120,4 +120,7 @@
   <data name="DrawGameEventID" xml:space="preserve">
     <value>draw-game</value>
   </data>
+  <data name="ProcessUserInputGameEventID" xml:space="preserve">
+    <value>process-input</value>
+  </data>
 </root>

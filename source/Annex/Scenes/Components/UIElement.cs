@@ -59,7 +59,7 @@ namespace Annex.Scenes.Components
                 return false;
             }
             this.IsFocus = true;
-            ServiceProvider.SceneManager.CurrentScene.FocusObject = this;
+            ServiceProvider.SceneService.CurrentScene.FocusObject = this;
             return true;
         }
     }

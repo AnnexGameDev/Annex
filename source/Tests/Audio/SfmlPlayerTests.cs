@@ -13,7 +13,7 @@ namespace Tests.Audio
     [TestFixture]
     public class SfmlPlayerTests
     {
-        private IAudioPlayer _audio;
+        private IAudioService _audio;
         private const string Cold = "test/Cold2.wav";
         private const string Holy = "test/Holy1.wav";
 
@@ -24,7 +24,7 @@ namespace Tests.Audio
         [OneTimeSetUp]
         public void SuiteSetUp() {
             ServiceProvider.Provide<Log>(new Log());
-            this._audio = ServiceProvider.Provide<IAudioPlayer>(new SfmlPlayer(new ServiceProvider.DefaultAudioManager()));
+            this._audio = ServiceProvider.Provide<IAudioService>(new SfmlPlayer(new ServiceProvider.DefaultAudioManager()));
             Debug.PackageAssetsToBinaryFrom(AssetType.Audio, Path.Combine(SolutionFolder, "assets/audio/"));
         }
 
