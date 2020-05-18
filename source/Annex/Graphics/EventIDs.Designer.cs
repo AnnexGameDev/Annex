@@ -68,5 +68,14 @@ namespace Annex.Graphics {
                 return ResourceManager.GetString("DrawGameEventID", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to process-input.
+        /// </summary>
+        public static string ProcessUserInputGameEventID {
+            get {
+                return ResourceManager.GetString("ProcessUserInputGameEventID", resourceCulture);
+            }
+        }
     }
 }

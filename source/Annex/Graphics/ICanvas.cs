@@ -10,10 +10,6 @@ namespace Annex.Graphics
         void SetVideoMode(VideoMode mode);
         void ChangeResolution(uint width, uint height);
         void SetVisible(bool visible);
-        void ProcessEvents();
         void SetWindowIcon(string iconPath);
-
-        void BeginDrawing();
-        void EndDrawing();
     }
 }

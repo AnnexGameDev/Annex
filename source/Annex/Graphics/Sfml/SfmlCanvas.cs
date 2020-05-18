@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using static Annex.Graphics.Sfml.Errors;
+using static Annex.Graphics.EventIDs;
 
 namespace Annex.Graphics.Sfml
 {
@@ -52,6 +53,19 @@ namespace Annex.Graphics.Sfml
             this._buffer = new RenderWindow(new SFML.Window.VideoMode((uint)this._resolution.X, (uint)this._resolution.Y), "", Styles.Default);
             this._style = Styles.Default;
             this.SetTitle("Window");
+
+
+            var events = ServiceProvider.EventManager;
+            events.AddEvent(PriorityType.GRAPHICS, () => {
+                this.BeginDrawing();
+                ServiceProvider.SceneManager.CurrentScene.Draw(this);
+                this.EndDrawing();
+                return ControlEvent.NONE;
+            }, 16, 0, DrawGameEventID);
+            events.AddEvent(PriorityType.INPUT, () => {
+                this.ProcessEvents();
+                return ControlEvent.NONE;
+            }, 16, 0, ProcessUserInputGameEventID);
 
             AttachUIHandlers();
         }
@@ -181,7 +195,7 @@ namespace Annex.Graphics.Sfml
         }
 
         public void Draw(TextContext ctx) {
-            
+
             if (System.String.IsNullOrEmpty(ctx.RenderText)) {
                 return;
             }
@@ -321,13 +335,13 @@ namespace Annex.Graphics.Sfml
             this._buffer.Draw(shape);
         }
 
-        public void BeginDrawing() {
+        private void BeginDrawing() {
             this._bufferAccess.WaitOne();
             this._buffer.Clear();
             this.UpdateGameContentCamera();
         }
 
-        public void EndDrawing() {
+        private void EndDrawing() {
             this._buffer.Display();
             this._bufferAccess.ReleaseMutex();
         }
@@ -438,7 +452,7 @@ namespace Annex.Graphics.Sfml
             return position;
         }
 
-        public void ProcessEvents() {
+        private void ProcessEvents() {
             this._bufferAccess.WaitOne();
             this._buffer.DispatchEvents();
             Joystick.Update();
