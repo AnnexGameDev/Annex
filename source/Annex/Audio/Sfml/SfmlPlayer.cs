@@ -17,7 +17,7 @@ namespace Annex.Audio.Sfml
             this._playingAudio = new List<SfmlPlayingAudio>();
             this.AudioAssetManager = audioManager;
 
-            ServiceProvider.EventService.AddEvent(PriorityType.SOUNDS, () => {
+            ServiceProvider.EventService.AddEvent(PriorityType.SOUNDS, (e) => {
                 lock (this._lock) {
                     for (int i = 0; i < this._playingAudio.Count; i++) {
                         var audio = this._playingAudio[i];
@@ -27,7 +27,6 @@ namespace Annex.Audio.Sfml
                             this._playingAudio.RemoveAt(i--);
                         }
                     }
-                    return ControlEvent.NONE;
                 }
             }, 5000, eventID: GameEventID);
         }

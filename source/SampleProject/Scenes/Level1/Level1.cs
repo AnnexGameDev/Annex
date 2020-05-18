@@ -22,7 +22,7 @@ namespace SampleProject.Scenes.Level1
             this.Events.AddEvent(PriorityType.INPUT, this.HandlePlayerInput, 10);
         }
 
-        private ControlEvent HandlePlayerInput() {
+        private void HandlePlayerInput(GameEventArgs args) {
             var ctx = ServiceProvider.Canvas;
 
             float speed = 1;
@@ -38,8 +38,6 @@ namespace SampleProject.Scenes.Level1
             if (ctx.IsKeyDown(KeyboardKey.Right)) {
                 this._player.Position.X += speed;
             }
-
-            return ControlEvent.NONE;
         }
 
         public override void HandleCloseButtonPressed() {

@@ -28,18 +28,17 @@ namespace Annex.Networking.Lidgren
             ServiceProvider.EventService.AddEvent(PriorityType.NETWORK, this.OnReceive, 0, 0, NetworkEventID);
         }
 
-        private ControlEvent OnReceive() {
+        private void OnReceive(GameEventArgs args) {
             if (ServiceProvider.SceneService.IsCurrentScene<GameClosing>()) {
                 this.Destroy();
-                return ControlEvent.REMOVE;
+                args.ControlEvent = ControlEvent.REMOVE;
+                return;
             }
 
             NetIncomingMessage message;
             while ((message = this._lidgrenClient.ReadMessage()) != null) {
                 this.ProcessMessage(message);
             }
-
-            return ControlEvent.NONE;
         }
 
         private void ProcessMessage(NetIncomingMessage message) {

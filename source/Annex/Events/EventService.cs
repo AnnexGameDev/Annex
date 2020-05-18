@@ -20,7 +20,7 @@ namespace Annex.Events
             this._sw.Start();
         }
 
-        public void AddEvent(PriorityType type, Func<ControlEvent> e, int interval_ms, int delay_ms = 0, string eventID = "") {
+        public void AddEvent(PriorityType type, Action<GameEventArgs> e, int interval_ms, int delay_ms = 0, string eventID = "") {
             this._queue.AddEvent(type, e, interval_ms, delay_ms, eventID);
         }
 
@@ -62,7 +62,8 @@ namespace Annex.Events
 
         private void RunQueueLevel(List<GameEvent> level, long diff) {
             for (int i = 0; i < level.Count; i++) {
-                if (level[i].Probe(diff) == ControlEvent.REMOVE) {
+                var args = level[i].Probe(diff);
+                if (args.ControlEvent == ControlEvent.REMOVE) {
                     level.RemoveAt(i--);
                 }
             }

@@ -56,15 +56,13 @@ namespace Annex.Graphics.Sfml
 
 
             var events = ServiceProvider.EventService;
-            events.AddEvent(PriorityType.GRAPHICS, () => {
+            events.AddEvent(PriorityType.GRAPHICS, (e) => {
                 this.BeginDrawing();
                 ServiceProvider.SceneService.CurrentScene.Draw(this);
                 this.EndDrawing();
-                return ControlEvent.NONE;
             }, 16, 0, DrawGameEventID);
-            events.AddEvent(PriorityType.INPUT, () => {
+            events.AddEvent(PriorityType.INPUT, (e) => {
                 this.ProcessEvents();
-                return ControlEvent.NONE;
             }, 16, 0, ProcessUserInputGameEventID);
 
             AttachUIHandlers();

@@ -22,7 +22,7 @@ namespace Annex.Networking.DotNet
             }
         }
 
-        public ControlEvent ProcessQueue() {
+        public void ProcessQueue(GameEventArgs args) {
             lock (this._messagesToProcess) {
                 while (this._messagesToProcess.Count != 0) {
                     (int id, byte[] data) = this._messagesToProcess.Dequeue();
@@ -31,7 +31,6 @@ namespace Annex.Networking.DotNet
                     this._endpoint.PacketHandler.HandlePacket(connection, packet);
                 }
             }
-            return ControlEvent.NONE;
         }
     }
 }

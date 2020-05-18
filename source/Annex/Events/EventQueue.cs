@@ -21,7 +21,7 @@ namespace Annex.Events
             this._queue[(int)type].Add(e);
         }
 
-        public void AddEvent(PriorityType type, Func<ControlEvent> e, int interval_ms, int delay_ms = 0, string eventID = "") {
+        public void AddEvent(PriorityType type, Action<GameEventArgs> e, int interval_ms, int delay_ms = 0, string eventID = "") {
             this.AddEvent(type, new GameEvent(eventID, e, interval_ms, delay_ms));
         }
 
