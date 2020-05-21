@@ -8,13 +8,14 @@ parent: v0.1.0
 
 # Shared Data
 
-Shared data is a mechanism to maintain references to the same data (primarily primitive data) across different objects. This behaviour is achieved through the use of generic wrapper classes.
+Shared data is a mechanism to maintain references to the same data (primarily primitive data) across different objects. This behaviour is achieved through the use of the generic wrapper class ```Annex.Data.Shared```.
 
-## String
-Defines a string that can be shared across objects.
+## String ```class String : Shared<string>```
+
+A wrapper class for a string.
 
 ## Int
-Defines a 32 bit integer that can be shared across objects.
+A wrapper class for a 32 bit integer.
 
 ## ScalingInt
 A type of shared Int that applies a scaling integer to a base value.

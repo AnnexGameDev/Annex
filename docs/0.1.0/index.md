@@ -6,6 +6,11 @@ has_children: true
 has_toc: false
 ---
 
+# Requirements
+[.Net Core 3.1 SDK (or higher)](https://dotnet.microsoft.com/download)
+
+[Visual Studio](https://visualstudio.microsoft.com/vs/) or [Visual Studio Code](https://code.visualstudio.com/)
+
 # Installing Annex Through NuGet
 [How to install packages with NuGet](https://docs.microsoft.com/en-us/nuget/quickstart/install-and-use-a-package-in-visual-studio)
 

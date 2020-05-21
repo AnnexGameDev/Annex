@@ -6,7 +6,7 @@ parent: v0.1.0
 # search_exclude: true
 ---
 # Audio
-You can access the audio service using the service proider.
+The audio service is made available through the service proider.
 
 ```cs
 var audioService = ServiceProvider.AudioService;
@@ -31,5 +31,5 @@ audioService.StopPlayingAudio("music");
 
 # Buffered vs NonBuffered
 
-* Set BufferMode to None when your audio file is small in size, and is played very briefly. E.g. Sound effects
-* Set BufferMode to Buffered when your audio file is large in size, and is played for long periods of time. E.g. background music.
+* Set BufferMode to None when the audio file is small in size, and is played very briefly.
+* Set BufferMode to Buffered when the audio file is large in size, and is played for long periods of time.
