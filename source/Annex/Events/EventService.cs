@@ -63,7 +63,7 @@ namespace Annex.Events
         private void RunQueueLevel(List<GameEvent> level, long diff) {
             for (int i = 0; i < level.Count; i++) {
                 var args = level[i].Probe(diff);
-                if (args.ControlEvent == ControlEvent.REMOVE) {
+                if (args.RemoveFromQueue) {
                     level.RemoveAt(i--);
                 }
             }

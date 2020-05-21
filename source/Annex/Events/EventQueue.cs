@@ -16,13 +16,13 @@ namespace Annex.Events
             }
         }
 
-        public void AddEvent(PriorityType type, GameEvent e) {
+        public void AddEvent(PriorityType type, GameEvent gameEvent) {
             Debug.ErrorIf((int)type >= this._queue.Length || type < 0, INVALID_PRIORITY.Format(type));
-            this._queue[(int)type].Add(e);
+            this._queue[(int)type].Add(gameEvent);
         }
 
-        public void AddEvent(PriorityType type, Action<GameEventArgs> e, int interval_ms, int delay_ms = 0, string eventID = "") {
-            this.AddEvent(type, new GameEvent(eventID, e, interval_ms, delay_ms));
+        public void AddEvent(PriorityType type, Action<GameEventArgs> action, int interval_ms, int delay_ms = 0, string eventID = "") {
+            this.AddEvent(type, new GameEvent(eventID, action, interval_ms, delay_ms));
         }
 
         public List<GameEvent> GetPriority(PriorityType type) {

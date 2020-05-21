@@ -31,7 +31,7 @@ namespace Annex.Networking.Lidgren
         private void OnReceive(GameEventArgs args) {
             if (ServiceProvider.SceneService.IsCurrentScene<GameClosing>()) {
                 this.Destroy();
-                args.ControlEvent = ControlEvent.REMOVE;
+                args.RemoveFromQueue = true;
                 return;
             }
 

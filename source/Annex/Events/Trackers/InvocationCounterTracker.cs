@@ -1,6 +1,6 @@
-﻿namespace Annex.Events
+﻿namespace Annex.Events.Trackers
 {
-    public class EventTracker
+    public class EventTracker : IEventTracker
     {
         public long LastCount { get; set; }
         public long CurrentCount { get; set; }
@@ -14,11 +14,11 @@
             this.CurrentInterval = 0;
         }
 
-        public void Probe(long diff, bool invoked) {
+        public void NotifyProbe(GameEvent gameEvent, long timeDiff, bool invoked) {
             if (invoked) {
                 this.CurrentCount++;
             }
-            this.CurrentInterval += diff;
+            this.CurrentInterval += timeDiff;
 
             if (this.CurrentInterval >= this.Interval) {
                 LastCount = CurrentCount;

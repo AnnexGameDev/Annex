@@ -1,6 +1,7 @@
 ﻿using Annex;
 using Annex.Events;
 using Annex.Graphics;
+using Annex.Graphics.Events;
 using Annex.Scenes;
 using Annex.Scenes.Components;
 using SampleProject.Models;
@@ -37,6 +38,15 @@ namespace SampleProject.Scenes.Level1
             }
             if (ctx.IsKeyDown(KeyboardKey.Right)) {
                 this._player.Position.X += speed;
+            }
+        }
+
+        public override void HandleKeyboardKeyPressed(KeyboardKeyPressedEvent e) {
+
+            if (e.Key == KeyboardKey.Tilde) {
+                Debug.ToggleDebugOverlay();
+            } else {
+                base.HandleKeyboardKeyPressed(e);
             }
         }
 

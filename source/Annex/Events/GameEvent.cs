@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Annex.Events.Trackers;
+using System;
+using System.Collections.Generic;
 
 namespace Annex.Events
 {
@@ -8,7 +10,7 @@ namespace Annex.Events
         private readonly Action<GameEventArgs> _event;
         private long _interval;
         private long _nextEventInvocation;
-        private EventTracker? _tracker;
+        private List<IEventTracker>? _trackers;
 
         private GameEventArgs _gameEventArgs;
 
@@ -21,20 +23,34 @@ namespace Annex.Events
         }
 
         public GameEventArgs Probe(long timeDifference_ms) {
+            bool wasInvoked = false;
             this._nextEventInvocation -= timeDifference_ms;
 
             if (this._nextEventInvocation <= 0) {
-                this._tracker?.Probe(timeDifference_ms, true);
                 this._nextEventInvocation += this._interval;
                 this._event.Invoke(_gameEventArgs);
+                wasInvoked = true;
             }
 
-            this._tracker?.Probe(timeDifference_ms, false);
+            NotifyAllProbe(timeDifference_ms, wasInvoked);
             return _gameEventArgs;
         }
 
-        public void AttachTracker(EventTracker tracker) {
-            this._tracker = tracker;
+        private void NotifyAllProbe(long diff, bool invoked) {
+            if (this._trackers == null) {
+                return;
+            }
+            foreach (var tracker in this._trackers) {
+                tracker.NotifyProbe(this, diff, invoked);
+            }
+        }
+
+        public void AttachTracker(IEventTracker tracker) {
+            if (this._trackers == null) {
+                this._trackers = new List<IEventTracker>();
+            }
+            Debug.ErrorIf(this._trackers.Contains(tracker), "Tried to attach a tracker to a GameEvent that is already attached to it");
+            this._trackers.Add(tracker);
         }
 
         public void SetInterval(long interval) {
@@ -50,6 +66,6 @@ namespace Annex.Events
 
     public class GameEventArgs
     {
-        public ControlEvent ControlEvent { get; set; }
+        public bool RemoveFromQueue { get; set; }
     }
 }
