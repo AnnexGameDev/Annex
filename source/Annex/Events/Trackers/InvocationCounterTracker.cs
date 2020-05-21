@@ -1,13 +1,13 @@
 ﻿namespace Annex.Events.Trackers
 {
-    public class EventTracker : IEventTracker
+    public class InvocationCounterTracker : IEventTracker
     {
         public long LastCount { get; set; }
         public long CurrentCount { get; set; }
         public long CurrentInterval { get; set; }
         public long Interval { get; set; }
 
-        public EventTracker(long interval) {
+        public InvocationCounterTracker(long interval) {
             this.Interval = interval;
             this.LastCount = 0;
             this.CurrentCount = 0;
