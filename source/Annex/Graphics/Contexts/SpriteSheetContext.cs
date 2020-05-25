@@ -75,11 +75,11 @@ namespace Annex.Graphics.Contexts
             : this(textureName, (int)numRows, (int)numColumns, 0, 0, DETERMINE_SIZE_FROM_IMAGE, DETERMINE_SIZE_FROM_IMAGE) {
         }
 
-        public SpriteSheetContext(String textureName, uint numRows, uint numColumns, uint sourceLeft, uint sourceTop, uint frameWidth, uint frameHeight) 
-            : this(textureName, (int)numRows, (int)numColumns, (int)sourceLeft, (int)sourceTop, (int)frameWidth, (int)frameHeight) {
+        public SpriteSheetContext(String textureName, uint numRows, uint numColumns, uint sourceTop, uint sourceLeft, uint frameWidth, uint frameHeight) 
+            : this(textureName, (int)numRows, (int)numColumns, (int)sourceTop, (int)sourceLeft, (int)frameWidth, (int)frameHeight) {
         }
 
-        private SpriteSheetContext(String textureName, int numRows, int numColumns, int sourceLeft, int sourceTop, int frameWidth, int frameHeight) {
+        private SpriteSheetContext(String textureName, int numRows, int numColumns, int sourceTop, int sourceLeft, int frameWidth, int frameHeight) {
             this._internalTexture = new TextureContext(textureName);
             this.Row = new Int();
             this.Column = new Int();
