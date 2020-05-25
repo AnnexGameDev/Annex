@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace Annex.Data.Shared
 {
     [Serializable]
+    [DebuggerDisplay("{Value}")]
     public class Int : Shared<int>
     {
         public Int() {

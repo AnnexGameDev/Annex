@@ -1,7 +1,9 @@
 ﻿using SFML.System;
+using System.Diagnostics;
 
 namespace Annex.Data.Shared
 {
+    [DebuggerDisplay("X:{X} Y:{Y}")]
     public abstract class Vector : Shared<float, float>
     {
         public void Add(float x, float y) {

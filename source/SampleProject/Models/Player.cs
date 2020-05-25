@@ -9,7 +9,7 @@ namespace SampleProject.Models
     {
         public readonly Vector Position;
 
-        private readonly TextureContext _sprite;
+        private readonly SpriteSheetContext _sprite;
         private readonly TextContext _hoverText;
 
         public readonly String Name;
@@ -18,8 +18,7 @@ namespace SampleProject.Models
             this.Position = Vector.Create(0, 0);
             this.Name = "Player Name";
 
-            this._sprite = new TextureContext("player.png") {
-                SourceTextureRect = new IntRect(0, 0, 96, 96),
+            this._sprite = new SpriteSheetContext("player.png", 4, 4) {
                 RenderPosition = new OffsetVector(this.Position, Vector.Create(-48, -90))
             };
             this._hoverText = new TextContext(this.Name, "Augusta.ttf") {
@@ -33,6 +32,10 @@ namespace SampleProject.Models
                 BorderThickness = 3,
                 FontSize = 16
             };
+        }
+
+        internal void Animate() {
+            this._sprite.StepColumn();
         }
 
         public void Draw(ICanvas canvas) {

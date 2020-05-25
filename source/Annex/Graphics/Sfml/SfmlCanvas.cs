@@ -247,7 +247,8 @@ namespace Annex.Graphics.Sfml
                 return;
             }
 
-            if (sheet.SourceTextureRect == null) {
+            var rect = sheet.SourceTextureRect;
+            if (rect.Width == SpriteSheetContext.DETERMINE_SIZE_FROM_IMAGE && rect.Height == SpriteSheetContext.DETERMINE_SIZE_FROM_IMAGE) {
                 object? asset = null;
                 var args = new AssetInitializerArgs(sheet.SourceTextureName.Value);
                 bool loadSuccess = this.TextureManager.GetAsset(args, out asset);
@@ -255,15 +256,12 @@ namespace Annex.Graphics.Sfml
                 using var sprite = new Sprite((Texture)asset);
                 var size = sprite.Texture.Size;
 
-                sheet.SourceTextureRect = new Data.Shared.IntRect();
                 int width = (int)(size.X / sheet.NumColumns);
                 int height = (int)(size.Y / sheet.NumRows);
-                sheet.SourceTextureRect.Width.Set(width);
-                sheet.SourceTextureRect.Height.Set(height);
-            }
 
-            sheet.SourceTextureRect.Top.Set(sheet.SourceTextureRect.Height * sheet.Row);
-            sheet.SourceTextureRect.Left.Set(sheet.SourceTextureRect.Width * sheet.Column);
+                rect.Height.Set(width);
+                rect.Width.Set(height);
+            }
 
             this.Draw(sheet._internalTexture);
         }

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace Annex.Data.Shared
 {
     [Serializable]
+    [DebuggerDisplay("Top:{Top.Value} Left:{Left.Value} Width:{Width.Value} Height:{Height.Value}")]
     public class IntRect
     {
         public Int Top { get; set; }
