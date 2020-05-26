@@ -2,56 +2,46 @@
 layout: default
 title: Graphics
 nav_order: 0
-parent: v0.1.0
+parent: v0.0.9
 # search_exclude: true
 ---
 
-# Game Window
-Before talking about game graphics, it's important to understand its containing element which is the game window. The game window can be accessed through its singleton.
+# Canvas
+The canvas is the object responsible for the game window, and performing graphical operations on it. It is accessible through the service provider.
 
 ```cs
-var window = GameWindow.Singleton;
-```
-
-The game window contains an object which is the context to perform graphical operations (canvas). 
-
-```cs
-var canvas = window.Canvas;
+var canvas = ServiceProvider.Canvas;
 ```
 
 # Rendering Process
-Rendering any text or images is done through the Draw function, which is a part of the canvas.
-Its parameters are a _TextContext_ or _TextureContext_. Both of which are intermediate objects that contain information about **what** needs to be rendered, and **how**.
+Rendering any text or images is done through the ```Draw``` function, which takes in a context. The context is an intermediate object that contain information about **what** needs to be rendered, and **how**.
 
 ```cs
 canvas.Draw(ctx);
 ```
 
-But you shouldn't call this function just _anywhere_ in your code. There's a certain process behind rendering a frame of your game, and if you don't call Draw() at the right moment, it won't appear at all.
+**Note**: Draw calls shouldn't be called arbitrarily. Drawing a frame of a game requires setup, ordering, and cleanup. If a draw isn't called at the right moment, it won't appear at all.
+{: .note} 
 
 ## Render Order
-
-There is a game event that gets generated in the Graphics priority which lets you know when its safe to start drawing. The game event take care of the necessary preparations, and then calls the Draw function in the current scene when it's ready. All of your draw calls should stem from the Draw function in the scene.
+A canvas implementation will usually create a game event which is responsible for initiating the process of drawing a frame. Once ready, the ```Draw``` method in your current scene will run.
 
 ```cs
 public class Foo : Scene
 {
     public override void Draw(ICanvas canvas) {
-        // canvas.Draw(ctx);
+        // TODO: draw game
     }
 }
 ```
 
-# Text / Texture Contexts
-As mentioned before, a text or texture context is an intermediate object that describes what needs to be rendered, and how.
-
 ## Text Context
-A text context specifies text that needs to be drawn to the screen. Not all these properties need to be specified, but you will find yourself using a few of them fairly often. Keep in mind that font files should be stored in the appropriate Resources/Fonts/ folder as .ttf files.
+A text context specifies text that needs to be drawn to the screen.
 
 ```cs
 var ctx = new TextContext("Text that has to be rendered.", "Font.ttf");
 
-// always absolute positioning. By default, (0, 0).
+// Always absolute positioning. By default, (0, 0).
 ctx.RenderPosition = Vector.Create(10, 10);
 
 // By default, top left positioning is used.
@@ -59,7 +49,7 @@ ctx.Alignment = new TextAlignment() {
     HorizontalAlignment = HorizontalAlignment.Left,
     VerticalAlignment = VerticalAlignment.Bottom,
     // Top, Left, Bottom, Right are all calculated based off of RenderPosition and Size.
-    // bottom is Position.Y + Size.height
+    // Bottom is Position.Y + Size.height
     // Top is Position.Y
     // Left is Position.X
     // Right is Position.X + Size.Width
@@ -77,13 +67,13 @@ ctx.BorderThickness = 1;
 ctx.BorderColor = RGBA.Red;
 ```
 
-## Texture context
-A texture context specifies an image that needs to be drawn to the screen. Not all these properties need to be specified, but you will find yourself using a few of them fairly often. Keep in mind that image files should be stored in the appropriate Resources/Textures/ folder as .png files.
+## Texture Context
+A texture context specifies an image that needs to be drawn to the screen.
 
 ```cs
 var ctx = new TextureContext("image.png");
 
-// always absolute positioning. By default, (0, 0).
+// Always absolute positioning. By default, (0, 0).
 ctx.RenderPosition = Vector.Create(100, 100);
 
 // How big the final render should be on screen.
@@ -102,8 +92,44 @@ ctx.Rotation = 180;
 ctx.RelativeRotationOrigin = Vector.Create(0, 0);
 ```
 
+## Solid Rectangle Context
+A solid rectangle context specifies a rectangular shape with a solid color fill that needs to be drawn to the screen.
+
+```cs
+var ctx = new SolidRectangleContext(RGBA.Red);
+
+// Always absolute positioning. By default, (0, 0).
+ctx.RenderPosition = Vector.Create(100, 100);
+
+// How big the final render should be on screen.
+ctx.RenderSize = Vector.Create(100, 100);
+
+// Draws a 1.5pixel border around the rectangle shape. 
+// By default, RenderBorderColor is null and RenderBorderSize is 1.
+ctx.RenderBorderColor = RGBA.Black;
+ctx.RenderBorderSize = 1.5f;
+
+```
+
+## Sprite Sheet Context
+A sprite sheet context is an extension of the TextureContext, used typically for animations.
+
+**Note:** SpriteSheetContext handles setting the SubTextureRect for you so you don't have to.
+{: .note }
+
+![Spritesheet](https://raw.githubusercontent.com/MatthewChrobak/Annex/master/source/Resources/textures/player.png)
+
+```cs
+int numRows = 4;
+int numColumns = 4;
+var spritesheet = new SpriteSheetContext("spritesheet.png", numRows, numColumns);
+
+// If the spritesheet is a subsection of the texture, SpriteSheetContext can still be used.
+var spritesheet = new SpriteSheetContext("spritesheet.png", 4, 4, 0, 0, 96, 96);
+```
+
 # Organizing Draw Calls
-Ideally, each entity that can be drawn will be responsible for creating its own contexts and making appropriate draw calls.
+Each entity that is drawn should be responsible for creating its own contexts, and making 
 
 ```cs
 public class Player : IDrawableObject
@@ -130,10 +156,10 @@ public class ExampleScene : Scene
 ```
 
 # Camera
-The camera is a data structure belonging to the canvas that is responsible for specifying the current view of the content in your scene. It specifies what area of the scene you're in (position), and how much of the region to show (size). You can retrieve the camera through the canvas.
+Accessing the game camera can be done through the canvas.
 
 ```cs
-var camera = GameWindow.Singleton.Canvas.GetCamera();
+var camera = ServiceProvider.Canvas.GetCamera();
 ```
 
 The camera object supports various manipulations.

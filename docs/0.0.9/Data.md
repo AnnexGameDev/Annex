@@ -2,7 +2,7 @@
 layout: default
 title: Data
 nav_order: 0
-parent: v0.1.0
+parent: v0.0.9
 # search_exclude: true
 ---
 
@@ -23,7 +23,7 @@ A type of shared Int that applies a scaling integer to a base value.
 Setting the internal property *Value* will set the scale component.
 Getting the internal property *Value* will return the base component times the scale component.
 ```cs
-var shared = new SharedInt(5, 10);
+var shared = new ScalingInt(5, 10);
 int product;
 
 shared.Value = 20; // These two lines are synonymous.
@@ -31,6 +31,22 @@ shared.Scale.Value = 20;
 
 product = shared.Value; // These two lines are synonymous.
 product = shared.Base.Value * shared.Scale.Value;
+```
+
+## OffsetInt
+A type of shared Int that applies an offset to a base value.
+
+Setting the internal property *Value* will set the offset component.
+Getting the internal property *Value* will return the base component plus the offset component.
+```cs
+var shared = new OffsetInt(5, 10);
+int sum;
+
+shared.Value = 20; // These two lines are synonymous.
+shared.Offset.Value = 20;
+
+sum = shared.Value; // These two lines are synonymous.
+sum = shared.Base.Value + shared.Offset.Value;
 ```
 
 ## IntRect
