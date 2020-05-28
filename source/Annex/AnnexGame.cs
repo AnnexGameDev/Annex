@@ -3,6 +3,7 @@ using Annex.Audio.Sfml;
 using Annex.Graphics;
 using Annex.Graphics.Sfml;
 using Annex.Logging;
+using Annex.Scenes;
 using Annex.Scenes.Components;
 
 namespace Annex
@@ -14,6 +15,7 @@ namespace Annex
             ServiceProvider.Log.WriteLineTrace_Module("AnnexGame", "Initializing services...");
             ServiceProvider.Provide<IAudioService>(new SfmlPlayer(new ServiceProvider.DefaultAudioManager()));
             ServiceProvider.Provide<ICanvas>(new SfmlCanvas(new ServiceProvider.DefaultTextureManager(), new ServiceProvider.DefaultFontManager(), new ServiceProvider.DefaultIconManager()));
+            ServiceProvider.Provide<SceneService>();
         }
 
         public static void Start<T>() where T : Scene, new() {
