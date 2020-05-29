@@ -5,6 +5,8 @@ namespace Annex.Graphics
 {
     public interface ICanvas : IDrawableSurface, IHardwarePollable, IService
     {
+        bool IsActive { get; }
+
         Vector GetResolution();
         Camera GetCamera();
         void SetVideoMode(VideoMode mode);

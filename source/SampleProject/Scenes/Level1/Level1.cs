@@ -31,6 +31,9 @@ namespace SampleProject.Scenes.Level1
             var ctx = ServiceProvider.Canvas;
 
             float speed = 1;
+            if (!ctx.IsActive) {
+                return;
+            }
             if (ctx.IsKeyDown(KeyboardKey.Up)) {
                 this._player.Position.Y -= speed;
             }

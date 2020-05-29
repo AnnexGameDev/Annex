@@ -3,31 +3,27 @@ using Annex.Data.Shared;
 using Annex.Events;
 using Annex.Graphics.Cameras;
 using Annex.Graphics.Contexts;
-using Annex.Graphics.Events;
 using Annex.Scenes;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
-using System;
 using System.Collections.Generic;
 using System.Threading;
-using static Annex.Graphics.Sfml.Errors;
 using static Annex.Graphics.EventIDs;
+using static Annex.Graphics.Sfml.Errors;
 
 namespace Annex.Graphics.Sfml
 {
     public class SfmlCanvas : ICanvas
     {
+        public bool IsActive { get => this._buffer?.HasFocus() == true; }
+
         private Mutex _bufferAccess;
         private bool _usingUiView;
         private readonly View _uiView;
         private readonly View _gameContentView;
         private readonly Camera _camera;
         private RenderWindow _buffer;
-
-        private float _lastMouseClickX;
-        private float _lastMouseClickY;
-        private long _lastMouseClick;
 
         private readonly Vector _resolution;
         private string _title { get; set; }
@@ -36,6 +32,8 @@ namespace Annex.Graphics.Sfml
         public readonly AssetManager FontManager;
         public readonly AssetManager TextureManager;
         public readonly AssetManager IconManager;
+
+        private readonly InputHandler _inputHandler;
 
         public SfmlCanvas(AssetManager textureManager, AssetManager fontManager, AssetManager iconManager) {
             this.TextureManager = textureManager;
@@ -54,6 +52,7 @@ namespace Annex.Graphics.Sfml
             this._style = Styles.Default;
             this.SetTitle("Window");
 
+            this._inputHandler = new SfmlInputHandler(this._buffer);
 
             var events = ServiceProvider.EventService;
             events.AddEvent(PriorityType.GRAPHICS, (e) => {
@@ -64,8 +63,6 @@ namespace Annex.Graphics.Sfml
             events.AddEvent(PriorityType.INPUT, (e) => {
                 this.ProcessEvents();
             }, 16, 0, ProcessUserInputGameEventID);
-
-            AttachUIHandlers();
         }
 
         public void SetWindowIcon(string iconPath) {
@@ -98,98 +95,7 @@ namespace Annex.Graphics.Sfml
             this._buffer = new RenderWindow(new SFML.Window.VideoMode(x, y), this._title, style);
             this._style = style;
             this._resolution.Set(x, y);
-            this.AttachUIHandlers();
             this._bufferAccess.ReleaseMutex();
-        }
-
-        private void AttachUIHandlers() {
-            // Hook up UI events
-            this._buffer.Closed += (sender, e) => { ServiceProvider.SceneService.CurrentScene.HandleCloseButtonPressed(); };
-            this._buffer.KeyPressed += (sender, e) => {
-                ServiceProvider.SceneService.CurrentScene.HandleKeyboardKeyPressed(new KeyboardKeyPressedEvent() {
-                    Key = e.Code.ToNonSFML(),
-                    ShiftDown = e.Shift
-                });
-            };
-            this._buffer.KeyReleased += (sender, e) => {
-                ServiceProvider.SceneService.CurrentScene.HandleKeyboardKeyReleased(new KeyboardKeyReleasedEvent() {
-                    Key = e.Code.ToNonSFML(),
-                    ShiftDown = e.Shift
-                });
-            };
-            this._buffer.MouseButtonPressed += (sender, e) => {
-                var mousePos = Mouse.GetPosition(this._buffer);
-                var gamePos = this._buffer.MapPixelToCoords(mousePos, this._gameContentView);
-                var uiPos = this._buffer.MapPixelToCoords(mousePos, this._uiView);
-
-                bool doubleClick = false;
-                float dx = uiPos.X - this._lastMouseClickX;
-                float dy = uiPos.Y - this._lastMouseClickY;
-                long dt = EventService.CurrentTime - this._lastMouseClick;
-                int distanceThreshold = 10;
-                int timeThreshold = 250;
-
-                if (Math.Sqrt(dx * dx + dy * dy) < distanceThreshold && dt < timeThreshold) {
-                    doubleClick = true;
-                }
-
-                this._lastMouseClickX = uiPos.X;
-                this._lastMouseClickY = uiPos.Y;
-                this._lastMouseClick = EventService.CurrentTime;
-
-                var scene = ServiceProvider.SceneService.CurrentScene;
-                scene.HandleSceneFocusMouseDown((int)uiPos.X, (int)uiPos.Y);
-                scene.HandleMouseButtonPressed(new MouseButtonPressedEvent() {
-                    Button = e.Button.ToNonSFML(),
-                    MouseX = (int)uiPos.X,
-                    MouseY = (int)uiPos.Y,
-                    WorldX = gamePos.X,
-                    WorldY = gamePos.Y,
-                    DoubleClick = doubleClick
-                });
-            };
-            this._buffer.MouseButtonReleased += (sender, e) => {
-                var mousePos = Mouse.GetPosition(this._buffer);
-                var gamePos = this._buffer.MapPixelToCoords(mousePos, this._gameContentView);
-                var uiPos = this._buffer.MapPixelToCoords(mousePos, this._uiView);
-                ServiceProvider.SceneService.CurrentScene.HandleMouseButtonReleased(new MouseButtonReleasedEvent() {
-                    Button = e.Button.ToNonSFML(),
-                    MouseX = (int)uiPos.X,
-                    MouseY = (int)uiPos.Y,
-                    WorldX = gamePos.X,
-                    WorldY = gamePos.Y,
-                    TimeSinceClick = EventService.CurrentTime - this._lastMouseClick
-                });
-            };
-            this._buffer.JoystickButtonPressed += (sender, e) => {
-                ServiceProvider.SceneService.CurrentScene.HandleJoystickButtonPressed(new JoystickButtonPressedEvent() {
-                    JoystickID = e.JoystickId,
-                    Button = (JoystickButton)e.Button
-                });
-            };
-            this._buffer.JoystickButtonReleased += (sender, e) => {
-                ServiceProvider.SceneService.CurrentScene.HandleJoystickButtonReleased(new JoystickButtonReleasedEvent() {
-                    JoystickID = e.JoystickId,
-                    Button = (JoystickButton)e.Button
-                });
-            };
-            this._buffer.JoystickConnected += (sender, e) => {
-                ServiceProvider.SceneService.CurrentScene.HandleJoystickConnected(new JoystickConnectedEvent() {
-                    JoystickID = e.JoystickId
-                });
-            };
-            this._buffer.JoystickDisconnected += (sender, e) => {
-                ServiceProvider.SceneService.CurrentScene.HandleJoystickDisconnected(new JoystickDisconnectedEvent() {
-                    JoystickID = e.JoystickId
-                });
-            };
-            this._buffer.JoystickMoved += (sender, e) => {
-                ServiceProvider.SceneService.CurrentScene.HandleJoystickMoved(new JoystickMovedEvent() {
-                    JoystickID = e.JoystickId,
-                    Axis = e.Axis.ToNonSFML(),
-                    Delta = e.Position
-                });
-            };
         }
 
         public void Draw(TextContext ctx) {
