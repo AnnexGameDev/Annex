@@ -6,126 +6,110 @@ parent: v0.0.9
 # search_exclude: true
 ---
 
-Most games usually change their state pretty frequently. You start up your game, and see a loading screen followed by a main menu. You then hit "play now" and get thrown into some game world. Without realizing it, your game is switching between different states.
+# Scene State
+Annex defines a game state as a _scene_.
 
 ![Example state changing](https://i.imgur.com/aCfsysf.png)
 
-In Annex, a scene is a game state. You can interact with the game scenes using the SceneManager singleton.
+A scene is responsible for storing and representing its data, and for handling user interaction with the scene.
+
 
 ```CSharp
-var scenes = SceneManager.Singleton;
+var scenes = ServiceManager.SceneService;
 ```
 
-Scenes have various responsibilities, like exposing a user interface, handling user input, playing background music, and drawing game content on the screen.
-
 ## Creating a scene
-You can create a scene by inheriting from the Scene class.
-```cs
-using Annex.Scenes.Components;
+Scenes are defined by creating a class that inherits from the ```Scene``` class.
 
+**Note:** In order for Annex to maintain scene instances, all scenes need to have a default constructor in order to be loaded.
+{: .note }
+```cs
 public class MainMenu : Scene 
 {
-
 }
 ```
 
-## Changing scenes
-You can change the scene your game is currently in by calling the LoadScene method.
+## Loading scenes
+Scenes can be loaded by using the ```LoadScene``` method.
+If the scene specified has been visited before, the previous instance will be loaded instead of creating a new one. To force the creation of a new instance of the scene, use the ```LoadNewScene``` method.
 ```cs
-var scenes = SceneManager.Singleton;
 scenes.LoadScene<MainMenu>();
+scenes.LoadNewScene<MainMenu>();
 ```
 
-Likewise, you can also retrieve the current scene by using the CurrentScene accessor.
+Retrieving the current state can be done through the scene service.
 ```cs
-var scenes = SceneManager.Singleton;
 var mainMenu = scenes.CurrentScene as MainMenu;
 ```
 
 ## Closing the game
-One of the scenes defined by Annex is the 'GameClosing' scene. Once Annex loads the GameClosing scene, game events will stop running and your game will close.
+Safely terminating an Annex game is done by loading the ```GameClosing``` scene, which can be done by calling ```LoadGameClosingScene```.
 
 ```cs
-SceneManager.Singleton.LoadScene<GameClosing>();
+scenes.LoadGameClosingScene();
 ```
 
 ## Starting your game
-In order to start your game, Annex requires that you specify the initial scene to use on startup.
+Starting a new Annex game requires specifying the starting state. 
 
 ```cs
 private static void Main() {
-    var game = new AnnexGame();
-    game.Start<MainMenu>();
+    AnnexGame.Initialize();
+    AnnexGame.Start<MainMenu>();
 }
 ```
 
 ## User Input
-As mentioned before, user input is another one of the responsibilities of the scene. You can get user input by overriding the scene's input handlers.
+Each scene is responsible for handling the user-input while on the scene. An input handler is defined for each type of input event. 
+
+Annex currently supports the Mouse, Keyboard, and Game Controller events listed below.
+
+**Note:** It is important to call ```base.Handle(e)``` for any overridden event handler if you want the event to be propagated to child UI elements.
+{: .note }
 ```cs
-using Annex.Scenes;
-using Annex.Scenes.Components;
+public override void HandleCloseButtonPressed() {
+    // When the window's x button is closed.
+}
 
-public class MainMenu : Scene
-{
-    // For mouse events,
-    // e.mouseX/Y is the actual x/y distance from the top left of your window.
-    // e.worldX/Y is the x/y coordinate of where you clicked adjusted to where your game-camera is positioned.
+// For mouse events:
+// e.mouseX/Y is the actual x/y distance from the top left of the user's canvas.
+// e.worldX/Y is the x/y coordinate of where the user clicked adjusted to where 
+//            the user's game-camera is positioned.
+public override void HandleMouseButtonPressed(MouseButtonPressedEvent e) {
+}
 
-    public override void HandleCloseButtonPressed() {
-        // When the window's x button is closed.
-    }
+public override void HandleMouseButtonReleased(MouseButtonReleasedEvent e) {
+}
 
-    public virtual void HandleMouseButtonPressed(MouseButtonPressedEvent e) {
+public override void HandleKeyboardKeyPressed(KeyboardKeyPressedEvent e) {
+}
     
-    }
+public override void HandleKeyboardKeyReleased(KeyboardKeyReleasedEvent e) {
+}
 
-    public virtual void HandleMouseButtonReleased(MouseButtonReleasedEvent e) {
+public override void HandleJoystickMoved(JoystickMovedEvent e) {
+}
 
-    }
+public override void HandleJoystickButtonPressed(JoystickButtonPressedEvent e) {
+}
 
-    public virtual void HandleKeyboardKeyPressed(KeyboardKeyPressedEvent e) {
+public override void HandleJoystickButtonReleased(JoystickButtonReleasedEvent e) {
+}
 
-    }
-        
-    public virtual void HandleKeyboardKeyReleased(KeyboardKeyReleasedEvent e) {
+public override void HandleJoystickDisconnected(JoystickDisconnectedEvent e) {
+}
 
-    }
-
-    public virtual void HandleJoystickMoved(JoystickMovedEvent e) {
-
-    }
-
-    public virtual void HandleJoystickButtonPressed(JoystickButtonPressedEvent e) {
-
-    }
-
-    public virtual void HandleJoystickButtonReleased(JoystickButtonReleasedEvent e) {
-
-    }
-
-    public virtual void HandleJoystickDisconnected(JoystickDisconnectedEvent e) {
-
-    }
-
-    public virtual void HandleJoystickConnected(JoystickConnectedEvent e) {
-
-    }
+public override void HandleJoystickConnected(JoystickConnectedEvent e) {
 }
 
 ```
 
 ## User Interface
-One of the primary responsibilities of a scene is the user interface that it exposes to the user. Annex provides a few basic controls for you to use.
-
-- Label
-- Button
-- Textbox
-- Checkbox (planned)
-
-You can build on these fundamental controls, or create your own, and add them to your scene.
+Each scene has its own user interface. Annex currently offers basic user controls: Labels, Buttons, and Textboxes. Handling user input on UI elements can be done in the same manner that user input in a scene is handled.
 
 ```cs
 using Annex.Data;
+using Annex.Graphics.Events;
 using Annex.Scenes.Components;
 
 public class EnterGameButton : Button
@@ -139,22 +123,15 @@ public class EnterGameButton : Button
         this.RenderText.FontColor = RGBA.Black;
         this.RenderText.FontSize = 16;
     }
+
+    public override void HandleMouseButtonPressed(MouseButtonPressedEvent e) {
+    }
 }
 
 public class MainMenu : Scene
 {
     public MainMenu() {
-        var scenes = SceneManager.Singleton;
-
         this.AddChild(new EnterGameButton());
     }
-}
-```
-
-## Custom controls
-If you're interested in making your own custom control, inherit from the UIElement class. It is highly recommended to understand how the common controls provided by Annex work before making your own controls from scratch.
-```cs
-public class ListBox : UIElement {
-
 }
 ```
