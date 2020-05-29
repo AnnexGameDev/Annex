@@ -2,7 +2,7 @@
 
 namespace Annex.Scenes
 {
-    public class GameClosing : Scene
+    internal class GameClosing : Scene
     {
     }
 }

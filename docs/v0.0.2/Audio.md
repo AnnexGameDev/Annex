@@ -3,9 +3,13 @@ layout: default
 title: Audio
 nav_order: 2
 parent: v0.0.2
-grand_parent: Annex Home
-# search_exclude: true
+search_exclude: true
 ---
+
+**Careful:** This page was for meant for an older version of Annex
+{: .deprecated }
+
+# Audio
 
 You can interact with Annex's audio module by using the Audio Manager singleton.
 

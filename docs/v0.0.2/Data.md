@@ -3,9 +3,11 @@ layout: default
 title: Data
 nav_order: 2
 parent: v0.0.2
-grand_parent: Annex Home
-# search_exclude: true
+search_exclude: true
 ---
+
+**Careful:** This page was for meant for an older version of Annex
+{: .deprecated }
 
 Shared data structures are wrappers around primitive data types which help different objects in your game look at the same primitive data, even when that primitive data changes.
 

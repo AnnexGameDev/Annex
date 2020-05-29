@@ -1,31 +1,26 @@
-﻿namespace Annex.Data.Shared
-{
-    public class Int
-    {
-        public virtual int Value { get; set; }
+﻿using System;
+using System.Diagnostics;
 
+namespace Annex.Data.Shared
+{
+    [Serializable]
+    [DebuggerDisplay("{Value}")]
+    public class Int : Shared<int>
+    {
         public Int() {
 
         }
 
-        public Int(int value) {
-            this.Value = value;
+        public Int(int value) : base(value) {
+
         }
 
-        public Int(Int copy) {
-            this.Value = copy.Value;
+        public static implicit operator Int(int value) {
+            return new Int(value);
         }
 
-        public void Set(int val) {
-            this.Value = val;
-        }
-
-        public static implicit operator int(Int pint) {
-            return pint.Value;
-        }
-
-        public static implicit operator Int(int val) {
-            return new Int(val);
+        public static implicit operator int(Int instance) {
+            return instance.Value;
         }
     }
 }

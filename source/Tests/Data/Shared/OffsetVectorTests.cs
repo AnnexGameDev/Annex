@@ -13,15 +13,15 @@ namespace Tests.Data.Shared
             float offsetY = 40;
             float newOffsetX = 50;
             float expected = originalX + newOffsetX;
-            var original = new Vector(originalX, originalY);
-            var offset = new Vector(offsetX, offsetY);
+            var original = Vector.Create(originalX, originalY);
+            var offset = Vector.Create(offsetX, offsetY);
             var source = new OffsetVector(original, offset);
 
             source.X = newOffsetX;
 
             Assert.AreEqual(source.Offset.X, newOffsetX);
             Assert.AreEqual(source.X, expected);
-            Assert.AreEqual(source.Original.X, originalX);
+            Assert.AreEqual(source.Base.X, originalX);
         }
 
         [Test]
@@ -32,15 +32,15 @@ namespace Tests.Data.Shared
             float offsetY = 40;
             float newOffsetY = 50;
             float expected = originalY + newOffsetY;
-            var original = new Vector(originalX, originalY);
-            var offset = new Vector(offsetX, offsetY);
+            var original = Vector.Create(originalX, originalY);
+            var offset = Vector.Create(offsetX, offsetY);
             var source = new OffsetVector(original, offset);
 
             source.Y = newOffsetY;
 
             Assert.AreEqual(source.Offset.Y, newOffsetY);
             Assert.AreEqual(source.Y, expected);
-            Assert.AreEqual(source.Original.Y, originalY);
+            Assert.AreEqual(source.Base.Y, originalY);
         }
 
         [Test]
@@ -51,14 +51,14 @@ namespace Tests.Data.Shared
             float offsetY = 40;
             float expectedX = originalX + offsetX;
             float expectedY = originalY + offsetY;
-            var original = new Vector(originalX, originalY);
-            var offset = new Vector(offsetX, offsetY);
+            var original = Vector.Create(originalX, originalY);
+            var offset = Vector.Create(offsetX, offsetY);
             var source = new OffsetVector(original, offset);
 
             Assert.AreEqual(source.Offset.X, offset.X);
             Assert.AreEqual(source.Offset.Y, offset.Y);
-            Assert.AreEqual(source.Original.X, originalX);
-            Assert.AreEqual(source.Original.Y, originalY);
+            Assert.AreEqual(source.Base.X, originalX);
+            Assert.AreEqual(source.Base.Y, originalY);
             Assert.AreEqual(source.X, expectedX);
             Assert.AreEqual(source.Y, expectedY);
         }
@@ -72,8 +72,8 @@ namespace Tests.Data.Shared
             float expectedX = originalX + offsetX + offsetX;
             float expectedY = originalY + offsetY + offsetY;
 
-            var original = new Vector(originalX, originalY);
-            var offset = new Vector(offsetX, offsetY);
+            var original = Vector.Create(originalX, originalY);
+            var offset = Vector.Create(offsetX, offsetY);
 
             OffsetVector nestedOriginal = new OffsetVector(original, offset);
             OffsetVector source = new OffsetVector(nestedOriginal, offset);
@@ -91,8 +91,8 @@ namespace Tests.Data.Shared
             float expectedX = originalX + originalX + offsetX;
             float expectedY = originalY + originalY + offsetY;
 
-            var original = new Vector(originalX, originalY);
-            var offset = new Vector(offsetX, offsetY);
+            var original = Vector.Create(originalX, originalY);
+            var offset = Vector.Create(offsetX, offsetY);
 
             OffsetVector nestedOffset = new OffsetVector(original, offset);
             OffsetVector source = new OffsetVector(original, nestedOffset);

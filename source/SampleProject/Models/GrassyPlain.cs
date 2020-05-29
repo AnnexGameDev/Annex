@@ -11,8 +11,8 @@ namespace SampleProject.Models
             this._plainTexture = new TextureContext("plain.png");
         }
 
-        public void Draw(IDrawableContext context) {
-            context.Draw(this._plainTexture);
+        public void Draw(ICanvas canvas) {
+            canvas.Draw(this._plainTexture);
         }
     }
 }

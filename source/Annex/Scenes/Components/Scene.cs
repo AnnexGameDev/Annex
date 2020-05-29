@@ -1,6 +1,6 @@
-﻿#nullable enable
-using Annex.Events;
+﻿using Annex.Events;
 using Annex.Graphics;
+using Annex.Graphics.Events;
 
 namespace Annex.Scenes.Components
 {
@@ -9,20 +9,25 @@ namespace Annex.Scenes.Components
         public readonly EventQueue Events;
         public UIElement? FocusObject { get; internal set; }
 
+        public Scene(int width, int height) {
+            this.FocusObject = null;
+            this.Events = new EventQueue();
+            this.Position.Set(0, 0);
+            this.Size.Set(width, height);
+        }
+
         public Scene() {
             this.FocusObject = null;
             this.Events = new EventQueue();
             this.Position.Set(0, 0);
-            this.Size.Set(GameWindow.RESOLUTION_WIDTH, GameWindow.RESOLUTION_HEIGHT);
+            this.Size.Set(ServiceProvider.Canvas.GetResolution());
         }
 
-        public override void Draw(IDrawableContext context) {
-            this.DrawScene(context);
-            base.Draw(context);
-        }
-
-        public virtual void DrawScene(IDrawableContext context) {
-
+        public override void Draw(ICanvas canvas) {
+            if (!this.Visible) {
+                return;
+            }
+            base.Draw(canvas);
         }
 
         internal override bool HandleSceneFocusMouseDown(int x, int y) {
@@ -33,8 +38,22 @@ namespace Annex.Scenes.Components
             return base.HandleSceneFocusMouseDown(x, y);
         }
 
-        public override void HandleKeyboardKeyPressed(KeyboardKey key) {
-            this.FocusObject?.HandleKeyboardKeyPressed(key);
+        public override void HandleKeyboardKeyPressed(KeyboardKeyPressedEvent e) {
+            if (!e.Handled) {
+                this.FocusObject?.HandleKeyboardKeyPressed(e);
+            }
+        }
+
+        public override void HandleMouseButtonPressed(MouseButtonPressedEvent e) {
+            if (!e.Handled) {
+                this.FocusObject?.HandleMouseButtonPressed(e);
+            }
+        }
+
+        public override void HandleMouseButtonReleased(MouseButtonReleasedEvent e) {
+            if (!e.Handled) {
+                this.FocusObject?.HandleMouseButtonReleased(e);
+            }
         }
     }
 }

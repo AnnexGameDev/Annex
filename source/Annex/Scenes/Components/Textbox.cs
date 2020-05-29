@@ -1,6 +1,7 @@
 ﻿using Annex.Data.Shared;
 using Annex.Graphics;
 using Annex.Graphics.Contexts;
+using Annex.Graphics.Events;
 
 namespace Annex.Scenes.Components
 {
@@ -25,21 +26,22 @@ namespace Annex.Scenes.Components
             };
         }
 
-        public override void Draw(IDrawableContext context) {
-            base.Draw(context);
-            context.Draw(this.RenderText);
+        public override void Draw(ICanvas canvas) {
+            base.Draw(canvas);
+            canvas.Draw(this.RenderText);
         }
 
-        public override void HandleKeyboardKeyPressed(KeyboardKey key) {
-            if (key == KeyboardKey.BackSpace) {
+        public override void HandleKeyboardKeyPressed(KeyboardKeyPressedEvent e) {
+            e.Handled = true;
+            if (e.Key == KeyboardKey.BackSpace) {
                 if (System.String.IsNullOrEmpty(this.Text.Value)) {
                     return;
                 }
-                this.Text.Set(this.Text.Value.Substring(0, this.Text.Value.Length - 1));
+                this.Text.Set(this.Text.Value[0..^1]);
                 return;
             }
-            if (key.ToString().Length == 1) {
-                this.Text.Set(this.Text.Value + key.ToString());
+            if (e.ToString().Length == 1) {
+                this.Text.Set(this.Text.Value + e.ToString());
             }
         }
     }

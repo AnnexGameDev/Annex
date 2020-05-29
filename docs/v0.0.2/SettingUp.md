@@ -3,9 +3,11 @@ layout: default
 title: Setting Up
 nav_order: 2
 parent: v0.0.2
-grand_parent: Annex Home
-# search_exclude: true
+search_exclude: true
 ---
+
+**Careful:** This page was for meant for an older version of Annex
+{: .deprecated }
 
 # Installing Annex Through NuGet
 [How to install packages with NuGet](https://docs.microsoft.com/en-us/nuget/quickstart/install-and-use-a-package-in-visual-studio)

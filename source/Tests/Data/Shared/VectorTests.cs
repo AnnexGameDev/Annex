@@ -8,7 +8,7 @@ namespace Tests.Data.Shared
     {
         [Test]
         public void Constructor_Default_ValueIsZeroZero() {
-            Vector source = new Vector();
+            var source = Vector.Create(0, 0);
 
             Assert.AreEqual(source.X, 0);
             Assert.AreEqual(source.Y, 0);
@@ -19,7 +19,7 @@ namespace Tests.Data.Shared
             float expectedX = 10;
             float expectedY = 20;
 
-            Vector source = new Vector(expectedX, expectedY);
+            var source = Vector.Create(expectedX, expectedY);
 
             Assert.AreEqual(source.X, expectedX);
             Assert.AreEqual(source.Y, expectedY);
@@ -29,7 +29,7 @@ namespace Tests.Data.Shared
         public void Operator_ImplicitCast_VectorToSFMLVector2f() {
             float expectedX = 10;
             float expectedY = 20;
-            Vector source = new Vector(expectedX, expectedY);
+            var source = Vector.Create(expectedX, expectedY);
 
             Vector2f copy = source;
 
@@ -46,7 +46,7 @@ namespace Tests.Data.Shared
         public void Set_ValueChanges() {
             float expectedX = 10;
             float expectedY = 20;
-            Vector source = new Vector();
+            var source = Vector.Create(0, 0);
 
             source.Set(expectedX, expectedY);
 
@@ -59,7 +59,7 @@ namespace Tests.Data.Shared
             float initialX = 0;
             float initialY = 0;
             float expectedX = 10;
-            Vector source = new Vector(initialX, initialY);
+            var source = Vector.Create(initialX, initialY);
 
             source.X = expectedX;
 
@@ -71,7 +71,7 @@ namespace Tests.Data.Shared
             float initialX = 0;
             float initialY = 0;
             float expectedY = 10;
-            Vector source = new Vector(initialX, initialY);
+            var source = Vector.Create(initialX, initialY);
 
             source.Y = expectedY;
 
@@ -86,7 +86,7 @@ namespace Tests.Data.Shared
             float addY = 20;
             float expectedX = initialX + addX;
             float expectedY = initialY + addY;
-            Vector source = new Vector(initialX, initialY);
+            var source = Vector.Create(initialX, initialY);
 
             source.Add(addX, addY);
 
@@ -100,8 +100,8 @@ namespace Tests.Data.Shared
             float initialY = 20;
             float expectedX = initialX;
             float expectedY = initialY;
-            Vector source = new Vector(initialX, initialY);
-            Vector copy = source;
+            var source = Vector.Create(initialX, initialY);
+            var copy = source;
 
             Assert.AreEqual(source.X, expectedX);
             Assert.AreEqual(source.Y, expectedY);
@@ -117,8 +117,8 @@ namespace Tests.Data.Shared
             float initialY = 20;
             float expectedX = 20;
             float expectedY = 30;
-            Vector source = new Vector(initialX, initialY);
-            Vector copy = source;
+            var source = Vector.Create(initialX, initialY);
+            var copy = source;
 
             copy.Set(expectedX, expectedY);
 
@@ -136,8 +136,8 @@ namespace Tests.Data.Shared
             float initialY = 20;
             float expectedX = 20;
             float expectedY = 30;
-            Vector source = new Vector(initialX, initialY);
-            Vector copy = source;
+            var source = Vector.Create(initialX, initialY);
+            var copy = source;
 
             copy.X = expectedX;
             copy.Y = expectedY;
@@ -156,8 +156,8 @@ namespace Tests.Data.Shared
             float initialY = 20;
             float expectedX = 20;
             float expectedY = 30;
-            Vector source = new Vector(initialX, initialY);
-            Vector copy = source;
+            var source = Vector.Create(initialX, initialY);
+            var copy = source;
 
             source.Set(expectedX, expectedY);
 
@@ -175,8 +175,8 @@ namespace Tests.Data.Shared
             float initialY = 20;
             float expectedX = 20;
             float expectedY = 30;
-            Vector source = new Vector(initialX, initialY);
-            Vector copy = source;
+            var source = Vector.Create(initialX, initialY);
+            var copy = source;
 
             source.X = expectedX;
             source.Y = expectedY;

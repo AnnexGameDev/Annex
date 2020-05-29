@@ -9,7 +9,7 @@ namespace Annex.Graphics.Contexts
         public VerticalAlignment VerticalAlignment;
 
         public TextAlignment() {
-            this.Size = new Vector();
+            this.Size = Vector.Create();
         }
     }
 

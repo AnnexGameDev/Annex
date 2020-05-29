@@ -3,9 +3,11 @@ layout: default
 title: Debugging
 nav_order: 2
 parent: v0.0.2
-grand_parent: Annex Home
-# search_exclude: true
+search_exclude: true
 ---
+
+**Careful:** This page was for meant for an older version of Annex
+{: .deprecated }
 
 Annex offers several debugging tools that you can leverage to your discretion. All of these tools apply only on DEBUG builds and will not affect performance on RELEASE builds.
 

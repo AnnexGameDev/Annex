@@ -3,9 +3,11 @@ layout: default
 title: Events
 nav_order: 2
 parent: v0.0.2
-grand_parent: Annex Home
-# search_exclude: true
+search_exclude: true
 ---
+
+**Careful:** This page was for meant for an older version of Annex
+{: .deprecated }
 
 The backbone of any game is the gameloop, and all the game events that the gameloop kicks off.
 A gameloop is a while-loop which is in charge of the flow of game-logic.

@@ -8,14 +8,14 @@ namespace Annex.Graphics.Cameras
         public Vector Size { get; private set; }
         public float CurrentZoom { get; private set; }
 
-        public Camera() {
-            this.Size = new Vector(GameWindow.RESOLUTION_WIDTH, GameWindow.RESOLUTION_HEIGHT);
-            this.Centerpoint = new Vector(this.Size.X / 2, this.Size.Y / 2);
+        public Camera(Vector resolution) {
+            this.Size = Vector.Create(resolution.X, resolution.Y);
+            this.Centerpoint = Vector.Create(this.Size.X / 2, this.Size.Y / 2);
             this.CurrentZoom = 1;
         }
 
         public void Resize(float newWidth, float newHeight) {
-            this.CurrentZoom = newHeight / GameWindow.RESOLUTION_HEIGHT;
+            this.CurrentZoom = newHeight / ServiceProvider.Canvas.GetResolution().Y;
             this.Size.Set(newWidth, newHeight);
         }
 
@@ -33,6 +33,12 @@ namespace Annex.Graphics.Cameras
 
         public void ZoomOut(float delta) {
             this.Resize((1 - delta) * this.Size.X, (1 - delta) * this.Size.Y);
+        }
+
+        public void Copy(Camera camera) {
+            this.Centerpoint = camera.Centerpoint;
+            this.Size = camera.Size;
+            this.CurrentZoom = camera.CurrentZoom;
         }
     }
 }

@@ -1,25 +1,13 @@
-﻿#nullable enable
-
-namespace Annex.Data.Shared
+﻿namespace Annex.Data.Shared
 {
-    public class String
+    public class String : Shared<string?>
     {
-        public string? Value { get; private set; }
-
         public String() {
 
         }
 
-        public String(String copy) {
-            this.Value = copy.Value;
-        }
-
         public String(string? value) {
             this.Value = value;
-        }
-
-        public static implicit operator string?(String pstr) {
-            return pstr?.Value;
         }
 
         public static implicit operator String(string? value) {
@@ -29,8 +17,8 @@ namespace Annex.Data.Shared
             return new String(value);
         }
 
-        public void Set(string value) {
-            this.Value = value;
+        public static implicit operator string?(String instance) {
+            return instance.Value;
         }
     }
 }

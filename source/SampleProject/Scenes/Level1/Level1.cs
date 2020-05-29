@@ -1,4 +1,5 @@
-﻿using Annex.Events;
+﻿using Annex;
+using Annex.Events;
 using Annex.Graphics;
 using Annex.Scenes;
 using Annex.Scenes.Components;
@@ -15,16 +16,24 @@ namespace SampleProject.Scenes.Level1
             this._grassyPlain = new GrassyPlain();
             this._player = new Player();
 
-            var camera = GameWindow.Singleton.Context.GetCamera();
+            var camera = ServiceProvider.Canvas.GetCamera();
             camera.Follow(this._player.Position);
 
-            this.Events.AddEvent(PriorityType.INPUT, HandlePlayerInput, 10);
+            this.Events.AddEvent(PriorityType.INPUT, this.HandlePlayerInput, 10);
+
+
+            this.Events.AddEvent(PriorityType.ANIMATION, (e) => {
+                this._player.Animate();
+            }, 500);
         }
 
-        private ControlEvent HandlePlayerInput() {
-            var ctx = GameWindow.Singleton.Context;
+        private void HandlePlayerInput(GameEventArgs args) {
+            var ctx = ServiceProvider.Canvas;
 
             float speed = 1;
+            if (!ctx.IsActive) {
+                return;
+            }
             if (ctx.IsKeyDown(KeyboardKey.Up)) {
                 this._player.Position.Y -= speed;
             }
@@ -37,17 +46,17 @@ namespace SampleProject.Scenes.Level1
             if (ctx.IsKeyDown(KeyboardKey.Right)) {
                 this._player.Position.X += speed;
             }
-
-            return ControlEvent.NONE;
         }
 
         public override void HandleCloseButtonPressed() {
-            SceneManager.Singleton.LoadScene<GameClosing>();
+            ServiceProvider.SceneService.LoadGameClosingScene();
         }
 
-        public override void DrawScene(IDrawableContext surfaceContext) {
-            this._grassyPlain.Draw(surfaceContext);
-            this._player.Draw(surfaceContext);
+        public override void Draw(ICanvas canvas) {
+            this._grassyPlain.Draw(canvas);
+            this._player.Draw(canvas);
+
+            base.Draw(canvas);
         }
     }
 }

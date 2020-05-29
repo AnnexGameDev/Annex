@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using static Annex.Events.Errors;
 
 namespace Annex.Events
 {
@@ -15,14 +16,13 @@ namespace Annex.Events
             }
         }
 
-        public void AddEvent(PriorityType type, GameEvent e) {
-            Debug.Assert((int)type < this._queue.Length);
-            Debug.Assert((int)type >= 0);
-            this._queue[(int)type].Add(e);
+        public void AddEvent(PriorityType type, GameEvent gameEvent) {
+            Debug.ErrorIf((int)type >= this._queue.Length || type < 0, INVALID_PRIORITY.Format(type));
+            this._queue[(int)type].Add(gameEvent);
         }
 
-        public void AddEvent(PriorityType type, Func<ControlEvent> e, int interval_ms, int delay_ms = 0) {
-            this.AddEvent(type, new GameEvent(e, interval_ms, delay_ms));
+        public void AddEvent(PriorityType type, Action<GameEventArgs> action, int interval_ms, int delay_ms = 0, string eventID = "") {
+            this.AddEvent(type, new GameEvent(eventID, action, interval_ms, delay_ms));
         }
 
         public List<GameEvent> GetPriority(PriorityType type) {
@@ -31,6 +31,17 @@ namespace Annex.Events
         
         public List<GameEvent> GetPriority(int type) {
             return this._queue[type];
+        }
+
+        public GameEvent? GetEvent(string id) {
+            foreach (var level in _queue) {
+                foreach (var e in level) {
+                    if (e.EventID == id) {
+                        return e;
+                    }
+                }
+            }
+            return null;
         }
     }
 }
