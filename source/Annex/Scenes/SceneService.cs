@@ -18,8 +18,16 @@ namespace Annex.Scenes
             this.LoadScene<Unknown>();
         }
 
-        public T LoadScene<T>(bool overwrite = false) where T : Scene, new() {
-            if (overwrite || !this._scenes.ContainsKey(typeof(T))) {
+        public T LoadNewScene<T>() where T : Scene, new() {
+            if (_scenes.ContainsKey(typeof(T))) {
+                ServiceProvider.Log.WriteLineTrace(this, $"Removing previous instance of scene {typeof(T).Name}");
+                _scenes.Remove(typeof(T));
+            }
+            return LoadScene<T>();
+        }
+
+        public T LoadScene<T>() where T : Scene, new() {
+            if (!this._scenes.ContainsKey(typeof(T))) {
                 ServiceProvider.Log.WriteLineTrace(this, $"Creating new instance of scene {typeof(T).Name}");
                 this._scenes[typeof(T)] = new T();
             }
