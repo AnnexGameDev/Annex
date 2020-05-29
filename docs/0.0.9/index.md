@@ -14,7 +14,7 @@ has_toc: false
 # Installing Annex Through NuGet
 [How to install packages with NuGet](https://docs.microsoft.com/en-us/nuget/quickstart/install-and-use-a-package-in-visual-studio)
 
-[Annex.Game package link](https://www.nuget.org/packages/Annex.Net/)
+[Annex.Net package link](https://www.nuget.org/packages/Annex.Net/)
 
 # Example
 A minimal Annex game is implemented with the code shown below.

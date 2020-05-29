@@ -74,7 +74,7 @@ tracker.LastCount; // How many times the event ran last interval.
 tracker.CurrentInterval; // How long the current interval has been running for.
 
 string eventID;
-var gameEvent = EventManager.Singleton.GetEvent(eventID);
+var gameEvent = ServiceProvider.EventService.GetEvent(eventID);
 gameEvent.AttachTracker(tracker);
 
 Debug.AddDebugOverlayInformation(() => $"FPS: {tracker.LastCount}");

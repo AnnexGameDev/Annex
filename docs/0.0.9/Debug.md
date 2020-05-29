@@ -7,7 +7,7 @@ parent: v0.0.9
 ---
 
 # Debug
-Sometimes, for the purposes of debugging, it's useful to have certain functionality available in debug builds, but not in release builds like running administrative commands, or displaying diagnostic information. The Debug class contains functionality only present in Debug builds.
+Sometimes, for the purposes of debugging, it's useful to have certain functionality available in debug builds, but not in release builds. For example, running administrative commands, or displaying diagnostic information. The Debug class contains functionality only present in Debug builds.
 
 # Sanity Checks
 To verify that your code is behaving as expected, without affecting performance on release builds, usage of ```Assert```, ```ErrorIf```, and ```Fail``` is recommended.
@@ -41,7 +41,7 @@ The debug overlay can display textual content. A common usecase would be to disp
 ``` cs
 // Attach a tracker that resets every second to the game event responsible for drawing the game
 var tracker = new EventTracker(1000);
-var drawEvent = ServiceProvider.EventManager.GetEvent(Annex.Graphics.EventIDs.DrawGameEventID);
+var drawEvent = ServiceProvider.EventService.GetEvent(Annex.Graphics.EventIDs.DrawGameEventID);
 drawEvent.AttachTracker(tracker);
 
 // Display the last count of the event tracker

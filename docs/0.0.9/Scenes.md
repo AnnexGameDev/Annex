@@ -15,7 +15,7 @@ A scene is responsible for storing and representing its data, and for handling u
 
 
 ```CSharp
-var scenes = ServiceManager.SceneService;
+var scenes = ServiceProvider.SceneService;
 ```
 
 ## Creating a scene

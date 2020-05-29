@@ -10,7 +10,7 @@ parent: v0.0.9
 
 Shared data is a mechanism to maintain references to the same data (primarily primitive data) across different objects. This behaviour is achieved through the use of the generic wrapper class ```Annex.Data.Shared```.
 
-## String ```class String : Shared<string>```
+## String
 
 A wrapper class for a string.
 
