@@ -18,7 +18,7 @@ namespace Annex.Graphics.Sfml
 
         public bool Validate(AssetInitializerArgs args) {
             args.Key = Path.Combine(this.AssetPath, args.Key);
-            return args.Key.EndsWith(".png");
+            return args.Key.EndsWith(".png") || args.Key.EndsWith(".jpg");
         }
     }
 

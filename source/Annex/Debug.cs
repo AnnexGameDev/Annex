@@ -2,6 +2,7 @@
 using Annex.Scenes.Components;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using static Annex.Paths;
@@ -61,6 +62,12 @@ namespace Annex
 
         [Conditional("DEBUG")]
         public static void PackageAssetsToBinaryFrom(AssetType assetType, string path) {
+
+            path = path.Replace('\\', '/');
+            if (!path.EndsWith("/")) {
+                path = $"{path}/";
+            }
+
             foreach (var registeredService in ServiceProvider.RegisteredServices) {
                 foreach (var assetManager in registeredService.GetAssetManagers().Where(assetManager => assetManager.AssetType == assetType)) {
                     assetManager.PackageAssetsToBinaryFrom(path);
