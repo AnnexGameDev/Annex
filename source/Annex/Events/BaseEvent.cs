@@ -4,31 +4,28 @@ using System.Collections.Generic;
 
 namespace Annex.Events
 {
-    public class GameEvent
+    public abstract class BaseEvent : IEvent
     {
-        public readonly string EventID;
-        private readonly Action<GameEventArgs> _event;
+        public string EventID { get; }
         private long _interval;
         private long _nextEventInvocation;
         private List<IEventTracker>? _trackers;
+        private EventArgs _gameEventArgs;
 
-        private GameEventArgs _gameEventArgs;
-
-        public GameEvent(string eventID, Action<GameEventArgs> @event, int interval_ms, int delay_ms) {
+        public BaseEvent(string eventID, int interval_ms, int delay_ms) {
             this.EventID = eventID;
-            this._event = @event;
             this._interval = interval_ms;
             this._nextEventInvocation = delay_ms;
-            this._gameEventArgs = new GameEventArgs();
+            this._gameEventArgs = new EventArgs();
         }
 
-        public GameEventArgs Probe(long timeDifference_ms) {
+        public EventArgs Probe(long timeDifference_ms, Action<EventArgs> action) {
             bool wasInvoked = false;
             this._nextEventInvocation -= timeDifference_ms;
 
             if (this._nextEventInvocation <= 0) {
                 this._nextEventInvocation += this._interval;
-                this._event.Invoke(_gameEventArgs);
+                action.Invoke(_gameEventArgs);
                 wasInvoked = true;
             }
 
@@ -62,10 +59,7 @@ namespace Annex.Events
         public long GetInterval() {
             return this._interval;
         }
-    }
 
-    public class GameEventArgs
-    {
-        public bool RemoveFromQueue { get; set; }
+        public abstract EventArgs Probe(long timeDifference_ms);
     }
 }

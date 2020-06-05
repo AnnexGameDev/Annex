@@ -28,7 +28,7 @@ namespace Annex.Networking.Lidgren
             ServiceProvider.EventService.AddEvent(PriorityType.NETWORK, this.OnReceive, 0, 0, NetworkEventID);
         }
 
-        private void OnReceive(GameEventArgs args) {
+        private void OnReceive(Events.EventArgs args) {
             if (ServiceProvider.SceneService.IsCurrentScene<GameClosing>()) {
                 this.Destroy();
                 args.RemoveFromQueue = true;

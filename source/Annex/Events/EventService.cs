@@ -20,11 +20,11 @@ namespace Annex.Events
             this._sw.Start();
         }
 
-        public void AddEvent(PriorityType type, Action<GameEventArgs> e, int interval_ms, int delay_ms = 0, string eventID = "") {
+        public void AddEvent(PriorityType type, Action<EventArgs> e, int interval_ms, int delay_ms = 0, string eventID = "") {
             this._queue.AddEvent(type, e, interval_ms, delay_ms, eventID);
         }
 
-        public void AddEvent(PriorityType type, GameEvent e) {
+        public void AddEvent(PriorityType type, IEvent e) {
             this._queue.AddEvent(type, e);
         }
 
@@ -56,11 +56,11 @@ namespace Annex.Events
             }
         }
 
-        public GameEvent? GetEvent(string id) {
+        public IEvent? GetEvent(string id) {
             return this._queue.GetEvent(id) ?? ServiceProvider.SceneService.CurrentScene.Events.GetEvent(id);
         }
 
-        private void RunQueueLevel(List<GameEvent> level, long diff) {
+        private void RunQueueLevel(List<IEvent> level, long diff) {
             for (int i = 0; i < level.Count; i++) {
                 var args = level[i].Probe(diff);
                 if (args.RemoveFromQueue) {

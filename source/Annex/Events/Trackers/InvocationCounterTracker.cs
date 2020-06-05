@@ -14,7 +14,7 @@
             this.CurrentInterval = 0;
         }
 
-        public void NotifyProbe(GameEvent gameEvent, long timeDiff, bool invoked) {
+        public void NotifyProbe(IEvent gameEvent, long timeDiff, bool invoked) {
             if (invoked) {
                 this.CurrentCount++;
             }

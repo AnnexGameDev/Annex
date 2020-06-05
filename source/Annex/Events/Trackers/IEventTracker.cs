@@ -2,6 +2,6 @@
 {
     public interface IEventTracker
     {
-        void NotifyProbe(GameEvent gameEvent, long timeDiff, bool invoked);
+        void NotifyProbe(IEvent gameEvent, long timeDiff, bool invoked);
     }
 }
