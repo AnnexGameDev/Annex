@@ -6,6 +6,7 @@ namespace Annex.Graphics
     {
        void Draw(TextContext ctx);
        void Draw(TextureContext ctx);
+       void Draw(BatchTextureContext batch);
        void Draw(SpriteSheetContext sheet);
        void Draw(SolidRectangleContext rectangle);
     }
