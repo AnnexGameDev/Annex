@@ -47,5 +47,12 @@ namespace Annex.Scenes.Controllers
         internal virtual bool HandleSceneFocusMouseDown(int x, int y) {
             return false;
         }
+
+        public virtual void HandleSceneOnEnter(SceneOnEnterEvent e) {
+
+        }
+        public virtual void HandleSceneOnLeave(SceneOnLeaveEvent e) { 
+
+        }
     }
 }

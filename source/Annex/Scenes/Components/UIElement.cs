@@ -19,6 +19,11 @@ namespace Annex.Scenes.Components
         public bool IsFocus { get; internal set; }
         public bool Visible;
 
+        public float Top => this.Position.Y;
+        public float Left => this.Position.X;
+        public float Right => this.Position.X + this.Size.X;
+        public float Bottom => this.Position.Y + this.Size.Y;
+
         public UIElement(string elementID) {
             this.ElementID = elementID;
             this.Size = Vector.Create(100, 100);
@@ -42,20 +47,33 @@ namespace Annex.Scenes.Components
             return RemoveState.KeepSearching;
         }
 
+        public bool IsMouseWithinElementBounds() {
+            var canvas = ServiceProvider.Canvas;
+
+            if (!canvas.IsActive) {
+                return false;
+            }
+
+            var mousePos = canvas.GetRealMousePos();
+
+            if (mousePos.X < this.Left || mousePos.X > this.Right) {
+                return false;
+            }
+            if (mousePos.Y < this.Top || mousePos.Y > this.Bottom) {
+                return false;
+            }
+
+            return true;
+        }
+
         internal override bool HandleSceneFocusMouseDown(int x, int y) {
             if (!this.Visible) {
                 return false;
             }
-            if (x < this.Position.X) {
+            if (x < this.Left || x > this.Right) {
                 return false;
             }
-            if (y < this.Position.Y) {
-                return false;
-            }
-            if (x > this.Position.X + this.Size.X) {
-                return false;
-            }
-            if (y > this.Position.Y + this.Size.Y) {
+            if (y < this.Top || y > this.Bottom) {
                 return false;
             }
             this.IsFocus = true;
