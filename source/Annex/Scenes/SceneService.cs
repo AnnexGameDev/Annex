@@ -49,7 +49,7 @@ namespace Annex.Scenes
                 PreviousScene = previousScene
             });
 
-            return (T)this.CurrentScene;
+            return (T)nextScene;
         }
 
         private T CreateSceneInstanceIfNotExists<T>() where T : Scene, new() {
