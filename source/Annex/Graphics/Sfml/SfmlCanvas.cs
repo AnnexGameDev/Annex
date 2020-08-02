@@ -8,6 +8,7 @@ using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using static Annex.Graphics.EventIDs;
 using static Annex.Graphics.Sfml.Errors;
@@ -193,6 +194,30 @@ namespace Annex.Graphics.Sfml
                         break;
                 }
                 text.Position += offset;
+
+                if (ctx.Wrap)
+                {
+                    var stringBuilder = new StringBuilder();
+                    var lastSpaceIndex = 0;
+                    var originalText = text.DisplayedString;
+                    for (int i = 0; i < originalText.Length; i++)
+                    {
+                        var currentCharacter = originalText[i];
+                        stringBuilder.Append(currentCharacter);
+
+                        if (char.IsWhiteSpace(currentCharacter))
+                        {
+                            lastSpaceIndex = i;
+                        }
+
+                        if (text.FindCharacterPos((uint)i).X > ctx.Alignment.Size.X)
+                        {
+                            stringBuilder[lastSpaceIndex] = '\n';
+                        }
+
+                        text.DisplayedString = stringBuilder.ToString();
+                    }
+                }
             }
 
             this._buffer.Draw(text);

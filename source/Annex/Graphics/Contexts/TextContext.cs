@@ -17,6 +17,8 @@ namespace Annex.Graphics.Contexts
         public float BorderThickness { get; set; }
         public RGBA BorderColor { get; set; }
 
+        public bool Wrap { get; set; }
+
         public TextContext(String text, String font) {
             this.RenderText = text;
 
