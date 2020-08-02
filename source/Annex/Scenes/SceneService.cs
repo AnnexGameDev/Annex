@@ -24,7 +24,10 @@ namespace Annex.Scenes
 
             if (_scenes.ContainsKey(typeof(T))) {
                 ServiceProvider.Log.WriteLineTrace(this, $"Removing previous instance of scene {typeof(T).Name}");
-                destroyedSceneInstance = this._scenes[typeof(T)];
+
+                if (this._currentSceneType == typeof(T)) {
+                    destroyedSceneInstance = this._scenes[typeof(T)];
+                }
                 _scenes.Remove(typeof(T));
             }
 
@@ -44,8 +47,7 @@ namespace Annex.Scenes
             this._currentSceneType = typeof(T);
 
             // OnSceneEnter
-            nextScene.HandleSceneOnEnter(new SceneOnEnterEvent()
-            {
+            nextScene.HandleSceneOnEnter(new SceneOnEnterEvent() {
                 PreviousScene = previousScene
             });
 
