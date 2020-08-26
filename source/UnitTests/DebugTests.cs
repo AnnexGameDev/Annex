@@ -16,7 +16,6 @@ namespace UnitTests
             var e = Assert.Throws<AssertionFailedException>(() => {
                 Debug.Assert(false, nameof(Debug_AssertFalse_ThrowsException));
             });
-            Assert.AreEqual(e.Message, nameof(Debug_AssertFalse_ThrowsException));
         }
 
         [Test]
@@ -29,7 +28,6 @@ namespace UnitTests
             var e = Assert.Throws<AssertionFailedException>(() => {
                 Debug.ErrorIf(true, nameof(Debug_ErrorIfTrue_ThrowsException));
             });
-            Assert.AreEqual(e.Message, nameof(Debug_ErrorIfTrue_ThrowsException));
         }
     }
 }
