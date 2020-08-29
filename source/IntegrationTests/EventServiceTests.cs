@@ -2,10 +2,12 @@
 using Annex.Events.Execution;
 using Annex.Events.Scheduling;
 using NUnit.Framework;
+using System.Threading;
 
 namespace IntegrationTests
 {
-    public class EventServiceTests {
+    public class EventServiceTests
+    {
         private EventService? _eventService;
         private EventService EventService => this._eventService!;
 
@@ -22,15 +24,47 @@ namespace IntegrationTests
         }
 
         [Test]
-        public void EventService_TerminatorIsTriggered_Terminates() {
-            var terminator = new TrueTerminator();
-            this.EventService.Run(terminator);
+        public void EventService_TerminatorIsNeverTriggered_DoesntTerminate() {
+            var terminator = new BooleanTerminator();
+
+            var worker = new Thread(() => {
+                this.EventService.Run(terminator);
+                Assert.Fail();
+            });
+            worker.Start();
+
+            Thread.Sleep(1000);
+            worker.Interrupt();
+            Assert.Pass();
         }
 
-        private class TrueTerminator : ITerminatable
+        [Test]
+        public void EventService_TerminatorIsTriggered_Terminates() {
+            var terminator = new BooleanTerminator();
+
+            var worker = new Thread(() => {
+                Thread.Sleep(1000);
+                terminator.Toggle();
+            });
+            worker.Start();
+            this.EventService.Run(terminator);
+            Assert.Pass();
+        }
+
+        private class BooleanTerminator : ITerminatable
         {
+            private bool _value;
+
+            public void Toggle() {
+                this._value = !this._value;
+            }
+
+            public BooleanTerminator(bool value = false) {
+                this._value = value;
+            }
+
             public bool ShouldTerminate() {
-                return true;
+                return this._value;
             }
         }
 
