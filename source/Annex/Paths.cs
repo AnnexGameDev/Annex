@@ -13,7 +13,7 @@ namespace Annex
         private static string GetSolutionFolder() {
             var di = new DirectoryInfo(ApplicationPath);
             while (di.Parent != null) {
-                if (Directory.GetFiles(di.FullName, "*.sln").Select(filePath => new FileInfo(filePath)).Any(fi => fi.Name == "Annex.sln")) {
+                if (Directory.GetFiles(di.FullName, "*.sln").Select(filePath => new FileInfo(filePath)).Any(fi => fi.Name.EndsWith(".sln"))) {
                     break;
                 }
                 di = di.Parent;

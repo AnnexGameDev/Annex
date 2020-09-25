@@ -1,5 +1,6 @@
 ﻿using Annex.Assets;
 using Annex.Scenes.Components;
+using Annex.Services;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -61,7 +62,7 @@ namespace Annex
 
         [Conditional("DEBUG")]
         public static void PackageAssetsToBinaryFrom(AssetType assetType, string path) {
-            foreach (var registeredService in ServiceProvider.RegisteredServices) {
+            foreach (var registeredService in ServiceContainerSingleton.Instance.RegisteredServices) {
                 foreach (var assetManager in registeredService.GetAssetManagers().Where(assetManager => assetManager.AssetType == assetType)) {
                     assetManager.PackageAssetsToBinaryFrom(path);
                 }

@@ -1,12 +1,15 @@
 ﻿#define DEBUG
 using Annex;
 using Annex.Assets;
+using Annex.Assets.Loaders;
+using Annex.Assets.Managers;
 using Annex.Events;
 using Annex.Graphics;
 using Annex.Graphics.Sfml;
 using Annex.Logging;
 using Annex.Scenes;
 using Annex.Scenes.Components;
+using Annex.Services;
 using System;
 using System.IO;
 using System.Threading;
@@ -14,7 +17,7 @@ using static Annex.Paths;
 
 namespace Tests.Graphics
 {
-    public class SfmlCanvasTestCase
+    public class SfmlCanvasTestCase : TestWithServiceContainerSingleton
     {
         protected EventService EventManager;
         protected ICanvas Canvas;
@@ -23,17 +26,13 @@ namespace Tests.Graphics
         private Thread _backgroundThread;
         private readonly string AssetFolder = Path.Combine(SolutionFolder, "assets/textures/");
 
-        public SfmlCanvasTestCase() {
-            ServiceProvider.Provide<Log>(new Log());
-        }
-
         protected void StartTest<T>() where T : Scene, new() {
-            this.EventManager = ServiceProvider.Provide<EventService>();
-            this.Scenes = ServiceProvider.Provide<SceneService>();
+            ServiceContainer.Provide<Log>(new Log());
+            this.EventManager = ServiceContainer.Provide<EventService>();
+            this.Scenes = ServiceContainer.Provide<SceneService>();
 
             this._backgroundThread = new Thread(() => {
-                this.Canvas = ServiceProvider.Provide<ICanvas>(new SfmlCanvas(new ServiceProvider.DefaultTextureManager(), new ServiceProvider.DefaultFontManager(), new ServiceProvider.DefaultIconManager()));
-                AnnexGame.Initialize();
+                this.Canvas = ServiceContainer.Provide<ICanvas>(new SfmlCanvas(new DefaultTextureManager(), new DefaultFontManager(), new DefaultIconManager()));
                 Debug.PackageAssetsToBinaryFrom(AssetType.Texture, AssetFolder);
                 AnnexGame.Start<T>();
                 Console.WriteLine("Done!");
@@ -52,6 +51,24 @@ namespace Tests.Graphics
 
         protected void Wait(int ms) {
             Thread.Sleep(ms);
+        }
+
+        private class DefaultTextureManager : CachedAssetManager
+        {
+            public DefaultTextureManager() : base(AssetType.Texture, new FileLoader(), new SfmlTextureInitializer("textures/")) {
+            }
+        }
+
+        private class DefaultFontManager : CachedAssetManager
+        {
+            public DefaultFontManager() : base(AssetType.Font, new FileLoader(), new SfmlFontInitializer("fonts/")) {
+            }
+        }
+
+        private class DefaultIconManager : CachedAssetManager
+        {
+            public DefaultIconManager() : base(AssetType.Icon, new FileLoader(), new SfmlFontInitializer("icons/")) {
+            }
         }
     }
 }

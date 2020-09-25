@@ -1,30 +1,43 @@
 ﻿using Annex;
 using Annex.Assets;
+using Annex.Assets.Loaders;
+using Annex.Assets.Managers;
 using Annex.Audio;
 using Annex.Audio.Sfml;
+using Annex.Events;
 using Annex.Logging;
 using NUnit.Framework;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using static Annex.Paths;
 
 namespace Tests.Audio
 {
     [TestFixture]
-    public class SfmlPlayerTests
+    public class SfmlPlayerTests : TestWithServiceContainerSingleton
     {
         private IAudioService _audio;
         private const string Cold = "test/Cold2.wav";
         private const string Holy = "test/Holy1.wav";
 
+        private static Mutex _mutex = new Mutex();
+
         private void Wait(int ms) {
             System.Threading.Thread.Sleep(ms);
         }
 
+        private class DefaultAudioManager : UncachedAssetManager
+        {
+            public DefaultAudioManager() : base(AssetType.Audio, new FileLoader(), new SfmlAudioInitializer("audio/")) {
+            }
+        }
+
         [OneTimeSetUp]
         public void SuiteSetUp() {
-            ServiceProvider.Provide<Log>(new Log());
-            this._audio = ServiceProvider.Provide<IAudioService>(new SfmlPlayer(new ServiceProvider.DefaultAudioManager()));
+            ServiceContainer.Provide<Log>(new Log());
+            ServiceContainer.Provide<EventService>();
+            this._audio = ServiceContainer.Provide<IAudioService>(new SfmlPlayer(new DefaultAudioManager()));
             Debug.PackageAssetsToBinaryFrom(AssetType.Audio, Path.Combine(SolutionFolder, "assets/audio/"));
         }
 
@@ -35,12 +48,13 @@ namespace Tests.Audio
 
         [SetUp]
         public void TestSetUp() {
-
+            _mutex.WaitOne();
         }
 
         [TearDown]
         public void TestCleanUp() {
             this._audio.StopPlayingAudio();
+            _mutex.ReleaseMutex();
         }
 
         [Test]
@@ -111,6 +125,13 @@ namespace Tests.Audio
 
             for (float volume = 100; volume >= 0; volume -= 0.1f) {
                 audio.Volume = volume;
+            }
+        }
+
+        [Test] 
+        public void PlayTwoSounds() {
+            for (int i = 0; i < 2; i++) {
+                var audio = this._audio.PlayAudio(Cold, new AudioContext());
             }
         }
 

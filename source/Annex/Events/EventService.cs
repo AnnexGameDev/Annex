@@ -1,5 +1,6 @@
 ﻿using Annex.Assets;
 using Annex.Scenes;
+using Annex.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +12,7 @@ namespace Annex.Events
     public sealed class EventService : IService
     {
         private readonly EventQueue _queue;
-        public static long CurrentTime => ServiceProvider.Locate<EventService>()?._sw.ElapsedMilliseconds ?? 0;
+        public static long CurrentTime => ServiceProvider.EventService._sw.ElapsedMilliseconds;
         private readonly Stopwatch _sw;
 
         public EventService() {
