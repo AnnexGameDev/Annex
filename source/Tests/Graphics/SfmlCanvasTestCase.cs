@@ -34,7 +34,8 @@ namespace Tests.Graphics
             this._backgroundThread = new Thread(() => {
                 this.Canvas = ServiceContainer.Provide<ICanvas>(new SfmlCanvas(new DefaultTextureManager(), new DefaultFontManager(), new DefaultIconManager()));
                 Debug.PackageAssetsToBinaryFrom(AssetType.Texture, AssetFolder);
-                AnnexGame.Start<T>();
+                // TODO: Commented out due to removal of AnnexGame, resulting in broken test cases
+                //AnnexGame.Start<T>();
                 Console.WriteLine("Done!");
             });
             this._backgroundThread.Start();

@@ -13,6 +13,7 @@ namespace Tests.Graphics
         public BasicWindow() {
         }
 
+        // TODO: Broken test case because of removal of AnnexGame
         [Test]
         public void Test() {
             StartTest<TestCaseScene>();

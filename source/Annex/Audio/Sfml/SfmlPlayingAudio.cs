@@ -1,4 +1,4 @@
-﻿using Annex.Services;
+using Annex.Services;
 using SFML.Audio;
 using static Annex.Audio.Sfml.Errors;
 
