@@ -29,7 +29,7 @@ namespace Annex.Events
             this._queue.AddEvent(type, e);
         }
 
-        internal void Run() {
+        public void Run() {
             // Environment.TickCount is based on GetTickCount() WinAPI function. It's in milliseconds But the actual precision of it is about 15.6 ms. 
             // So you can't measure shorter time intervals (or you'll get 0)                                                                  
             // [ ^ this gave me a lot of headache. Current workaround to get more precise time diffs is using stopwatch ]
