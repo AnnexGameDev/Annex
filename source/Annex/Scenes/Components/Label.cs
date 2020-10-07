@@ -7,16 +7,16 @@ namespace Annex.Scenes.Components
     public class Label : Image
     {
         protected readonly TextContext RenderText;
-        public readonly String Caption;
+        public readonly String Text;
         public readonly String Font;
         public readonly Int FontSize;
 
         public Label(string elementID = "") : base(elementID) {
-            this.Caption = new String();
+            this.Text = new String();
             this.Font = new String();
             this.FontSize = new Int(12);
 
-            this.RenderText = new TextContext(this.Caption, this.Font) {
+            this.RenderText = new TextContext(this.Text, this.Font) {
                 RenderPosition = this.Position,
                 UseUIView = true,
                 Alignment = new TextAlignment() {
