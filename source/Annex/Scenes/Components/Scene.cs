@@ -54,5 +54,11 @@ namespace Annex.Scenes.Components
             this.FocusObject = uielement;
             this.FocusObject?.GainedFocus();
         }
+
+        public virtual void OnEnter(OnSceneEnterEvent e) {
+        }
+
+        public virtual void OnLeave(OnSceneLeaveEvent e) {
+        }
     }
 }
