@@ -41,10 +41,6 @@ namespace Annex.Scenes
             return typeof(T) == this.CurrentScene.GetType();
         }
 
-        public void LoadGameClosingScene() {
-            this.LoadScene<GameClosing>();
-        }
-
         public void Destroy() {
 
         }

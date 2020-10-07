@@ -31,11 +31,12 @@ namespace Annex.Networking.Lidgren
         }
 
         private void OnReceive(Events.EventArgs args) {
-            if (ServiceProvider.SceneService.IsCurrentScene<GameClosing>()) {
-                this.Destroy();
-                args.RemoveFromQueue = true;
-                return;
-            }
+            // TODO: To be redone by networking rework
+            //if (ServiceProvider.SceneService.IsCurrentScene<GameClosing>()) {
+            //    this.Destroy();
+            //    args.RemoveFromQueue = true;
+            //    return;
+            //}
 
             NetIncomingMessage message;
             while ((message = this._lidgrenClient.ReadMessage()) != null) {
