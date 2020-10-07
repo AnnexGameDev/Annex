@@ -19,22 +19,27 @@ namespace Annex.Scenes
             this.LoadScene<Unknown>();
         }
 
-        public T LoadNewScene<T>() where T : Scene, new() {
-            if (_scenes.ContainsKey(typeof(T))) {
-                ServiceProvider.Log.WriteLineTrace(this, $"Removing previous instance of scene {typeof(T).Name}");
-                _scenes.Remove(typeof(T));
-            }
-            return LoadScene<T>();
-        }
+        public T LoadScene<T>(bool createNewInstance = false) where T : Scene, new() {
 
-        public T LoadScene<T>() where T : Scene, new() {
+            if (createNewInstance && _scenes.ContainsKey(typeof(T))) {
+                UnloadScene<T>();
+            }
+
             if (!this._scenes.ContainsKey(typeof(T))) {
                 ServiceProvider.Log.WriteLineTrace(this, $"Creating new instance of scene {typeof(T).Name}");
                 this._scenes[typeof(T)] = new T();
             }
+
             ServiceProvider.Log.WriteLineTrace(this, $"Loading scene {typeof(T).Name}");
             this._currentSceneType = typeof(T);
             return (T)this.CurrentScene;
+        }
+
+        public void UnloadScene<T>() where T : Scene {
+            Debug.ErrorIf(this.CurrentScene.GetType() == typeof(T), "Unloading the current scene is prohibited");
+            Debug.Assert(this._scenes.ContainsKey(typeof(T)), $"Tried to unload a scene {typeof(T).Name} that doesn't exist");
+            ServiceProvider.Log.WriteLineTrace(this, $"Unloading instance of scene {typeof(T).Name}");
+            _scenes.Remove(typeof(T));
         }
 
         public bool IsCurrentScene<T>() {
