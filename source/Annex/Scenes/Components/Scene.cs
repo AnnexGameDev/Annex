@@ -8,7 +8,7 @@ namespace Annex.Scenes.Components
     public class Scene : Container
     {
         public readonly EventQueue Events;
-        public UIElement? FocusObject { get; internal set; }
+        public UIElement? FocusObject { get; private set; }
 
         public Scene(int width, int height) {
             this.FocusObject = null;
@@ -31,14 +31,6 @@ namespace Annex.Scenes.Components
             base.Draw(canvas);
         }
 
-        internal override bool HandleSceneFocusMouseDown(int x, int y) {
-            if (this.FocusObject != null) {
-                this.FocusObject.IsFocus = false;
-            }
-            this.FocusObject = null;
-            return base.HandleSceneFocusMouseDown(x, y);
-        }
-
         public override void HandleKeyboardKeyPressed(KeyboardKeyPressedEvent e) {
             if (!e.Handled) {
                 this.FocusObject?.HandleKeyboardKeyPressed(e);
@@ -55,6 +47,12 @@ namespace Annex.Scenes.Components
             if (!e.Handled) {
                 this.FocusObject?.HandleMouseButtonReleased(e);
             }
+        }
+
+        public void ChangeFocusObject(UIElement? uielement) {
+            this.FocusObject?.LostFocus();
+            this.FocusObject = uielement;
+            this.FocusObject?.GainedFocus();
         }
     }
 }
