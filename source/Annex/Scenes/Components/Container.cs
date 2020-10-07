@@ -25,14 +25,14 @@ namespace Annex.Scenes.Components
             this._children.Add(child);
         }
 
-        internal override bool HandleSceneFocusMouseDown(int x, int y) {
+        public override UIElement? GetFirstVisibleChildElementAt(int x, int y) {
             // z-index from last to first.
             for (int i = this._children.Count - 1; i >= 0; i--) {
-                if (this._children[i].HandleSceneFocusMouseDown(x, y)) {
-                    return true;
+                if (this._children[i].GetFirstVisibleChildElementAt(x, y) is UIElement child) {
+                    return child;
                 }
             }
-            return false;
+            return base.GetFirstVisibleChildElementAt(x, y);
         }
 
         public override UIElement GetElementById(string id) {

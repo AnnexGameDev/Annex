@@ -79,7 +79,9 @@ namespace Annex.Graphics
             this._lastMouseClick = EventService.CurrentTime;
             e.DoubleClick = doubleClick;
 
-            this.currentScene.HandleSceneFocusMouseDown(e.MouseX, e.MouseY);
+            var firstChild = this.currentScene.GetFirstVisibleChildElementAt(e.MouseX, e.MouseY);
+            this.currentScene.ChangeFocusObject(firstChild);
+
             this.currentScene.HandleMouseButtonPressed(e);
         }
 

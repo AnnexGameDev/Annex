@@ -1,7 +1,6 @@
 ﻿using Annex.Data.Shared;
 using Annex.Graphics;
 using Annex.Scenes.Controllers;
-using Annex.Services;
 
 namespace Annex.Scenes.Components
 {
@@ -17,7 +16,7 @@ namespace Annex.Scenes.Components
         private protected readonly string ElementID;
         public readonly Vector Size;
         public readonly Vector Position;
-        public bool IsFocus { get; internal set; }
+        public bool HasFocus { get; private set; }
         public bool Visible;
 
         public UIElement(string elementID) {
@@ -43,25 +42,31 @@ namespace Annex.Scenes.Components
             return RemoveState.KeepSearching;
         }
 
-        internal override bool HandleSceneFocusMouseDown(int x, int y) {
+        public override UIElement? GetFirstVisibleChildElementAt(int x, int y) {
             if (!this.Visible) {
-                return false;
+                return null;
             }
             if (x < this.Position.X) {
-                return false;
+                return null;
             }
             if (y < this.Position.Y) {
-                return false;
+                return null;
             }
             if (x > this.Position.X + this.Size.X) {
-                return false;
+                return null;
             }
             if (y > this.Position.Y + this.Size.Y) {
-                return false;
+                return null;
             }
-            this.IsFocus = true;
-            ServiceProvider.SceneService.CurrentScene.FocusObject = this;
-            return true;
+            return this;
+        }
+
+        public virtual void GainedFocus() {
+            this.HasFocus = true;
+        }
+
+        public virtual void LostFocus() {
+            this.HasFocus = false;
         }
     }
 }

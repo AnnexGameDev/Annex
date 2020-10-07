@@ -1,4 +1,5 @@
 ﻿using Annex.Graphics.Events;
+using Annex.Scenes.Components;
 
 namespace Annex.Scenes.Controllers
 {
@@ -44,8 +45,8 @@ namespace Annex.Scenes.Controllers
 
         }
 
-        internal virtual bool HandleSceneFocusMouseDown(int x, int y) {
-            return false;
+        public virtual UIElement? GetFirstVisibleChildElementAt(int x, int y) {
+            return null;
         }
     }
 }

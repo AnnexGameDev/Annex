@@ -18,9 +18,9 @@ namespace Annex
             if (scene.GetElementById(DebugOverlay.ID) == null) {
                 var overlay = new DebugOverlay();
                 scene.AddChild(overlay);
-                scene.FocusObject = overlay;
+                scene.ChangeFocusObject(overlay);
             } else {
-                scene.FocusObject = null;
+                scene.ChangeFocusObject(null);
                 scene.RemoveElementById(DebugOverlay.ID);
             }
         }
