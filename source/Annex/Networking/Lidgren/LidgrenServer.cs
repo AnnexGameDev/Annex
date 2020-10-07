@@ -29,10 +29,11 @@ namespace Annex.Networking.Lidgren
             this._lidgrenServer = new NetServer(this._lidgrenConfig);
             this._lidgrenServer.Start();
 
-            ServiceProvider.EventService.AddEvent(PriorityType.NETWORK, this.OnReceive, 0, 0, NetworkEventID);
+            // TODO: To be redone by networking rework
+            // ServiceProvider.EventService.AddEvent(PriorityType.NETWORK, this.OnReceive, 0, 0, NetworkEventID);
         }
 
-        private void OnReceive(GameEventArgs args) {
+        private void OnReceive(Events.EventArgs args) {
 
             if (ServiceProvider.SceneService.IsCurrentScene<GameClosing>()) {
                 this.Destroy();

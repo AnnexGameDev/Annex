@@ -27,7 +27,7 @@ namespace SampleProject.Scenes.Level1
             }, 500);
         }
 
-        private void HandlePlayerInput(GameEventArgs args) {
+        private void HandlePlayerInput(EventArgs args) {
             var ctx = ServiceProvider.Canvas;
 
             float speed = 1;

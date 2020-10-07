@@ -35,7 +35,8 @@ namespace Annex.Networking.DotNet
         public override void Start() {
             Console.WriteLine($"Creating client: {this.Configuration}");
             this._client.Start();
-            ServiceProvider.EventService.AddEvent(PriorityType.NETWORK, this._messageQueue.ProcessQueue, 0, 0, "client-core-process-queue");
+            // TODO: To be redone by networking rework
+            // ServiceProvider.EventService.AddEvent(PriorityType.NETWORK, this._messageQueue.ProcessQueue, 0, 0, "client-core-process-queue");
         }
     }
 }
