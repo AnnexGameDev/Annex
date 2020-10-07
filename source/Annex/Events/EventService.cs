@@ -1,11 +1,8 @@
 ﻿using Annex.Assets;
-using Annex.Scenes;
 using Annex.Services;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 
 namespace Annex.Events
 {
@@ -21,15 +18,11 @@ namespace Annex.Events
             this._sw.Start();
         }
 
-        public void AddEvent(PriorityType type, Action<GameEventArgs> e, int interval_ms, int delay_ms = 0, string eventID = "") {
-            this._queue.AddEvent(type, e, interval_ms, delay_ms, eventID);
-        }
-
-        public void AddEvent(PriorityType type, GameEvent e) {
+        public void AddEvent(PriorityType type, IEvent e) {
             this._queue.AddEvent(type, e);
         }
 
-        public void Run() {
+        public void Run(ITerminationCondition condition) {
             // Environment.TickCount is based on GetTickCount() WinAPI function. It's in milliseconds But the actual precision of it is about 15.6 ms. 
             // So you can't measure shorter time intervals (or you'll get 0)                                                                  
             // [ ^ this gave me a lot of headache. Current workaround to get more precise time diffs is using stopwatch ]
@@ -40,15 +33,10 @@ namespace Annex.Events
             var scenes = ServiceProvider.SceneService;
             long timeDelta;
 
-            while (!scenes.IsCurrentScene<GameClosing>()) {
+            while (!condition.ShouldTerminate()) {
                 tick = CurrentTime;
                 timeDelta = tick - lastTick;
                 lastTick = tick;
-
-                if (timeDelta == 0) {
-                    Thread.Yield();
-                    continue;
-                }
 
                 foreach (int priority in Priorities.All) {
                     this.RunQueueLevel(this._queue.GetPriority(priority), timeDelta);
@@ -57,11 +45,11 @@ namespace Annex.Events
             }
         }
 
-        public GameEvent? GetEvent(string id) {
+        public IEvent? GetEvent(string id) {
             return this._queue.GetEvent(id) ?? ServiceProvider.SceneService.CurrentScene.Events.GetEvent(id);
         }
 
-        private void RunQueueLevel(List<GameEvent> level, long diff) {
+        private void RunQueueLevel(List<IEvent> level, long diff) {
             for (int i = 0; i < level.Count; i++) {
                 var args = level[i].Probe(diff);
                 if (args.RemoveFromQueue) {

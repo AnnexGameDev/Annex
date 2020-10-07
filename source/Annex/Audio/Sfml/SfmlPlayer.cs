@@ -1,4 +1,5 @@
 ﻿using Annex.Assets;
+using Annex.Audio.Sfml.Events;
 using Annex.Events;
 using Annex.Services;
 using System.Collections.Generic;
@@ -8,28 +9,15 @@ namespace Annex.Audio.Sfml
 {
     public sealed class SfmlPlayer : IAudioService
     {
-        public const string GameEventID = "sfml-audio-player-gc";
         private readonly List<SfmlPlayingAudio> _playingAudio;
         private readonly object _lock = new object();
-
         public readonly IAssetManager AudioAssetManager;
 
         public SfmlPlayer(IAssetManager audioManager) {
             this._playingAudio = new List<SfmlPlayingAudio>();
             this.AudioAssetManager = audioManager;
 
-            ServiceProvider.EventService.AddEvent(PriorityType.SOUNDS, (e) => {
-                lock (this._lock) {
-                    for (int i = 0; i < this._playingAudio.Count; i++) {
-                        var audio = this._playingAudio[i];
-                        if (audio.IsStopped) {
-                            audio.Stop();
-                            audio.Dispose();
-                            this._playingAudio.RemoveAt(i--);
-                        }
-                    }
-                }
-            }, 5000, eventID: GameEventID);
+            ServiceProvider.EventService.AddEvent(PriorityType.SOUNDS, new SoundGCEvent(this._lock, this._playingAudio));
         }
 
         public void StopPlayingAudio(string? id = null) {

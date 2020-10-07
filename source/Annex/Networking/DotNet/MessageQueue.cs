@@ -22,7 +22,7 @@ namespace Annex.Networking.DotNet
             }
         }
 
-        public void ProcessQueue(GameEventArgs args) {
+        public void ProcessQueue(EventArgs args) {
             lock (this._messagesToProcess) {
                 while (this._messagesToProcess.Count != 0) {
                     (int id, byte[] data) = this._messagesToProcess.Dequeue();

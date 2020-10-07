@@ -46,7 +46,7 @@ namespace Tests.Graphics
         }
 
         protected void EndTest() {
-            Scenes.LoadGameClosingScene();
+            // TODO: Scenes.LoadGameClosingScene();
             this._backgroundThread.Join();
         }
 

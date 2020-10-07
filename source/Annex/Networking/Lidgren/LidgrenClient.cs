@@ -26,15 +26,17 @@ namespace Annex.Networking.Lidgren
 
             this._lidgrenClient.Connect(this.Configuration.IP, this.Configuration.Port);
 
-            ServiceProvider.EventService.AddEvent(PriorityType.NETWORK, this.OnReceive, 0, 0, NetworkEventID);
+            // TODO: To be redone by networking rework
+            // ServiceProvider.EventService.AddEvent(PriorityType.NETWORK, this.OnReceive, 0, 0, NetworkEventID);
         }
 
-        private void OnReceive(GameEventArgs args) {
-            if (ServiceProvider.SceneService.IsCurrentScene<GameClosing>()) {
-                this.Destroy();
-                args.RemoveFromQueue = true;
-                return;
-            }
+        private void OnReceive(Events.EventArgs args) {
+            // TODO: To be redone by networking rework
+            //if (ServiceProvider.SceneService.IsCurrentScene<GameClosing>()) {
+            //    this.Destroy();
+            //    args.RemoveFromQueue = true;
+            //    return;
+            //}
 
             NetIncomingMessage message;
             while ((message = this._lidgrenClient.ReadMessage()) != null) {

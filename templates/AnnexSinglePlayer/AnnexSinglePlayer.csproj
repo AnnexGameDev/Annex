@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\source\Annex\Annex.csproj" />
+    <ProjectReference Include="..\..\source\Annex\Annex.csproj" />
   </ItemGroup>
 
 </Project>

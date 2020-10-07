@@ -16,7 +16,7 @@ using static Annex.Paths;
 
 namespace AnnexSinglePlayer
 {
-    public class Game
+    public class Game : ITerminationCondition
     {
         private static void Main(string[] args) {
             var container = ServiceContainerSingleton.Create();
@@ -32,9 +32,17 @@ namespace AnnexSinglePlayer
             Debug.PackageAssetsToBinaryFrom(AssetType.Font, Path.Combine(SolutionFolder, "assets/fonts/"));
             Debug.PackageAssetsToBinaryFrom(AssetType.Icon, Path.Combine(SolutionFolder, "assets/icons/"));
 
+            new Game().Run();
+        }
+
+        public void Run() {
             ServiceProvider.SceneService.LoadScene<MainMenuScene>();
             ServiceProvider.Canvas.SetVisible(true);
-            ServiceProvider.EventService.Run();
+            ServiceProvider.EventService.Run(this);
+        }
+
+        public bool ShouldTerminate() {
+            return false;
         }
 
         private class DefaultAudioManager : CachedAssetManager

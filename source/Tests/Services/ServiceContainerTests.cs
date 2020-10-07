@@ -26,6 +26,23 @@ namespace Tests.Services
         public void Resolve_WithIntendedService_ReturnsService() {
             var instance = ServiceContainer.Provide<AService>();
             Assert.AreEqual(instance, ServiceContainer.Resolve<AService>());
+            Assert.IsTrue(ServiceContainer.Exists<AService>());
+        }
+
+        [Test]
+        public void Remove_WithService_RemovesService() {
+            ServiceContainer.Provide<AService>();
+            ServiceContainer.Remove<AService>();
+
+            Assert.IsFalse(ServiceContainer.Exists<AService>());
+        }
+
+
+        [Test]
+        public void Remove_WithoutService_ThrowsException() {
+            Assert.Throws<AssertionFailedException>(() => {
+                ServiceContainer.Remove<AService>();
+            });
         }
 
         private class AService : IService

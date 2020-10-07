@@ -3,12 +3,14 @@ using Annex.Data.Shared;
 using Annex.Events;
 using Annex.Graphics.Cameras;
 using Annex.Graphics.Contexts;
+using Annex.Graphics.Sfml.Events;
 using Annex.Scenes;
 using Annex.Services;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading;
 using static Annex.Graphics.EventIDs;
 using static Annex.Graphics.Sfml.Errors;
@@ -56,14 +58,8 @@ namespace Annex.Graphics.Sfml
             this._inputHandler = new SfmlInputHandler(this._buffer);
 
             var events = ServiceProvider.EventService;
-            events.AddEvent(PriorityType.GRAPHICS, (e) => {
-                this.BeginDrawing();
-                ServiceProvider.SceneService.CurrentScene.Draw(this);
-                this.EndDrawing();
-            }, 16, 0, DrawGameEventID);
-            events.AddEvent(PriorityType.INPUT, (e) => {
-                this.ProcessEvents();
-            }, 16, 0, ProcessUserInputGameEventID);
+            events.AddEvent(PriorityType.GRAPHICS, new GraphicsEvent(this, this.BeginDrawing, this.EndDrawing)); ;
+            events.AddEvent(PriorityType.INPUT, new InputEvent(this.ProcessEvents));
         }
 
         public void SetWindowIcon(string iconPath) {
