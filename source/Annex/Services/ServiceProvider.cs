@@ -7,9 +7,9 @@ namespace Annex.Services
 {
     internal class ServiceProvider
     {
-        internal static Log Log => ServiceContainerSingleton.Instance.Resolve<Log>();
-        internal static SceneService SceneService => ServiceContainerSingleton.Instance.Resolve<SceneService>();
-        internal static EventService EventService => ServiceContainerSingleton.Instance.Resolve<EventService>();
+        internal static ILogService LogService => ServiceContainerSingleton.Instance.Resolve<ILogService>();
+        internal static ISceneService SceneService => ServiceContainerSingleton.Instance.Resolve<ISceneService>();
+        internal static IEventService EventService => ServiceContainerSingleton.Instance.Resolve<IEventService>();
         internal static ICanvas Canvas => ServiceContainerSingleton.Instance.Resolve<ICanvas>();
     }
 }

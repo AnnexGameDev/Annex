@@ -19,17 +19,17 @@ namespace Tests.Graphics
 {
     public class SfmlCanvasTestCase : TestWithServiceContainerSingleton
     {
-        protected EventService EventManager;
+        protected IEventService EventManager;
         protected ICanvas Canvas;
-        protected SceneService Scenes;
+        protected ISceneService Scenes;
 
         private Thread _backgroundThread;
         private readonly string AssetFolder = Path.Combine(SolutionFolder, "assets/textures/");
 
         protected void StartTest<T>() where T : Scene, new() {
-            ServiceContainer.Provide<Log>(new Log());
-            this.EventManager = ServiceContainer.Provide<EventService>();
-            this.Scenes = ServiceContainer.Provide<SceneService>();
+            ServiceContainer.Provide<LogService>(new LogService());
+            this.EventManager = ServiceContainer.Provide<IEventService>(new EventService());
+            this.Scenes = ServiceContainer.Provide<ISceneService>(new SceneService());
 
             this._backgroundThread = new Thread(() => {
                 this.Canvas = ServiceContainer.Provide<ICanvas>(new SfmlCanvas(new DefaultTextureManager(), new DefaultFontManager(), new DefaultIconManager()));

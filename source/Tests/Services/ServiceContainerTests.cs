@@ -12,7 +12,7 @@ namespace Tests.Services
     {
         [OneTimeSetUp]
         public new void OneTimeSetUp() {
-            ServiceContainer.Provide<Log>();
+            ServiceContainer.Provide<ILogService>(new LogService());
         }
 
         [Test]
@@ -24,14 +24,14 @@ namespace Tests.Services
 
         [Test]
         public void Resolve_WithIntendedService_ReturnsService() {
-            var instance = ServiceContainer.Provide<AService>();
+            var instance = ServiceContainer.Provide<AService>(new AService());
             Assert.AreEqual(instance, ServiceContainer.Resolve<AService>());
             Assert.IsTrue(ServiceContainer.Exists<AService>());
         }
 
         [Test]
         public void Remove_WithService_RemovesService() {
-            ServiceContainer.Provide<AService>();
+            ServiceContainer.Provide<AService>(new AService());
             ServiceContainer.Remove<AService>();
 
             Assert.IsFalse(ServiceContainer.Exists<AService>());

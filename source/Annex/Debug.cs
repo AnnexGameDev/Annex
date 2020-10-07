@@ -56,7 +56,7 @@ namespace Annex
 
         private static string FormatAndLog(string reason, int line, string callingMethod, string filePath) {
             string message = $"Failure in {filePath.Substring(SourceFolder.Length)} on line {line} in the function {callingMethod}: {reason}";
-            ServiceProvider.Log.WriteLineError(message);
+            ServiceProvider.LogService.WriteLineError(message);
             return message;
         }
 
