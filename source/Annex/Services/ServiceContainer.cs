@@ -34,6 +34,15 @@ namespace Annex.Services
             return (T)_services[typeof(T)];
         }
 
+        public void Remove<T>() where T : class, IService {
+            Debug.Assert(_services.ContainsKey(typeof(T)), $"Tried to remove a service of type {typeof(T)} which doesn't exist");
+            _services.Remove(typeof(T));
+        }
+
+        public bool Exists<T>() where T : class, IService {
+            return _services.ContainsKey(typeof(T));
+        }
+
         public void Dispose() {
             foreach (var service in this._services.Values) {
                 service.Destroy();

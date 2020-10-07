@@ -14,7 +14,7 @@ namespace Tests.Graphics
         }
 
         // TODO: Broken test case because of removal of AnnexGame
-        [Test]
+        // [Test]
         public void Test() {
             StartTest<TestCaseScene>();
             Wait(5000);

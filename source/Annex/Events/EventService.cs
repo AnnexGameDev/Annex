@@ -1,11 +1,8 @@
 ﻿using Annex.Assets;
-using Annex.Scenes;
 using Annex.Services;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 
 namespace Annex.Events
 {
@@ -25,7 +22,7 @@ namespace Annex.Events
             this._queue.AddEvent(type, e);
         }
 
-        public void Run() {
+        public void Run(ITerminationCondition condition) {
             // Environment.TickCount is based on GetTickCount() WinAPI function. It's in milliseconds But the actual precision of it is about 15.6 ms. 
             // So you can't measure shorter time intervals (or you'll get 0)                                                                  
             // [ ^ this gave me a lot of headache. Current workaround to get more precise time diffs is using stopwatch ]
@@ -36,15 +33,10 @@ namespace Annex.Events
             var scenes = ServiceProvider.SceneService;
             long timeDelta;
 
-            while (!scenes.IsCurrentScene<GameClosing>()) {
+            while (!condition.ShouldTerminate()) {
                 tick = CurrentTime;
                 timeDelta = tick - lastTick;
                 lastTick = tick;
-
-                if (timeDelta == 0) {
-                    Thread.Yield();
-                    continue;
-                }
 
                 foreach (int priority in Priorities.All) {
                     this.RunQueueLevel(this._queue.GetPriority(priority), timeDelta);

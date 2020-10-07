@@ -1,4 +1,5 @@
 ﻿using Annex.Events.Trackers;
+using System;
 using System.Collections.Generic;
 
 namespace Annex.Events
@@ -10,6 +11,9 @@ namespace Annex.Events
         private long _nextEventInvocation;
         private List<IEventTracker>? _trackers;
         private EventArgs _gameEventArgs;
+
+        public GameEvent(int interval_ms, int delay_ms) : this(Guid.NewGuid().ToString(), interval_ms, delay_ms) {
+        }
 
         public GameEvent(string eventID, int interval_ms, int delay_ms) {
             this.EventID = eventID;

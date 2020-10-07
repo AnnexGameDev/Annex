@@ -7,7 +7,7 @@ namespace Annex.Events
     {
         private readonly List<IEvent>[] _queue;
 
-        internal EventQueue() {
+        public EventQueue() {
             this._queue = new List<IEvent>[Priorities.Count];
 
             foreach (int priority in Priorities.All) {
