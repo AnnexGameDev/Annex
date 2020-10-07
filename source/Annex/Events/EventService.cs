@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Annex.Events
 {
-    public sealed class EventService : IService
+    public sealed class EventService : IEventService
     {
         private readonly EventQueue _queue;
 

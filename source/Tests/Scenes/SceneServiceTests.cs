@@ -7,21 +7,21 @@ namespace Tests.Scenes
 {
     public class SceneServiceTests : TestWithServiceContainerSingleton
     {
-        private SceneService _sceneService => this.ServiceContainer.Resolve<SceneService>();
+        private ISceneService _sceneService => this.ServiceContainer.Resolve<ISceneService>();
 
         [OneTimeSetUp]
         public void OneTimeSetUp() {
-            this.ServiceContainer.Provide<Log>();
+            this.ServiceContainer.Provide<ILogService>(new LogService());
         }
 
         [SetUp]
         public void SetUp() {
-            this.ServiceContainer.Provide<SceneService>();
+            this.ServiceContainer.Provide<ISceneService>(new SceneService());
         }
 
         [TearDown]
         public void TearDown() {
-            this.ServiceContainer.Remove<SceneService>();
+            this.ServiceContainer.Remove<ISceneService>();
         }
 
         [Test]

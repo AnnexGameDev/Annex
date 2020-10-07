@@ -35,8 +35,8 @@ namespace Tests.Audio
 
         [OneTimeSetUp]
         public void SuiteSetUp() {
-            ServiceContainer.Provide<Log>(new Log());
-            ServiceContainer.Provide<EventService>();
+            ServiceContainer.Provide<ILogService>(new LogService());
+            ServiceContainer.Provide<IEventService>(new EventService());
             this._audio = ServiceContainer.Provide<IAudioService>(new SfmlPlayer(new DefaultAudioManager()));
             Debug.PackageAssetsToBinaryFrom(AssetType.Audio, Path.Combine(SolutionFolder, "assets/audio/"));
         }

@@ -11,23 +11,23 @@ namespace Tests.Events
     public class EventServiceTests : TestWithServiceContainerSingleton, ITerminationCondition
     {
         public bool _shouldTerminate;
-        private EventService _eventService => this.ServiceContainer.Resolve<EventService>();
+        private IEventService _eventService => this.ServiceContainer.Resolve<IEventService>();
 
         [OneTimeSetUp]
         public void OneTimeSetUp() {
-            this.ServiceContainer.Provide<Log>();
-            this.ServiceContainer.Provide<SceneService>();
+            this.ServiceContainer.Provide<ILogService>(new LogService());
+            this.ServiceContainer.Provide<ISceneService>(new SceneService());
         }
 
         [SetUp]
         public void SetUp() {
             this._shouldTerminate = false;
-            this.ServiceContainer.Provide<EventService>();
+            this.ServiceContainer.Provide<IEventService>(new EventService());
         }
 
         [TearDown]
         public void TearDown() {
-            this.ServiceContainer.Remove<EventService>();
+            this.ServiceContainer.Remove<IEventService>();
         }
 
         public bool ShouldTerminate() {

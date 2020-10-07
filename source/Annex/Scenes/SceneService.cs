@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Annex.Scenes
 {
-    public class SceneService : IService
+    public class SceneService : ISceneService
     {
         private readonly Dictionary<Type, Scene> _scenes;
 
@@ -28,11 +28,11 @@ namespace Annex.Scenes
             }
 
             if (!this._scenes.ContainsKey(typeof(T))) {
-                ServiceProvider.Log.WriteLineTrace(this, $"Creating new instance of scene {typeof(T).Name}");
+                ServiceProvider.LogService.WriteLineTrace(this, $"Creating new instance of scene {typeof(T).Name}");
                 this._scenes[typeof(T)] = new T();
             }
 
-            ServiceProvider.Log.WriteLineTrace(this, $"Loading scene {typeof(T).Name}");
+            ServiceProvider.LogService.WriteLineTrace(this, $"Loading scene {typeof(T).Name}");
             this._currentSceneType = typeof(T);
 
             previousScene.OnLeave(new OnSceneLeaveEvent(this.CurrentScene));
@@ -43,11 +43,11 @@ namespace Annex.Scenes
 
         public void UnloadScene<T>() where T : Scene {
             Debug.Assert(this._scenes.ContainsKey(typeof(T)), $"Tried to unload a scene {typeof(T).Name} that doesn't exist");
-            ServiceProvider.Log.WriteLineTrace(this, $"Unloading instance of scene {typeof(T).Name}");
+            ServiceProvider.LogService.WriteLineTrace(this, $"Unloading instance of scene {typeof(T).Name}");
             _scenes.Remove(typeof(T));
         }
 
-        public bool IsCurrentScene<T>() {
+        public bool IsCurrentScene<T>() where T : Scene {
             return typeof(T) == this.CurrentScene.GetType();
         }
 

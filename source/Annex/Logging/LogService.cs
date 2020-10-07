@@ -1,6 +1,5 @@
 ﻿using Annex.Assets;
 using Annex.Logging.Decorator;
-using Annex.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,13 +8,13 @@ using System.Threading;
 
 namespace Annex.Logging
 {
-    public class Log : IService
+    public class LogService : ILogService
     {
         private readonly object _lock;
         private readonly DecoratableLog _log;
         private readonly bool[] _allowedChannels;
 
-        public Log() {
+        public LogService() {
             this._lock = new object();
             this._allowedChannels = new bool[Enum.GetNames(typeof(OutputChannel)).Length];
             this.EnableChannel(OutputChannel.Error);
