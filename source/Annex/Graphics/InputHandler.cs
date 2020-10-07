@@ -54,7 +54,7 @@ namespace Annex.Graphics
             if (this._preventEvents) {
                 return;
             }
-            e.TimeSinceClick = EventService.CurrentTime - this._lastMouseClick;
+            e.TimeSinceClick = GameTime.Now - this._lastMouseClick;
             this.currentScene.HandleMouseButtonReleased(e);
         }
 
@@ -66,7 +66,7 @@ namespace Annex.Graphics
             bool doubleClick = false;
             float dx = e.MouseX - this._lastMouseClickX;
             float dy = e.MouseY - this._lastMouseClickY;
-            long dt = EventService.CurrentTime - this._lastMouseClick;
+            long dt = GameTime.Now - this._lastMouseClick;
             int distanceThreshold = 10;
             int timeThreshold = 250;
 
@@ -76,7 +76,7 @@ namespace Annex.Graphics
 
             this._lastMouseClickX = e.MouseX;
             this._lastMouseClickY = e.MouseY;
-            this._lastMouseClick = EventService.CurrentTime;
+            this._lastMouseClick = GameTime.Now;
             e.DoubleClick = doubleClick;
 
             var firstChild = this.currentScene.GetFirstVisibleChildElementAt(e.MouseX, e.MouseY);
