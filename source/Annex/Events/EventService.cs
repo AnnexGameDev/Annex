@@ -1,7 +1,6 @@
 ﻿using Annex.Assets;
 using Annex.Services;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace Annex.Events
@@ -9,13 +8,9 @@ namespace Annex.Events
     public sealed class EventService : IService
     {
         private readonly EventQueue _queue;
-        public static long CurrentTime => ServiceProvider.EventService._sw.ElapsedMilliseconds;
-        private readonly Stopwatch _sw;
 
         public EventService() {
             this._queue = new EventQueue();
-            this._sw = new Stopwatch();
-            this._sw.Start();
         }
 
         public void AddEvent(PriorityType type, IEvent e) {
@@ -29,12 +24,12 @@ namespace Annex.Events
             //                                                                                                                          
             // Source: https://stackoverflow.com/questions/243351/environment-tickcount-vs-datetime-now/6308701#6308701
             long tick;
-            long lastTick = CurrentTime;
+            long lastTick = GameTime.Now;
             var scenes = ServiceProvider.SceneService;
             long timeDelta;
 
             while (!condition.ShouldTerminate()) {
-                tick = CurrentTime;
+                tick = GameTime.Now;
                 timeDelta = tick - lastTick;
                 lastTick = tick;
 
