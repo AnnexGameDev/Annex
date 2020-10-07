@@ -16,10 +16,12 @@ namespace Annex.Scenes
 
         public SceneService() {
             this._scenes = new Dictionary<Type, Scene>();
-            this.LoadScene<Unknown>();
+            this._currentSceneType = typeof(Unknown);
+            this._scenes.Add(typeof(Unknown), new Unknown());
         }
 
         public T LoadScene<T>(bool createNewInstance = false) where T : Scene, new() {
+            var previousScene = this.CurrentScene;
 
             if (createNewInstance && _scenes.ContainsKey(typeof(T))) {
                 UnloadScene<T>();
@@ -32,11 +34,14 @@ namespace Annex.Scenes
 
             ServiceProvider.Log.WriteLineTrace(this, $"Loading scene {typeof(T).Name}");
             this._currentSceneType = typeof(T);
+
+            previousScene.OnLeave(new OnSceneLeaveEvent(this.CurrentScene));
+            this.CurrentScene.OnEnter(new OnSceneEnterEvent(previousScene));
+
             return (T)this.CurrentScene;
         }
 
         public void UnloadScene<T>() where T : Scene {
-            Debug.ErrorIf(this.CurrentScene.GetType() == typeof(T), "Unloading the current scene is prohibited");
             Debug.Assert(this._scenes.ContainsKey(typeof(T)), $"Tried to unload a scene {typeof(T).Name} that doesn't exist");
             ServiceProvider.Log.WriteLineTrace(this, $"Unloading instance of scene {typeof(T).Name}");
             _scenes.Remove(typeof(T));
