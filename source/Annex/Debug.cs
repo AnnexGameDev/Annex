@@ -56,13 +56,13 @@ namespace Annex
 
         private static string FormatAndLog(string reason, int line, string callingMethod, string filePath) {
             string message = $"Failure in {filePath.Substring(SourceFolder.Length)} on line {line} in the function {callingMethod}: {reason}";
-            ServiceProvider.LogService.WriteLineError(message);
+            ServiceProvider.LogService?.WriteLineError(message);
             return message;
         }
 
         [Conditional("DEBUG")]
         public static void PackageAssetsToBinaryFrom(AssetType assetType, string path) {
-            foreach (var registeredService in ServiceContainerSingleton.Instance.RegisteredServices) {
+            foreach (var registeredService in ServiceContainerSingleton.Instance!.RegisteredServices) {
                 foreach (var assetManager in registeredService.GetAssetManagers().Where(assetManager => assetManager.AssetType == assetType)) {
                     assetManager.PackageAssetsToBinaryFrom(path);
                 }

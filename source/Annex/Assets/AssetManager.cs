@@ -19,7 +19,7 @@ namespace Annex.Assets
         public bool GetAsset(AssetInitializerArgs args, out object? asset) {
 
             if (!this.AssetInitializer.Validate(args)) {
-                ServiceProvider.LogService.WriteLineWarning(ASSET_NOT_VALID.Format(args.Key));
+                ServiceProvider.LogService?.WriteLineWarning(ASSET_NOT_VALID.Format(args.Key));
                 asset = default;
                 return false;
             }

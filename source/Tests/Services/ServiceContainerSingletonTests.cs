@@ -21,7 +21,6 @@ namespace Tests.Services
             Assert.Throws<NullReferenceException>(() => {
                 var instance = ServiceContainerSingleton.Instance;
 
-                // TODO: Remove this once instance isn't inferred to be nullable
                 if (instance == null) {
                     throw new NullReferenceException();
                 }
@@ -57,7 +56,6 @@ namespace Tests.Services
             Assert.Throws<NullReferenceException>(() => {
                 var i2 = ServiceContainerSingleton.Instance;
 
-                // TODO: Remove this once i2 isn't inferred to be nullable
                 if (i2 == null) {
                     throw new NullReferenceException();
                 }
