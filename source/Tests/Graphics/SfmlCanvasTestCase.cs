@@ -1,8 +1,4 @@
 ﻿#define DEBUG
-using Annex;
-using Annex.Assets;
-using Annex.Assets.Loaders;
-using Annex.Assets.Managers;
 using Annex.Events;
 using Annex.Graphics;
 using Annex.Graphics.Sfml;
@@ -32,8 +28,7 @@ namespace Tests.Graphics
             this.Scenes = ServiceContainer.Provide<ISceneService>(new SceneService());
 
             this._backgroundThread = new Thread(() => {
-                this.Canvas = ServiceContainer.Provide<ICanvas>(new SfmlCanvas(new DefaultTextureManager(), new DefaultFontManager(), new DefaultIconManager()));
-                Debug.PackageAssetsToBinaryFrom(AssetType.Texture, AssetFolder);
+                this.Canvas = ServiceContainer.Provide<ICanvas>(new SfmlCanvas());
                 // TODO: Commented out due to removal of AnnexGame, resulting in broken test cases
                 //AnnexGame.Start<T>();
                 Console.WriteLine("Done!");
@@ -52,24 +47,6 @@ namespace Tests.Graphics
 
         protected void Wait(int ms) {
             Thread.Sleep(ms);
-        }
-
-        private class DefaultTextureManager : CachedAssetManager
-        {
-            public DefaultTextureManager() : base(AssetType.Texture, new FileLoader(), new SfmlTextureInitializer("textures/")) {
-            }
-        }
-
-        private class DefaultFontManager : CachedAssetManager
-        {
-            public DefaultFontManager() : base(AssetType.Font, new FileLoader(), new SfmlFontInitializer("fonts/")) {
-            }
-        }
-
-        private class DefaultIconManager : CachedAssetManager
-        {
-            public DefaultIconManager() : base(AssetType.Icon, new FileLoader(), new SfmlFontInitializer("icons/")) {
-            }
         }
     }
 }

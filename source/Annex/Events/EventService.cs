@@ -56,9 +56,5 @@ namespace Annex.Events
         public void Destroy() {
 
         }
-
-        public IEnumerable<IAssetManager> GetAssetManagers() {
-            return Enumerable.Empty<IAssetManager>();
-        }
     }
 }

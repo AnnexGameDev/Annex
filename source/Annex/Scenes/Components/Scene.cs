@@ -31,21 +31,43 @@ namespace Annex.Scenes.Components
             base.Draw(canvas);
         }
 
+        public override void HandleKeyboardKeyReleased(KeyboardKeyReleasedEvent e) {
+            if (e.Handled) {
+                if (this.FocusObject == this) {
+                    base.HandleKeyboardKeyReleased(e);
+                } else {
+                    this.FocusObject?.HandleKeyboardKeyReleased(e);
+                }
+            }
+        }
+
         public override void HandleKeyboardKeyPressed(KeyboardKeyPressedEvent e) {
             if (!e.Handled) {
-                this.FocusObject?.HandleKeyboardKeyPressed(e);
+                if (this.FocusObject == this) {
+                    base.HandleKeyboardKeyPressed(e);
+                } else {
+                    this.FocusObject?.HandleKeyboardKeyPressed(e);
+                }
             }
         }
 
         public override void HandleMouseButtonPressed(MouseButtonPressedEvent e) {
             if (!e.Handled) {
-                this.FocusObject?.HandleMouseButtonPressed(e);
+                if (this.FocusObject == this) {
+                    base.HandleMouseButtonPressed(e);
+                } else {
+                    this.FocusObject?.HandleMouseButtonPressed(e);
+                }
             }
         }
 
         public override void HandleMouseButtonReleased(MouseButtonReleasedEvent e) {
             if (!e.Handled) {
-                this.FocusObject?.HandleMouseButtonReleased(e);
+                if (this.FocusObject == this) {
+                    base.HandleMouseButtonReleased(e);
+                } else {
+                    this.FocusObject?.HandleMouseButtonReleased(e);
+                }
             }
         }
 

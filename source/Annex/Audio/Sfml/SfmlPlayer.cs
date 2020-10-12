@@ -1,4 +1,4 @@
-﻿using Annex.Assets;
+﻿using Annex.Audio.Sfml.Assets;
 using Annex.Audio.Sfml.Events;
 using Annex.Events;
 using Annex.Services;
@@ -11,12 +11,9 @@ namespace Annex.Audio.Sfml
     {
         private readonly List<SfmlPlayingAudio> _playingAudio;
         private readonly object _lock = new object();
-        public readonly IAssetManager AudioAssetManager;
 
-        public SfmlPlayer(IAssetManager audioManager) {
+        public SfmlPlayer() {
             this._playingAudio = new List<SfmlPlayingAudio>();
-            this.AudioAssetManager = audioManager;
-
             ServiceProvider.EventService.AddEvent(PriorityType.SOUNDS, new SoundGCEvent(this._lock, this._playingAudio));
         }
 
@@ -28,7 +25,6 @@ namespace Annex.Audio.Sfml
                         continue;
                     }
                     audio.Stop();
-                    audio.Dispose();
                     this._playingAudio.RemoveAt(i--);
                 }
             }
@@ -44,12 +40,12 @@ namespace Annex.Audio.Sfml
 
         public IPlayingAudio PlayAudio(string audioFilePath, AudioContext context) {
             lock (this._lock) {
-                var args = new SfmlAudioInitializerArgs(audioFilePath, context.BufferMode);
-                if (!this.AudioAssetManager.GetAsset(args, out var asset)) {
+                var args = new SfmlAudioConverterArgs(audioFilePath, context.BufferMode);
+                if (!ServiceProvider.AudioManager.GetAsset(args, out var asset)) {
                     Debug.Error(ASSET_LOAD_FAILED.Format(audioFilePath));
                 }
                 // TODO: Wait for https://github.com/SFML/SFML/pull/1185 support in C#
-                var playingAudio = new SfmlPlayingAudio(context.ID, asset);
+                var playingAudio = new SfmlPlayingAudio(context.ID, asset.GetTarget());
                 playingAudio.Volume = context.Volume;
                 playingAudio.Loop = context.Loop;
                 playingAudio.Play();
@@ -68,10 +64,6 @@ namespace Annex.Audio.Sfml
                     yield return playingAudio;
                 }
             }
-        }
-
-        public IEnumerable<IAssetManager> GetAssetManagers() {
-            yield return AudioAssetManager;
         }
     }
 }

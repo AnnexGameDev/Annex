@@ -1,7 +1,7 @@
 ﻿using Annex;
 using Annex.Assets;
 using Annex.Assets.Loaders;
-using Annex.Assets.Managers;
+using Annex.Assets.Services;
 using Annex.Audio;
 using Annex.Audio.Sfml;
 using Annex.Events;
@@ -27,9 +27,9 @@ namespace Tests.Audio
             System.Threading.Thread.Sleep(ms);
         }
 
-        private class DefaultAudioManager : UncachedAssetManager
+        private class DefaultAudioManager : AssetManager, IAudioManager
         {
-            public DefaultAudioManager() : base(AssetType.Audio, new FileLoader(), new SfmlAudioInitializer("audio/")) {
+            public DefaultAudioManager() : base(new FileSystemStreamer("audio", ".wav")) {
             }
         }
 
@@ -37,8 +37,10 @@ namespace Tests.Audio
         public void SuiteSetUp() {
             ServiceContainer.Provide<ILogService>(new LogService());
             ServiceContainer.Provide<IEventService>(new EventService());
-            this._audio = ServiceContainer.Provide<IAudioService>(new SfmlPlayer(new DefaultAudioManager()));
-            Debug.PackageAssetsToBinaryFrom(AssetType.Audio, Path.Combine(SolutionFolder, "assets/audio/"));
+            ServiceContainer.Provide<IAudioManager>(new DefaultAudioManager());
+            this._audio = ServiceContainer.Provide<IAudioService>(new SfmlPlayer());
+
+            Debug.PackageAssetsToBinary(ServiceContainer.Resolve<IAudioManager>(), Path.Combine(SolutionFolder, "assets/audio"));
         }
 
         [OneTimeTearDown]

@@ -91,9 +91,5 @@ namespace Annex.Logging
             }
             return num;
         }
-
-        public IEnumerable<IAssetManager> GetAssetManagers() {
-            return Enumerable.Empty<IAssetManager>();
-        }
     }
 }

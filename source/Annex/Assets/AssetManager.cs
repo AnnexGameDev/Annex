@@ -1,54 +1,54 @@
-using Annex.Services;
-using System.IO;
-using static Annex.Assets.Errors;
+﻿using Annex.Assets.Converters;
+using Annex.Assets.Streams;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Annex.Assets
 {
     public abstract class AssetManager : IAssetManager
     {
-        public readonly IAssetLoader AssetLoader;
-        public readonly IAssetInitializer AssetInitializer;
-        public AssetType AssetType { get; set; }
+        public IDataStreamer DataStreamer { get; }
 
-        public AssetManager(AssetType type, IAssetLoader assetLoader, IAssetInitializer assetInitializer) {
-            this.AssetType = type;
-            this.AssetLoader = assetLoader;
-            this.AssetInitializer = assetInitializer;
+        private readonly Dictionary<string, Asset> _cache;
+
+        public AssetManager(IDataStreamer streamer) {
+            this.DataStreamer = streamer;
+            this._cache = new Dictionary<string, Asset>();
         }
 
-        public bool GetAsset(AssetInitializerArgs args, out object? asset) {
-
-            if (!this.AssetInitializer.Validate(args)) {
-                ServiceProvider.LogService.WriteLineWarning(ASSET_NOT_VALID.Format(args.Key));
-                asset = default;
-                return false;
+        public void Destroy() {
+            foreach (var asset in this._cache.Values) {
+                asset.Dispose();
             }
+            this._cache.Clear();
+        }
 
-            if (!this.ContainsCachedAsset(args.Key)) {
-                var loadedAsset = this.AssetInitializer.Load(args, this.AssetLoader);
-                Debug.ErrorIf(loadedAsset == null, ASSET_IS_NULL.Format(args.Key));
-#pragma warning disable CS8604 // Possible null reference argument.
-                this.CacheAsset(args.Key, loadedAsset);
-#pragma warning restore CS8604 // Possible null reference argument.
+        // TODO: This never returns false
+        public bool GetAsset(AssetConverterArgs args, out Asset asset) {
+            if (this._cache.ContainsKey(args.Id)) {
+                Asset cachedAsset = this._cache[args.Id];
+                if (args.Converter.Validate(cachedAsset)) {
+                    asset = cachedAsset;
+                    return true;
+                }
+                this.UnloadCachedAsset(args.Id);
             }
-
-            asset = this.RetrieveCachedAsset(args.Key);
+            var data = this.DataStreamer.Read(args.Id);
+            asset = args.Converter.CreateAsset(args.Id, data);
+            this._cache.Add(args.Id, asset);
             return true;
         }
 
-        public void PackageAssetsToBinaryFrom(string path) {
-
-            Directory.CreateDirectory(path);
-
-            foreach (var file in Directory.GetFiles(path, "*", SearchOption.AllDirectories)) {
-                string relativePath = file.Substring(path.Length);
-                this.AssetLoader.Write(Path.Combine(path, relativePath), Path.Combine(this.AssetInitializer.AssetPath, relativePath));
-            }
+        public Asset[] GetCachedAssets() {
+            return this._cache.Values.ToArray();
         }
 
-        protected abstract object RetrieveCachedAsset(string key);
-        protected abstract void CacheAsset(string key, object asset);
-        protected abstract bool ContainsCachedAsset(string key);
-
+        public void UnloadCachedAsset(string id) {
+            if (this._cache.ContainsKey(id)) {
+                var asset = this._cache[id];
+                asset.Dispose();
+                this._cache.Remove(id);
+            }
+        }
     }
 }
