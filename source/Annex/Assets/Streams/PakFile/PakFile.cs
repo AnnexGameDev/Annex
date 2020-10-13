@@ -46,7 +46,6 @@ namespace Annex.Assets.Streams.PakFile
                 int length = br.ReadInt32();
                 long position = br.BaseStream.Position;
                 br.ReadBytes(length);
-                Console.WriteLine($"Reading: {id} - {length}");
 
                 this._entries.Add(id, new PakFileEntry(position, length));
             }
