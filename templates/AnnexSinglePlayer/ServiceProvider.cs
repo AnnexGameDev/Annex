@@ -12,7 +12,7 @@ namespace AnnexSinglePlayer
         private static ServiceContainer _singleton;
 
         static ServiceProvider() {
-            _singleton = ServiceContainerSingleton.Create();
+            _singleton = ServiceContainerSingleton.Instance;
         }
 
         public static void Destroy() {

@@ -1,5 +1,5 @@
 ﻿using Annex.Assets;
-using Annex.Assets.Loaders;
+using Annex.Assets.Streams;
 using Annex.Assets.Services;
 
 namespace SampleProject.Assets

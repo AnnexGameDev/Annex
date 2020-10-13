@@ -1,6 +1,6 @@
 ﻿using Annex;
 using Annex.Assets;
-using Annex.Assets.Loaders;
+using Annex.Assets.Streams;
 using Annex.Assets.Services;
 using Annex.Audio;
 using Annex.Audio.Sfml;
