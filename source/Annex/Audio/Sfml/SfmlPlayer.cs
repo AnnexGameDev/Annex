@@ -1,7 +1,10 @@
-﻿using Annex.Audio.Sfml.Assets;
+﻿using Annex.Assets.Converters;
+using Annex.Audio.Sfml.Assets;
 using Annex.Audio.Sfml.Events;
 using Annex.Events;
 using Annex.Services;
+using SFML.Audio;
+using System;
 using System.Collections.Generic;
 using static Annex.Audio.Sfml.Errors;
 
@@ -11,6 +14,8 @@ namespace Annex.Audio.Sfml
     {
         private readonly List<SfmlPlayingAudio> _playingAudio;
         private readonly object _lock = new object();
+
+        private readonly IAssetConverter _converter = new AudioConverter();
 
         public SfmlPlayer() {
             this._playingAudio = new List<SfmlPlayingAudio>();
@@ -25,6 +30,7 @@ namespace Annex.Audio.Sfml
                         continue;
                     }
                     audio.Stop();
+                    audio.Dispose();
                     this._playingAudio.RemoveAt(i--);
                 }
             }
@@ -40,12 +46,20 @@ namespace Annex.Audio.Sfml
 
         public IPlayingAudio PlayAudio(string audioFilePath, AudioContext context) {
             lock (this._lock) {
-                var args = new SfmlAudioConverterArgs(audioFilePath, context.BufferMode);
+                var args = new AssetConverterArgs(audioFilePath, this._converter);
                 if (!ServiceProvider.AudioManager.GetAsset(args, out var asset)) {
                     Debug.Error(ASSET_LOAD_FAILED.Format(audioFilePath));
                 }
+
+                object target;
+                if (context.BufferMode == BufferMode.Buffered) {
+                    target = new Music((byte[])asset.GetTarget());
+                } else {
+                    target = new Sound(new SoundBuffer((byte[])asset.GetTarget()));
+                }
+
                 // TODO: Wait for https://github.com/SFML/SFML/pull/1185 support in C#
-                var playingAudio = new SfmlPlayingAudio(context.ID, asset.GetTarget());
+                var playingAudio = new SfmlPlayingAudio(context.ID, target);
                 playingAudio.Volume = context.Volume;
                 playingAudio.Loop = context.Loop;
                 playingAudio.Play();
