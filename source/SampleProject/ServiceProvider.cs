@@ -14,7 +14,7 @@ namespace SampleProject
         private static ServiceContainer _instance;
 
         static ServiceProvider() {
-            _instance = ServiceContainerSingleton.Instance;
+            _instance = ServiceContainerSingleton.Instance!;
         }
 
         public static void Destroy() {
@@ -30,6 +30,6 @@ namespace SampleProject
         public static IAudioManager AudioManager => _instance.Resolve<IAudioManager>()!;
         public static IFontManager FontManager => _instance.Resolve<IFontManager>()!;
         public static IIconManager IconManager => _instance.Resolve<IIconManager>()!;
-        public static IHtmlLayoutManager HtmlLayoutManager => _instance.Resolve<IHtmlLayoutManager>();
+        public static IHtmlLayoutManager HtmlLayoutManager => _instance.Resolve<IHtmlLayoutManager>()!;
     }
 }

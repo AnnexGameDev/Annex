@@ -41,6 +41,8 @@ namespace SampleProject
             Debug.PackageAssetsToBinary(ServiceProvider.HtmlLayoutManager, Path.Combine(SolutionFolder, "assets/layouts"));
 
             new Game().Run();
+
+            ServiceContainerSingleton.Destroy();
         }
 
         public void Run() {
