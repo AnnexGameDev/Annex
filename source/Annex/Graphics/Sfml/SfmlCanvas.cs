@@ -1,18 +1,16 @@
-﻿using Annex.Assets;
+﻿using Annex.Assets.Converters;
 using Annex.Data.Shared;
 using Annex.Events;
 using Annex.Graphics.Cameras;
 using Annex.Graphics.Contexts;
+using Annex.Graphics.Sfml.Assets;
 using Annex.Graphics.Sfml.Events;
 using Annex.Scenes;
 using Annex.Services;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading;
-using static Annex.Graphics.EventIDs;
 using static Annex.Graphics.Sfml.Errors;
 
 namespace Annex.Graphics.Sfml
@@ -32,19 +30,19 @@ namespace Annex.Graphics.Sfml
         private string _title { get; set; }
         private Styles _style { get; set; }
 
-        public readonly AssetManager FontManager;
-        public readonly AssetManager TextureManager;
-        public readonly AssetManager IconManager;
+        private readonly TextureConverter _textureConverter;
+        private readonly FontConverter _fontConverter;
+        private readonly IconConverter _iconConverter;
 
         private readonly InputHandler _inputHandler;
 
-        public SfmlCanvas(AssetManager textureManager, AssetManager fontManager, AssetManager iconManager) {
-            this.TextureManager = textureManager;
-            this.FontManager = fontManager;
-            this.IconManager = iconManager;
-
+        public SfmlCanvas() {
             int resolutionWidth = 960;
             int resolutionHeight = 640;
+
+            this._textureConverter = new TextureConverter();
+            this._fontConverter = new FontConverter();
+            this._iconConverter = new IconConverter();
 
             this._bufferAccess = new Mutex();
             this._resolution = Vector.Create(resolutionWidth, resolutionHeight);
@@ -63,9 +61,9 @@ namespace Annex.Graphics.Sfml
         }
 
         public void SetWindowIcon(string iconPath) {
-            var args = new AssetInitializerArgs(iconPath);
-            IconManager.GetAsset(args, out var resource);
-            var icon = (Image)resource;
+            var args = new AssetConverterArgs(iconPath, this._iconConverter);
+            ServiceProvider.IconManager.GetAsset(args, out var resource);
+            var icon = (Image)resource.GetTarget();
             this._buffer.SetIcon(icon.Size.X, icon.Size.Y, icon.Pixels);
         }
 
@@ -104,9 +102,9 @@ namespace Annex.Graphics.Sfml
             // We need to update the camera.
             this.UpdateView(ctx);
 
-            var args = new AssetInitializerArgs(ctx.FontName.Value);
-            this.FontManager.GetAsset(args, out var asset);
-            var font = (Font)asset;
+            var args = new AssetConverterArgs(ctx.FontName.Value, this._fontConverter);
+            ServiceProvider.FontManager.GetAsset(args, out var asset);
+            var font = (Font)asset.GetTarget();
             var text = new Text(ctx.RenderText, font) {
                 CharacterSize = (uint)(int)ctx.FontSize,
                 FillColor = ctx.FontColor,
@@ -152,11 +150,10 @@ namespace Annex.Graphics.Sfml
 
             var rect = sheet.SourceTextureRect;
             if (rect.Width == SpriteSheetContext.DETERMINE_SIZE_FROM_IMAGE && rect.Height == SpriteSheetContext.DETERMINE_SIZE_FROM_IMAGE) {
-                object? asset = null;
-                var args = new AssetInitializerArgs(sheet.SourceTextureName.Value);
-                bool loadSuccess = this.TextureManager.GetAsset(args, out asset);
+                var args = new AssetConverterArgs(sheet.SourceTextureName.Value, this._textureConverter);
+                bool loadSuccess = ServiceProvider.TextureManager.GetAsset(args, out var asset);
                 Debug.Assert(loadSuccess, TEXTURE_FAILED_TO_LOAD.Format(sheet.SourceTextureName.Value));
-                using var sprite = new Sprite((Texture)asset);
+                using var sprite = new Sprite((Texture)asset.GetTarget());
                 var size = sprite.Texture.Size;
 
                 int width = (int)(size.X / sheet.NumColumns);
@@ -178,11 +175,11 @@ namespace Annex.Graphics.Sfml
             // We need to update the camera.
             this.UpdateView(ctx);
 
-            var args = new AssetInitializerArgs(ctx.SourceTextureName.Value);
-            bool loadSuccess = this.TextureManager.GetAsset(args, out var asset);
+            var args = new AssetConverterArgs(ctx.SourceTextureName.Value, this._textureConverter);
+            bool loadSuccess = ServiceProvider.TextureManager.GetAsset(args, out var asset);
             Debug.Assert(loadSuccess, TEXTURE_FAILED_TO_LOAD.Format(ctx.SourceTextureName.Value));
 
-            using var sprite = new Sprite((Texture)asset) {
+            using var sprite = new Sprite((Texture)asset.GetTarget()) {
                 Position = ctx.RenderPosition
             };
 
@@ -364,12 +361,6 @@ namespace Annex.Graphics.Sfml
 
         public Vector GetResolution() {
             return this._resolution;
-        }
-
-        public IEnumerable<IAssetManager> GetAssetManagers() {
-            yield return this.FontManager;
-            yield return this.TextureManager;
-            yield return this.IconManager;
         }
     }
 }

@@ -1,15 +1,13 @@
-﻿namespace Annex.Assets.Managers
+﻿namespace Annex.Assets.Streams.PakFile
 {
     public class PakFileEntry
     {
         public readonly long Position;
         public readonly int Size;
-        public readonly byte[]? Data;
 
-        public PakFileEntry(long position, int size, byte[]? data = null) {
+        public PakFileEntry(long position, int size) {
             this.Position = position;
             this.Size = size;
-            this.Data = data;
         }
     }
 }
