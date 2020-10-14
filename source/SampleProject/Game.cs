@@ -8,12 +8,12 @@ using Annex.Graphics.Sfml;
 using Annex.Logging;
 using Annex.Scenes;
 using Annex.Services;
-using AnnexSinglePlayer.Assets;
-using AnnexSinglePlayer.Scenes.MainMenu;
+using SampleProject.Assets;
+using SampleProject.Scenes.Level1;
 using System.IO;
 using static Annex.Paths;
 
-namespace AnnexSinglePlayer
+namespace SampleProject
 {
     public class Game : ITerminationCondition
     {
@@ -38,18 +38,22 @@ namespace AnnexSinglePlayer
             Debug.PackageAssetsToBinary(ServiceProvider.IconManager, Path.Combine(SolutionFolder, "assets/icons/"));
 
             new Game().Run();
-
-            ServiceProvider.Destroy();
         }
 
         public void Run() {
-            ServiceProvider.SceneService.LoadScene<MainMenuScene>();
+            ServiceProvider.SceneService.LoadScene<Level1>();
             ServiceProvider.Canvas.SetVisible(true);
             ServiceProvider.EventService.Run(this);
         }
 
+        private static bool _shouldTerminateFlag = false;
+        
+        public static void Terminate() {
+            _shouldTerminateFlag = true;
+        }
+
         public bool ShouldTerminate() {
-            return false;
+            return _shouldTerminateFlag;
         }
     }
 }

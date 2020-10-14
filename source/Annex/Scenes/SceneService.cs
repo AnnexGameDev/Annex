@@ -54,9 +54,5 @@ namespace Annex.Scenes
         public void Destroy() {
 
         }
-
-        public IEnumerable<IAssetManager> GetAssetManagers() {
-            return Enumerable.Empty<IAssetManager>();
-        }
     }
 }

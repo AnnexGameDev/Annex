@@ -3,6 +3,7 @@ using Annex.Scenes.Components;
 using Annex.Services;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using static Annex.Paths;
@@ -61,12 +62,21 @@ namespace Annex
         }
 
         [Conditional("DEBUG")]
-        public static void PackageAssetsToBinaryFrom(AssetType assetType, string path) {
-            foreach (var registeredService in ServiceContainerSingleton.Instance!.RegisteredServices) {
-                foreach (var assetManager in registeredService.GetAssetManagers().Where(assetManager => assetManager.AssetType == assetType)) {
-                    assetManager.PackageAssetsToBinaryFrom(path);
+        public static void PackageAssetsToBinary(IAssetManager assetManager, string path) {
+
+            Directory.CreateDirectory(path);
+
+            foreach (var file in Directory.GetFiles(path, "*", SearchOption.AllDirectories)) {
+                string extension = file.Substring(file.LastIndexOf("."));
+                if (!assetManager.DataStreamer.IsValidExtension(extension)) {
+                    continue;
                 }
+
+                string relativePath = file.Substring(path.Length);
+                assetManager.DataStreamer.Write(relativePath, File.ReadAllBytes(file));
             }
+
+            assetManager.DataStreamer.Persist();
         }
     }
 }
