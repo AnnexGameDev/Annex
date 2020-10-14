@@ -11,17 +11,20 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using static Annex.Paths;
+using Annex.Services;
 
 namespace Tests.Audio
 {
     [TestFixture]
-    public class SfmlPlayerTests : TestWithServiceContainerSingleton
+    public class SfmlPlayerTests
     {
         private IAudioService _audio;
         private const string Cold = "test/Cold2.wav";
         private const string Holy = "test/Holy1.wav";
 
         private static Mutex _mutex = new Mutex();
+
+        private ServiceContainer ServiceContainer => ServiceContainerSingleton.Instance!;
 
         private void Wait(int ms) {
             System.Threading.Thread.Sleep(ms);
@@ -35,6 +38,7 @@ namespace Tests.Audio
 
         [OneTimeSetUp]
         public void SuiteSetUp() {
+            ServiceContainerSingleton.Create();
             ServiceContainer.Provide<ILogService>(new LogService());
             ServiceContainer.Provide<IEventService>(new EventService());
             ServiceContainer.Provide<IAudioManager>(new DefaultAudioManager());
@@ -45,7 +49,7 @@ namespace Tests.Audio
 
         [OneTimeTearDown]
         public void SuiteCleanUp() {
-            this._audio.Destroy();
+            ServiceContainerSingleton.Destroy();
         }
 
         [SetUp]

@@ -1,4 +1,5 @@
-﻿using Annex.Data.Shared;
+﻿using Annex.Data;
+using Annex.Data.Shared;
 using Annex.Graphics;
 using Annex.Graphics.Contexts;
 
@@ -10,21 +11,26 @@ namespace Annex.Scenes.Components
         public readonly String Text;
         public readonly String Font;
         public readonly Int FontSize;
+        public readonly RGBA FontColor;
+        public readonly TextAlignment TextAlignment;
 
         public Label(string elementID = "") : base(elementID) {
             this.Text = new String();
             this.Font = new String();
             this.FontSize = new Int(12);
+            this.FontColor = RGBA.Black;
+            this.TextAlignment = new TextAlignment() {
+                Size = this.Size,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Middle
+            };
 
             this.RenderText = new TextContext(this.Text, this.Font) {
                 RenderPosition = this.Position,
                 UseUIView = true,
-                Alignment = new TextAlignment() {
-                    Size = this.Size,
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Middle
-                },
-                FontSize = this.FontSize
+                Alignment = this.TextAlignment,
+                FontSize = this.FontSize,
+                FontColor = this.FontColor,
             };
         }
 

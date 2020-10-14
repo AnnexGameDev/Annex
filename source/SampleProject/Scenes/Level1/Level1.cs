@@ -1,17 +1,17 @@
 ﻿using Annex.Events;
 using Annex.Graphics;
-using Annex.Scenes.Components;
+using Annex.Scenes.Layouts.Html;
 using SampleProject.Models;
 using SampleProject.Scenes.Level1.Events;
 
 namespace SampleProject.Scenes.Level1
 {
-    public class Level1 : Scene
+    public class Level1 : HtmlScene
     {
         private readonly GrassyPlain _grassyPlain;
         private readonly Player _player;
 
-        public Level1() {
+        public Level1() : base("level1.html") {
             this._grassyPlain = new GrassyPlain();
             this._player = new Player();
 

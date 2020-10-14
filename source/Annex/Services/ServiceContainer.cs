@@ -15,11 +15,11 @@ namespace Annex.Services
         public T Provide<T>(T instance) where T : IService {
             Debug.ErrorIf(_services.ContainsKey(typeof(T)), $"A service of type {typeof(T)} already exists");
             _services[typeof(T)] = instance;
-            ServiceProvider.LogService.WriteLineTrace_Module(typeof(ServiceContainer).Name, $"Created '{instance.GetType().Name}' under '{typeof(T).Name}'");
+            ServiceProvider.LogService?.WriteLineTrace_Module(typeof(ServiceContainer).Name, $"Created '{instance.GetType().Name}' under '{typeof(T).Name}'");
             return (T)_services[typeof(T)];
         }
 
-        public T Resolve<T>() where T : IService {
+        public T? Resolve<T>() where T : class, IService {
             if (!_services.ContainsKey(typeof(T))) {
                 throw new AssertionFailedException($"Service of type {typeof(T)} does not exist");
             }

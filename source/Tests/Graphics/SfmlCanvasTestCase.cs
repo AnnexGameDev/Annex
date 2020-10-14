@@ -6,6 +6,7 @@ using Annex.Logging;
 using Annex.Scenes;
 using Annex.Scenes.Components;
 using Annex.Services;
+using NUnit.Framework;
 using System;
 using System.IO;
 using System.Threading;
@@ -13,7 +14,7 @@ using static Annex.Paths;
 
 namespace Tests.Graphics
 {
-    public class SfmlCanvasTestCase : TestWithServiceContainerSingleton
+    public class SfmlCanvasTestCase
     {
         protected IEventService EventManager;
         protected ICanvas Canvas;
@@ -21,6 +22,18 @@ namespace Tests.Graphics
 
         private Thread _backgroundThread;
         private readonly string AssetFolder = Path.Combine(SolutionFolder, "assets/textures/");
+
+        private ServiceContainer ServiceContainer => ServiceContainerSingleton.Instance!;
+
+        [OneTimeSetUp]
+        public void OneTimeSetUp() {
+            ServiceContainerSingleton.Create();
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown() {
+            ServiceContainerSingleton.Destroy();
+        }
 
         protected void StartTest<T>() where T : Scene, new() {
             ServiceContainer.Provide<LogService>(new LogService());

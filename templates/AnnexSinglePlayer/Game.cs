@@ -38,6 +38,8 @@ namespace AnnexSinglePlayer
             Debug.PackageAssetsToBinary(ServiceProvider.IconManager, Path.Combine(SolutionFolder, "assets/icons/"));
 
             new Game().Run();
+
+            ServiceProvider.Destroy();
         }
 
         public void Run() {

@@ -1,5 +1,4 @@
 ﻿using Annex.Assets.Converters;
-using Annex.Audio.Sfml.Assets;
 using Annex.Audio.Sfml.Events;
 using Annex.Events;
 using Annex.Services;
@@ -15,7 +14,7 @@ namespace Annex.Audio.Sfml
         private readonly List<SfmlPlayingAudio> _playingAudio;
         private readonly object _lock = new object();
 
-        private readonly IAssetConverter _converter = new AudioConverter();
+        private readonly IAssetConverter _converter = new ByteArrayConverter();
 
         public SfmlPlayer() {
             this._playingAudio = new List<SfmlPlayingAudio>();

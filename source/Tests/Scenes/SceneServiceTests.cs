@@ -1,17 +1,25 @@
 ﻿using Annex.Logging;
 using Annex.Scenes;
 using Annex.Scenes.Components;
+using Annex.Services;
 using NUnit.Framework;
 
 namespace Tests.Scenes
 {
-    public class SceneServiceTests : TestWithServiceContainerSingleton
+    public class SceneServiceTests
     {
-        private ISceneService _sceneService => this.ServiceContainer.Resolve<ISceneService>();
+        private ISceneService _sceneService => this.ServiceContainer.Resolve<ISceneService>()!;
+        private ServiceContainer ServiceContainer => ServiceContainerSingleton.Instance!;
 
         [OneTimeSetUp]
         public void OneTimeSetUp() {
+            ServiceContainerSingleton.Create();
             this.ServiceContainer.Provide<ILogService>(new LogService());
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown() {
+            ServiceContainerSingleton.Destroy();
         }
 
         [SetUp]

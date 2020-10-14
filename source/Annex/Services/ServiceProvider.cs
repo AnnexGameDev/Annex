@@ -8,14 +8,16 @@ namespace Annex.Services
 {
     internal class ServiceProvider
     {
-        internal static ILogService LogService => ServiceContainerSingleton.Instance.Resolve<ILogService>();
-        internal static ISceneService SceneService => ServiceContainerSingleton.Instance.Resolve<ISceneService>();
-        internal static IEventService EventService => ServiceContainerSingleton.Instance.Resolve<IEventService>();
-        internal static ICanvas Canvas => ServiceContainerSingleton.Instance.Resolve<ICanvas>();
+        private static ServiceContainer _instance => ServiceContainerSingleton.Instance!;
 
-        internal static ITextureManager TextureManager => ServiceContainerSingleton.Instance.Resolve<ITextureManager>();
-        internal static IAudioManager AudioManager => ServiceContainerSingleton.Instance.Resolve<IAudioManager>();
-        internal static IFontManager FontManager => ServiceContainerSingleton.Instance.Resolve<IFontManager>();
-        internal static IIconManager IconManager => ServiceContainerSingleton.Instance.Resolve<IIconManager>();
+        internal static ILogService? LogService => _instance.Resolve<ILogService>();
+        internal static ISceneService SceneService => _instance.Resolve<ISceneService>()!;
+        internal static IEventService EventService => _instance.Resolve<IEventService>()!;
+        internal static ICanvas Canvas => _instance.Resolve<ICanvas>()!;
+
+        internal static ITextureManager TextureManager => _instance.Resolve<ITextureManager>()!;
+        internal static IAudioManager AudioManager => _instance.Resolve<IAudioManager>()!;
+        internal static IFontManager FontManager => _instance.Resolve<IFontManager>()!;
+        internal static IIconManager IconManager => _instance.Resolve<IIconManager>()!;
     }
 }

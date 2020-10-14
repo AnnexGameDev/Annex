@@ -7,6 +7,7 @@ using Annex.Graphics;
 using Annex.Graphics.Sfml;
 using Annex.Logging;
 using Annex.Scenes;
+using Annex.Scenes.Layouts.Html;
 using Annex.Services;
 using SampleProject.Assets;
 using SampleProject.Scenes.Level1;
@@ -26,16 +27,18 @@ namespace SampleProject
             container.Provide<IAudioManager>(new AudioManager());
             container.Provide<IFontManager>(new FontManager());
             container.Provide<IIconManager>(new IconManager());
+            container.Provide<IHtmlLayoutManager>(new HtmlLayoutManager());
 
             container.Provide<IEventService>(new EventService());
             container.Provide<IAudioService>(new SfmlPlayer());
             container.Provide<ICanvas>(new SfmlCanvas());
             container.Provide<ISceneService>(new SceneService());
 
-            Debug.PackageAssetsToBinary(ServiceProvider.TextureManager, Path.Combine(SolutionFolder, "assets/textures/"));
-            Debug.PackageAssetsToBinary(ServiceProvider.AudioManager, Path.Combine(SolutionFolder, "assets/audio/"));
-            Debug.PackageAssetsToBinary(ServiceProvider.FontManager, Path.Combine(SolutionFolder, "assets/fonts/"));
-            Debug.PackageAssetsToBinary(ServiceProvider.IconManager, Path.Combine(SolutionFolder, "assets/icons/"));
+            Debug.PackageAssetsToBinary(ServiceProvider.TextureManager, Path.Combine(SolutionFolder, "assets/textures"));
+            Debug.PackageAssetsToBinary(ServiceProvider.AudioManager, Path.Combine(SolutionFolder, "assets/audio"));
+            Debug.PackageAssetsToBinary(ServiceProvider.FontManager, Path.Combine(SolutionFolder, "assets/fonts"));
+            Debug.PackageAssetsToBinary(ServiceProvider.IconManager, Path.Combine(SolutionFolder, "assets/icons"));
+            Debug.PackageAssetsToBinary(ServiceProvider.HtmlLayoutManager, Path.Combine(SolutionFolder, "assets/layouts"));
 
             new Game().Run();
         }

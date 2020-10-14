@@ -50,7 +50,7 @@ namespace Annex.Audio.Sfml
 
         private SoundStatus GetSoundStatus() {
             if (this._isDisposed) {
-                ServiceProvider.LogService.WriteLineWarning(PERFORMED_OPERATION_WHILE_DISPOSED.Format(nameof(GetSoundStatus)));
+                ServiceProvider.LogService?.WriteLineWarning(PERFORMED_OPERATION_WHILE_DISPOSED.Format(nameof(GetSoundStatus)));
                 return SoundStatus.Stopped;
             }
             lock (this) {
@@ -60,7 +60,7 @@ namespace Annex.Audio.Sfml
 
         private float GetVolume() {
             if (this._isDisposed) {
-                ServiceProvider.LogService.WriteLineWarning(PERFORMED_OPERATION_WHILE_DISPOSED.Format(nameof(GetVolume)));
+                ServiceProvider.LogService?.WriteLineWarning(PERFORMED_OPERATION_WHILE_DISPOSED.Format(nameof(GetVolume)));
                 return 0;
             }
             lock (this) {
@@ -71,7 +71,7 @@ namespace Annex.Audio.Sfml
         private void SetVolume(float volume) {
             Debug.ErrorIf(volume < 0 || volume > 100, INVALID_VOLUME_VALUE.Format(volume));
             if (this._isDisposed) {
-                ServiceProvider.LogService.WriteLineWarning(PERFORMED_OPERATION_WHILE_DISPOSED.Format(nameof(SetVolume)));
+                ServiceProvider.LogService?.WriteLineWarning(PERFORMED_OPERATION_WHILE_DISPOSED.Format(nameof(SetVolume)));
                 return;
             }
             lock (this) {
@@ -81,7 +81,7 @@ namespace Annex.Audio.Sfml
 
         public bool GetLoop() {
             if (this._isDisposed) {
-                ServiceProvider.LogService.WriteLineWarning(PERFORMED_OPERATION_WHILE_DISPOSED.Format(nameof(GetLoop)));
+                ServiceProvider.LogService?.WriteLineWarning(PERFORMED_OPERATION_WHILE_DISPOSED.Format(nameof(GetLoop)));
                 return false;
             }
             lock (this) {
@@ -91,7 +91,7 @@ namespace Annex.Audio.Sfml
 
         public void SetLoop(bool loop) {
             if (this._isDisposed) {
-                ServiceProvider.LogService.WriteLineWarning(PERFORMED_OPERATION_WHILE_DISPOSED.Format(nameof(SetLoop)));
+                ServiceProvider.LogService?.WriteLineWarning(PERFORMED_OPERATION_WHILE_DISPOSED.Format(nameof(SetLoop)));
                 return;
             }
             lock (this) {
