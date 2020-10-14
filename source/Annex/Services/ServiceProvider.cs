@@ -8,11 +8,7 @@ namespace Annex.Services
 {
     internal class ServiceProvider
     {
-        private static ServiceContainer _instance;
-
-        static ServiceProvider() {
-            _instance = ServiceContainerSingleton.Instance!;
-        }
+        private static ServiceContainer _instance => ServiceContainerSingleton.Instance!;
 
         internal static ILogService? LogService => _instance.Resolve<ILogService>();
         internal static ISceneService SceneService => _instance.Resolve<ISceneService>()!;

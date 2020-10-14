@@ -5,11 +5,15 @@ namespace Annex.Scenes.Layouts.Html
 {
     public class UIElementActivator
     {
+        private Type[] IdConstructorParameters = new Type[] { typeof(string) };
+
         public UIElement CreateInstance(Type type, string? id) {
-            if (id == null) {
+
+            if (type.GetConstructor(IdConstructorParameters) != null) {
+                return (UIElement)Activator.CreateInstance(type, id ?? Guid.NewGuid().ToString())!;
+            } else {
                 return (UIElement)Activator.CreateInstance(type)!;
             }
-            return (UIElement)Activator.CreateInstance(type, id)!;
         }
     }
 }

@@ -1,8 +1,10 @@
-﻿using Annex.Assets.Services;
+﻿using Annex.Assets;
+using Annex.Assets.Services;
 using Annex.Events;
 using Annex.Graphics;
 using Annex.Logging;
 using Annex.Scenes;
+using Annex.Scenes.Layouts.Html;
 using Annex.Services;
 
 namespace SampleProject
@@ -28,5 +30,6 @@ namespace SampleProject
         public static IAudioManager AudioManager => _instance.Resolve<IAudioManager>()!;
         public static IFontManager FontManager => _instance.Resolve<IFontManager>()!;
         public static IIconManager IconManager => _instance.Resolve<IIconManager>()!;
+        public static IHtmlLayoutManager HtmlLayoutManager => _instance.Resolve<IHtmlLayoutManager>();
     }
 }

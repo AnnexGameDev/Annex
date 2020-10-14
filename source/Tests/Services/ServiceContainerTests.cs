@@ -8,11 +8,19 @@ using System.Linq;
 
 namespace Tests.Services
 {
-    public class ServiceContainerTests : TestWithServiceContainerSingleton
+    public class ServiceContainerTests
     {
+        private ServiceContainer ServiceContainer => ServiceContainerSingleton.Instance!;
+
         [OneTimeSetUp]
         public new void OneTimeSetUp() {
+            ServiceContainerSingleton.Create();
             ServiceContainer.Provide<ILogService>(new LogService());
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown() {
+            ServiceContainerSingleton.Destroy();
         }
 
         [Test]

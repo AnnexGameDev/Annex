@@ -64,9 +64,14 @@ namespace Annex
         [Conditional("DEBUG")]
         public static void PackageAssetsToBinary(IAssetManager assetManager, string path) {
 
+            path = path.Replace('\\', '/');
+            if (!path.EndsWith("/")) {
+                path += "/";
+            }
             Directory.CreateDirectory(path);
 
-            foreach (var file in Directory.GetFiles(path, "*", SearchOption.AllDirectories)) {
+            foreach (var uncleanFile in Directory.GetFiles(path, "*", SearchOption.AllDirectories)) {
+                string file = uncleanFile.Replace('\\', '/');
                 string extension = file.Substring(file.LastIndexOf("."));
                 if (!assetManager.DataStreamer.IsValidExtension(extension)) {
                     continue;

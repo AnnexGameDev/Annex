@@ -2,19 +2,28 @@
 using Annex.Events;
 using Annex.Logging;
 using Annex.Scenes;
+using Annex.Services;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading;
 
 namespace Tests.Events
 {
-    public class EventServiceTests : TestWithServiceContainerSingleton, ITerminationCondition
+    public class EventServiceTests :  ITerminationCondition
     {
         public bool _shouldTerminate;
-        private IEventService _eventService => this.ServiceContainer.Resolve<IEventService>();
+        private IEventService _eventService => this.ServiceContainer.Resolve<IEventService>()!;
+
+        private ServiceContainer ServiceContainer => ServiceContainerSingleton.Instance!;
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown() {
+            ServiceContainerSingleton.Destroy();
+        }
 
         [OneTimeSetUp]
         public void OneTimeSetUp() {
+            ServiceContainerSingleton.Create();
             this.ServiceContainer.Provide<ILogService>(new LogService());
             this.ServiceContainer.Provide<ISceneService>(new SceneService());
         }

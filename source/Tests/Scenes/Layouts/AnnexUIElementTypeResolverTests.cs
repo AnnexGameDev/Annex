@@ -1,6 +1,7 @@
 ﻿using Annex;
 using Annex.Scenes.Components;
 using Annex.Scenes.Layouts.Html;
+using Annex.Services;
 using NUnit.Framework;
 using System;
 
@@ -15,6 +16,18 @@ namespace Tests.Scenes.Layouts
                 typeof(Label),
                 typeof(Textbox),
             };
+
+        private ServiceContainer ServiceContainer => ServiceContainerSingleton.Instance!;
+
+        [OneTimeSetUp]
+        public void OneTimeSetUp() {
+            ServiceContainerSingleton.Create();
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown() {
+            ServiceContainerSingleton.Destroy();
+        }
 
         [Test]
         public void Resolve_LowercaseNames_ThrowsException() {
