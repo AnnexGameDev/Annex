@@ -27,6 +27,10 @@ namespace Annex.Networking.DotNet
             this._server.Destroy();
         }
 
+        public override void DisconnectClient(int id) {
+            throw new NotImplementedException();
+        }
+
         public override void Start() {
             Console.WriteLine($"Creating server: {this.Configuration}");
             this._server.Start();

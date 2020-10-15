@@ -29,5 +29,12 @@
             Debug.Assert(this.Endpoint == null, "Endpoint has already been set");
             this.Endpoint = endpoint;
         }
+
+        public void Destroy() {
+            this.ID = null;
+            this.Endpoint = null;
+            this.BaseConnection = null;
+            this.SetState(ConnectionState.Unknown);
+        }
     }
 }

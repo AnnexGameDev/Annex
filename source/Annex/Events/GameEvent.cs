@@ -63,6 +63,10 @@ namespace Annex.Events
             return this._interval;
         }
 
+        public void MarkForRemoval() {
+            this._gameEventArgs.RemoveFromQueue = true;
+        }
+
         protected abstract void Run(EventArgs gameEventArgs);
     }
 }

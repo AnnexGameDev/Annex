@@ -15,7 +15,7 @@ namespace Annex.Networking.DotNet
         }
 
         public void OnReceive(object baseConnection, byte[] data) {
-            var connection = this._endpoint.Connections.CreateIfNotExistsAndGet(baseConnection, this._endpoint);
+            var connection = this._endpoint.CreateConnectionIfNotExistsAndGet(baseConnection);
 
             lock (this._messagesToProcess) {
                 this._messagesToProcess.Enqueue(((int)connection.ID, data));
@@ -26,9 +26,20 @@ namespace Annex.Networking.DotNet
             lock (this._messagesToProcess) {
                 while (this._messagesToProcess.Count != 0) {
                     (int id, byte[] data) = this._messagesToProcess.Dequeue();
-                    var connection = this._endpoint.Connections.Get(id);
+
+                    T connection;
+
+                    if (this._endpoint is ServerEndpoint<T> server) {
+                        connection = server.GetConnection(id)!;
+                    } else if (this._endpoint is ClientEndpoint<T> client) {
+                        connection = client.Connection!;
+                    } else {
+                        Debug.Error($"Unknown endpoint type {this._endpoint.GetType()}");
+                        throw new System.Exception();
+                    }
+
                     using var packet = new IncomingPacket(data);
-                    this._endpoint.PacketHandler.HandlePacket(connection, packet);
+                    this._endpoint.HandlePacket(connection, packet);
                 }
             }
         }

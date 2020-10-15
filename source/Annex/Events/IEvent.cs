@@ -4,5 +4,6 @@
     {
         string EventID { get; }
         EventArgs Probe(long timeDifference_ms);
+        void MarkForRemoval();
     }
 }
