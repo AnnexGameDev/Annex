@@ -21,6 +21,12 @@ namespace Annex.Scenes.Layouts.Html
             }
         }
 
+        public void RemoveAttribute(string key) {
+            if (this._attributes.ContainsKey(key)) {
+                this._attributes.Remove(key);
+            }
+        }
+
         public bool TryGetValue(string key, out string value) {
             if (this._attributes.TryGetValue(key, out var val)) {
                 value = val;

@@ -4,6 +4,7 @@ using Annex.Graphics.Contexts;
 using Annex.Scenes.Components;
 using Annex.Services;
 using System;
+using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace Annex.Scenes.Layouts.Html
@@ -14,11 +15,13 @@ namespace Annex.Scenes.Layouts.Html
         private readonly AnnexUIElementTypeResolver _annexTypeResolver;
         private readonly UIElementActivator _uiElementActivator;
         private readonly HtmlElementToAnnexTypeMap _elementToTypeMap;
+        private readonly Dictionary<string, HtmlAttributes> _styles;
 
         public HtmlLayoutLoader(UIElementTypeResolver typeResolver) {
             this._customTypeResolver = typeResolver;
             this._annexTypeResolver = new AnnexUIElementTypeResolver();
             this._uiElementActivator = new UIElementActivator();
+            this._styles = new Dictionary<string, HtmlAttributes>();
 
             this._elementToTypeMap = new HtmlElementToAnnexTypeMap(
                 "container",
@@ -45,13 +48,26 @@ namespace Annex.Scenes.Layouts.Html
                 }
 
                 string elementName = elementChild.Name.LocalName;
+
+                if (elementName == "style") {
+                    CreateStyle(elementChild);
+                    continue;
+                }
+
                 if (!this._elementToTypeMap.ContainsElement(elementName)) {
                     ServiceProvider.LogService?.WriteLineWarning($"Unknown node: {elementName}");
                     continue;
                 }
 
                 var attributes = new HtmlAttributes(elementChild);
-                var newChild = this.CreateChildOf(parent, attributes);
+                
+                HtmlAttributes? style = null;
+                if (attributes.TryGetValue("style-id", out string styleID)) {
+                    style = this._styles[styleID];
+                }
+                var attributeResolver = new HtmlAttributeResolver(attributes, style);
+
+                var newChild = this.CreateChildOf(parent, attributeResolver);
                 parent.AddChild(newChild);
 
                 if (newChild is Container c) {
@@ -60,7 +76,19 @@ namespace Annex.Scenes.Layouts.Html
             }
         }
 
-        private UIElement CreateUIElement(HtmlAttributes attributes) {
+        private void CreateStyle(XElement elementChild) {
+            var attributes = new HtmlAttributes(elementChild);
+
+            if (!attributes.TryGetValue("id", out string id)) {
+                ServiceProvider.LogService?.WriteLineWarning($"Style without id is defined");
+                return;
+            }
+
+            attributes.RemoveAttribute("id");
+            this._styles[id] = attributes;
+        }
+
+        private UIElement CreateUIElement(HtmlAttributeResolver attributes) {
 
             // Should we bind to a class?
             if (attributes.TryGetValue("class", out string className)) {
@@ -83,7 +111,7 @@ namespace Annex.Scenes.Layouts.Html
             return this._uiElementActivator.CreateInstance(annexType, attributes.ID);
         }
 
-        private UIElement CreateChildOf(Container parent, HtmlAttributes attributes) {
+        private UIElement CreateChildOf(Container parent, HtmlAttributeResolver attributes) {
             var child = this.CreateUIElement(attributes);
 
             this.SetPosition(child, parent, attributes);
@@ -99,24 +127,24 @@ namespace Annex.Scenes.Layouts.Html
             return child;
         }
 
-        private void SetPosition(UIElement element, Container parent, HtmlAttributes attributes) {
+        private void SetPosition(UIElement element, Container parent, HtmlAttributeResolver attributes) {
             if (!attributes.SetXYComponents("position", element.Position, parent.Size, parent.Position)) {
                 element.Position.Set(parent.Position);
             }
         }
 
-        private void SetSize(UIElement element, Container parent, HtmlAttributes attributes) {
+        private void SetSize(UIElement element, Container parent, HtmlAttributeResolver attributes) {
             attributes.SetXYComponents("size", element.Size, parent.Size, Vector.Create());
         }
 
-        private void SetTexture(Image img, HtmlAttributes attributes) {
+        private void SetTexture(Image img, HtmlAttributeResolver attributes) {
             if (!attributes.TryGetValue("texture", out string texture)) {
                 return;
             }
             img.ImageTextureName.Set(texture);
         }
 
-        private void SetText(Label label, HtmlAttributes attributes) {
+        private void SetText(Label label, HtmlAttributeResolver attributes) {
             if (attributes.TryGetValue("text", out string text)) {
                 label.Text.Set(text);
             }
