@@ -16,9 +16,7 @@ namespace Annex.Scenes.Components
                 this.Text.Set(this.Text.Value[0..^1]);
                 return;
             }
-            if (e.ToString().Length == 1) {
-                this.Text.Set(this.Text.Value + e.ToString());
-            }
+            this.Text.Set(this.Text.Value + e.LiteralContent);
         }
     }
 }

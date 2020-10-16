@@ -85,17 +85,11 @@ namespace Annex.Graphics.Sfml
         }
 
         private void RenderWindow_KeyReleased(object? sender, KeyEventArgs e) {
-            this.KeyReleased(new KeyboardKeyReleasedEvent() {
-                Key = e.Code.ToNonSFML(),
-                ShiftDown = e.Shift
-            });
+            this.KeyReleased(new KeyboardKeyReleasedEvent(e.Code.ToNonSFML(), e.Shift));
         }
 
         private void RenderWindow_KeyPressed(object? sender, KeyEventArgs e) {
-            this.KeyPressed(new KeyboardKeyPressedEvent() {
-                Key = e.Code.ToNonSFML(),
-                ShiftDown = e.Shift
-            });
+            this.KeyPressed(new KeyboardKeyPressedEvent(e.Code.ToNonSFML(), e.Shift));
         }
 
         private void RenderWindow_Closed(object? sender, EventArgs e) {
