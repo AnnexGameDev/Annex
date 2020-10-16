@@ -1,4 +1,5 @@
 ﻿using Annex.Networking.Packets;
+using Annex.Services;
 using System;
 using System.Collections.Generic;
 
@@ -18,6 +19,12 @@ namespace Annex.Networking
 
         public void HandlePacket(T client, IncomingPacket packet) {
             int id = packet.ReadInt32();
+            
+            if (!this._handlers.ContainsKey(id)) {
+                ServiceProvider.LogService?.WriteLineWarning($"No packet handler exists for packet id {id}");
+                return;
+            }
+
             this._handlers[id].Invoke(client, packet);
         }
     }
