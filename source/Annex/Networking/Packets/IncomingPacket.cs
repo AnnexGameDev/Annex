@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace Annex.Networking.Packets
 {
@@ -20,6 +21,10 @@ namespace Annex.Networking.Packets
 
         public int ReadInt32() {
             return this._reader.ReadInt32();
+        }
+
+        public float ReadFloat() {
+            return this._reader.ReadSingle();
         }
 
         public void Dispose() {

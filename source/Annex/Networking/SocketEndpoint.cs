@@ -1,5 +1,4 @@
 ﻿using Annex.Networking.Packets;
-using System;
 
 namespace Annex.Networking
 {
@@ -17,7 +16,7 @@ namespace Annex.Networking
             this.PacketHandler.HandlePacket(connection, packet);
         }
 
-        public void AddPacketHandler(int packetId, Action<T, IncomingPacket> handler) {
+        public void AddPacketHandler(int packetId, IIncomingPacketHandler<T> handler) {
             this.PacketHandler.AddPacketHandler(packetId, handler);
         }
 

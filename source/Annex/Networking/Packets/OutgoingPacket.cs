@@ -16,6 +16,10 @@ namespace Annex.Networking.Packets
             return this._memoryStream.ToArray();
         }
 
+        public void Write(float value) {
+            this._writer.Write(value);
+        }
+
         public void Write(string value) {
             this._writer.Write(value);
         }
