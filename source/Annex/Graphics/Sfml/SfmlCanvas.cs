@@ -159,8 +159,8 @@ namespace Annex.Graphics.Sfml
                 int width = (int)(size.X / sheet.NumColumns);
                 int height = (int)(size.Y / sheet.NumRows);
 
-                rect.Height.Set(width);
-                rect.Width.Set(height);
+                rect.Height.Set(height);
+                rect.Width.Set(width);
             }
 
             this.Draw(sheet._internalTexture);
