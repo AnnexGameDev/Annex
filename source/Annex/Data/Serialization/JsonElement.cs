@@ -49,6 +49,17 @@ namespace Annex.Data.Serialization
             this._jsonObject[key] = value;
         }
 
+        public void Set(string key, int value) {
+            this._jsonObject[key] = value;
+        }
+
+        public int GetInt(string key) {
+            if (!this._jsonObject.ContainsKey(key)) {
+                return 0;
+            }
+            return int.Parse((string)this._jsonObject[key]!);
+        }
+
         public float GetFloat(string key) {
             if (!this._jsonObject.ContainsKey(key)) {
                 return 0;

@@ -55,6 +55,7 @@ namespace Annex.Networking
         }
 
         public T CreateIfNotExistsAndGet(object baseConnection, SocketEndpoint<T> endpoint) {
+            Debug.ErrorIf(baseConnection == null, "Base connection cannot be null");
             if (!this.Exists(baseConnection)) {
                 var connection = new T();
                 connection.SetBaseConnection(baseConnection);

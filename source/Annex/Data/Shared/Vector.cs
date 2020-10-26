@@ -1,4 +1,5 @@
 ﻿using SFML.System;
+using System;
 using System.Diagnostics;
 
 namespace Annex.Data.Shared
@@ -22,6 +23,10 @@ namespace Annex.Data.Shared
 
         public static Vector Create() {
             return new Vector_Val_Val();
+        }
+
+        public float Norm() {
+            return Math.Abs(this.X) + Math.Abs(this.Y);
         }
 
         public static Vector Create(float x, float y) {

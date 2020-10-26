@@ -1,9 +1,6 @@
-﻿using Annex.Assets;
-using Annex.Logging.Decorator;
+﻿using Annex.Logging.Decorator;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 
 namespace Annex.Logging
@@ -90,6 +87,10 @@ namespace Annex.Logging
                 num = "0" + num;
             }
             return num;
+        }
+
+        public void WriteLine(string line) {
+            this.WriteLineClean(line);
         }
     }
 }
