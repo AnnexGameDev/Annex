@@ -73,5 +73,12 @@ namespace Annex.Data.Serialization
             }
             return new JsonElement((JObject)this._jsonObject[key]!);
         }
+
+        public JsonArray GetChildArray(string key) {
+            if (!this._jsonObject.ContainsKey(key)) {
+                return new JsonArray();
+            }
+            return new JsonArray((JArray)this._jsonObject[key]!);
+        }
     }
 }

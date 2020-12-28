@@ -72,7 +72,13 @@ namespace Annex.Networking.Lidgren
         }
 
         public override void SendPacket(int packetID, OutgoingPacket packet) {
-            var message = this._lidgrenClient!.CreateMessage();
+
+            if (this._lidgrenClient == null) {
+                ServiceProvider.LogService?.WriteLineWarning($"Canceling sending packet #{packetID} due to null client");
+                return;
+            }
+
+            var message = this._lidgrenClient.CreateMessage();
             message.Write(packetID);
             message.Write(packet.GetBytes());
             this._lidgrenClient.SendMessage(message, this._method);

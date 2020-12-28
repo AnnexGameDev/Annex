@@ -3,7 +3,6 @@ using Annex.Audio.Sfml.Events;
 using Annex.Events;
 using Annex.Services;
 using SFML.Audio;
-using System;
 using System.Collections.Generic;
 using static Annex.Audio.Sfml.Errors;
 

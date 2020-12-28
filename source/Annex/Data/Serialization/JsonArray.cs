@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace Annex.Data.Serialization
 {
@@ -8,6 +9,12 @@ namespace Annex.Data.Serialization
 
         public JsonArray() {
             this._elements = new List<JsonElement>();
+        }
+
+        public JsonArray(JArray jarray) : this() {
+            foreach (var element in jarray) {
+                this._elements.Add(new JsonElement(element.ToString()));
+            }
         }
 
         public void Add(JsonElement element) {
