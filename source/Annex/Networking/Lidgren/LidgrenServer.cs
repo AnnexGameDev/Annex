@@ -43,6 +43,14 @@ namespace Annex.Networking.Lidgren
         }
 
         private void ProcessMessage(NetIncomingMessage message) {
+
+            if (message.SenderConnection == null) {
+                if (message.MessageType == NetIncomingMessageType.WarningMessage) {
+                    ServiceProvider.LogService?.WriteLineWarning(message.ReadString());
+                }
+                 return;
+            }
+
             this.CreateConnectionIfNotExistsAndGet(message.SenderConnection);
 
             switch (message.MessageType) {
