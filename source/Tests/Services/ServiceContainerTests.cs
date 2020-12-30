@@ -24,10 +24,8 @@ namespace Tests.Services
         }
 
         [Test]
-        public void Resolve_WithDifferentService_ThrowsException() {
-            Assert.Throws<AssertionFailedException>(() => {
-                ServiceContainer.Resolve<AService>();
-            });
+        public void Resolve_WithDifferentService_ReturnsNull() {
+            Assert.IsNull(ServiceContainer.Resolve<AService>());
         }
 
         [Test]

@@ -21,7 +21,7 @@ namespace Annex.Services
 
         public T? Resolve<T>() where T : class, IService {
             if (!_services.ContainsKey(typeof(T))) {
-                throw new AssertionFailedException($"Service of type {typeof(T)} does not exist");
+                return null;
             }
             return (T)_services[typeof(T)];
         }
