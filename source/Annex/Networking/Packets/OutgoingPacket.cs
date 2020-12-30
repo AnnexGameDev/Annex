@@ -28,6 +28,14 @@ namespace Annex.Networking.Packets
             this._writer.Write(value);
         }
 
+        public void Write(bool value) {
+            this._writer.Write(value);
+        }
+
+        public void Write(byte value) {
+            this._writer.Write(value);
+        }
+
         public void Dispose() {
             this._writer.Dispose();
             this._memoryStream.Dispose();

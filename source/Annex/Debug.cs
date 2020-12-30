@@ -4,7 +4,6 @@ using Annex.Services;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using static Annex.Paths;
 
@@ -37,26 +36,33 @@ namespace Annex
         }
 
         [Conditional("DEBUG")]
+        public static void WarnIf(bool condition, string message, [CallerLineNumber] int line = 0, [CallerMemberName] string callingMethod = "unknown", [CallerFilePath] string filePath = "unknown") {
+            if (condition) {
+                ServiceProvider.LogService?.WriteLineWarning(FormatAndLog(message, "Warning", line, callingMethod, filePath));
+            }
+        }
+
+        [Conditional("DEBUG")]
         public static void Assert(bool condition, string reason, [CallerLineNumber] int line = 0, [CallerMemberName] string callingMethod = "unknown", [CallerFilePath] string filePath = "unknown") {
             if (!condition) {
-                throw new AssertionFailedException(FormatAndLog(reason, line, callingMethod, filePath));
+                throw new AssertionFailedException(FormatAndLog(reason, "Failure", line, callingMethod, filePath));
             }
         }
 
         [Conditional("DEBUG")]
         public static void ErrorIf(bool condition, string reason, [CallerLineNumber] int line = 0, [CallerMemberName] string callingMethod = "unknown", [CallerFilePath] string filePath = "unknown") {
             if (condition) {
-                throw new AssertionFailedException(FormatAndLog(reason, line, callingMethod, filePath));
+                throw new AssertionFailedException(FormatAndLog(reason, "Failure", line, callingMethod, filePath));
             }
         }
 
         [Conditional("DEBUG")]
         public static void Error(string reason, [CallerLineNumber] int line = 0, [CallerMemberName] string callingMethod = "unknown", [CallerFilePath] string filePath = "unknown") {
-            throw new AssertionFailedException(FormatAndLog(reason, line, callingMethod, filePath));
+            throw new AssertionFailedException(FormatAndLog(reason, "Failure", line, callingMethod, filePath));
         }
 
-        private static string FormatAndLog(string reason, int line, string callingMethod, string filePath) {
-            string message = $"Failure in {filePath.Substring(SourceFolder.Length)} on line {line} in the function {callingMethod}: {reason}";
+        private static string FormatAndLog(string reason, string messageType, int line, string callingMethod, string filePath) {
+            string message = $"{messageType} in {filePath.Substring(SourceFolder.Length)} on line {line} in the function {callingMethod}: {reason}";
             ServiceProvider.LogService?.WriteLineError(message);
             return message;
         }
