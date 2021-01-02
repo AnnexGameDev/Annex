@@ -30,7 +30,7 @@
             this.Endpoint = endpoint;
         }
 
-        public void Destroy() {
+        public virtual void Destroy() {
             this.ID = null;
             this.Endpoint = null;
             this.BaseConnection = null;
