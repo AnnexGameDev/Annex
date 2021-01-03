@@ -19,10 +19,12 @@ namespace Annex.Scenes.Components
         public bool HasFocus { get; private set; }
         public bool Visible;
 
-        public UIElement(string elementID) {
+        public UIElement(string elementID,
+            Vector? size = null,
+            Vector? position = null) {
             this.ElementID = elementID;
-            this.Size = Vector.Create(100, 100);
-            this.Position = Vector.Create();
+            this.Size = size ?? Vector.Create(100, 100);
+            this.Position = position ?? Vector.Create();
             this.Visible = true;
         }
 
