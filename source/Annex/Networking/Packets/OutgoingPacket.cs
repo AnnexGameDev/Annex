@@ -7,6 +7,8 @@ namespace Annex.Networking.Packets
         private readonly MemoryStream _memoryStream;
         private readonly BinaryWriter _writer;
 
+        public long Length => this._memoryStream.Length;
+
         public OutgoingPacket() {
             this._memoryStream = new MemoryStream();
             this._writer = new BinaryWriter(this._memoryStream);

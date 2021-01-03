@@ -8,6 +8,8 @@ namespace Annex.Networking.Packets
         private MemoryStream _memoryStream;
         private BinaryReader _reader;
 
+        public long Length => this._memoryStream.Length;
+
         public IncomingPacket(byte[] data) {
             this._data = data;
             this._memoryStream = new MemoryStream(data);

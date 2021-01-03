@@ -30,8 +30,12 @@ namespace Annex.Data.Serialization
             this._jsonObject[key] = jarray;
         }
 
-        public void Set(string name, string value) {
-            this._jsonObject[name] = value;
+        public void Set(string key, bool value) {
+            this._jsonObject[key] = value;
+        }
+
+        public void Set(string key, string value) {
+            this._jsonObject[key] = value;
         }
 
         public override string ToString() {
@@ -43,6 +47,13 @@ namespace Annex.Data.Serialization
                 return string.Empty;
             }
             return (string)this._jsonObject[key]!;
+        }
+
+        public bool GetBool(string key) {
+            if (!this._jsonObject.ContainsKey(key)) {
+                return false;
+            }
+            return (bool)this._jsonObject[key]!;
         }
 
         public void Set(string key, float value) {
