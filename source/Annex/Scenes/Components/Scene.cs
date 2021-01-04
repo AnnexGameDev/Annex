@@ -7,19 +7,19 @@ namespace Annex.Scenes.Components
 {
     public class Scene : Container
     {
-        public readonly EventQueue Events;
+        public readonly EventQueue EventQueue;
         public UIElement? FocusObject { get; private set; }
 
         public Scene(int width, int height) {
             this.FocusObject = null;
-            this.Events = new EventQueue();
+            this.EventQueue = new EventQueue();
             this.Position.Set(0, 0);
             this.Size.Set(width, height);
         }
 
         public Scene() {
             this.FocusObject = null;
-            this.Events = new EventQueue();
+            this.EventQueue = new EventQueue();
             this.Position.Set(0, 0);
             this.Size.Set(ServiceProvider.Canvas.GetResolution());
         }

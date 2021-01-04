@@ -33,13 +33,13 @@ namespace Annex.Events
 
                 foreach (int priority in Priorities.All) {
                     this.RunQueueLevel(this._queue.GetPriority(priority), timeDelta);
-                    this.RunQueueLevel(scenes.CurrentScene.Events.GetPriority(priority), timeDelta);
+                    this.RunQueueLevel(scenes.CurrentScene.EventQueue.GetPriority(priority), timeDelta);
                 }
             }
         }
 
         public IEvent? GetEvent(string id) {
-            return this._queue.GetEvent(id) ?? ServiceProvider.SceneService.CurrentScene.Events.GetEvent(id);
+            return this._queue.GetEvent(id) ?? ServiceProvider.SceneService.CurrentScene.EventQueue.GetEvent(id);
         }
 
         private void RunQueueLevel(List<IEvent> level, long diff) {
