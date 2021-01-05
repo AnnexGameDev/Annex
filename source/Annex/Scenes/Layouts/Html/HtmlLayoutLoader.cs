@@ -27,7 +27,8 @@ namespace Annex.Scenes.Layouts.Html
                 "container",
                 "button",
                 "label",
-                "textbox");
+                "textbox",
+                "passwordbox");
             this._elementToTypeMap.AddRelation("picture", "image");
         }
 
@@ -123,6 +124,9 @@ namespace Annex.Scenes.Layouts.Html
             if (child is Label lbl) {
                 this.SetText(lbl, attributes);
             }
+            if (child is Passwordbox txt) {
+                this.SetPasswordChar(txt, attributes);
+            }
 
             return child;
         }
@@ -142,6 +146,14 @@ namespace Annex.Scenes.Layouts.Html
                 return;
             }
             img.ImageTextureName.Set(texture);
+        }
+
+        private void SetPasswordChar(Passwordbox textbox, HtmlAttributeResolver attributes) {
+            if (!attributes.TryGetValue("password-char", out string passwordChar)) {
+                return;
+            }
+            Debug.WarnIf(passwordChar.Length > 1, $"Taking the first character of {passwordChar} as the password char");
+            textbox.PasswordChar = passwordChar.Length == 0 ? '\0' : passwordChar[0];
         }
 
         private void SetText(Label label, HtmlAttributeResolver attributes) {
