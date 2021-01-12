@@ -13,7 +13,7 @@ namespace Annex.Scenes.Components
 
     public abstract class UIElement : InputController, IDrawableObject
     {
-        private protected readonly string ElementID;
+        public readonly string ElementID;
         public readonly Vector Size;
         public readonly Vector Position;
         public bool HasFocus { get; private set; }
