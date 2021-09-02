@@ -30,6 +30,10 @@ namespace Annex.Data.Serialization
             this._jsonObject[key] = jarray;
         }
 
+        public bool ContainsKey(string key) {
+            return this._jsonObject.ContainsKey(key);
+        }
+
         public void Set(string key, bool value) {
             this._jsonObject[key] = value;
         }
