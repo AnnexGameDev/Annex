@@ -1,5 +1,4 @@
-﻿using Annex.Events;
-using Annex.Graphics.Events;
+﻿using Annex.Graphics.Events;
 using Annex.Scenes.Components;
 using Annex.Services;
 using System;
@@ -83,6 +82,13 @@ namespace Annex.Graphics
             this.currentScene.ChangeFocusObject(firstChild);
 
             this.currentScene.HandleMouseButtonPressed(e);
+        }
+
+        public void MouseMoved(MouseMovedEvent e) {
+            if (this._preventEvents) {
+                return;
+            }
+            this.currentScene.HandleMouseMoved(e);
         }
 
         public void KeyReleased(KeyboardKeyReleasedEvent e) {

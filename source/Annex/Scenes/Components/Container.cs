@@ -1,4 +1,5 @@
 ﻿using Annex.Graphics;
+using Annex.Graphics.Events;
 using System.Collections.Generic;
 
 namespace Annex.Scenes.Components
@@ -71,6 +72,21 @@ namespace Annex.Scenes.Components
             }
 
             return RemoveState.KeepSearching;
+        }
+
+        public override void HandleMouseMoved(MouseMovedEvent e) {
+
+            for (int i = 0; i < this._children.Count; i++) {
+                var child = this._children[i];
+                var x = e.MouseX;
+                var y = e.MouseY;
+
+                if (x >= child.Position.X && x <= child.Position.X + child.Size.X) {
+                    if (y >= child.Position.Y && y <= child.Position.Y + child.Size.Y) {
+                        child.HandleMouseMoved(e);
+                    }
+                }
+            }
         }
     }
 }

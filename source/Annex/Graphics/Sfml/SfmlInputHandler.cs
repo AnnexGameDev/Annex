@@ -13,6 +13,7 @@ namespace Annex.Graphics.Sfml
             renderWindow.Closed += this.RenderWindow_Closed;
             renderWindow.KeyPressed += this.RenderWindow_KeyPressed;
             renderWindow.KeyReleased += this.RenderWindow_KeyReleased;
+            renderWindow.MouseMoved += this.RenderWindow_MouseMoved;
             renderWindow.MouseButtonPressed += this.RenderWindow_MouseButtonPressed;
             renderWindow.MouseButtonReleased += this.RenderWindow_MouseButtonReleased;
             renderWindow.JoystickButtonPressed += this.RenderWindow_JoystickButtonPressed;
@@ -77,6 +78,19 @@ namespace Annex.Graphics.Sfml
 
             this.MouseButtonPressed(new MouseButtonPressedEvent() {
                 Button = e.Button.ToNonSFML(),
+                MouseX = (int)mousePos.X,
+                MouseY = (int)mousePos.Y,
+                WorldX = gamePos.X,
+                WorldY = gamePos.Y
+            });
+        }
+
+        private void RenderWindow_MouseMoved(object? sender, MouseMoveEventArgs e) {
+            var canvas = ServiceProvider.Canvas;
+            var mousePos = canvas.GetRealMousePos();
+            var gamePos = canvas.GetGameWorldMousePos();
+            this.MouseMoved(new MouseMovedEvent()
+            {
                 MouseX = (int)mousePos.X,
                 MouseY = (int)mousePos.Y,
                 WorldX = gamePos.X,
