@@ -1,6 +1,8 @@
 ﻿using Annex.Data.Shared;
 using Annex.Graphics;
+using Annex.Graphics.Events;
 using Annex.Scenes.Controllers;
+using System;
 
 namespace Annex.Scenes.Components
 {
@@ -18,6 +20,8 @@ namespace Annex.Scenes.Components
         public readonly Vector Position;
         public bool HasFocus { get; private set; }
         public bool Visible;
+
+        internal bool WasPreviouslyHoveredOver = false;
 
         public UIElement(string elementID,
             Vector? size = null,
@@ -69,6 +73,14 @@ namespace Annex.Scenes.Components
 
         public virtual void LostFocus() {
             this.HasFocus = false;
+        }
+
+        public virtual void OnMouseEntered() {
+            this.WasPreviouslyHoveredOver = true;
+        }
+
+        public virtual void OnMouseLeft() {
+            this.WasPreviouslyHoveredOver = false;
         }
     }
 }

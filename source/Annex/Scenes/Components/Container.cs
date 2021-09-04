@@ -83,8 +83,28 @@ namespace Annex.Scenes.Components
 
                 if (x >= child.Position.X && x <= child.Position.X + child.Size.X) {
                     if (y >= child.Position.Y && y <= child.Position.Y + child.Size.Y) {
+                        if (!child.WasPreviouslyHoveredOver) {
+                            child.OnMouseEntered();
+                        }
                         child.HandleMouseMoved(e);
+                        continue;
                     }
+                }
+
+                if (child.WasPreviouslyHoveredOver) {
+                    child.OnMouseLeft();
+                }
+            }
+        }
+
+        public override void OnMouseLeft() {
+            base.OnMouseLeft();
+
+            for (int i = 0; i< this._children.Count; i++) {
+                var child = this._children[i];
+
+                if (child.WasPreviouslyHoveredOver) {
+                    child.OnMouseLeft();
                 }
             }
         }
