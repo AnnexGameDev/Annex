@@ -3,6 +3,7 @@ using Annex.Data.Shared;
 using Annex.Events;
 using Annex.Graphics.Cameras;
 using Annex.Graphics.Contexts;
+using Annex.Graphics.Events;
 using Annex.Graphics.Sfml.Assets;
 using Annex.Graphics.Sfml.Events;
 using Annex.Scenes;
@@ -36,7 +37,9 @@ namespace Annex.Graphics.Sfml
 
         private readonly InputHandler _inputHandler;
 
-        public SfmlCanvas() {
+        public event System.EventHandler<WindowResizedEvent>? OnWindowResized;
+
+        public SfmlCanvas(WindowMode mode) {
             int resolutionWidth = 960;
             int resolutionHeight = 640;
 
@@ -49,11 +52,16 @@ namespace Annex.Graphics.Sfml
             this._camera = new Camera(this._resolution);
             this._uiView = new View(new Vector2f(this._resolution.X / 2, this._resolution.Y / 2), new Vector2f(this._resolution.X, this._resolution.Y));
             this._gameContentView = new View();
-            this._buffer = new RenderWindow(new SFML.Window.VideoMode((uint)this._resolution.X, (uint)this._resolution.Y), "", Styles.Default);
+            this._buffer = new RenderWindow(new SFML.Window.VideoMode((uint)this._resolution.X, (uint)this._resolution.Y), "", (Styles)mode);
             this._style = Styles.Default;
             this.SetTitle("Window");
 
             this._inputHandler = new SfmlInputHandler(this._buffer);
+
+            // Has to be handled differently
+            this._buffer.Resized += (sender, e) => {
+                this.OnWindowResized?.Invoke(this, new WindowResizedEvent(e.Width, e.Height));
+            };
 
             var events = ServiceProvider.EventService;
             events.AddEvent(PriorityType.GRAPHICS, new GraphicsEvent(this, this.BeginDrawing, this.EndDrawing)); ;
