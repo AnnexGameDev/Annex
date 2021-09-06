@@ -29,8 +29,13 @@ namespace Annex.Scenes.Components
         public override UIElement? GetFirstVisibleChildElementAt(int x, int y) {
             // z-index from last to first.
             for (int i = this._children.Count - 1; i >= 0; i--) {
-                if (this._children[i].GetFirstVisibleChildElementAt(x, y) is UIElement child) {
-                    return child;
+                var child = this._children[i];
+
+                if (!child.Visible) {
+                    continue;
+                }
+                if (child.GetFirstVisibleChildElementAt(x, y) is UIElement visibleChild) {
+                    return visibleChild;
                 }
             }
             return base.GetFirstVisibleChildElementAt(x, y);
