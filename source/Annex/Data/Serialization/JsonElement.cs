@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 
 namespace Annex.Data.Serialization
 {
@@ -73,6 +74,17 @@ namespace Annex.Data.Serialization
                 return 0;
             }
             return int.Parse((string)this._jsonObject[key]!);
+        }
+
+        public void Set(string key, uint value) {
+            this._jsonObject[key] = value;
+        }
+
+        public uint GetUInt(string key) {
+            if (!this._jsonObject.ContainsKey(key)) {
+                return default;
+            }
+            return uint.Parse((string)this._jsonObject[key]!);
         }
 
         public float GetFloat(string key) {
