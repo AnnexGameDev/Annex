@@ -39,6 +39,12 @@ namespace Annex.Networking.Packets
             this._reader = new BinaryReader(this._memoryStream);
         }
 
+        public double ReadDouble() {
+            var value = this._reader.ReadDouble();
+            this.WriteValue(value);
+            return value;
+        }
+
         public string ReadString() {
             var value = this._reader.ReadString();
             this.WriteValue(value);

@@ -46,6 +46,11 @@ namespace Annex.Networking.Packets
             this.WriteValue(value);
         }
 
+        public void Write(double value) {
+            this._writer.Write(value);
+            this.WriteValue(value);
+        }
+
         public void Write(string value) {
             this._writer.Write(value);
             this.WriteValue(value);

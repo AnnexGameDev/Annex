@@ -72,6 +72,12 @@ namespace Annex.Data.Shared
             }
         }
 
+        public float DistanceTo(Vector position) {
+            var dx = this.X - position.X;
+            var dy = this.Y - position.Y;
+            return (float)Math.Sqrt(dx * dx + dy * dy);
+        }
+
         private class Vector_Val_Ref : Vector
         {
             private readonly Float _y;

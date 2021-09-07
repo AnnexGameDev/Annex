@@ -65,6 +65,10 @@ namespace Annex.Data.Serialization
             this._jsonObject[key] = value;
         }
 
+        public void Set(string key, long value) {
+            this._jsonObject[key] = value;
+        }
+
         public void Set(string key, int value) {
             this._jsonObject[key] = value;
         }
@@ -92,6 +96,13 @@ namespace Annex.Data.Serialization
                 return 0;
             }
             return float.Parse((string)this._jsonObject[key]!);
+        }
+
+        public long GetLong(string key) {
+            if (!this._jsonObject.ContainsKey(key)) {
+                return 0;
+            }
+            return long.Parse((string)this._jsonObject[key]!);
         }
 
         public JsonElement GetChild(string key) {
