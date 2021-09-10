@@ -28,5 +28,9 @@ namespace Annex.Data.Serialization
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
             return this._elements.GetEnumerator();
         }
+
+        public int Count() {
+            return this._elements.Count;
+        }
     }
 }
