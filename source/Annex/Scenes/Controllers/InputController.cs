@@ -49,6 +49,10 @@ namespace Annex.Scenes.Controllers
 
         }
 
+        public virtual void HandleMouseWheelMoved(MouseWheelMovedEvent e) {
+
+        }
+
         public virtual UIElement? GetFirstVisibleChildElementAt(int x, int y) {
             return null;
         }

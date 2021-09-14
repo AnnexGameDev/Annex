@@ -15,12 +15,20 @@ namespace Annex.Graphics.Sfml
             renderWindow.KeyReleased += this.RenderWindow_KeyReleased;
             renderWindow.MouseMoved += this.RenderWindow_MouseMoved;
             renderWindow.MouseButtonPressed += this.RenderWindow_MouseButtonPressed;
+            renderWindow.MouseWheelScrolled += RenderWindow_MouseWheelScrolled;
             renderWindow.MouseButtonReleased += this.RenderWindow_MouseButtonReleased;
             renderWindow.JoystickButtonPressed += this.RenderWindow_JoystickButtonPressed;
             renderWindow.JoystickButtonReleased += this.RenderWindow_JoystickButtonReleased;
             renderWindow.JoystickConnected += this.RenderWindow_JoystickConnected;
             renderWindow.JoystickDisconnected += this.RenderWindow_JoystickDisconnected;
             renderWindow.JoystickMoved += this.RenderWindow_JoystickMoved;
+        }
+
+        private void RenderWindow_MouseWheelScrolled(object? sender, MouseWheelScrollEventArgs e) {
+            this.MouseWheelMoved(new MouseWheelMovedEvent()
+            {
+                Delta = e.Delta
+            });
         }
 
         private void RenderWindow_JoystickMoved(object? sender, JoystickMoveEventArgs e) {

@@ -21,6 +21,13 @@ namespace Annex.Graphics
             this.currentScene.HandleJoystickMoved(e);
         }
 
+        public void MouseWheelMoved(MouseWheelMovedEvent e) {
+            if (this._preventEvents) {
+                return;
+            }
+            this.currentScene.HandleMouseWheelMoved(e);
+        }
+
         public void JoystickDisconnected(JoystickDisconnectedEvent e) {
             if (this._preventEvents) {
                 return;
