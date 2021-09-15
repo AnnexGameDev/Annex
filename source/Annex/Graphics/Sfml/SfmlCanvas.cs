@@ -75,7 +75,7 @@ namespace Annex.Graphics.Sfml
             this._buffer.SetIcon(icon.Size.X, icon.Size.Y, icon.Pixels);
         }
 
-        private void SetTitle(string title) {
+        public void SetTitle(string title) {
             this._buffer.SetTitle(title);
             this._title = title;
         }

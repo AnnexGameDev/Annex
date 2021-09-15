@@ -18,5 +18,6 @@ namespace Annex.Graphics
         void ChangeResolution(uint width, uint height);
         void SetVisible(bool visible);
         void SetWindowIcon(string iconPath);
+        void SetTitle(string title);
     }
 }
