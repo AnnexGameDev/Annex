@@ -11,4 +11,9 @@ namespace Annex.Graphics.Contexts
     {
 
     }
+
+    internal interface ISheetPlatformTarget : IPlatformTarget
+    {
+
+    }
 }

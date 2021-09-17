@@ -7,6 +7,8 @@ namespace Annex.Graphics.Contexts
     {
         internal const int DETERMINE_SIZE_FROM_IMAGE = -1;
 
+        internal ISheetPlatformTarget? Target;
+
         public String SourceTextureName {
             get {
                 return this._internalTexture.SourceTextureName;

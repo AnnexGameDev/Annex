@@ -11,7 +11,7 @@ namespace Annex.Graphics.Sfml.Events
         private readonly Action _predraw;
         private readonly Action _postdraw;
 
-        public GraphicsEvent(ICanvas canvas, Action preDraw, Action postDraw) : base(DrawGameEventID, 16, 0) {
+        public GraphicsEvent(ICanvas canvas, Action preDraw, Action postDraw) : base(DrawGameEventID, 0, 0) {
             this._canvas = canvas;
             this._predraw = preDraw;
             this._postdraw = postDraw;

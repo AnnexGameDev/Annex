@@ -157,19 +157,30 @@ namespace Annex.Graphics.Sfml
                 return;
             }
 
-            var rect = sheet.SourceTextureRect;
-            if (rect.Width == SpriteSheetContext.DETERMINE_SIZE_FROM_IMAGE && rect.Height == SpriteSheetContext.DETERMINE_SIZE_FROM_IMAGE) {
-                var args = new AssetConverterArgs(sheet.SourceTextureName.Value, this._textureConverter);
-                bool loadSuccess = ServiceProvider.TextureManager.GetAsset(args, out var asset);
-                Debug.Assert(loadSuccess, TEXTURE_FAILED_TO_LOAD.Format(sheet.SourceTextureName.Value));
-                using var sprite = new Sprite((Texture)asset.GetTarget());
-                var size = sprite.Texture.Size;
+            if (sheet.Target is not SheetPlatformTarget) {
+                sheet.Target?.Dispose();
+                sheet.Target = new SheetPlatformTarget();
+            }
+            var target = (SheetPlatformTarget)sheet.Target;
 
-                int width = (int)(size.X / sheet.NumColumns);
-                int height = (int)(size.Y / sheet.NumRows);
 
-                rect.Height.Set(height);
-                rect.Width.Set(width);
+            if (target.TextureId != sheet.SourceTextureName.Value) {
+                target.TextureId = sheet.SourceTextureName.Value;
+
+                var rect = sheet.SourceTextureRect;
+                if (rect.Width == SpriteSheetContext.DETERMINE_SIZE_FROM_IMAGE && rect.Height == SpriteSheetContext.DETERMINE_SIZE_FROM_IMAGE) {
+                    var args = new AssetConverterArgs(sheet.SourceTextureName.Value, this._textureConverter);
+                    bool loadSuccess = ServiceProvider.TextureManager.GetAsset(args, out var asset);
+                    Debug.Assert(loadSuccess, TEXTURE_FAILED_TO_LOAD.Format(sheet.SourceTextureName.Value));
+                    using var sprite = new Sprite((Texture)asset.GetTarget());
+                    var size = sprite.Texture.Size;
+
+                    int width = (int)(size.X / sheet.NumColumns);
+                    int height = (int)(size.Y / sheet.NumRows);
+
+                    rect.Height.Set(height);
+                    rect.Width.Set(width);
+                }
             }
 
             this.Draw(sheet._internalTexture);
@@ -184,7 +195,6 @@ namespace Annex.Graphics.Sfml
             // We need to update the camera.
             this.UpdateView(ctx);
 
-            var unknownTarget = ctx.Target;
             if (ctx.Target is not TexturePlatformTarget) {
                 ctx.Target?.Dispose();
                 ctx.Target = new TexturePlatformTarget();
