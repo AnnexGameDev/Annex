@@ -6,6 +6,7 @@ using Annex.Graphics.Contexts;
 using Annex.Graphics.Events;
 using Annex.Graphics.Sfml.Assets;
 using Annex.Graphics.Sfml.Events;
+using Annex.Graphics.Sfml.Targets;
 using Annex.Scenes;
 using Annex.Services;
 using SFML.Graphics;
@@ -176,45 +177,68 @@ namespace Annex.Graphics.Sfml
 
         public void Draw(TextureContext ctx) {
 
-            if (System.String.IsNullOrEmpty(ctx.SourceTextureName)) {
+            if (string.IsNullOrEmpty(ctx.SourceTextureName)) {
                 return;
             }
 
             // We need to update the camera.
             this.UpdateView(ctx);
 
-            var args = new AssetConverterArgs(ctx.SourceTextureName.Value, this._textureConverter);
-            bool loadSuccess = ServiceProvider.TextureManager.GetAsset(args, out var asset);
-            Debug.Assert(loadSuccess, TEXTURE_FAILED_TO_LOAD.Format(ctx.SourceTextureName.Value));
+            var unknownTarget = ctx.Target;
+            if (ctx.Target is not TexturePlatformTarget) {
+                ctx.Target?.Dispose();
+                ctx.Target = new TexturePlatformTarget();
+            }
+            var target = (TexturePlatformTarget)ctx.Target;
+            var sprite = target.Sprite;
 
-            using var sprite = new Sprite((Texture)asset.GetTarget()) {
-                Position = ctx.RenderPosition
-            };
+            if (target.TextureName != ctx.SourceTextureName.Value) {
+                var args = new AssetConverterArgs(ctx.SourceTextureName.Value!, this._textureConverter);
+                bool loadSuccess = ServiceProvider.TextureManager.GetAsset(args, out var asset);
+                Debug.Assert(loadSuccess, TEXTURE_FAILED_TO_LOAD.Format(ctx.SourceTextureName.Value!));
 
-            Vector2f renderSize;
+                sprite.Texture = (Texture)asset.GetTarget();
+                target.TextureName = ctx.SourceTextureName.Value;
+            }
+
+            target.RenderPosition.X = ctx.RenderPosition.X;
+            target.RenderPosition.Y = ctx.RenderPosition.Y;
+            sprite.Position = target.RenderPosition;
+
+            var renderSize = target.RenderSize;
             if (ctx.RenderSize == null) {
                 if (ctx.SourceTextureRect == null) {
-                    renderSize = new Vector2f(sprite.Texture.Size.X, sprite.Texture.Size.Y);
+                    renderSize.X = sprite.Texture.Size.X;
+                    renderSize.Y = sprite.Texture.Size.Y;
                 } else {
-                    renderSize = new Vector2f(ctx.SourceTextureRect.Width, ctx.SourceTextureRect.Height);
+                    renderSize.X = ctx.SourceTextureRect.Width;
+                    renderSize.Y = ctx.SourceTextureRect.Height;
                 }
             } else {
-                renderSize = ctx.RenderSize;
+                renderSize.X = ctx.RenderSize.X;
+                renderSize.Y = ctx.RenderSize.Y;
             }
 
             if (ctx.SourceTextureRect != null) {
                 sprite.TextureRect = ctx.SourceTextureRect;
-                sprite.Scale = new Vector2f(renderSize.X / ctx.SourceTextureRect.Width, renderSize.Y / ctx.SourceTextureRect.Height);
+                target.Scale.X = renderSize.X / ctx.SourceTextureRect.Width;
+                target.Scale.Y = renderSize.Y / ctx.SourceTextureRect.Height;
             } else {
-                sprite.Scale = new Vector2f(renderSize.X / sprite.Texture.Size.X, renderSize.Y / sprite.Texture.Size.Y);
+                target.Scale.X = renderSize.X / sprite.Texture.Size.X;
+                target.Scale.Y = renderSize.Y / sprite.Texture.Size.Y;
             }
+            sprite.Scale = target.Scale;
 
             if (ctx.RenderColor != null) {
                 sprite.Color = ctx.RenderColor;
             }
 
             if (ctx.Rotation % 360 != 0) {
-                sprite.Origin = ctx.RelativeRotationOrigin;
+
+                target.Origin.X = ctx.RelativeRotationOrigin.X;
+                target.Origin.Y = ctx.RelativeRotationOrigin.Y;
+
+                sprite.Origin = target.Origin;
                 sprite.Rotation = ctx.Rotation;
                 sprite.Position += new Vector2f(ctx.RelativeRotationOrigin.X, ctx.RelativeRotationOrigin.Y);
             }

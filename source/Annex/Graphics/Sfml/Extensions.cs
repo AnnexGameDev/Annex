@@ -1,4 +1,6 @@
-﻿using Annex.Scenes;
+﻿using Annex.Data.Shared;
+using Annex.Scenes;
+using SFML.System;
 using SFML.Window;
 
 namespace Annex.Graphics.Sfml

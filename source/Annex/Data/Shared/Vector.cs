@@ -17,6 +17,7 @@ namespace Annex.Data.Shared
             this.Y += instance.Y;
         }
 
+
         public static implicit operator Vector2f(Vector instance) {
             return new Vector2f(instance.X, instance.Y);
         }

@@ -13,6 +13,8 @@ namespace Annex.Graphics.Contexts
         public float Rotation { get; set; }
         public Vector RelativeRotationOrigin { get; set; }
 
+        internal ITexturePlatformTarget? Target;
+
         public TextureContext(String textureName) {
             this.SourceTextureName = textureName;
             this.RenderPosition = Vector.Create();
