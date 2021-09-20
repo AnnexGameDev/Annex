@@ -151,6 +151,57 @@ namespace Annex.Graphics.Sfml
             this._buffer.Draw(text);
         }
 
+        public void Draw(BatchTextureContext batch) {
+            if (string.IsNullOrEmpty(batch.SourceTextureName)) {
+                return;
+            }
+
+            // We need to update the camera.
+            this.UpdateView(batch);
+            if (batch.vertex_cache as DrawableVertexArray is null) {
+                var args = new AssetConverterArgs(batch.SourceTextureName, this._textureConverter);
+                bool loadSuccess = ServiceProvider.TextureManager.GetAsset(args, out var asset);
+                Debug.Assert(loadSuccess, TEXTURE_FAILED_TO_LOAD.Format(batch.SourceTextureName));
+
+                var texture = (Texture)asset.GetTarget();
+                int batchSize = batch.RenderPositions.Length;
+                var vertices = new VertexArray(PrimitiveType.Quads, (uint)batchSize * 4);
+
+                for (uint i = 0; i < batchSize; i++) {
+                    uint quad_num = i * 4;
+
+                    var size = batch.RenderSizes[i];
+                    var pos = batch.RenderPositions[i];
+
+                    float rect_top = 0;
+                    float rect_left = 0;
+                    float rect_right = texture.Size.X;
+                    float rect_bottom = texture.Size.Y;
+                    if (batch.SourceTextureRects != null) {
+                        var rect = batch.SourceTextureRects[i];
+                        rect_top = rect.top;
+                        rect_left = rect.left;
+                        rect_right = rect.left + rect.width;
+                        rect_bottom = rect.top + rect.height;
+                    }
+
+                    var color = Color.White;
+                    if (batch.RenderColors != null) {
+                        color = batch.RenderColors[i];
+                    }
+
+                    vertices[quad_num] = new Vertex(new Vector2f(pos.x, pos.y), color, new Vector2f(rect_left, rect_top));
+                    vertices[quad_num + 1] = new Vertex(new Vector2f(pos.x + size.x, pos.y), color, new Vector2f(rect_right, rect_top));
+                    vertices[quad_num + 2] = new Vertex(new Vector2f(pos.x + size.x, pos.y + size.y), color, new Vector2f(rect_right, rect_bottom));
+                    vertices[quad_num + 3] = new Vertex(new Vector2f(pos.x, pos.y + size.y), color, new Vector2f(rect_left, rect_bottom));
+                }
+
+                batch.vertex_cache = new DrawableVertexArray(vertices, texture);
+            }
+
+            this._buffer.Draw(batch.vertex_cache as DrawableVertexArray);
+        }
+
         public void Draw(SpriteSheetContext sheet) {
 
             if (System.String.IsNullOrEmpty(sheet.SourceTextureName)) {
