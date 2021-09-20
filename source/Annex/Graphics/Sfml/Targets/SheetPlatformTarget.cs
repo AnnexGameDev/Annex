@@ -1,5 +1,4 @@
 ﻿using Annex.Graphics.Contexts;
-using SFML.System;
 
 namespace Annex.Graphics.Sfml.Targets
 {

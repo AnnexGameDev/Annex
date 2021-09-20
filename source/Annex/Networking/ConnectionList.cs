@@ -9,6 +9,8 @@ namespace Annex.Networking
         private readonly List<T?> _connections;
         private readonly Dictionary<object, int> _connectionMap;
 
+        public int Size => this._connections.Count;
+
         public ConnectionList() {
             this._connections = new List<T?>();
             this._connectionMap = new Dictionary<object, int>();

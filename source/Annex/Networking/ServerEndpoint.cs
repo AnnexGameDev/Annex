@@ -11,6 +11,8 @@ namespace Annex.Networking
         public readonly ServerConfiguration Configuration;
         private readonly ConnectionList<T> _connections;
 
+        public int NumConnections => this._connections.Size;
+
         public ServerEndpoint(ServerConfiguration config) {
             this.Configuration = config;
             this._connections = new ConnectionList<T>();
