@@ -12,5 +12,9 @@ namespace Annex
             _sw = new Stopwatch();
             _sw.Start();
         }
+
+        public static long Since(long time) {
+            return Now - time;
+        }
     }
 }
