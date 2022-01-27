@@ -3,7 +3,7 @@ using FluentAssertions;
 using System;
 using Xunit;
 
-namespace Annex.Core.Tests
+namespace Annex.Core.Tests.Services
 {
     public class ContainerTests
     {
