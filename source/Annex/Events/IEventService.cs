@@ -1,5 +1,4 @@
-﻿using Annex.Networking.Lidgren;
-using Annex.Services;
+﻿using Annex.Services;
 
 namespace Annex.Events
 {
