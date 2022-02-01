@@ -3,6 +3,7 @@
     public class RegistrationOptions
     {
         public bool Singleton { get; init; } = false;
+        public bool Aggregate { get; init; } = false;
     }
 
     public interface IContainer

@@ -1,6 +1,8 @@
 using Annex.Core.Services;
 using FluentAssertions;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Annex.Core.Tests.Services
@@ -9,6 +11,8 @@ namespace Annex.Core.Tests.Services
     {
         private readonly IContainer _container;
         private readonly RegistrationOptions _singletonOptions;
+        private readonly RegistrationOptions _aggregateOptions;
+        private readonly RegistrationOptions _singletonAggregateOptions;
 
         #region Helpers
         private interface IServiceInterface { }
@@ -152,6 +156,60 @@ namespace Annex.Core.Tests.Services
             Assert.Throws<InvalidOperationException>(() => {
                 this._container.Resolve<ServiceWithMultipleConstructors>();
             });
+        }
+
+        [Fact]
+        public void GivenANonAggregateSErviceIsRegistered_WhenRegisteringAnAggregateService_ThenThrowsInvalidCastException() {
+            // Arrange
+            this._container.Register<IServiceInterface, ServiceImplementation>();
+
+            // Act
+            // Assert
+            Assert.Throws<InvalidCastException>(() => {
+                this._container.Register<IServiceInterface, ServiceImplementation>(this._aggregateOptions);
+            });
+        }
+        
+        [Fact]
+        public void GivenAServiceIsRegisteredAsAggregate_WhenResolving_ThenReturnsServiceInAggregation() {
+            // Arrange
+            this._container.Register<IServiceInterface, ServiceImplementation>(this._aggregateOptions);
+
+            // Act
+            var theAggregatedServices = this._container.Resolve<IEnumerable<IServiceInterface>>();
+
+            // Assert
+            theAggregatedServices
+                .Should().BeAssignableTo<IEnumerable<IServiceInterface>>().And
+                .HaveCount(1).And
+                .AllBeOfType<ServiceImplementation>();
+        }
+
+        [Fact]
+        public void GivenMultipleServicesAreRegisteredAsAggregate_WhenResoling_ThenAllAreResolved() {
+            // Arrange
+            this._container.Register<IServiceInterface, ServiceImplementation>(this._aggregateOptions);
+            this._container.Register<IServiceInterface, ServiceImplementation>(this._aggregateOptions);
+
+            // Act
+            var theActualServices = this._container.Resolve<IEnumerable<IServiceInterface>>();
+
+            // Assert
+            theActualServices.Should().HaveCount(2).And.AllBeOfType<ServiceImplementation>();
+        }
+
+        [Fact]
+        public void GivenAServiceIsRegisteredAsAggregateSingleton_WhenResolvingMultipleTimes_ThenTheSameAggregateInstanceIsReturned() {
+            // Arrange
+            this._container.Register<IServiceInterface, ServiceImplementation>(this._singletonAggregateOptions);
+
+            var theExpectedInstance = this._container.Resolve<IEnumerable<IServiceInterface>>().Single();
+
+            // Act
+            var theActualInstance = this._container.Resolve<IEnumerable<IServiceInterface>>().Single();
+
+            // Assert
+            theActualInstance.Should().Be(theExpectedInstance);
         }
     }
 }

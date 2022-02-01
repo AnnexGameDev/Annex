@@ -4,9 +4,13 @@ namespace Annex.Core.Services
 {
     internal class Container : IContainer
     {
+        private record UninstanciatedSingleton(Type type) { }
+
         private readonly Dictionary<Type, object> _serviceData = new();
 
-        private bool IsSingleton(object serviceData) => serviceData is not Type;
+        // If a service is stored as a Type, it should be instanciated on each Resolve.
+        // Otherwise, it's a singleton
+        private bool ShouldBeInstanciated(object data) => data is Type || data is UninstanciatedSingleton;
 
         public Container() {
             // Register the container to the container
@@ -14,12 +18,24 @@ namespace Annex.Core.Services
         }
 
         public void Register<TInterface, TImplementation>(RegistrationOptions? options = null) where TImplementation : TInterface {
-            // Register the service as usual
-            this._serviceData.Add(typeof(TInterface), typeof(TImplementation));
+
+            object serviceData = typeof(TImplementation);
 
             if (options?.Singleton == true) {
-                // If it's a singleton, then overwrite it with the instance.
-                this._serviceData[typeof(TInterface)] = this.Resolve<TInterface>()!;
+                serviceData = new UninstanciatedSingleton(typeof(TInterface));
+            }
+
+            if (options?.Aggregate == true) {
+                if (!this.IsRegistered<TInterface>()) {
+                    this._serviceData.Add(typeof(IEnumerable<TInterface>), new List<object>());
+                }
+
+                if (this._serviceData[typeof(IEnumerable<TInterface>)] is not List<object> lst) {
+                    throw new InvalidCastException($"Trying to register aggregate service but already found the non-aggregate service {this._serviceData[typeof(TInterface)].GetType().Name} registered already");
+                }
+                lst.Add(serviceData);
+            } else {
+                this._serviceData.Add(typeof(TInterface), serviceData);
             }
         }
 
@@ -40,16 +56,29 @@ namespace Annex.Core.Services
                 throw new NullReferenceException($"No service registered to type: {type.Name}");
             }
 
-            var entry = this._serviceData[type];
-            if (this.IsSingleton(entry)) {
-                return entry;
+            if (type == typeof(IEnumerable<>)) {
+                type = type.GetGenericArguments().Single();
             }
 
-            Debug.Assert(entry is Type, "Non-singleton services should be stored as types");
-            return CreateInstanceOf((Type)entry);
+            var entry = this._serviceData[type];
+
+            if (entry is List<object> enumerable) {
+                return enumerable.Select(data => this.CreateInstanceOf(data));
+            }
+            return this.CreateInstanceOf(entry);
         }
 
-        private object CreateInstanceOf(Type type) {
+        private object CreateInstanceOf(object data) {
+
+            if (!this.ShouldBeInstanciated(data)) {
+                return data;
+            }
+
+            if (data is UninstanciatedSingleton uninstanciatedSingleton) {
+                return this.CreateInstanceOf(uninstanciatedSingleton.type);
+            }
+
+            var type = (Type)data;
             var constructor = type.GetConstructors().Single();
             var dependencies = constructor.GetParameters()
                 .Select(parameter => parameter.ParameterType)

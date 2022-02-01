@@ -16,8 +16,16 @@ namespace UnitTests.Core.Fixture
             return this._fixture.Create<T>();
         }
 
+        public IEnumerable<T> CreateMany<T>() {
+            return this._fixture.CreateMany<T>();
+        }
+
         public T Freeze<T>() {
             return this._fixture.Freeze<T>();
+        }
+
+        public void Register<T>(Func<T> creator) {
+            this._fixture.Register<T>(creator);
         }
     }
 }
