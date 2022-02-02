@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Annex.Core.Logging;
+using System.Collections;
 
 namespace Annex.Core.Services
 {
@@ -24,6 +25,8 @@ namespace Annex.Core.Services
         }
 
         public void Register<TInterface, TImplementation>(RegistrationOptions? options = null) where TImplementation : TInterface {
+
+            Log.Trace(LogSeverity.Verbose, $"Registering {typeof(TInterface).Name} -> {typeof(TImplementation).Name} with options {options?.ToString()}");
 
             object serviceData = typeof(TImplementation);
 
@@ -95,6 +98,21 @@ namespace Annex.Core.Services
                 .Select(dependencyType => this.Resolve(dependencyType))
                 .ToArray();
             return Activator.CreateInstance(type, dependencies)!;
+        }
+
+        public void Dispose() {
+            foreach (var serviceData in this._serviceData.Values) {
+                // Remember that 'this' is also injected into the container. Don't stackoverflow
+                if (serviceData is IDisposable disposable && disposable != this) {
+                    disposable.Dispose();
+                }
+
+                if (serviceData is IEnumerable<object> aggregateData) {
+                    if (aggregateData is IDisposable disposableAggregate) {
+                        disposableAggregate.Dispose();
+                    }
+                }
+            }
         }
     }
 }
