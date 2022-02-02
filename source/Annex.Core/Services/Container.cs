@@ -1,16 +1,22 @@
-﻿using System.Diagnostics;
+﻿using System.Collections;
 
 namespace Annex.Core.Services
 {
     internal class Container : IContainer
     {
-        private record UninstanciatedSingleton(Type type) { }
+        private class SingletonEntry
+        {
+            public Type Type { get; set; }
+            public object? Instance { get; set; }
+            public bool IsInstanciated => this.Instance != null;
+
+            public SingletonEntry(Type type) {
+                this.Type = type;
+                this.Instance = null;
+            }
+        }
 
         private readonly Dictionary<Type, object> _serviceData = new();
-
-        // If a service is stored as a Type, it should be instanciated on each Resolve.
-        // Otherwise, it's a singleton
-        private bool ShouldBeInstanciated(object data) => data is Type || data is UninstanciatedSingleton;
 
         public Container() {
             // Register the container to the container
@@ -22,16 +28,21 @@ namespace Annex.Core.Services
             object serviceData = typeof(TImplementation);
 
             if (options?.Singleton == true) {
-                serviceData = new UninstanciatedSingleton(typeof(TInterface));
+                serviceData = new SingletonEntry(typeof(TImplementation));
             }
 
             if (options?.Aggregate == true) {
-                if (!this.IsRegistered<TInterface>()) {
+                if (this.IsRegistered<TInterface>()) {
+                    throw new ArgumentException($"Trying to register aggregate service but already found the non-aggregate service {this._serviceData[typeof(TInterface)].GetType().Name} registered already");
+                }
+
+                if (!this.IsRegistered<IEnumerable<TInterface>>()) {
                     this._serviceData.Add(typeof(IEnumerable<TInterface>), new List<object>());
                 }
 
-                if (this._serviceData[typeof(IEnumerable<TInterface>)] is not List<object> lst) {
-                    throw new InvalidCastException($"Trying to register aggregate service but already found the non-aggregate service {this._serviceData[typeof(TInterface)].GetType().Name} registered already");
+                object expectedAggregateEntry = this._serviceData[typeof(IEnumerable<TInterface>)];
+                if (expectedAggregateEntry is not List<object> lst) {
+                    throw new InvalidCastException($"Aggregate service value isn't a List: {this._serviceData[typeof(TInterface)].GetType().Name} -> {expectedAggregateEntry.GetType().Name}");
                 }
                 lst.Add(serviceData);
             } else {
@@ -48,7 +59,7 @@ namespace Annex.Core.Services
         }
 
         public T Resolve<T>() {
-            return (T)Resolve(typeof(T));
+            return (T)this.Resolve(typeof(T));
         }
 
         public object Resolve(Type type) {
@@ -56,26 +67,25 @@ namespace Annex.Core.Services
                 throw new NullReferenceException($"No service registered to type: {type.Name}");
             }
 
-            if (type == typeof(IEnumerable<>)) {
+            var entry = this._serviceData[type];
+
+            if (type.IsAssignableTo(typeof(IEnumerable)) && type.IsGenericType) {
                 type = type.GetGenericArguments().Single();
             }
 
-            var entry = this._serviceData[type];
-
             if (entry is List<object> enumerable) {
-                return enumerable.Select(data => this.CreateInstanceOf(data));
+                return enumerable.Select(data => this.CreateInstanceOf(data)).MakeGeneric(type);
             }
             return this.CreateInstanceOf(entry);
         }
 
         private object CreateInstanceOf(object data) {
 
-            if (!this.ShouldBeInstanciated(data)) {
-                return data;
-            }
-
-            if (data is UninstanciatedSingleton uninstanciatedSingleton) {
-                return this.CreateInstanceOf(uninstanciatedSingleton.type);
+            if (data is SingletonEntry singletonEntry) {
+                if (!singletonEntry.IsInstanciated) {
+                    singletonEntry.Instance = this.CreateInstanceOf(singletonEntry.Type);
+                }
+                return singletonEntry.Instance!;
             }
 
             var type = (Type)data;

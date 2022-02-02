@@ -1,9 +1,8 @@
 ﻿namespace Annex.Core.Events
 {
-
-
     public interface IEventGroup
     {
+        int Priority { get; }
         string GroupId { get; }
         GroupExecutionMode ExecutionMode { get; }
 

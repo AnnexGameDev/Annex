@@ -31,6 +31,15 @@ namespace Annex.Core.Tests.Services
             this._singletonOptions = new RegistrationOptions() {
                 Singleton = true
             };
+
+            this._aggregateOptions = new RegistrationOptions() {
+                Aggregate = true
+            };
+
+            this._singletonAggregateOptions = new RegistrationOptions() {
+                Singleton = true,
+                Aggregate = true
+            };
         }
 
         [Fact]
@@ -159,13 +168,13 @@ namespace Annex.Core.Tests.Services
         }
 
         [Fact]
-        public void GivenANonAggregateSErviceIsRegistered_WhenRegisteringAnAggregateService_ThenThrowsInvalidCastException() {
+        public void GivenANonAggregateServiceIsRegistered_WhenRegisteringAnAggregateService_ThenThrowsArgumentException() {
             // Arrange
             this._container.Register<IServiceInterface, ServiceImplementation>();
 
             // Act
             // Assert
-            Assert.Throws<InvalidCastException>(() => {
+            Assert.Throws<ArgumentException>(() => {
                 this._container.Register<IServiceInterface, ServiceImplementation>(this._aggregateOptions);
             });
         }

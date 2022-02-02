@@ -12,7 +12,7 @@ namespace Annex.Core.Events
         private bool _keepRunning = true;
 
         public EventScheduler(IEnumerable<IEventGroup> groups, IBroadcast<RequestStopAppMessage> appLifeCycleMessage, ITimeService timeService) {
-            this._groups = groups.OrderBy(group => group.GroupId);
+            this._groups = groups.OrderBy(group => group.Priority);
             this._requestStopAppMessage = appLifeCycleMessage;
             this._requestStopAppMessage.OnBroadcastPublished += _requestStopAppMessage_OnBroadcastPublished;
             this._timeService = timeService;

@@ -2,8 +2,10 @@
 using Annex.Core.Broadcasts.Messages;
 using Annex.Core.Events;
 using Annex.Core.Times;
+using FluentAssertions;
 using Moq;
 using System.Linq;
+using UnitTests.Core;
 using UnitTests.Core.Fixture;
 using Xunit;
 
@@ -22,12 +24,12 @@ namespace Annex.Core.Tests.Events
         }
 
         [Fact]
-        public void Given_When_Then() {
+        public void GivenEventGroups_WhenRunningTheQueue_ThenEachGroupIsRun() {
             // Arrange
             var groupMocks = this._fixture.CreateMany<Mock<IEventGroup>>();
             this._fixture.Register(() => groupMocks.Select(groupMock => groupMock.Object));
 
-            var eventScheduler = this._fixture.Create<EventScheduler>();
+            var eventScheduler = this._fixture.Create<IEventScheduler>();
 
             this._timeServiceMock
                 .Setup(timeService => timeService.ElapsedTimeSince(It.IsAny<long>()))
@@ -37,9 +39,37 @@ namespace Annex.Core.Tests.Events
             eventScheduler.Run();
 
             // Assert
-            foreach (var groupMock in groupMocks) {
-                groupMock.Verify(group => group.Run(It.IsAny<long>()), Moq.Times.Once);
-            }
+            groupMocks.VerifyMany(group => group.Run(It.IsAny<long>()), Moq.Times.Once());
+        }
+
+        [Fact]
+        public void GivenEventGroups_WhenRunningTheQueue_ThenEachGroupIsRunInOrderOfPriority() {
+            // Arrange
+            var groupMocks = this._fixture.CreateMany<Mock<IEventGroup>>();
+            this._fixture.Register(() => groupMocks.Select(groupMock => groupMock.Object));
+
+            var eventScheduler = this._fixture.Create<IEventScheduler>();
+
+            this._timeServiceMock
+                .Setup(timeService => timeService.ElapsedTimeSince(It.IsAny<long>()))
+                .Callback(() => this._requestStopAppMessageMock.Raise(message => message.OnBroadcastPublished += null, null, new RequestStopAppMessage()));
+
+            int? lastEventExecutionPriority = null;
+            bool eventsWereExecutedInOrderOfPriority = true;
+            groupMocks.SetupMany(group => group.Run(It.IsAny<int>()))
+                .CallbackMany(group => {
+                    if (lastEventExecutionPriority > group.Priority) {
+                        eventsWereExecutedInOrderOfPriority = false;
+                    }
+                    lastEventExecutionPriority = group.Priority;
+                });
+
+            // Act
+            eventScheduler.Run();
+
+            // Assert
+            eventsWereExecutedInOrderOfPriority.Should().BeTrue();
+
         }
     }
 }
