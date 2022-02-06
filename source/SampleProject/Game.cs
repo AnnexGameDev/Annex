@@ -1,10 +1,16 @@
 ﻿using Annex.Core;
+using Annex.Core.Data;
+using Annex.Core.Graphics;
+using Annex.Core.Graphics.Windows;
 using Annex.Core.Services;
+using Annex.Sfml.Graphics;
 
 namespace SampleProject
 {
     public class Game : AnnexApp
     {
+        private IGraphicsService _graphicsService;
+
         private static void Main(string[] args) {
             new Game().Run();
 
@@ -32,13 +38,20 @@ namespace SampleProject
             //ServiceContainerSingleton.Destroy();
         }
 
-        //public void Run() {
-        //    ServiceProvider.SceneService.LoadScene<Level1>();
-        //    ServiceProvider.Canvas.SetVisible(true);
-        //    ServiceProvider.EventService.Run(this);
-        //}
+
+        protected override void Run() {
+            var window = this._graphicsService.CreateWindow(
+                "MainWindow",
+                size: new Vector2ui(960, 640), 
+                style: WindowStyle.Default
+            );
+            window.IsVisible = true;
+            base.Run();
+        }
 
         protected override void RegisterTypes(IContainer container) {
+            container.Register<IGraphicsEngine, GraphicsEngine>();
+            this._graphicsService = container.Resolve<IGraphicsService>();
         }
     }
 }

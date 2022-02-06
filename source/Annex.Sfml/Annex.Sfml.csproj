@@ -7,7 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Graphics\Canvas\" />
+    <ProjectReference Include="..\Annex.Core\Annex.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SFML.Net" Version="2.5.0" />
   </ItemGroup>
 
 </Project>

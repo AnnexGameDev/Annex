@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Annex.Core\Annex.Core.csproj" />
+    <ProjectReference Include="..\Annex.Sfml\Annex.Sfml.csproj" />
   </ItemGroup>
 
 </Project>

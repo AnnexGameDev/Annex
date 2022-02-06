@@ -1,4 +1,5 @@
 ﻿using Annex.Core.Events;
+using Annex.Core.Graphics;
 using Annex.Core.Logging;
 using Annex.Core.Scenes;
 using Annex.Core.Services;
@@ -20,6 +21,7 @@ public abstract class AnnexApp
         this._container.Register<IEventScheduler, EventScheduler>();
         this._container.Register<ITimeService, StopwatchTimeService>(asSingleton);
         this._container.Register<ISceneService, SceneService>(asSingleton);
+        this._container.Register<IGraphicsService, GraphicsService>(asSingleton);
 
         this.RegisterTypes(this._container);
 
@@ -29,9 +31,8 @@ public abstract class AnnexApp
 
     protected abstract void RegisterTypes(IContainer container);
 
-    protected void Run<T>() where T : IScene {
+    protected virtual void Run() {
         try {
-            this._sceneService.LoadScene<T>();
             this._eventService.Run();
             this._container.Dispose();
         }
