@@ -4,7 +4,7 @@ using Annex.Sfml.Graphics.Windows;
 
 namespace Annex.Sfml.Graphics
 {
-    public class GraphicsEngine : IGraphicsEngine
+    public class SfmlGraphicsEngine : IGraphicsEngine
     {
         public IWindow CreateWindow() => new SfmlWindow();
     }
