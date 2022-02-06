@@ -1,7 +1,5 @@
 ﻿using Annex.Core;
 using Annex.Core.Services;
-using SampleProject.Assets;
-using SampleProject.Scenes.Level1;
 
 namespace SampleProject
 {

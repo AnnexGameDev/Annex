@@ -1,7 +1,7 @@
 ﻿using Annex.Core.Broadcasts;
 using Annex.Core.Broadcasts.Messages;
 using Annex.Core.Events;
-using Annex.Core.Times;
+using Annex.Core.Time;
 using FluentAssertions;
 using Moq;
 using System.Linq;
@@ -69,7 +69,6 @@ namespace Annex.Core.Tests.Events
 
             // Assert
             eventsWereExecutedInOrderOfPriority.Should().BeTrue();
-
         }
     }
 }

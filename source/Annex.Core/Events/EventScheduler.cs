@@ -1,6 +1,6 @@
 ﻿using Annex.Core.Broadcasts;
 using Annex.Core.Broadcasts.Messages;
-using Annex.Core.Times;
+using Annex.Core.Time;
 
 namespace Annex.Core.Events
 {

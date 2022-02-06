@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Annex.Core.Times
+namespace Annex.Core.Time
 {
     internal class StopwatchTimeService : ITimeService
     {
