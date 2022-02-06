@@ -1,11 +1,11 @@
-﻿using System.Diagnostics;
-
-namespace Annex.Core.Data
+﻿namespace Annex.Core.Data
 {
-    [DebuggerDisplay("X:{X} Y:{Y}")]
-    public class Vector2f
+    public class Vector2f : VectorBase<float>
     {
-        public float X { get; set; }
-        public float Y { get; set; }
+        public Vector2f(Action? onChangeCallback = null) : this(0, 0, onChangeCallback) {
+        }
+
+        public Vector2f(float x, float y, Action? onChangeCallback) : base(x, y, onChangeCallback) {
+        }
     }
 }

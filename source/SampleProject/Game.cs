@@ -40,12 +40,10 @@ namespace SampleProject
 
 
         protected override void Run() {
-            var window = this._graphicsService.CreateWindow(
-                "MainWindow",
-                size: new Vector2ui(960, 640), 
-                style: WindowStyle.Default
-            );
+            var window = this._graphicsService.CreateWindow("MainWindow");
             window.IsVisible = true;
+            window.WindowResolution.Set(960, 640);
+            window.WindowSize.Set(960, 640);
             base.Run();
         }
 

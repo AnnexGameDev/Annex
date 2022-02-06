@@ -1,5 +1,4 @@
-﻿using Annex.Core.Data;
-using Annex.Core.Graphics.Windows;
+﻿using Annex.Core.Graphics.Windows;
 
 namespace Annex.Core.Graphics
 {
@@ -18,27 +17,9 @@ namespace Annex.Core.Graphics
             this._graphicsEngine = graphicsEngine;
         }
 
-        public IWindow CreateWindow(string id, 
-            Vector2ui? size, 
-            Vector2i? position,
-            string? title,
-            WindowStyle style
-        ) {
-            var window = this._graphicsEngine.CreateWindow(style);
+        public IWindow CreateWindow(string id) {
+            var window = this._graphicsEngine.CreateWindow();
             this._windows.Add(id, window);
-
-            if (size != null) {
-                window.Size = size;
-            }
-
-            if (position != null) {
-                window.Position = position;
-            }
-
-            if (title != null) {
-                window.Title = title;
-            }
-
             return window;
         }
     }

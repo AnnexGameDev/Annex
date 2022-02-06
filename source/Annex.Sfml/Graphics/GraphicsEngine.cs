@@ -6,8 +6,6 @@ namespace Annex.Sfml.Graphics
 {
     public class GraphicsEngine : IGraphicsEngine
     {
-        public IWindow CreateWindow(WindowStyle style) {
-            return new SfmlWindow(style);
-        }
+        public IWindow CreateWindow() => new SfmlWindow();
     }
 }

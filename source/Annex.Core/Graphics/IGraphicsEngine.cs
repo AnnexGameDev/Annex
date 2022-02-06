@@ -4,6 +4,6 @@ namespace Annex.Core.Graphics
 {
     public interface IGraphicsEngine
     {
-        IWindow CreateWindow(WindowStyle style);
+        IWindow CreateWindow();
     }
 }

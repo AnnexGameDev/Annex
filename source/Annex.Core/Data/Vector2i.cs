@@ -1,20 +1,11 @@
-﻿using System.Diagnostics;
-
-namespace Annex.Core.Data
+﻿namespace Annex.Core.Data
 {
-    [DebuggerDisplay("X:{X} Y:{Y}")]
-    public class Vector2i
+    public class Vector2i : VectorBase<int>
     {
-        public int X { get; set; }
-        public int Y { get; set; }
-
-        public Vector2i() : this(0, 0) {
-
+        public Vector2i(Action? onChangeCallback = null) : this(0, 0, onChangeCallback) {
         }
 
-        public Vector2i(int x, int y) {
-            this.X = x;
-            this.Y = y;
+        public Vector2i(int x, int y, Action? onChangeCallback) : base(x, y, onChangeCallback) {
         }
     }
 }
