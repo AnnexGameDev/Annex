@@ -52,7 +52,8 @@ namespace Annex.Sfml.Graphics.Windows
         }
 
         private void OnWindowResolutionChanged() {
-            this.ReCreateWindow();
+            if (this.WindowResolution != null)
+                this.ReCreateWindow();
         }
 
         private void OnWindowSizeChanged() {

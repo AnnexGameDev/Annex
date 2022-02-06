@@ -78,19 +78,12 @@ namespace Annex.Core.Tests.Services
         }
 
         [Fact]
-        public void GivenNoServiceIsRegistered_WhenTryingToResolveTheInterface_ThenThrowsNullReferenceException() {
-            // Arrange / Act / Assert
-            Assert.Throws<NullReferenceException>(() => {
-                this._container.Resolve(typeof(IServiceInterface));
-            });
-        }
+        public void GivenNoServiceIsRegistered_WhenTryingToResolveTheInterface_ThenReturnsNull() {
+            // Arrange / Act
+            var theActualService = this._container.Resolve(typeof(IServiceInterface));
 
-        [Fact]
-        public void GivenNoServiceIsRegistered_WhenTryingToResolveTheInterfaceTemplated_ThenReturnsNull() {
-            // Arrange / Act / Assert
-            Assert.Throws<NullReferenceException>(() => {
-                this._container.Resolve<IServiceInterface>();
-            });
+            // Assert
+            theActualService.Should().BeNull();
         }
 
         [Fact]
@@ -177,6 +170,17 @@ namespace Annex.Core.Tests.Services
             Assert.Throws<ArgumentException>(() => {
                 this._container.Register<IServiceInterface, ServiceImplementation>(this._aggregateOptions);
             });
+        }
+
+        [Fact]
+        public void GivenNoServiceIsRegisteredAsAggregate_WhenResolving_ThenReturnsEmpty() {
+            // Arrange
+
+            // Act
+            var theAggregatedServices = this._container.Resolve<IEnumerable<IServiceInterface>>();
+
+            // Assert
+            theAggregatedServices.Should().BeEmpty();
         }
         
         [Fact]

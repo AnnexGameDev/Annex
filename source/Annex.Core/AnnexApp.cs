@@ -1,4 +1,6 @@
 ﻿using Annex.Core.Assets;
+using Annex.Core.Broadcasts;
+using Annex.Core.Broadcasts.Messages;
 using Annex.Core.Events;
 using Annex.Core.Graphics;
 using Annex.Core.Logging;
@@ -25,6 +27,7 @@ public abstract class AnnexApp
         this._container.Register<ISceneService, SceneService>(asSingleton);
         this._container.Register<IGraphicsService, GraphicsService>(asSingleton);
         this._container.Register<IAssetService, AssetService>(asSingleton);
+        this._container.RegisterBroadcast<RequestStopAppMessage>();
 
         this.RegisterTypes(this._container);
 

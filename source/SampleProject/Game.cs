@@ -2,8 +2,10 @@
 using Annex.Core.Assets;
 using Annex.Core.Assets.Bundles;
 using Annex.Core.Graphics;
+using Annex.Core.Logging;
 using Annex.Core.Services;
 using Annex.Sfml.Graphics;
+using System;
 using System.IO;
 
 namespace SampleProject
@@ -11,21 +13,12 @@ namespace SampleProject
     public class Game : AnnexApp
     {
         private static void Main(string[] args) {
-            new Game().Run();
-
-            //container.Provide<IAudioManager>(new AudioManager());
-            //container.Provide<IFontManager>(new FontManager());
-            //container.Provide<IIconManager>(new IconManager());
-            //container.Provide<IHtmlLayoutManager>(new HtmlLayoutManager());
-
-            //container.Provide<IAudioService>(new SfmlPlayer());
-
-            //Debug.PackageAssetsToBinary(ServiceProvider.AudioManager, Path.Combine(SolutionFolder, "assets/audio"));
-            //Debug.PackageAssetsToBinary(ServiceProvider.FontManager, Path.Combine(SolutionFolder, "assets/fonts"));
-            //Debug.PackageAssetsToBinary(ServiceProvider.IconManager, Path.Combine(SolutionFolder, "assets/icons"));
-            //Debug.PackageAssetsToBinary(ServiceProvider.HtmlLayoutManager, Path.Combine(SolutionFolder, "assets/layouts"));
+            try {
+                new Game().Run();
+            } catch (Exception e) {
+                Log.Trace(LogSeverity.Error, "Exception in main", exception: e);
+            }
         }
-
 
         protected override void CreateWindow(IGraphicsService graphicsService) {
             var window = graphicsService.CreateWindow("MainWindow");
@@ -41,8 +34,7 @@ namespace SampleProject
         protected override void SetupAssetBundles(IAssetService assetService) {
             string assetRoot = GetAssetRoot();
             string textureRoot = Path.Combine(assetRoot, "textures");
-            var textureBundle = new FileSystemDirectory("*", textureRoot);
-            assetService.Textures.AddBundle(textureBundle);
+            //assetService.Textures.AddBundle(new FileSystemDirectory("*", textureRoot));
         }
 
         private string GetAssetRoot() {

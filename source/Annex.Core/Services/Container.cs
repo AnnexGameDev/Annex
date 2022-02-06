@@ -62,17 +62,25 @@ namespace Annex.Core.Services
         }
 
         public T Resolve<T>() {
+            Log.Trace(LogSeverity.Verbose, $"Trying to resolve {typeof(T).Name}");
             return (T)this.Resolve(typeof(T));
         }
 
         public object Resolve(Type type) {
+            bool isAggregateType = type.IsAssignableTo(typeof(IEnumerable)) && type.IsGenericType;
+
             if (!IsRegistered(type)) {
-                throw new NullReferenceException($"No service registered to type: {type.Name}");
+                Log.Trace(LogSeverity.Warning, $"No service was found to be registered to {type.Name}");
+
+                if (isAggregateType) {
+                    return Enumerable.Empty<object>().MakeGeneric(type.GetGenericArguments().Single());
+                }
+                return null;
             }
 
             var entry = this._serviceData[type];
 
-            if (type.IsAssignableTo(typeof(IEnumerable)) && type.IsGenericType) {
+            if (isAggregateType) {
                 type = type.GetGenericArguments().Single();
             }
 

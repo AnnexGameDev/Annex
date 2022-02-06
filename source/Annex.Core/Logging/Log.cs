@@ -11,6 +11,8 @@ namespace Annex.Core.Logging
         private static readonly string _logDirectory;
         private readonly string _logFilePath;
 
+        private static bool _consoleExists => Environment.UserInteractive;
+
         private static ILogService? _singletonInstance;
 
         static Log() {
@@ -56,6 +58,10 @@ namespace Annex.Core.Logging
                 SourceLine = lineNumber,
                 SourceFile = filePath
             };
+
+            if (_consoleExists) {
+                Console.WriteLine(entry.ToString());
+            }
 
             if (_singletonInstance == null) {
                 _unflushedEntries.Enqueue(entry);
