@@ -1,6 +1,4 @@
-﻿using Annex.Events;
-using Annex.Scenes;
-using SampleProject.Models;
+﻿using SampleProject.Models;
 
 namespace SampleProject.Scenes.Level1.Events
 {

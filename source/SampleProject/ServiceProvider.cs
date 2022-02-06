@@ -1,13 +1,4 @@
-﻿using Annex.Assets;
-using Annex.Assets.Services;
-using Annex.Events;
-using Annex.Graphics;
-using Annex.Logging;
-using Annex.Scenes;
-using Annex.Scenes.Layouts.Html;
-using Annex.Services;
-
-namespace SampleProject
+﻿namespace SampleProject
 {
     public static class ServiceProvider
     {

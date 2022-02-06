@@ -1,7 +1,4 @@
-﻿using Annex.Events;
-using Annex.Graphics;
-using Annex.Scenes.Layouts.Html;
-using SampleProject.Models;
+﻿using SampleProject.Models;
 using SampleProject.Scenes.Level1.Events;
 
 namespace SampleProject.Scenes.Level1

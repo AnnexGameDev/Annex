@@ -1,9 +1,4 @@
-﻿using Annex.Data;
-using Annex.Data.Shared;
-using Annex.Graphics;
-using Annex.Graphics.Contexts;
-
-namespace SampleProject.Models
+﻿namespace SampleProject.Models
 {
     public class Player : IDrawableObject
     {

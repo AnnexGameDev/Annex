@@ -1,8 +1,4 @@
-﻿using Annex.Assets;
-using Annex.Assets.Streams;
-using Annex.Assets.Services;
-
-namespace SampleProject.Assets
+﻿namespace SampleProject.Assets
 {
     public class AudioManager : AssetManager, IAudioManager
     {

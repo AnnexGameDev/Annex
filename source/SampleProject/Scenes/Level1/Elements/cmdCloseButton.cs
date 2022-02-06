@@ -1,7 +1,4 @@
-﻿using Annex.Graphics.Events;
-using Annex.Scenes.Components;
-
-namespace SampleProject.Scenes.Level1.Elements
+﻿namespace SampleProject.Scenes.Level1.Elements
 {
     public class cmdCloseButton : Button
     {

@@ -1,7 +1,4 @@
-﻿using Annex.Graphics;
-using Annex.Graphics.Contexts;
-
-namespace SampleProject.Models
+﻿namespace SampleProject.Models
 {
     public class GrassyPlain : IDrawableObject
     {

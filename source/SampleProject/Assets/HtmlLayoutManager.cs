@@ -1,8 +1,4 @@
-﻿using Annex.Assets;
-using Annex.Assets.Streams;
-using Annex.Scenes.Layouts.Html;
-
-namespace SampleProject.Assets
+﻿namespace SampleProject.Assets
 {
     public class HtmlLayoutManager : AssetManager, IHtmlLayoutManager
     {
