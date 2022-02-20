@@ -2,6 +2,7 @@
 using Annex.Core.Broadcasts;
 using Annex.Core.Broadcasts.Messages;
 using Annex.Core.Events;
+using Annex.Core.Events.Core;
 using Annex.Core.Graphics;
 using Annex.Core.Logging;
 using Annex.Core.Scenes;
@@ -12,7 +13,7 @@ namespace Annex.Core;
 
 public abstract class AnnexApp
 {
-    private readonly IEventScheduler _eventService;
+    private readonly ICoreEventService _eventService;
     private readonly IGraphicsService _graphicsService;
     private readonly IAssetService _assetManager;
     private readonly IContainer _container;
@@ -22,7 +23,7 @@ public abstract class AnnexApp
 
         var asSingleton = new RegistrationOptions() { Singleton = true };
         this._container.Register<ILogService, Log>(asSingleton);
-        this._container.Register<IEventScheduler, EventScheduler>(asSingleton);
+        this._container.Register<ICoreEventService, CoreEventService>(asSingleton);
         this._container.Register<ITimeService, StopwatchTimeService>(asSingleton);
         this._container.Register<ISceneService, SceneService>(asSingleton);
         this._container.Register<IGraphicsService, GraphicsService>(asSingleton);
@@ -31,7 +32,7 @@ public abstract class AnnexApp
 
         this.RegisterTypes(this._container);
 
-        this._eventService = this._container.Resolve<IEventScheduler>();
+        this._eventService = this._container.Resolve<ICoreEventService>();
         this._graphicsService = this._container.Resolve<IGraphicsService>();
         this._assetManager = this._container.Resolve<IAssetService>();
     }

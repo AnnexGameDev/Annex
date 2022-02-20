@@ -5,8 +5,7 @@ using static Annex.Graphics.EventIDs;
 
 namespace Annex.Graphics.Sfml.Events
 {
-    public class GraphicsEvent : GameEvent
-    {
+    public class GraphicsEvent : GameEvent {
         private readonly ICanvas _canvas;
         private readonly Action _predraw;
         private readonly Action _postdraw;

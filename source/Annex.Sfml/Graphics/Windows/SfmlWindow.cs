@@ -1,4 +1,6 @@
 ﻿using Annex.Core.Data;
+using Annex.Core.Events;
+using Annex.Core.Events.Core;
 using Annex.Core.Graphics.Windows;
 using Annex.Sfml.Extensions;
 using SFML.Graphics;
@@ -44,11 +46,14 @@ namespace Annex.Sfml.Graphics.Windows
             }
         }
 
-        public SfmlWindow() {
+        public SfmlWindow(ICoreEventService coreEventService) {
             this.WindowSize = new Vector2ui(OnWindowSizeChanged);
             this.WindowPosition = new Vector2i(OnWindowPositionChanged);
             this.WindowResolution = new Vector2ui(OnWindowResolutionChanged);
             this.CreateWindow();
+
+            coreEventService.Add(CoreEventType.Graphics, new DrawGameEvent(this));
+            coreEventService.Add(CoreEventType.UserInput, new DoEvents(this));
         }
 
         private void OnWindowResolutionChanged() {
@@ -85,6 +90,37 @@ namespace Annex.Sfml.Graphics.Windows
 
         public void Dispose() {
             this.DestroyWindow();
+        }
+
+        private class DrawGameEvent : Core.Events.Event
+        {
+            private readonly SfmlWindow _sfmlWindow;
+
+            public DrawGameEvent(SfmlWindow sfmlWindow) : base(16, 0) {
+                this._sfmlWindow = sfmlWindow;
+            }
+
+            protected override void Run() {
+                if (this._sfmlWindow._renderWindow is RenderWindow buffer) {
+                    buffer.Clear();
+                    buffer.Display();
+                }
+            }
+        }
+
+        private class DoEvents : Core.Events.Event
+        {
+            private readonly SfmlWindow _sfmlWindow;
+
+            public DoEvents(SfmlWindow sfmlWindow) : base(16, 0) {
+                this._sfmlWindow = sfmlWindow;
+            }
+
+            protected override void Run() {
+                if (this._sfmlWindow._renderWindow is RenderWindow buffer) {
+                    buffer.DispatchEvents();
+                }
+            }
         }
     }
 }

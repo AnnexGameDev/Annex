@@ -6,6 +6,10 @@ namespace UnitTests.Core
 {
     public static class Extensions
     {
+        public static IEnumerable<T> Objects<T>(this IEnumerable<Mock<T>> collection) where T : class {
+            return collection.Select(x => x.Object);
+        }
+
         public static void VerifyMany<T>(this IEnumerable<Mock<T>> collection, Expression<Action<T>> exp, Times times) where T : class {
             foreach (var entry in collection) {
                 entry.Verify(exp, times);
