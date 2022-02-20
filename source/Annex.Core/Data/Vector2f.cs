@@ -5,7 +5,7 @@
         public Vector2f(Action? onChangeCallback = null) : this(0, 0, onChangeCallback) {
         }
 
-        public Vector2f(float x, float y, Action? onChangeCallback) : base(x, y, onChangeCallback) {
+        public Vector2f(float x, float y, Action? onChangeCallback = null) : base(x, y, onChangeCallback) {
         }
     }
 }

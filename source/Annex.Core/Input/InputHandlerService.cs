@@ -38,5 +38,31 @@ namespace Annex.Core.Input
             Log.Trace(LogSeverity.Verbose, $"Window closed: {window.Title}");
             this._currentScene.OnWindowClosed(window);
         }
+
+        public void HandleMouseButtonPressed(IWindow window, MouseButton button, int windowX, int windowY) {
+            // TODO: Track drag / dbl click
+            Log.Trace(LogSeverity.Verbose, $"MouseButton Pressed: {button}  x:{windowX}  y:{windowY}");
+            var mouseButtonPressedEvent = new MouseButtonPressedEvent(button, windowX, windowY);
+            this._currentScene.OnMouseButtonPressed(window, mouseButtonPressedEvent);
+        }
+
+        public void HandleMouseButtonReleased(IWindow window, MouseButton button, int windowX, int windowY) {
+            // TODO: Track drag / dbl click
+            Log.Trace(LogSeverity.Verbose, $"MouseButton Released: {button}  x:{windowX}  y:{windowY}");
+            var mouseButtonReleasedEvent = new MouseButtonReleasedEvent(button, windowX, windowY);
+            this._currentScene.OnMouseButtonReleased(window, mouseButtonReleasedEvent);
+        }
+
+        public void HandleMouseMoved(IWindow window, int windowX, int windowY) {
+            Log.Trace(LogSeverity.Verbose, $"Mouse Moved: x:{windowX}  y:{windowY}");
+            var mouseMovedEvent = new MouseMovedEvent(windowX, windowY);
+            this._currentScene.OnMouseMoved(window, mouseMovedEvent);
+        }
+
+        public void HandleMouseScrollWheelMoved(IWindow window, double delta) {
+            Log.Trace(LogSeverity.Verbose, $"MouseScrollWheel Moved: {delta}");
+            var mouseScrollWheelMovedEvent = new MouseScrollWheelMovedEvent(delta);
+            this._currentScene.OnMouseScrollWheelMoved(window, mouseScrollWheelMovedEvent);
+        }
     }
 }

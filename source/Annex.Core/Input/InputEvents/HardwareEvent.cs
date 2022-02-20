@@ -1,6 +1,6 @@
 ﻿namespace Annex.Core.Input.InputEvents
 {
-    public abstract class InputEvent
+    public abstract class HardwareEvent
     {
         public bool Handled { get; set; } = false;
     }

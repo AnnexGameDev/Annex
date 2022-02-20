@@ -124,21 +124,33 @@ namespace Annex.Sfml.Graphics.Windows
                 this._renderWindow.KeyPressed += OnKeyboardKeyPressed;
                 this._renderWindow.KeyReleased += OnKeyboardKeyReleased;
                 this._renderWindow.Closed += OnWindowClosed;
+                this._renderWindow.MouseButtonPressed += OnMouseButtonPressed;
+                this._renderWindow.MouseButtonReleased += OnMouseButtonReleased;
+                this._renderWindow.MouseWheelScrolled += OnMouseScrollWheelMoved;
+                this._renderWindow.MouseMoved += OnMouseMoved;
             }
         }
-
 
         private void RemoveInputHandlers() {
             if (this._renderWindow != null) {
                 this._renderWindow.KeyPressed -= OnKeyboardKeyPressed;
                 this._renderWindow.KeyReleased -= OnKeyboardKeyReleased;
                 this._renderWindow.Closed -= OnWindowClosed;
+                this._renderWindow.MouseButtonPressed -= OnMouseButtonPressed;
+                this._renderWindow.MouseButtonReleased -= OnMouseButtonReleased;
+                this._renderWindow.MouseWheelScrolled -= OnMouseScrollWheelMoved;
+                this._renderWindow.MouseMoved -= OnMouseMoved;
             }
         }
 
         private void OnKeyboardKeyPressed(object? sender, KeyEventArgs e) => this._inputHandlerService?.HandleKeyboardKeyPressed(this, e.Code.ToKeyboardKey());
         private void OnKeyboardKeyReleased(object? sender, KeyEventArgs e) => this._inputHandlerService?.HandleKeyboardKeyReleased(this, e.Code.ToKeyboardKey());
         private void OnWindowClosed(object? sender, EventArgs e) => this._inputHandlerService?.HandleWindowClosed(this);
+
+        private void OnMouseMoved(object? sender, MouseMoveEventArgs e) => this._inputHandlerService?.HandleMouseMoved(this, e.X, e.Y);
+        private void OnMouseScrollWheelMoved(object? sender, MouseWheelScrollEventArgs e) => this._inputHandlerService?.HandleMouseScrollWheelMoved(this, e.Delta);
+        private void OnMouseButtonReleased(object? sender, MouseButtonEventArgs e) => this._inputHandlerService?.HandleMouseButtonReleased(this, e.Button.ToMouseButton(), e.X, e.Y);
+        private void OnMouseButtonPressed(object? sender, MouseButtonEventArgs e) => this._inputHandlerService?.HandleMouseButtonPressed(this, e.Button.ToMouseButton(), e.X, e.Y);
         #endregion
 
         private class DoEvents : Core.Events.Event

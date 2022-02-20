@@ -12,5 +12,10 @@ namespace Annex.Core.Scenes
         void OnWindowClosed(IWindow window);
         void OnKeyboardKeyPressed(IWindow window, KeyboardKeyPressedEvent keyboardKeyPressedEvent);
         void OnKeyboardKeyReleased(IWindow window, KeyboardKeyReleasedEvent keyboardKeyReleasedEvent);
+
+        void OnMouseButtonPressed(IWindow window, MouseButtonPressedEvent mouseButtonPressedEvent);
+        void OnMouseButtonReleased(IWindow window, MouseButtonReleasedEvent mouseButtonReleasedEvent);
+        void OnMouseMoved(IWindow window, MouseMovedEvent mouseMovedEvent);
+        void OnMouseScrollWheelMoved(IWindow window, MouseScrollWheelMovedEvent mouseScrollWheelMovedEvent);
     }
 }

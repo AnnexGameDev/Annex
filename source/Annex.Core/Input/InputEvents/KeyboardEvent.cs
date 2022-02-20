@@ -1,6 +1,6 @@
 ﻿namespace Annex.Core.Input.InputEvents
 {
-    public class KeyboardEvent : InputEvent
+    public abstract class KeyboardEvent : HardwareEvent
     {
         public KeyboardKey Key { get; }
 

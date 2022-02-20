@@ -19,5 +19,17 @@ namespace Annex.Core.Scenes.Components
 
         public virtual void OnWindowClosed(IWindow window) {
         }
+
+        public virtual void OnMouseButtonPressed(IWindow window, MouseButtonPressedEvent mouseButtonPressedEvent) {
+        }
+
+        public virtual void OnMouseButtonReleased(IWindow window, MouseButtonReleasedEvent mouseButtonReleasedEvent) {
+        }
+
+        public virtual void OnMouseMoved(IWindow window, MouseMovedEvent mouseMovedEvent) {
+        }
+
+        public virtual void OnMouseScrollWheelMoved(IWindow window, MouseScrollWheelMovedEvent mouseScrollWheelMovedEvent) {
+        }
     }
 }
