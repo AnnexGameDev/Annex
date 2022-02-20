@@ -22,6 +22,12 @@ namespace Annex.Core.Scenes
             var newScene = this._container.Resolve<T>();
             var oldScene = this._currentScene;
 
+            // If the new scene can't be resolved, don't switch.
+            if (newScene == null) {
+                Log.Trace(LogSeverity.Error, $"Unable to resolve scene {typeof(T).Name}.");
+                return;
+            }
+
             var leavingSceneArgs = new OnSceneLeaveEventArgs(newScene);
             var enteringSceneArgs = new OnSceneEnterEventArgs(oldScene);
 

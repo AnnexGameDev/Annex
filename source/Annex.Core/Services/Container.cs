@@ -21,7 +21,11 @@ namespace Annex.Core.Services
 
         public Container() {
             // Register the container to the container
-            this._serviceData.Add(typeof(IContainer), this);
+            this._serviceData.Add(typeof(IContainer), new SingletonEntry(typeof(IContainer)) { Instance = this });
+        }
+
+        public void Register<TService>(RegistrationOptions? options = null) {
+            this.Register<TService, TService>(options);
         }
 
         public void Register<TInterface, TImplementation>(RegistrationOptions? options = null) where TImplementation : TInterface {

@@ -16,6 +16,7 @@
 
     public interface IContainer : IDisposable
     {
+        void Register<TService>(RegistrationOptions? options = null);
         void Register<TInterface, TImplementation>(RegistrationOptions? options = null) where TImplementation : TInterface;
 
         bool IsRegistered<T>();

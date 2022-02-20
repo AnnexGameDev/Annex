@@ -1,4 +1,7 @@
-﻿using Annex.Core.Scenes.Components;
+﻿using Annex.Core.Broadcasts;
+using Annex.Core.Broadcasts.Messages;
+using Annex.Core.Graphics.Windows;
+using Annex.Core.Scenes.Components;
 using SampleProject.Models;
 
 namespace SampleProject.Scenes.Level1
@@ -7,6 +10,11 @@ namespace SampleProject.Scenes.Level1
     {
         private readonly GrassyPlain _grassyPlain;
         private readonly Player _player;
+        private readonly IBroadcast<RequestStopAppMessage> _requestStopAppMessage;
+
+        public Level1(IBroadcast<RequestStopAppMessage> requestStopAppMessage) {
+            this._requestStopAppMessage = requestStopAppMessage;
+        }
 
         //public Level1() : base("level1.html") {
         //    this._grassyPlain = new GrassyPlain();
@@ -19,9 +27,9 @@ namespace SampleProject.Scenes.Level1
         //    this.Events.AddEvent(PriorityType.ANIMATION, new PlayerAnimationEvent(this._player, 500));
         //}
 
-        //public override void HandleCloseButtonPressed() {
-        //    Game.Terminate();
-        //}
+        public override void OnWindowClosed(IWindow window) {
+            this._requestStopAppMessage.Publish(this, new RequestStopAppMessage());
+        }
 
         //public override void Draw(ICanvas canvas) {
         //    this._grassyPlain.Draw(canvas);

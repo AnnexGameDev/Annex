@@ -66,6 +66,23 @@ namespace Annex.Core.Tests.Scenes
             aNewSceneMock.Verify(aNewScene => aNewScene.OnEnter(It.Is<OnSceneEnterEventArgs>(args => args.PreviousScene == anOldSceneMock.Object)), Times.Once());
         }
 
+        [Fact]
+        public void GivenASceneIsLoaded_WhenLoadingANewSceneThatIsntRegistered_ThenCurrentSceneShouldNotChange() {
+            // Arrange
+            this._containerMock.Setup(container => container.Resolve<INewScene>()).Returns((INewScene)null);
+
+            var anOldSceneMock = this.RegisterScene<IOldScene>();
+            this._sceneService.LoadScene<IOldScene>();
+            var theOriginalScene = this._sceneService.CurrentScene;
+
+            // Act
+            this._sceneService.LoadScene<INewScene>();
+
+            // Assert
+            this._sceneService.CurrentScene.Should().Be(theOriginalScene);
+            anOldSceneMock.Verify(anOldScene => anOldScene.OnLeave(It.IsAny<OnSceneLeaveEventArgs>()), Times.Never);
+        }
+
         public interface AGivenSceneType : IScene { }
         public interface IOldScene : IScene { }
         public interface INewScene : IScene { }

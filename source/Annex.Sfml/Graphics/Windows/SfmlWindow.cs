@@ -1,7 +1,7 @@
 ﻿using Annex.Core.Data;
-using Annex.Core.Events;
 using Annex.Core.Events.Core;
 using Annex.Core.Graphics.Windows;
+using Annex.Core.Input;
 using Annex.Sfml.Extensions;
 using SFML.Graphics;
 using SFML.Window;
@@ -10,6 +10,7 @@ namespace Annex.Sfml.Graphics.Windows
 {
     internal class SfmlWindow : IWindow, IDisposable
     {
+        private readonly IInputHandlerService _inputHandlerService;
         private RenderWindow? _renderWindow;
 
         public Vector2ui WindowResolution { get; }
@@ -17,7 +18,8 @@ namespace Annex.Sfml.Graphics.Windows
         public Vector2i WindowPosition { get; }
 
         private string _title = string.Empty;
-        public string Title {
+        public string Title
+        {
             get => this._title;
             set
             {
@@ -38,15 +40,19 @@ namespace Annex.Sfml.Graphics.Windows
         }
 
         private WindowStyle _windowStyle = WindowStyle.Default;
-        public WindowStyle WindowStyle {
+
+        public WindowStyle WindowStyle
+        {
             get => this._windowStyle;
-            set {
+            set
+            {
                 this._windowStyle = value;
                 this.ReCreateWindow();
             }
         }
 
-        public SfmlWindow(ICoreEventService coreEventService) {
+        public SfmlWindow(ICoreEventService coreEventService, IInputHandlerService inputHandlerService) {
+            this._inputHandlerService = inputHandlerService;
             this.WindowSize = new Vector2ui(OnWindowSizeChanged);
             this.WindowPosition = new Vector2i(OnWindowPositionChanged);
             this.WindowResolution = new Vector2ui(OnWindowResolutionChanged);
@@ -54,6 +60,7 @@ namespace Annex.Sfml.Graphics.Windows
 
             coreEventService.Add(CoreEventType.Graphics, new DrawGameEvent(this));
             coreEventService.Add(CoreEventType.UserInput, new DoEvents(this));
+
         }
 
         private void OnWindowResolutionChanged() {
@@ -81,9 +88,12 @@ namespace Annex.Sfml.Graphics.Windows
             this._renderWindow.Size.Set(this.WindowSize);
             this._renderWindow.Position.Set(this.WindowPosition);
             this._renderWindow.SetVisible(this.IsVisible);
+
+            this.AttachInputHandlers();
         }
 
         private void DestroyWindow() {
+            this.RemoveInputHandlers();
             this._renderWindow?.Dispose();
             this._renderWindow = null;
         }
@@ -107,6 +117,29 @@ namespace Annex.Sfml.Graphics.Windows
                 }
             }
         }
+
+        #region Input
+        private void AttachInputHandlers() {
+            if (this._renderWindow != null) {
+                this._renderWindow.KeyPressed += OnKeyboardKeyPressed;
+                this._renderWindow.KeyReleased += OnKeyboardKeyReleased;
+                this._renderWindow.Closed += OnWindowClosed;
+            }
+        }
+
+
+        private void RemoveInputHandlers() {
+            if (this._renderWindow != null) {
+                this._renderWindow.KeyPressed -= OnKeyboardKeyPressed;
+                this._renderWindow.KeyReleased -= OnKeyboardKeyReleased;
+                this._renderWindow.Closed -= OnWindowClosed;
+            }
+        }
+
+        private void OnKeyboardKeyPressed(object? sender, KeyEventArgs e) => this._inputHandlerService?.HandleKeyboardKeyPressed(this, e.Code.ToKeyboardKey());
+        private void OnKeyboardKeyReleased(object? sender, KeyEventArgs e) => this._inputHandlerService?.HandleKeyboardKeyReleased(this, e.Code.ToKeyboardKey());
+        private void OnWindowClosed(object? sender, EventArgs e) => this._inputHandlerService?.HandleWindowClosed(this);
+        #endregion
 
         private class DoEvents : Core.Events.Event
         {
