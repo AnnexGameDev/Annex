@@ -4,7 +4,6 @@ using Annex.Core.Time;
 
 namespace Annex.Core.Events.Core
 {
-    // TODO: Write unit tests for this
     internal class CoreEventService : ICoreEventService, IDisposable
     {
         private readonly IBroadcast<RequestStopAppMessage> _stopAppMessage;
