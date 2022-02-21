@@ -1,17 +1,20 @@
-﻿using Annex.Core.Data;
+﻿using Annex.Core.Assets;
+using Annex.Core.Data;
 using Annex.Core.Events.Core;
 using Annex.Core.Graphics.Windows;
 using Annex.Core.Input;
+using Annex.Core.Scenes;
 using Annex.Sfml.Extensions;
 using SFML.Graphics;
 using SFML.Window;
 
 namespace Annex.Sfml.Graphics.Windows
 {
-    internal class SfmlWindow : IWindow, IDisposable
+    internal class SfmlWindow : SfmlCanvas, IWindow, IDisposable
     {
         private readonly IInputHandlerService _inputHandlerService;
-        private RenderWindow? _renderWindow;
+        private RenderWindow _renderWindow;
+        protected override RenderTarget? _renderTarget => _renderWindow;
 
         public Vector2ui WindowResolution { get; }
         public Vector2ui WindowSize { get; }
@@ -51,16 +54,16 @@ namespace Annex.Sfml.Graphics.Windows
             }
         }
 
-        public SfmlWindow(ICoreEventService coreEventService, IInputHandlerService inputHandlerService) {
+        public SfmlWindow(ICoreEventService coreEventService, IInputHandlerService inputHandlerService, ISceneService sceneService, IAssetService assetService)
+            : base(assetService) {
             this._inputHandlerService = inputHandlerService;
             this.WindowSize = new Vector2ui(OnWindowSizeChanged);
             this.WindowPosition = new Vector2i(OnWindowPositionChanged);
             this.WindowResolution = new Vector2ui(OnWindowResolutionChanged);
             this.CreateWindow();
 
-            coreEventService.Add(CoreEventType.Graphics, new DrawGameEvent(this));
+            coreEventService.Add(CoreEventType.Graphics, new DrawGameEvent(this, sceneService));
             coreEventService.Add(CoreEventType.UserInput, new DoEvents(this));
-
         }
 
         private void OnWindowResolutionChanged() {
@@ -102,22 +105,6 @@ namespace Annex.Sfml.Graphics.Windows
             this.DestroyWindow();
         }
 
-        private class DrawGameEvent : Core.Events.Event
-        {
-            private readonly SfmlWindow _sfmlWindow;
-
-            public DrawGameEvent(SfmlWindow sfmlWindow) : base(16, 0) {
-                this._sfmlWindow = sfmlWindow;
-            }
-
-            protected override void Run() {
-                if (this._sfmlWindow._renderWindow is RenderWindow buffer) {
-                    buffer.Clear();
-                    buffer.Display();
-                }
-            }
-        }
-
         #region Input
         private void AttachInputHandlers() {
             if (this._renderWindow != null) {
@@ -152,6 +139,25 @@ namespace Annex.Sfml.Graphics.Windows
         private void OnMouseButtonReleased(object? sender, MouseButtonEventArgs e) => this._inputHandlerService?.HandleMouseButtonReleased(this, e.Button.ToMouseButton(), e.X, e.Y);
         private void OnMouseButtonPressed(object? sender, MouseButtonEventArgs e) => this._inputHandlerService?.HandleMouseButtonPressed(this, e.Button.ToMouseButton(), e.X, e.Y);
         #endregion
+
+        private class DrawGameEvent : Core.Events.Event
+        {
+            private readonly SfmlWindow _sfmlWindow;
+            private readonly ISceneService _sceneService;
+
+            public DrawGameEvent(SfmlWindow sfmlWindow, ISceneService sceneService) : base(16, 0) {
+                this._sfmlWindow = sfmlWindow;
+                this._sceneService = sceneService;
+            }
+
+            protected override void Run() {
+                if (this._sfmlWindow._renderWindow is RenderWindow buffer) {
+                    buffer.Clear();
+                    this._sceneService.CurrentScene?.Draw(this._sfmlWindow);
+                    buffer.Display();
+                }
+            }
+        }
 
         private class DoEvents : Core.Events.Event
         {

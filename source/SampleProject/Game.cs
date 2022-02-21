@@ -1,5 +1,6 @@
 ﻿using Annex.Core;
 using Annex.Core.Assets;
+using Annex.Core.Assets.Bundles;
 using Annex.Core.Graphics;
 using Annex.Core.Logging;
 using Annex.Core.Services;
@@ -40,7 +41,7 @@ namespace SampleProject
         protected override void SetupAssetBundles(IAssetService assetService) {
             string assetRoot = GetAssetRoot();
             string textureRoot = Path.Combine(assetRoot, "textures");
-            //assetService.Textures.AddBundle(new FileSystemDirectory("*", textureRoot));
+            assetService.Textures.AddBundle(new FileSystemDirectory("*.png", textureRoot));
         }
 
         private string GetAssetRoot() {

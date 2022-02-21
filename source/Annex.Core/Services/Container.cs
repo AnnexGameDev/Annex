@@ -104,7 +104,13 @@ namespace Annex.Core.Services
             }
 
             var type = (Type)data;
-            var constructor = type.GetConstructors().Single();
+            var constructors = type.GetConstructors();
+
+            if (constructors.Count() != 1) {
+                throw new InvalidOperationException($"Multiple constructors found for {type.Name}");
+            }
+
+            var constructor = constructors.Single();
             var dependencies = constructor.GetParameters()
                 .Select(parameter => parameter.ParameterType)
                 .Select(dependencyType => this.Resolve(dependencyType))

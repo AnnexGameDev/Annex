@@ -1,10 +1,11 @@
-﻿using Annex.Core.Graphics.Windows;
+﻿using Annex.Core.Graphics;
+using Annex.Core.Graphics.Windows;
 using Annex.Core.Input.InputEvents;
 using Annex.Core.Scenes.Components;
 
 namespace Annex.Core.Scenes
 {
-    public interface IScene
+    public interface IScene : IDrawable
     {
         void OnLeave(OnSceneLeaveEventArgs onSceneLeaveEventArgs);
         void OnEnter(OnSceneEnterEventArgs onSceneEnterEventArgs);

@@ -1,4 +1,5 @@
-﻿using Annex.Core.Graphics.Windows;
+﻿using Annex.Core.Graphics;
+using Annex.Core.Graphics.Windows;
 using Annex.Core.Input.InputEvents;
 
 namespace Annex.Core.Scenes.Components
@@ -30,6 +31,9 @@ namespace Annex.Core.Scenes.Components
         }
 
         public virtual void OnMouseScrollWheelMoved(IWindow window, MouseScrollWheelMovedEvent mouseScrollWheelMovedEvent) {
+        }
+
+        public virtual void Draw(ICanvas canvas) {
         }
     }
 }

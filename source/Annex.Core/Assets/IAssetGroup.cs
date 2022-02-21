@@ -2,8 +2,9 @@
 
 namespace Annex.Core.Assets
 {
-    public interface IAssets
+    public interface IAssetGroup
     {
         void AddBundle(IAssetBundle bundle);
+        IAsset Get(string textureId);
     }
 }

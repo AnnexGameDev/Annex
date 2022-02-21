@@ -1,13 +1,46 @@
-﻿namespace Annex.Core.Assets.Bundles
+﻿using Annex.Core.Logging;
+using System.Collections.Concurrent;
+
+namespace Annex.Core.Assets.Bundles
 {
+    // TODO: Tests
+    // TODO: Clean this up
     public class FileSystemDirectory : IAssetBundle
     {
-        private string v;
-        private string textureRoot;
+        private readonly IDictionary<string, IAsset> _assets = new ConcurrentDictionary<string, IAsset>();
 
-        public FileSystemDirectory(string v, string textureRoot) {
-            this.v = v;
-            this.textureRoot = textureRoot;
+        public FileSystemDirectory(string filter, string rootPath) {
+            foreach (var file in Directory.GetFiles(rootPath, filter, SearchOption.AllDirectories)) {
+                var fi = new FileInfo(file);
+                var assetId = fi.FullName.Remove(0, rootPath.Length + 1);
+                Log.Trace(LogSeverity.Verbose, $"Adding asset {assetId}");
+                this._assets.Add(assetId, new FileAsset(fi.FullName));
+            }
+        }
+
+        public IAsset? GetAsset(string id) {
+            if (!this._assets.ContainsKey(id)) {
+                return null;
+            }
+
+            return this._assets[id];
+        }
+
+        private class FileAsset : Asset
+        {
+            public override bool FilepathSupported => true;
+            public override string FilePath { get; }
+
+            public FileAsset(string fullName) {
+                this.FilePath = fullName;
+            }
+
+            public override byte[] ToBytes() {
+                return File.ReadAllBytes(this.FilePath);
+            }
+        }
+
+        public void Dispose() {
         }
     }
 }

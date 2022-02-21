@@ -2,6 +2,6 @@
 {
     public interface IAssetService
     {
-        public ITextures Textures { get; }
+        public IAssetGroup Textures { get; }
     }
 }
