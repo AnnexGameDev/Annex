@@ -1,6 +1,6 @@
 ﻿namespace Annex.Core.Graphics.Contexts
 {
-    public abstract class Context : IDisposable
+    public abstract class DrawContext : IDisposable
     {
         public IDisposable? PlatformTarget { get; private set; }
 

@@ -26,7 +26,7 @@ public abstract class AnnexApp
         var asSingleton = new RegistrationOptions() { Singleton = true };
         this._container.Register<ILogService, Log>(asSingleton);
         this._container.Register<ICoreEventService, CoreEventService>(asSingleton);
-        this._container.Register<IInputHandlerService, InputHandlerService>();
+        this._container.Register<IInputService, InputService>();
         this._container.Register<ITimeService, StopwatchTimeService>(asSingleton);
         this._container.Register<ISceneService, SceneService>(asSingleton);
         this._container.Register<IGraphicsService, GraphicsService>(asSingleton);

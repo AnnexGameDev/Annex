@@ -2,8 +2,12 @@
 
 namespace Annex.Core.Input
 {
-    public interface IInputHandlerService
+    public interface IInputService
     {
+        // TODO: Tests
+        bool IsKeyDown(KeyboardKey key);
+        bool IsMouseButtonDown(MouseButton button);
+
         void HandleWindowClosed(IWindow window);
         void HandleKeyboardKeyPressed(IWindow window, KeyboardKey key);
         void HandleKeyboardKeyReleased(IWindow window, KeyboardKey key);

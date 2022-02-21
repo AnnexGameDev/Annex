@@ -1,6 +1,6 @@
 ﻿namespace Annex.Core.Graphics.Contexts
 {
-    public class SpriteContext : Context
+    public class SpriteContext : DrawContext
     {
     }
 }

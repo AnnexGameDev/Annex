@@ -12,7 +12,7 @@ namespace Annex.Sfml.Graphics.Windows
 {
     internal class SfmlWindow : SfmlCanvas, IWindow, IDisposable
     {
-        private readonly IInputHandlerService _inputHandlerService;
+        private readonly IInputService _inputHandlerService;
         private RenderWindow _renderWindow;
         protected override RenderTarget? _renderTarget => _renderWindow;
 
@@ -54,7 +54,7 @@ namespace Annex.Sfml.Graphics.Windows
             }
         }
 
-        public SfmlWindow(ICoreEventService coreEventService, IInputHandlerService inputHandlerService, ISceneService sceneService, IAssetService assetService)
+        public SfmlWindow(ICoreEventService coreEventService, IInputService inputHandlerService, ISceneService sceneService, IAssetService assetService)
             : base(assetService) {
             this._inputHandlerService = inputHandlerService;
             this.WindowSize = new Vector2ui(OnWindowSizeChanged);

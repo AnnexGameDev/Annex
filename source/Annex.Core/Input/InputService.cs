@@ -6,16 +6,22 @@ using Annex.Core.Scenes;
 
 namespace Annex.Core.Input
 {
-    internal class InputHandlerService : IInputHandlerService
+    internal class InputService : IInputService
     {
         private readonly ISceneService _sceneService;
         private readonly IPlatformKeyboardService _platformKeyboardService;
 
+        private readonly bool[] _keyboardKeyPressed;
+        private readonly bool[] _mouseButtonStates;
+
         private IScene _currentScene => this._sceneService.CurrentScene;
 
-        public InputHandlerService(ISceneService sceneService, IPlatformKeyboardService platformKeyboardService) {
+        public InputService(ISceneService sceneService, IPlatformKeyboardService platformKeyboardService) {
             this._sceneService = sceneService;
             this._platformKeyboardService = platformKeyboardService;
+
+            this._keyboardKeyPressed = new bool[Enum.GetValues<KeyboardKey>().Length];
+            this._mouseButtonStates = new bool[Enum.GetValues<MouseButton>().Length];
         }
 
         public void HandleKeyboardKeyPressed(IWindow window, KeyboardKey key) {
@@ -25,12 +31,14 @@ namespace Annex.Core.Input
             bool capsLock = this._platformKeyboardService.IsCapsLockOn();
             var keyPressedEvent = new KeyboardKeyPressedEvent(key, shift, capsLock);
 
+            this._keyboardKeyPressed[(int)key] = true;
             this._currentScene.OnKeyboardKeyPressed(window, keyPressedEvent);
         }
 
         public void HandleKeyboardKeyReleased(IWindow window, KeyboardKey key) {
             Log.Trace(LogSeverity.Verbose, $"KeyboardKey Released: {key}");
             var keyReleasedEvent = new KeyboardKeyReleasedEvent(key);
+            this._keyboardKeyPressed[(int)key] = false;
             this._currentScene.OnKeyboardKeyReleased(window, keyReleasedEvent);
         }
 
@@ -43,6 +51,7 @@ namespace Annex.Core.Input
             // TODO: Track drag / dbl click
             Log.Trace(LogSeverity.Verbose, $"MouseButton Pressed: {button}  x:{windowX}  y:{windowY}");
             var mouseButtonPressedEvent = new MouseButtonPressedEvent(button, windowX, windowY);
+            this._mouseButtonStates[(int)button] = true;
             this._currentScene.OnMouseButtonPressed(window, mouseButtonPressedEvent);
         }
 
@@ -50,6 +59,7 @@ namespace Annex.Core.Input
             // TODO: Track drag / dbl click
             Log.Trace(LogSeverity.Verbose, $"MouseButton Released: {button}  x:{windowX}  y:{windowY}");
             var mouseButtonReleasedEvent = new MouseButtonReleasedEvent(button, windowX, windowY);
+            this._mouseButtonStates[(int)button] = false;
             this._currentScene.OnMouseButtonReleased(window, mouseButtonReleasedEvent);
         }
 
@@ -63,6 +73,14 @@ namespace Annex.Core.Input
             Log.Trace(LogSeverity.Verbose, $"MouseScrollWheel Moved: {delta}");
             var mouseScrollWheelMovedEvent = new MouseScrollWheelMovedEvent(delta);
             this._currentScene.OnMouseScrollWheelMoved(window, mouseScrollWheelMovedEvent);
+        }
+
+        public bool IsKeyDown(KeyboardKey key) {
+            return this._keyboardKeyPressed[(int)key];
+        }
+
+        public bool IsMouseButtonDown(MouseButton button) {
+            return this._mouseButtonStates[(int)button];
         }
     }
 }

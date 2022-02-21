@@ -1,11 +1,12 @@
-﻿using Annex.Core.Graphics;
+﻿using Annex.Core.Data;
+using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
 
 namespace SampleProject.Models
 {
     public class Player : IDrawable
     {
-        //public readonly Vector Position;
+        public readonly Vector2f Position;
 
         private readonly TextureContext _sprite;
         //private readonly TextContext _hoverText;
@@ -16,7 +17,9 @@ namespace SampleProject.Models
             //this.Position = Vector.Create(0, 0);
             //this.Name = "Player Name";
 
-            this._sprite = new TextureContext("player.png");
+            this._sprite = new TextureContext("player.png") {
+                RenderPosition = this.Position
+            };
 
             //this._sprite = new SpriteSheetContext("player.png", 4, 4) {
             //    RenderPosition = new OffsetVector(this.Position, Vector.Create(-48, -90))
