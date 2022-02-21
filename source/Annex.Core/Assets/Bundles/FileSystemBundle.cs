@@ -5,11 +5,11 @@ namespace Annex.Core.Assets.Bundles
 {
     // TODO: Tests
     // TODO: Clean this up
-    public class FileSystemDirectory : IAssetBundle
+    public class FileSystemBundle : IAssetBundle
     {
         private readonly IDictionary<string, IAsset> _assets = new ConcurrentDictionary<string, IAsset>();
 
-        public FileSystemDirectory(string filter, string rootPath) {
+        public FileSystemBundle(string filter, string rootPath) {
             foreach (var file in Directory.GetFiles(rootPath, filter, SearchOption.AllDirectories)) {
                 var fi = new FileInfo(file);
                 var assetId = fi.FullName.Remove(0, rootPath.Length + 1);

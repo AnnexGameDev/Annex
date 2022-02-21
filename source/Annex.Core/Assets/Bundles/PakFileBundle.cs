@@ -57,6 +57,7 @@ namespace Annex.Core.Assets.Bundles
                     string assetId = this._reader.ReadString();
                     int assetSize = this._reader.ReadInt32();
                     long assetPosition = this._reader.BaseStream.Position;
+                    this._reader.BaseStream.Seek(assetSize, SeekOrigin.Current);
                     this._entries.Add(assetId, new PakFileEntry(assetPosition, assetSize));
                 }
             }
@@ -76,7 +77,7 @@ namespace Annex.Core.Assets.Bundles
 
                 foreach (var asset in allAssets) {
                     var fi = new FileInfo(asset);
-                    string assetId = fi.FullName.Remove(assetRoot.Length);
+                    string assetId = fi.FullName.Remove(0, assetRoot.Length + 1);
                     var assetData = File.ReadAllBytes(asset);
 
                     Log.Trace(LogSeverity.Verbose, $"Adding '{assetId}' to pakFile");

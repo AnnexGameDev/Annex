@@ -5,7 +5,7 @@ namespace Annex.Core.Services
 {
     internal class Container : IContainer
     {
-        private class SingletonEntry
+        private class SingletonEntry : IDisposable
         {
             public Type Type { get; set; }
             public object? Instance { get; set; }
@@ -14,6 +14,13 @@ namespace Annex.Core.Services
             public SingletonEntry(Type type) {
                 this.Type = type;
                 this.Instance = null;
+            }
+
+            public void Dispose() {
+                if (this.Instance is IDisposable disposable) {
+                    disposable.Dispose();
+                    this.Instance = null;
+                }
             }
         }
 
@@ -119,9 +126,11 @@ namespace Annex.Core.Services
         }
 
         public void Dispose() {
+            // Remember that 'this' is also injected into the container. Don't stackoverflow
+            this._serviceData.Remove(typeof(IContainer));
+
             foreach (var serviceData in this._serviceData.Values) {
-                // Remember that 'this' is also injected into the container. Don't stackoverflow
-                if (serviceData is IDisposable disposable && disposable != this) {
+                if (serviceData is IDisposable disposable) {
                     disposable.Dispose();
                 }
 

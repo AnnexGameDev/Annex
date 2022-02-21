@@ -29,7 +29,7 @@ namespace Annex.Sfml.Graphics.Windows
         }
 
         private Texture GetTexture(string textureId) {
-            var asset = this._assetService.Textures.Get(textureId);
+            var asset = this._assetService.Textures.GetAsset(textureId);
 
             if (asset.Target is not Texture texture) {
 

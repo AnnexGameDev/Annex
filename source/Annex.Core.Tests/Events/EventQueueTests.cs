@@ -33,7 +33,7 @@ namespace Annex.Core.Tests.Events
             eventScheduler.Run();
 
             // Assert
-            eventMocks.VerifyMany(@event => @event.TimeElapsed(It.IsAny<long>()), Times.Once());
+            eventMocks.VerifyAll(@event => @event.TimeElapsed(It.IsAny<long>()), Times.Once());
         }
 
         [Fact]

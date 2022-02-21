@@ -23,7 +23,7 @@ namespace Annex.Core.Logging
 
             string exceptionDetails = this.GetExceptionDetails();
 
-            return $"{this.DateTime.ToFileTimeUtc()} - [{this.Severity}] - {this.Message}{Environment.NewLine}" +
+            return $"{this.DateTime.ToLocalTime()} - [{this.Severity}] - {this.Message}{Environment.NewLine}" +
                 $"TID: {this.ThreadId}{Environment.NewLine}" +
                 $"{this.SourceFile}:{this.CallerMemberName}:{this.SourceLine}{Environment.NewLine}" +
                 $"{exceptionDetails}{Environment.NewLine}";

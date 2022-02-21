@@ -31,6 +31,7 @@ public abstract class AnnexApp
         this._container.Register<ISceneService, SceneService>(asSingleton);
         this._container.Register<IGraphicsService, GraphicsService>(asSingleton);
         this._container.Register<IAssetService, AssetService>(asSingleton);
+        this._container.Register<IAssetGroup, AssetGroup>();
         this._container.RegisterBroadcast<RequestStopAppMessage>();
 
 #if WINDOWS
@@ -52,10 +53,13 @@ public abstract class AnnexApp
             this.CreateWindow(this._graphicsService);
             this._sceneService.LoadScene<TStartingScene>();
             this._eventService.Run();
-            this._container.Dispose();
         }
         catch (Exception ex) {
             Log.Trace(LogSeverity.Error, "Exception in main gameloop", ex);
+            this._container.Resolve<ILogService>(); // Resolve the log so we have an instance up to persist the log to.
+        }
+        finally {
+            this._container.Dispose();
         }
     }
 

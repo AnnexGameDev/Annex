@@ -6,6 +6,7 @@ namespace Annex.Core.Logging
 {
     public class Log : ILogService, IDisposable
     {
+        private const string ISO8601 = "yyyyMMddTHHmmss";
         private const int FlushQueueLimit = 100;
         private static ConcurrentQueue<LogEntry> _unflushedEntries = new();
         private static readonly string _logDirectory;
@@ -21,7 +22,7 @@ namespace Annex.Core.Logging
         }
 
         public Log() {
-            _logFilePath = Path.Combine(_logDirectory, DateTime.Now.ToFileTimeUtc() + ".txt");
+            _logFilePath = Path.Combine(_logDirectory, DateTime.Now.ToString(ISO8601) + ".txt");
             _singletonInstance = this;
             this.Flush().FireAndForget();
         }
