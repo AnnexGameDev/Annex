@@ -2,11 +2,9 @@
 using Annex.Core.Assets;
 using Annex.Core.Assets.Bundles;
 using Annex.Core.Graphics;
-using Annex.Core.Logging;
-using Annex.Core.Services;
 using Annex.Sfml.Graphics;
 using SampleProject.Scenes.Level1;
-using System;
+using Scaffold.DependencyInjection;
 using System.IO;
 
 namespace SampleProject
@@ -17,7 +15,7 @@ namespace SampleProject
 #if !DEBUG
             try {
 #endif
-                new Game().Run<Level1>();
+            new Game().Run<Level1>();
 #if !DEBUG
             } catch (Exception e) {
                 Log.Trace(LogSeverity.Error, "Exception in main", exception: e);
@@ -33,8 +31,9 @@ namespace SampleProject
         }
 
         protected override void RegisterTypes(IContainer container) {
-            container.Register<IGraphicsEngine, SfmlGraphicsEngine>();
+            base.RegisterTypes(container);
 
+            container.Register<IGraphicsEngine, SfmlGraphicsEngine>();
             container.Register<Level1>();
         }
 

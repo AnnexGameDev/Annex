@@ -1,10 +1,10 @@
 ﻿using Annex.Core.Scenes;
 using Annex.Core.Scenes.Components;
-using Annex.Core.Services;
 using FluentAssertions;
 using Moq;
+using Scaffold.DependencyInjection;
+using Scaffold.Tests.Core.Fixture;
 using System;
-using UnitTests.Core.Fixture;
 using Xunit;
 
 namespace Annex.Core.Tests.Scenes

@@ -1,11 +1,11 @@
-﻿namespace Annex.Core
+﻿using Scaffold;
+
+namespace Annex.Core
 {
     public static class Paths
     {
-        public static string ApplicationPath => AppContext.BaseDirectory;
-
         public static string GetParentFolderWithFile(string fileName) {
-            var di = new DirectoryInfo(ApplicationPath);
+            var di = new DirectoryInfo(ScaffoldApp.ApplicationPath);
             while (di != null) {
                 if (Directory.GetFiles(di.FullName).Any(filePath => filePath.EndsWith(fileName, StringComparison.InvariantCultureIgnoreCase))) {
                     return di.FullName;

@@ -1,9 +1,9 @@
 ﻿using Annex.Core.Events;
 using Annex.Core.Time;
 using Moq;
+using Scaffold.Tests.Core;
+using Scaffold.Tests.Core.Fixture;
 using System.Linq;
-using UnitTests.Core;
-using UnitTests.Core.Fixture;
 using Xunit;
 
 namespace Annex.Core.Tests.Events

@@ -1,4 +1,4 @@
-﻿using Annex.Core.Logging;
+﻿using Scaffold.Logging;
 using System.Collections.Concurrent;
 
 namespace Annex.Core.Assets.Bundles

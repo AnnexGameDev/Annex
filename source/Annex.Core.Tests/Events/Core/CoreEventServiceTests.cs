@@ -2,8 +2,8 @@
 using Annex.Core.Broadcasts.Messages;
 using Annex.Core.Events.Core;
 using Moq;
+using Scaffold.Tests.Core.Fixture;
 using System.Threading.Tasks;
-using UnitTests.Core.Fixture;
 using Xunit;
 
 namespace Annex.Core.Tests.Events.Core

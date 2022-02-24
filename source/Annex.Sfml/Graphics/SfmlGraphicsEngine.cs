@@ -1,7 +1,7 @@
 ﻿using Annex.Core.Graphics;
 using Annex.Core.Graphics.Windows;
-using Annex.Core.Services;
 using Annex.Sfml.Graphics.Windows;
+using Scaffold.DependencyInjection;
 
 namespace Annex.Sfml.Graphics
 {

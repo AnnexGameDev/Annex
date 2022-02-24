@@ -1,7 +1,7 @@
 ﻿using Annex.Core.Graphics;
 using FluentAssertions;
 using Moq;
-using UnitTests.Core.Fixture;
+using Scaffold.Tests.Core.Fixture;
 using Xunit;
 
 namespace Annex.Core.Tests.Graphics

@@ -3,8 +3,8 @@ using Annex.Core.Input;
 using Annex.Core.Input.InputEvents;
 using Annex.Core.Scenes;
 using Moq;
-using UnitTests.Core.Attributes;
-using UnitTests.Core.Fixture;
+using Scaffold.Tests.Core.Attributes;
+using Scaffold.Tests.Core.Fixture;
 using Xunit;
 
 namespace Annex.Core.Tests.Input

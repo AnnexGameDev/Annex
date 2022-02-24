@@ -2,10 +2,10 @@
 using Annex.Core.Assets.Bundles;
 using FluentAssertions;
 using Moq;
+using Scaffold.Tests.Core;
+using Scaffold.Tests.Core.Attributes;
+using Scaffold.Tests.Core.Fixture;
 using System;
-using UnitTests.Core;
-using UnitTests.Core.Attributes;
-using UnitTests.Core.Fixture;
 using Xunit;
 
 namespace Annex.Core.Tests.Assets

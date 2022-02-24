@@ -5,65 +5,53 @@ using Annex.Core.Events.Core;
 using Annex.Core.Graphics;
 using Annex.Core.Input;
 using Annex.Core.Input.Platforms;
-using Annex.Core.Logging;
 using Annex.Core.Scenes;
-using Annex.Core.Services;
 using Annex.Core.Time;
+using Scaffold;
+using Scaffold.DependencyInjection;
+using Scaffold.Logging;
 
 namespace Annex.Core;
 
-public abstract class AnnexApp
+public abstract class AnnexApp : ScaffoldApp
 {
-    private readonly ISceneService _sceneService;
-    private readonly ICoreEventService _eventService;
-    private readonly IGraphicsService _graphicsService;
-    private readonly IAssetService _assetManager;
-    private readonly IContainer _container;
-
-    public AnnexApp() {
-        this._container = new Container();
-
-        var asSingleton = new RegistrationOptions() { Singleton = true };
-        this._container.Register<ILogService, Log>(asSingleton);
-        this._container.Register<ICoreEventService, CoreEventService>(asSingleton);
-        this._container.Register<IInputService, InputService>();
-        this._container.Register<ITimeService, StopwatchTimeService>(asSingleton);
-        this._container.Register<ISceneService, SceneService>(asSingleton);
-        this._container.Register<IGraphicsService, GraphicsService>(asSingleton);
-        this._container.Register<IAssetService, AssetService>(asSingleton);
-        this._container.Register<IAssetGroup, AssetGroup>();
-        this._container.RegisterBroadcast<RequestStopAppMessage>();
-
-#if WINDOWS
-        this._container.Register<IPlatformKeyboardService, WindowsKeyboardService>();
-#endif
-
-        this.RegisterTypes(this._container);
-
-        this._sceneService = this._container.Resolve<ISceneService>();
-        this._eventService = this._container.Resolve<ICoreEventService>();
-        this._graphicsService = this._container.Resolve<IGraphicsService>();
-        this._assetManager = this._container.Resolve<IAssetService>();
-    }
-
+    private IContainer _container;
 
     public void Run<TStartingScene>() where TStartingScene : IScene  {
         try {
-            this.SetupAssetBundles(this._assetManager);
-            this.CreateWindow(this._graphicsService);
-            this._sceneService.LoadScene<TStartingScene>();
-            this._eventService.Run();
+            var sceneService = this._container.Resolve<ISceneService>();
+            var eventService = this._container.Resolve<ICoreEventService>();
+            var graphicsService = this._container.Resolve<IGraphicsService>();
+            var assetService = this._container.Resolve<IAssetService>();
+
+            this.SetupAssetBundles(assetService);
+            this.CreateWindow(graphicsService);
+            sceneService.LoadScene<TStartingScene>();
+            eventService.Run();
         }
         catch (Exception ex) {
             Log.Trace(LogSeverity.Error, "Exception in main gameloop", ex);
-            this._container.Resolve<ILogService>(); // Resolve the log so we have an instance up to persist the log to.
-        }
-        finally {
-            this._container.Dispose();
         }
     }
 
-    protected abstract void RegisterTypes(IContainer container);
+    protected override void RegisterTypes(IContainer container) {
+        base.RegisterTypes(container);
+        this._container = container;
+
+        container.RegisterSingleton<ICoreEventService, CoreEventService>();
+        container.Register<IInputService, InputService>();
+        container.RegisterSingleton<ITimeService, StopwatchTimeService>();
+        container.RegisterSingleton<ISceneService, SceneService>();
+        container.RegisterSingleton<IGraphicsService, GraphicsService>();
+        container.RegisterSingleton<IAssetService, AssetService>();
+        container.Register<IAssetGroup, AssetGroup>();
+        container.RegisterBroadcast<RequestStopAppMessage>();
+
+#if WINDOWS
+        container.Register<IPlatformKeyboardService, WindowsKeyboardService>();
+#endif
+    }
+
     protected abstract void CreateWindow(IGraphicsService graphicsService);
     protected abstract void SetupAssetBundles(IAssetService assetService);
 }
