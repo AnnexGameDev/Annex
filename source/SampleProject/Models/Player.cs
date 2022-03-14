@@ -14,7 +14,7 @@ namespace SampleProject.Models
         //public readonly String Name;
 
         public Player() {
-            //this.Position = Vector.Create(0, 0);
+            this.Position = new Vector2f();
             //this.Name = "Player Name";
 
             this._sprite = new TextureContext("player.png") {

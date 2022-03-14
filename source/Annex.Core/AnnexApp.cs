@@ -15,14 +15,12 @@ namespace Annex.Core;
 
 public abstract class AnnexApp : ScaffoldApp
 {
-    private IContainer _container;
-
     public void Run<TStartingScene>() where TStartingScene : IScene  {
         try {
-            var sceneService = this._container.Resolve<ISceneService>();
-            var eventService = this._container.Resolve<ICoreEventService>();
-            var graphicsService = this._container.Resolve<IGraphicsService>();
-            var assetService = this._container.Resolve<IAssetService>();
+            var sceneService = this.Container.Resolve<ISceneService>();
+            var eventService = this.Container.Resolve<ICoreEventService>();
+            var graphicsService = this.Container.Resolve<IGraphicsService>();
+            var assetService = this.Container.Resolve<IAssetService>();
 
             this.SetupAssetBundles(assetService);
             this.CreateWindow(graphicsService);
@@ -36,7 +34,6 @@ public abstract class AnnexApp : ScaffoldApp
 
     protected override void RegisterTypes(IContainer container) {
         base.RegisterTypes(container);
-        this._container = container;
 
         container.RegisterSingleton<ICoreEventService, CoreEventService>();
         container.Register<IInputService, InputService>();

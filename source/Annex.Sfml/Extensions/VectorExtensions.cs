@@ -11,5 +11,13 @@
             vector.X = value.X;
             vector.Y = value.Y;
         }
+
+        public static bool DoesNotEqual(this SFML.System.Vector2f vector, Core.Data.Vector2f value) {
+            return vector.X != value.X || vector.Y != value.Y;
+        }
+
+        public static SFML.System.Vector2f ToSFML(this Core.Data.Vector2f value) {
+            return new SFML.System.Vector2f(value.X, value.Y);
+        }
     }
 }
