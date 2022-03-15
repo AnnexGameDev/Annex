@@ -43,6 +43,7 @@ namespace Annex.Core.Collections.Generic
             }
 
             public CacheEntry(TValue value) {
+                this.Value = value;
                 this.LastAccessTime = long.MinValue;
             }
         }
