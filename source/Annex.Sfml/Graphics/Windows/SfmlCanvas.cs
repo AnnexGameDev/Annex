@@ -1,5 +1,6 @@
 ﻿using Annex.Core.Assets;
 using Annex.Core.Collections.Generic;
+using Annex.Core.Data;
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
 using Annex.Sfml.Extensions;
@@ -41,10 +42,9 @@ namespace Annex.Sfml.Graphics.Windows
                 sprite.Position = context.RenderPosition.ToSFML();
             }
 
-            if (sprite.TextureRect.DoesNotEqual(context.SourceTextureRect)) {
-                if (RectIsNotDefault(context.SourceTextureRect, texture.Size)) {
-                    sprite.TextureRect = context.SourceTextureRect.ToSFML();
-                }
+            var defaultRect = new SFML.Graphics.IntRect(0, 0, (int)texture.Size.X, (int)texture.Size.Y);
+            if (sprite.TextureRect.DoesNotEqual(context.SourceTextureRect, defaultRect)) {
+                sprite.TextureRect = context.SourceTextureRect.ToSFML();
             }
 
             // Compute scale
@@ -52,13 +52,10 @@ namespace Annex.Sfml.Graphics.Windows
             if (sprite.Scale != scale) {
                 sprite.Scale = scale;
             }
-        }
 
-        private bool RectIsNotDefault(Core.Data.IntRect? sourceTextureRect, SFML.System.Vector2u size) {
-            if (sourceTextureRect == null)
-                return false;
-            return sourceTextureRect.Top != 0 || sourceTextureRect.Left != 0 
-                || sourceTextureRect.Width != size.X || sourceTextureRect.Height != size.Y;
+            if (sprite.Color.DoesNotEqual(context.RenderColor, Color.White)) {
+                sprite.Color = context.RenderColor.ToSFML(KnownColor.White);
+            }
         }
 
         private SFML.System.Vector2f ComputeSpriteScale(TextureContext context, Texture texture) {

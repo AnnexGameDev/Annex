@@ -18,7 +18,10 @@ namespace SampleProject.Models
             //this.Name = "Player Name";
 
             this._sprite = new TextureContext("player.png") {
-                RenderPosition = this.Position
+                RenderPosition = this.Position,
+                SourceTextureRect = new IntRect(0, 0, 96, 96),
+                RenderColor = KnownColor.Red,
+                RenderSize = new Vector2f(192, 192)
             };
 
             //this._sprite = new SpriteSheetContext("player.png", 4, 4) {
