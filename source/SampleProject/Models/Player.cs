@@ -23,7 +23,7 @@ namespace SampleProject.Models
                 RenderColor = KnownColor.Red,
                 RenderSize = _size,
                 Rotation = 90,
-                RelativeRotationOrigin = new Vector2f()
+                RelativeRotationOrigin = new ScalingVector2f(this._size, 0.5f, 0.5f)
             };
 
             //this._sprite = new SpriteSheetContext("player.png", 4, 4) {

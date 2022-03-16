@@ -3,7 +3,7 @@
 namespace Annex.Core.Data
 {
     [DebuggerDisplay("X:{X} Y:{Y}")]
-    public class VectorBase<T> where T : struct
+    public class VectorBase<T> : IVector2<T> where T : struct
     {
         // TODO: Get rid of this.
         private Action? _onChangeCallback;

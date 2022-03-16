@@ -33,7 +33,7 @@ namespace Annex.Sfml.Graphics.Windows
         }
 
         private void UpdateSpriteIfNeeded(Sprite sprite, TextureContext context) {
-            var texture = this.GetTexture(context.TextureId);
+            var texture = this.GetTexture(context.TextureId.Value);
             if (texture != sprite.Texture) {
                 sprite.Texture = texture;
             }
