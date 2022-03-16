@@ -9,6 +9,7 @@ namespace SampleProject.Models
         public readonly Vector2f Position;
 
         private readonly TextureContext _sprite;
+        private readonly Vector2f _size = new Vector2f(192, 192);
         //private readonly TextContext _hoverText;
 
         //public readonly String Name;
@@ -17,11 +18,12 @@ namespace SampleProject.Models
             this.Position = new Vector2f();
             //this.Name = "Player Name";
 
-            this._sprite = new TextureContext("player.png") {
-                RenderPosition = this.Position,
+            this._sprite = new TextureContext("player.png", this.Position) {
                 SourceTextureRect = new IntRect(0, 0, 96, 96),
                 RenderColor = KnownColor.Red,
-                RenderSize = new Vector2f(192, 192)
+                RenderSize = _size,
+                Rotation = 90,
+                RelativeRotationOrigin = new Vector2f()
             };
 
             //this._sprite = new SpriteSheetContext("player.png", 4, 4) {

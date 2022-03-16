@@ -4,21 +4,25 @@ namespace Annex.Core.Graphics.Contexts
 {
     public class TextureContext : DrawContext
     {
-        public string TextureId { get; }
-        public Vector2f RenderPosition { get; init; }
+        public Shared<string> TextureId { get; }
+        public Vector2f RenderPosition { get; }
         public Vector2f? RenderSize { get; init; }
-        public IntRect? SourceTextureRect { get; set; }
-        public RGBA? RenderColor { get; set; }
-        public float Rotation { get; set; }
-        public Vector2f? RelativeRotationOrigin { get; set; }
+        public IntRect? SourceTextureRect { get; init; }
+        public RGBA? RenderColor { get; init; }
+        public Shared<float>? Rotation { get; init; }
+        public Vector2f? RelativeRotationOrigin { get; init; }
 
-        public TextureContext(string textureId) {
+        public TextureContext(Shared<string> textureId) : this(textureId, new Vector2f()) {
+
+        }
+
+        public TextureContext(Shared<string> textureId, Vector2f renderPosition) {
             this.TextureId = textureId;
-            this.RenderPosition = new Vector2f();
+            this.RenderPosition = renderPosition;
             this.RenderSize = null;
             this.SourceTextureRect = null;
             this.RenderColor = null;
-            this.Rotation = 0;
+            this.Rotation = null;
             this.RelativeRotationOrigin = null;
         }
     }
