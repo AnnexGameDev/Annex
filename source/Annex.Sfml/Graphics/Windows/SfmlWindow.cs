@@ -150,6 +150,8 @@ namespace Annex.Sfml.Graphics.Windows
                 this._sceneService = sceneService;
             }
 
+            private long LastCall = Environment.TickCount;
+
             protected override void Run() {
                 if (this._sfmlWindow._renderWindow is RenderWindow buffer) {
                     buffer.Clear();

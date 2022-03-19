@@ -10,9 +10,12 @@ namespace Annex.Sfml.Extensions
             return new IntRect(rect.Left, rect.Top, rect.Width, rect.Height);
         }
 
-        public static bool DoesNotEqual(this IntRect sfmlRect, Core.Data.IntRect? annexRect, IntRect defaultRect) {
+        public static bool DoesNotEqual(this IntRect sfmlRect, Core.Data.IntRect? annexRect, int top, int left, int width, int height) {
             if (annexRect == null) {
-                if (sfmlRect == defaultRect)
+                if (sfmlRect.Top == top 
+                    && sfmlRect.Left == left
+                    && sfmlRect.Width == width
+                    && sfmlRect.Height == height)
                     return false;
                 return true;
             }

@@ -29,10 +29,10 @@ namespace Annex.Core.Events
             long lastRun = this._timeService.Now;
             while (this._keepRunning) {
                 long step = this._timeService.ElapsedTimeSince(lastRun);
+                lastRun += step;
                 foreach (var item in this._queueItems) {
                     item.TimeElapsed(step);
                 }
-                lastRun = this._timeService.Now;
             }
         }
     }

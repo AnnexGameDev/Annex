@@ -1,9 +1,11 @@
 ﻿using Annex.Core.Assets;
+using Annex.Core.Calculations;
 using Annex.Core.Collections.Generic;
 using Annex.Core.Data;
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
 using Annex.Sfml.Extensions;
+using Annex.Sfml.Graphics.Transforms;
 using SFML.Graphics;
 
 namespace Annex.Sfml.Graphics.Windows
@@ -19,17 +21,15 @@ namespace Annex.Sfml.Graphics.Windows
             this._assetService = assetService;
         }
 
-        public void Draw(SpriteContext context) {
+        public void Draw(SpritesheetContext context) {
         }
 
         public void Draw(TextureContext context) {
-
-            if (context.PlatformTarget is not Sprite sprite) {
-                sprite = CreateSprite(context);
+            if (context.PlatformTarget is not SpriteContext sprite) {
+                sprite = new SpriteContext(context, this._textureCache);
+                context.SetPlatformTarget(sprite);
             }
-            UpdateSpriteIfNeeded(sprite, context);
-
-            this._renderTarget?.Draw(sprite);
+            sprite.Draw(this._renderTarget);
         }
 
         private void UpdateSpriteIfNeeded(Sprite sprite, TextureContext context) {
@@ -42,8 +42,7 @@ namespace Annex.Sfml.Graphics.Windows
                 sprite.Position = context.RenderPosition.ToSFML();
             }
 
-            var defaultRect = new SFML.Graphics.IntRect(0, 0, (int)texture.Size.X, (int)texture.Size.Y);
-            if (sprite.TextureRect.DoesNotEqual(context.SourceTextureRect, defaultRect)) {
+            if (sprite.TextureRect.DoesNotEqual(context.SourceTextureRect, 0, 0, (int)texture.Size.X, (int)texture.Size.Y)) {
                 sprite.TextureRect = context.SourceTextureRect.ToSFML();
             }
 
@@ -55,6 +54,20 @@ namespace Annex.Sfml.Graphics.Windows
 
             if (sprite.Color.DoesNotEqual(context.RenderColor, Color.White)) {
                 sprite.Color = context.RenderColor.ToSFML(KnownColor.White);
+            }
+
+            // SFML rotates clockwise. We should stick to math. Convert from counter-clockwise to clockwise
+            float sfmlRotation = (360 - (context.Rotation?.Value ?? 0)) % 360;
+
+            if (sprite.Rotation != sfmlRotation) {
+
+                if (context.RelativeRotationOrigin != null) {
+                    (var x, var y) = Rotation.ComputeUnits((context.Rotation.Value % 360 - 90).ToRadians());
+
+                    var offset = new SFML.System.Vector2f(context.RelativeRotationOrigin.Y, context.RelativeRotationOrigin.X);
+                    sprite.Position += offset;
+                }
+                sprite.Rotation = sfmlRotation;
             }
         }
 
@@ -96,12 +109,6 @@ namespace Annex.Sfml.Graphics.Windows
 
             this._textureCache.Add(textureId, newTexture);
             return newTexture;
-        }
-
-        private Sprite CreateSprite(TextureContext context) {
-            var sprite = new Sprite();
-            context.SetPlatformTarget(sprite);
-            return (context.PlatformTarget as Sprite)!;
         }
     }
 }
