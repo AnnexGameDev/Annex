@@ -1,5 +1,6 @@
 ﻿using Annex.Core.Graphics;
 using Annex.Core.Graphics.Windows;
+using Annex.Sfml.Collections.Generic;
 using Annex.Sfml.Graphics.Windows;
 using Scaffold.DependencyInjection;
 
@@ -14,6 +15,7 @@ namespace Annex.Sfml.Graphics
         public SfmlGraphicsEngine(IContainer container) {
             this._container = container;
             this._container.Register<SfmlWindow>();
+            this._container.Register<ITextureCache, TextureCache>();
         }
     }
 }

@@ -5,6 +5,7 @@ using Annex.Core.Graphics;
 using Annex.Sfml.Graphics;
 using SampleProject.Scenes.Level1;
 using Scaffold.DependencyInjection;
+using Scaffold.Logging;
 using System.IO;
 
 namespace SampleProject

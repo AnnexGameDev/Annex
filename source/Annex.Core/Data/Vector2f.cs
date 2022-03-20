@@ -7,5 +7,10 @@
 
         public Vector2f(float x, float y, Action? onChangeCallback = null) : base(x, y, onChangeCallback) {
         }
+
+        public void Add(float dx, float dy) {
+            this.X += dx;
+            this.Y += dy;
+        }
     }
 }

@@ -4,6 +4,7 @@ using Annex.Core.Events.Core;
 using Annex.Core.Graphics.Windows;
 using Annex.Core.Input;
 using Annex.Core.Scenes;
+using Annex.Sfml.Collections.Generic;
 using Annex.Sfml.Extensions;
 using SFML.Graphics;
 using SFML.Window;
@@ -54,8 +55,8 @@ namespace Annex.Sfml.Graphics.Windows
             }
         }
 
-        public SfmlWindow(ICoreEventService coreEventService, IInputService inputHandlerService, ISceneService sceneService, IAssetService assetService)
-            : base(assetService) {
+        public SfmlWindow(ICoreEventService coreEventService, IInputService inputHandlerService, ISceneService sceneService, ITextureCache textureCache)
+            : base(textureCache) {
             this._inputHandlerService = inputHandlerService;
             this.WindowSize = new Vector2ui(OnWindowSizeChanged);
             this.WindowPosition = new Vector2i(OnWindowPositionChanged);
