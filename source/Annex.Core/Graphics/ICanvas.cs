@@ -4,7 +4,6 @@ namespace Annex.Core.Graphics
 {
     public interface ICanvas
     {
-        void Draw(SpritesheetContext context);
-        void Draw(TextureContext context);
+        void Draw(DrawContext context);
     }
 }
