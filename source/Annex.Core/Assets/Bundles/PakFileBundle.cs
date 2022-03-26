@@ -15,10 +15,11 @@ namespace Annex.Core.Assets.Bundles
         }
 
 #if DEBUG
+        // TODO: The CreateFrom should use [Conditional]
         public PakFileBundle(string pakFilePath, string fileFilter, string assetRoot) {
             Log.Trace(LogSeverity.Verbose, $"Constructing the pak file {pakFilePath}...");
 
-            this._pakFile = PakFile.CreateFrom(pakFilePath, fileFilter, assetRoot);
+            this._pakFile = PakFile.CreateFrom(pakFilePath, fileFilter, assetRoot)!;
         }
 #endif
 
