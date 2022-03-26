@@ -19,14 +19,7 @@ namespace SampleProject.Models
             this.Position = new Vector2f(960 / 2, 640 / 2);
             //this.Name = "Player Name";
 
-            this._sprite = new TextureContext("player.png", this.Position) {
-                SourceTextureRect = new IntRect(0, 0, 96, 96),
-                RenderColor = KnownColor.Red,
-                RenderSize = Size,
-                Rotation = Rotation,
-                RenderOffset = new Vector2f(-0.5f, -0.5f)
-            };
-            this._sprite = new SpritesheetContext("player.png", this.Position, 4, 4) {
+            this._sprite = new SpritesheetContext("sprites/player.png", this.Position, 4, 4) {
                 RenderColor = KnownColor.Red,
                 RenderSize = this.Size,
                 Rotation = this.Rotation,

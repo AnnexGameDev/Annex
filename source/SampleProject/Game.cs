@@ -41,7 +41,16 @@ namespace SampleProject
         protected override void SetupAssetBundles(IAssetService assetService) {
             string assetRoot = GetAssetRoot();
             string textureRoot = Path.Combine(assetRoot, "textures");
-            assetService.Textures.AddBundle(new PakFileBundle("pakFile.pak", "*.png", textureRoot));
+            string fontsRoot = Path.Combine(assetRoot, "fonts");
+
+#if DEBUG
+            assetService.Textures.AddBundle(new PakFileBundle("textures.pak", "*.png", textureRoot));
+            assetService.Fonts.AddBundle(new PakFileBundle("fonts.pak", "*.ttf", fontsRoot));
+#else
+            assetService.Textures.AddBundle(new PakFileBundle("texture.pak"));
+            assetService.Fonts.AddBundle(new PakFileBundle("fonts.pak"));
+#endif
+
         }
 
         private string GetAssetRoot() {
