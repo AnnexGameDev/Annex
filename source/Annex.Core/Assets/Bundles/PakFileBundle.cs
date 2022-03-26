@@ -23,6 +23,8 @@ namespace Annex.Core.Assets.Bundles
 #endif
 
         public IAsset? GetAsset(string id) {
+            id = id.ToSafeAssetIdString();
+
             if (this._assets.ContainsKey(id)) {
                 return this._assets[id];
             }
@@ -77,7 +79,7 @@ namespace Annex.Core.Assets.Bundles
 
                 foreach (var asset in allAssets) {
                     var fi = new FileInfo(asset);
-                    string assetId = fi.FullName.Remove(0, assetRoot.Length + 1);
+                    string assetId = fi.FullName.Remove(0, assetRoot.Length + 1).ToSafeAssetIdString();
                     var assetData = File.ReadAllBytes(asset);
 
                     Log.Trace(LogSeverity.Verbose, $"Adding '{assetId}' to pakFile");
