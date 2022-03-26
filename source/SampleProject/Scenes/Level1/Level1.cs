@@ -16,10 +16,10 @@ namespace SampleProject.Scenes.Level1
         public Level1(IBroadcast<RequestStopAppMessage> requestStopAppMessage) {
             this._requestStopAppMessage = requestStopAppMessage;
             this._player = new Player();
+            this._grassyPlain = new GrassyPlain();
         }
 
         // public Level1() : base("level1.html") {
-            //    this._grassyPlain = new GrassyPlain();
 
             //    var camera = ServiceProvider.Canvas.GetCamera();
             //    camera.Follow(this._player.Position);
@@ -33,7 +33,7 @@ namespace SampleProject.Scenes.Level1
         }
 
         public override void Draw(ICanvas canvas) {
-            //this._grassyPlain.Draw(canvas);
+            this._grassyPlain.Draw(canvas);
             this._player.Draw(canvas);
             base.Draw(canvas);
         }

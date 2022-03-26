@@ -13,7 +13,7 @@ namespace Annex.Sfml.Graphics.Windows
     internal class SfmlWindow : SfmlCanvas, IWindow, IDisposable
     {
         private readonly IInputService _inputHandlerService;
-        private RenderWindow _renderWindow;
+        private RenderWindow? _renderWindow;
         protected override RenderTarget? _renderTarget => _renderWindow;
 
         public Vector2ui WindowResolution { get; }
@@ -98,7 +98,7 @@ namespace Annex.Sfml.Graphics.Windows
         private void DestroyWindow() {
             this.RemoveInputHandlers();
             this._renderWindow?.Dispose();
-            this._renderWindow = null;
+            this._renderWindow = default;
         }
 
         public void Dispose() {
@@ -149,8 +149,6 @@ namespace Annex.Sfml.Graphics.Windows
                 this._sfmlWindow = sfmlWindow;
                 this._sceneService = sceneService;
             }
-
-            private long LastCall = Environment.TickCount;
 
             protected override void Run() {
                 if (this._sfmlWindow._renderWindow is RenderWindow buffer) {
