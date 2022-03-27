@@ -16,7 +16,7 @@ namespace Annex.Sfml.Graphics.Windows
 
         public void Draw(DrawContext context) {
             var platformTarget = this._platformTargetFactory.GetPlatformTarget(context);
-            platformTarget.TryDraw(this._renderTarget);
+            platformTarget?.TryDraw(this._renderTarget);
         }
     }
 }
