@@ -30,9 +30,9 @@ namespace SampleProject.Models
             };
 
             this._hoverText = new TextContext(this.Name, "lato.ttf") {
-                Position = new OffsetVector2f(this.Position, new ScalingVector2f(this.Size, renderOffset)),
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
+                AnchorPosition = new OffsetVector2f(this.Position, new ScalingVector2f(this.Size, renderOffset)),
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
                 Color = KnownColor.White,
                 BorderColor = KnownColor.Black,
                 BorderThickness = 3,

@@ -62,8 +62,8 @@ namespace Annex.Sfml.Graphics.Windows
             this.WindowResolution = new Vector2ui(OnWindowResolutionChanged);
             this.CreateWindow();
 
-            coreEventService.Add(CoreEventType.Graphics, new DrawGameEvent(this, sceneService));
-            coreEventService.Add(CoreEventType.UserInput, new DoEvents(this));
+            coreEventService.Add(CoreEventPriority.Graphics, new DrawGameEvent(this, sceneService));
+            coreEventService.Add(CoreEventPriority.UserInput, new DoEvents(this));
         }
 
         private void OnWindowResolutionChanged() {

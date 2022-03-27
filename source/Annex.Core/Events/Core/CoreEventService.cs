@@ -1,35 +1,56 @@
 ﻿using Annex.Core.Broadcasts;
 using Annex.Core.Broadcasts.Messages;
-using Annex.Core.Time;
+using Annex.Core.Scenes;
 
 namespace Annex.Core.Events.Core
 {
     internal class CoreEventService : ICoreEventService, IDisposable
     {
         private readonly IBroadcast<RequestStopAppMessage> _stopAppMessage;
-        private readonly IEventQueue _eventQueue;
+        private bool _keepRunning = true;
+        private readonly IPriorityEventQueue _globalEvents;
+        private readonly ISceneService _sceneService;
 
-        public CoreEventService(IBroadcast<RequestStopAppMessage> stopAppMessage, ITimeService timeService) {
+        public CoreEventService(IBroadcast<RequestStopAppMessage> stopAppMessage, IPriorityEventQueue priorityEventQueue, ISceneService sceneService) {
             this._stopAppMessage = stopAppMessage;
             this._stopAppMessage.OnBroadcastPublished += StopAppMessage_OnBroadcastPublished;
-
-            this._eventQueue = new EventQueue(timeService);
+            this._globalEvents = priorityEventQueue;
+            this._sceneService = sceneService;
         }
 
-        public void Add(CoreEventType type, IEvent coreEvent) {
-            this._eventQueue.Add(coreEvent);
+        public void Add(long priority, IEvent coreEvent) {
+            this._globalEvents.Add(priority, coreEvent);
+        }
+
+        public void Add(CoreEventPriority priority, IEvent coreEvent) {
+            this.Add((long)priority, coreEvent);
         }
 
         public void Dispose() {
             this._stopAppMessage.OnBroadcastPublished -= StopAppMessage_OnBroadcastPublished;
         }
 
+        public void Remove(Guid eventId) {
+            this._globalEvents.Remove(eventId);
+        }
+
         public void Run() {
-            this._eventQueue.Run();
+            while (this._keepRunning) {
+                var sceneEvents = this._sceneService.CurrentScene.Events;
+                var corePriorities = Enum.GetValues<CoreEventPriority>().Cast<long>();
+                var globalPriorities = this._globalEvents.Priorities;
+                var scenePriorities = sceneEvents.Priorities;
+                var allPriorities = scenePriorities.Union(globalPriorities).Union(corePriorities).OrderBy(val => val);
+
+                foreach (var priority in allPriorities) {
+                    this._globalEvents.StepPriority(priority);
+                    sceneEvents.StepPriority(priority);
+                }
+            }
         }
 
         private void StopAppMessage_OnBroadcastPublished(object? sender, RequestStopAppMessage e) {
-            this._eventQueue.Stop();
+            this._keepRunning = false;
         }
     }
 }

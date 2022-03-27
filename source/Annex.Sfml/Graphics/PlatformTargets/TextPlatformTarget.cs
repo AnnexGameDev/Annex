@@ -37,7 +37,7 @@ namespace Annex.Sfml.Graphics.PlatformTargets
             var borderThickness = UpdateBorderThickness(this._textContext.BorderThickness);
             var borderColor = UpdateBorderColor(this._textContext.BorderColor);
 
-            var position = UpdatePosition(this._textContext.Position);
+            var position = UpdatePosition(this._textContext.AnchorPosition);
             var origin = UpdateOrigin(this._textContext.HorizontalAlignment, this._textContext.VerticalAlignment);
             var rotation = UpdateRotation(this._textContext.Rotation);
         }

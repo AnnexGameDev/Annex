@@ -2,8 +2,7 @@
 {
     public interface IEventQueue
     {
-        void Run();
-        void Stop();
+        void Step();
 
         void Remove(Guid itemId);
         void Add(params IEvent[] items);

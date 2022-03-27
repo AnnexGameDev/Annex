@@ -1,5 +1,4 @@
 ﻿using Annex.Core.Events;
-using Annex.Core.Time;
 using Moq;
 using Scaffold.Tests.Core;
 using Scaffold.Tests.Core.Fixture;
@@ -11,10 +10,8 @@ namespace Annex.Core.Tests.Events
     public class EventQueueTests
     {
         private readonly IFixture _fixture = new Fixture();
-        private readonly Mock<ITimeService> _timeServiceMock;
 
         public EventQueueTests() {
-            this._timeServiceMock = this._fixture.Freeze<Mock<ITimeService>>();
             this._fixture.Register<IEventQueue>(this._fixture.Create<EventQueue>);
         }
 
@@ -25,12 +22,8 @@ namespace Annex.Core.Tests.Events
             var eventScheduler = this._fixture.Create<IEventQueue>();
             eventScheduler.Add(eventMocks.Objects().ToArray());
 
-            this._timeServiceMock
-                .Setup(timeService => timeService.ElapsedTimeSince(It.IsAny<long>()))
-                .Callback(() => eventScheduler.Stop());
-
             // Act
-            eventScheduler.Run();
+            eventScheduler.Step();
 
             // Assert
             eventMocks.VerifyAll(@event => @event.TimeElapsed(It.IsAny<long>()), Times.Once());
@@ -43,15 +36,10 @@ namespace Annex.Core.Tests.Events
 
             var eventScheduler = this._fixture.Create<IEventQueue>();
             eventScheduler.Add(eventMock.Object);
-
             eventScheduler.Remove(eventMock.Object.Id);
 
-            this._timeServiceMock
-                .Setup(timeService => timeService.ElapsedTimeSince(It.IsAny<long>()))
-                .Callback(() => eventScheduler.Stop());
-
             // Act
-            eventScheduler.Run();
+            eventScheduler.Step();
 
             // Assert
             eventMock.Verify(@event => @event.TimeElapsed(It.IsAny<long>()), Times.Never);

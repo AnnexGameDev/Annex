@@ -1,4 +1,5 @@
-﻿using Annex.Core.Graphics;
+﻿using Annex.Core.Events;
+using Annex.Core.Graphics;
 using Annex.Core.Graphics.Windows;
 using Annex.Core.Input.InputEvents;
 
@@ -7,6 +8,12 @@ namespace Annex.Core.Scenes.Components
     public class Scene : IScene
     {
         private bool disposedValue;
+
+        public IPriorityEventQueue Events { get; }
+
+        public Scene() {
+            this.Events = new PriorityEventQueue();
+        }
 
         public virtual void OnEnter(OnSceneEnterEventArgs onSceneEnterEventArgs) {
         }

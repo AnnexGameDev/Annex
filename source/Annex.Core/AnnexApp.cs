@@ -1,6 +1,7 @@
 ﻿using Annex.Core.Assets;
 using Annex.Core.Broadcasts;
 using Annex.Core.Broadcasts.Messages;
+using Annex.Core.Events;
 using Annex.Core.Events.Core;
 using Annex.Core.Graphics;
 using Annex.Core.Input;
@@ -42,6 +43,7 @@ public abstract class AnnexApp : ScaffoldApp
         container.RegisterSingleton<IGraphicsService, GraphicsService>();
         container.RegisterSingleton<IAssetService, AssetService>();
         container.Register<IAssetGroup, AssetGroup>();
+        container.Register<IPriorityEventQueue, PriorityEventQueue>();
         container.RegisterBroadcast<RequestStopAppMessage>();
 
 #if WINDOWS
