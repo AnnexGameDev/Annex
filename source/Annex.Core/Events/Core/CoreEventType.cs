@@ -8,4 +8,15 @@
         Graphics = 3000,
         Audio = 4000,
     }
+
+    public static class Extensions
+    {
+        public static void Add(this IPriorityEventQueue priorityEventQueue, CoreEventPriority priority, IEvent @event) {
+            priorityEventQueue.Add((long)priority, @event);
+        }
+
+        public static void Add(this ICoreEventService coreEventService, CoreEventPriority priority, IEvent @event) {
+            coreEventService.Add((long)priority, @event);
+        }
+    }
 }

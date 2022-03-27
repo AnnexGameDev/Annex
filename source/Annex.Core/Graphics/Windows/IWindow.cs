@@ -1,4 +1,5 @@
 ﻿using Annex.Core.Data;
+using Annex.Core.Input;
 
 namespace Annex.Core.Graphics.Windows
 {
@@ -10,5 +11,7 @@ namespace Annex.Core.Graphics.Windows
         WindowStyle WindowStyle { get; set; }
         string Title { get; set; }
         bool IsVisible { get; set; }
+
+        bool IsKeyDown(KeyboardKey key);
     }
 }

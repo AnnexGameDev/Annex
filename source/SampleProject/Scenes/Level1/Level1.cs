@@ -1,9 +1,11 @@
 ﻿using Annex.Core.Broadcasts;
 using Annex.Core.Broadcasts.Messages;
+using Annex.Core.Events.Core;
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Windows;
 using Annex.Core.Scenes.Components;
 using SampleProject.Models;
+using SampleProject.Scenes.Level1.Events;
 
 namespace SampleProject.Scenes.Level1
 {
@@ -13,10 +15,13 @@ namespace SampleProject.Scenes.Level1
         private readonly Player _player;
         private readonly IBroadcast<RequestStopAppMessage> _requestStopAppMessage;
 
-        public Level1(IBroadcast<RequestStopAppMessage> requestStopAppMessage) {
+        public Level1(IBroadcast<RequestStopAppMessage> requestStopAppMessage, IGraphicsService graphicsService) {
             this._requestStopAppMessage = requestStopAppMessage;
             this._player = new Player();
             this._grassyPlain = new GrassyPlain();
+
+            var mainWindow = graphicsService.GetWindow("MainWindow");
+            this.Events.Add(CoreEventPriority.UserInput, new PlayerMovementEvent(this._player, mainWindow, 10));
         }
 
         // public Level1() : base("level1.html") {

@@ -138,6 +138,13 @@ namespace Annex.Sfml.Graphics.Windows
         private void OnMouseScrollWheelMoved(object? sender, MouseWheelScrollEventArgs e) => this._inputHandlerService?.HandleMouseScrollWheelMoved(this, e.Delta);
         private void OnMouseButtonReleased(object? sender, MouseButtonEventArgs e) => this._inputHandlerService?.HandleMouseButtonReleased(this, e.Button.ToMouseButton(), e.X, e.Y);
         private void OnMouseButtonPressed(object? sender, MouseButtonEventArgs e) => this._inputHandlerService?.HandleMouseButtonPressed(this, e.Button.ToMouseButton(), e.X, e.Y);
+
+        public bool IsKeyDown(KeyboardKey key) {
+            if (this._renderWindow?.HasFocus() != true)
+                return false;
+
+            return Keyboard.IsKeyPressed(key.ToSfmlKeyboardKey());
+        }
         #endregion
 
         private class DrawGameEvent : Core.Events.Event

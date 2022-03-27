@@ -22,10 +22,6 @@ namespace Annex.Core.Events.Core
             this._globalEvents.Add(priority, coreEvent);
         }
 
-        public void Add(CoreEventPriority priority, IEvent coreEvent) {
-            this.Add((long)priority, coreEvent);
-        }
-
         public void Dispose() {
             this._stopAppMessage.OnBroadcastPublished -= StopAppMessage_OnBroadcastPublished;
         }

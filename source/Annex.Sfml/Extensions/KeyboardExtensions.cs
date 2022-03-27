@@ -8,5 +8,9 @@ namespace Annex.Sfml.Extensions
         public static KeyboardKey ToKeyboardKey(this Keyboard.Key key) {
             return (KeyboardKey)key;
         }
+
+        public static Keyboard.Key ToSfmlKeyboardKey(this KeyboardKey key) {
+            return (Keyboard.Key)key;
+        }
     }
 }
