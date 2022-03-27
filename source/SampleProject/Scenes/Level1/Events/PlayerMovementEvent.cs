@@ -31,6 +31,22 @@ namespace SampleProject.Scenes.Level1.Events
             if (window.IsKeyDown(KeyboardKey.Right)) {
                 this._player.Position.X += speed;
             }
+
+            if (window.IsKeyDown(KeyboardKey.E)) {
+                this._player.Size.Scale(1.1f);
+            }
+
+            if (window.IsKeyDown(KeyboardKey.Q)) {
+                this._player.Size.Scale(0.9f);
+            }
+
+            if (window.IsKeyDown(KeyboardKey.W)) {
+                this._player.Rotation.Set(this._player.Rotation.Value + 1);
+            }
+
+            if (window.IsKeyDown(KeyboardKey.S)) {
+                this._player.Rotation.Set(this._player.Rotation.Value - 1);
+            }
         }
     }
 }

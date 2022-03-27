@@ -19,20 +19,18 @@ namespace SampleProject.Models
             this.Position = new Vector2f(960 / 2, 640 / 2);
             this.Name = "Player Name";
 
-            var renderOffset = new Vector2f(-0.5f, -1f);
-
-            this._sprite = new TextureContext("sprites/player.png", this.Position) {
-                SourceTextureRect = new IntRect(0, 0, 96, 96),
+            this._sprite = new SpritesheetContext("sprites/player.png", this.Position, 4, 4) {
                 RenderColor = KnownColor.Red,
                 RenderSize = this.Size,
                 Rotation = this.Rotation,
-                RenderOffset = renderOffset
+                RenderOffset = new ScalingVector2f(this.Size, new Vector2f(-0.5f, -1f))
             };
 
             this._hoverText = new TextContext(this.Name, "lato.ttf") {
-                AnchorPosition = new OffsetVector2f(this.Position, new ScalingVector2f(this.Size, renderOffset)),
-                HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Top,
+                Position = this.Position,
+                PositionOffset = new ScalingVector2f(this.Size, new Vector2f(0, -1f)),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Bottom,
                 Color = KnownColor.White,
                 BorderColor = KnownColor.Black,
                 BorderThickness = 3,

@@ -92,8 +92,8 @@ namespace Annex.Sfml.Graphics.PlatformTargets
         protected (Vector2f position, Vector2f origin) UpdatePositionAndOrigin(IVector2<float> position, IVector2<float>? renderOffset) {
             var finalPosition = UpdatePosition(position.X, position.Y);
 
-            var offsetPositionX = position.X + (renderOffset?.X ?? 0) * this._sprite.TextureRect.Width;
-            var offsetPositionY = position.Y + (renderOffset?.Y ?? 0) * this._sprite.TextureRect.Height;
+            var offsetPositionX = position.X + (renderOffset?.X ?? 0) / this._sprite.Scale.X;
+            var offsetPositionY = position.Y + (renderOffset?.Y ?? 0) / this._sprite.Scale.Y;
             var originX = (position.X - offsetPositionX);
             var originY = (position.Y - offsetPositionY);
             var finalOrigin = UpdateOrigin(originX, originY);

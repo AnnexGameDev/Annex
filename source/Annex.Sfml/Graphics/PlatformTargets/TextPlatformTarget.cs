@@ -37,8 +37,8 @@ namespace Annex.Sfml.Graphics.PlatformTargets
             var borderThickness = UpdateBorderThickness(this._textContext.BorderThickness);
             var borderColor = UpdateBorderColor(this._textContext.BorderColor);
 
-            var position = UpdatePosition(this._textContext.AnchorPosition);
-            var origin = UpdateOrigin(this._textContext.HorizontalAlignment, this._textContext.VerticalAlignment);
+            var position = UpdatePosition(this._textContext.Position);
+            var origin = UpdateOrigin(this._textContext.HorizontalAlignment, this._textContext.VerticalAlignment, this._textContext.PositionOffset);
             var rotation = UpdateRotation(this._textContext.Rotation);
         }
 
@@ -51,12 +51,17 @@ namespace Annex.Sfml.Graphics.PlatformTargets
             return this._text.Rotation;
         }
 
-        private Vector2f UpdateOrigin(HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment) {
+        private Vector2f UpdateOrigin(HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, IVector2<float>? positionOffset) {
             var bounds = this._text.GetLocalBounds();
             Vector2f desiredOrigin = new Vector2f(
                 horizontalAlignment.Align(bounds),
                 verticalAlignment.Align(bounds)
             );
+            desiredOrigin.X += positionOffset?.X ?? 0;
+            desiredOrigin.Y -= positionOffset?.Y ?? 0;
+
+            desiredOrigin.X += bounds.Left;
+            desiredOrigin.Y += bounds.Top;
 
             if (this._text.Origin != desiredOrigin) {
                 this._text.Origin = desiredOrigin;

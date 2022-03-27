@@ -21,7 +21,8 @@ namespace Annex.Core.Graphics.Contexts
         public Shared<string> Text { get; }
         public Shared<string> Font { get; }
 
-        public IVector2<float>? AnchorPosition { get; init; }
+        public IVector2<float>? Position { get; init; }
+        public IVector2<float>? PositionOffset { get; init; }
 
         public Shared<uint>? FontSize { get; set; }
         public RGBA? Color { get; init; }
@@ -37,7 +38,8 @@ namespace Annex.Core.Graphics.Contexts
             this.Text = text;
             this.Font = font;
 
-            this.AnchorPosition = null;
+            this.Position = null;
+            this.PositionOffset = null;
             this.FontSize = null;
             this.Color = null;
             this.BorderThickness = null;
