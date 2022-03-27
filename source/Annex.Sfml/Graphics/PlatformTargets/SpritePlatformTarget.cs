@@ -14,7 +14,7 @@ namespace Annex.Sfml.Graphics.PlatformTargets
 
         public SpritePlatformTarget(ITextureCache textureCache) {
             this._textureCache = textureCache;
-            this._sprite = new Sprite();
+            this._sprite = new();
         }
 
         public override void Dispose() {

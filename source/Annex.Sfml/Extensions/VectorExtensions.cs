@@ -14,7 +14,7 @@ namespace Annex.Sfml.Extensions
             vector.Y = value.Y;
         }
 
-        public static bool DoesNotEqual(this SFML.System.Vector2f vector, IVector2<float> value) {
+        public static bool DoesNotEqual(this SFML.System.Vector2f vector, IVector2<float>? value) {
             return vector.DoesNotEqual(value, 0, 0);
         }
         

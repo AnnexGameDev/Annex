@@ -9,21 +9,35 @@ namespace SampleProject.Models
         public readonly Vector2f Position;
 
         private readonly DrawContext _sprite;
-        public readonly Vector2f Size = new Vector2f(192, 192);
+        public readonly Vector2f Size = new Vector2f(50, 50);
         public Shared<float> Rotation = new Shared<float>(0);
-        //private readonly TextContext _hoverText;
+        private readonly TextContext _hoverText;
 
-        //public readonly String Name;
+        public readonly Shared<string> Name;
 
         public Player() {
             this.Position = new Vector2f(960 / 2, 640 / 2);
-            //this.Name = "Player Name";
+            this.Name = "Player Name";
 
-            this._sprite = new SpritesheetContext("sprites/player.png", this.Position, 4, 4) {
+            var renderOffset = new Vector2f(-0.5f, -1f);
+
+            this._sprite = new TextureContext("sprites/player.png", this.Position) {
+                SourceTextureRect = new IntRect(0, 0, 96, 96),
                 RenderColor = KnownColor.Red,
                 RenderSize = this.Size,
                 Rotation = this.Rotation,
-                RenderOffset = new Vector2f(-0.5f, -0.5f)
+                RenderOffset = renderOffset
+            };
+
+            this._hoverText = new TextContext(this.Name, "lato.ttf") {
+                Position = new OffsetVector2f(this.Position, new ScalingVector2f(this.Size, renderOffset)),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Color = KnownColor.White,
+                BorderColor = KnownColor.Black,
+                BorderThickness = 3,
+                FontSize = 16,
+                Rotation = this.Rotation
             };
 
             //this._sprite = new SpriteSheetContext("player.png", 4, 4) {
@@ -49,11 +63,12 @@ namespace SampleProject.Models
 
         public void Draw(ICanvas canvas) {
             canvas.Draw(this._sprite);
-            //canvas.Draw(this._hoverText);
+            canvas.Draw(this._hoverText);
         }
 
         public void Dispose() {
             this._sprite.Dispose();
+            this._hoverText.Dispose();
         }
     }
 }
