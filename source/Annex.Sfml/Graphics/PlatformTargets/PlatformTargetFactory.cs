@@ -1,5 +1,4 @@
-﻿using Annex.Core.Assets;
-using Annex.Core.Graphics.Contexts;
+﻿using Annex.Core.Graphics.Contexts;
 using Annex.Sfml.Collections.Generic;
 
 namespace Annex.Sfml.Graphics.PlatformTargets
@@ -7,18 +6,18 @@ namespace Annex.Sfml.Graphics.PlatformTargets
     internal class PlatformTargetFactory : IPlatformTargetFactory
     {
         private readonly ITextureCache _textureCache;
-        private readonly IAssetService _assetService;
+        private readonly IFontCache _fontCache;
 
-        public PlatformTargetFactory(ITextureCache textureCache, IAssetService assetService) {
+        public PlatformTargetFactory(ITextureCache textureCache, IFontCache fontCache) {
             this._textureCache = textureCache;
-            this._assetService = assetService;
+            this._fontCache = fontCache;
         }
 
         public PlatformTarget GetPlatformTarget(DrawContext context) {
             return context switch {
                 TextureContext textureContext => GetPlatformTarget<TexturePlatformTarget>(textureContext) ?? new TexturePlatformTarget(textureContext, this._textureCache),
                 SpritesheetContext spritesheetContext => GetPlatformTarget<SpritesheetPlatformTarget>(spritesheetContext) ?? new SpritesheetPlatformTarget(spritesheetContext, this._textureCache),
-                TextContext textContext => GetPlatformTarget<TextPlatformTarget>(textContext) ?? new TextPlatformTarget(textContext, this._assetService),
+                TextContext textContext => GetPlatformTarget<TextPlatformTarget>(textContext) ?? new TextPlatformTarget(textContext, this._fontCache),
                 _ => throw new InvalidOperationException($"Unhandled case: {context.GetType()}")
             };
         }

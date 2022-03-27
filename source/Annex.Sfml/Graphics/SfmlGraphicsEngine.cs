@@ -18,6 +18,7 @@ namespace Annex.Sfml.Graphics
             this._container.Register<SfmlWindow>();
             this._container.Register<IPlatformTargetFactory, PlatformTargetFactory>();
             this._container.Register<ITextureCache, TextureCache>();
+            this._container.Register<IFontCache, FontCache>();
         }
     }
 }

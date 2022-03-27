@@ -1,6 +1,6 @@
-﻿using Annex.Core.Assets;
-using Annex.Core.Data;
+﻿using Annex.Core.Data;
 using Annex.Core.Graphics.Contexts;
+using Annex.Sfml.Collections.Generic;
 using Annex.Sfml.Extensions;
 using SFML.Graphics;
 using Vector2f = SFML.System.Vector2f;
@@ -11,12 +11,12 @@ namespace Annex.Sfml.Graphics.PlatformTargets
     {
         private readonly Text _text;
         private readonly TextContext _textContext;
-        private readonly IAssetService _assetService;
+        private readonly IFontCache _fontCache;
 
 
-        public TextPlatformTarget(TextContext textContext, IAssetService assetService) {
+        public TextPlatformTarget(TextContext textContext, IFontCache fontCache) {
             this._textContext = textContext;
-            this._assetService = assetService;
+            this._fontCache = fontCache;
             this._text = new();
         }
 
@@ -111,25 +111,11 @@ namespace Annex.Sfml.Graphics.PlatformTargets
         }
 
         private Font UpdateFont(string font) {
-            var sfmlFont = GetFont(font);
+            var sfmlFont = this._fontCache.GetFont(font);
             if (sfmlFont != this._text.Font) {
                 this._text.Font = sfmlFont;
             }
             return this._text.Font;
-        }
-
-        private Font GetFont(string fontId) {
-            var asset = this._assetService.Fonts.GetAsset(fontId);
-
-            if (asset is not Font font) {
-                if (asset.FilepathSupported) {
-                    font = new Font(asset.FilePath);
-                } else {
-                    font = new Font(asset.ToBytes());
-                }
-            }
-
-            return font;
         }
     }
 }
