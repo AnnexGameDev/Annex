@@ -25,7 +25,7 @@ namespace SampleProject
 #endif
         }
 
-        protected override void CreateWindow(IGraphicsService graphicsService) {
+        protected override void CreateWindow(IGraphicsService graphicsService, IAssetService assetService) {
             var window = graphicsService.CreateWindow("MainWindow");
             window.IsVisible = true;
             window.WindowResolution.Set(960, 640);
@@ -43,6 +43,12 @@ namespace SampleProject
 
             window.AddCamera(uiCamera);
             window.AddCamera(gameContent);
+
+            var icon = assetService.Textures.GetAsset("icons/icon.png");
+            var cursor = assetService.Textures.GetAsset("cursors/cursor.png");
+
+            window.SetIcon(100, 100, icon);
+            window.SetMouseImage(cursor, 16, 16, 0, 0);
         }
 
         protected override void RegisterTypes(IContainer container) {

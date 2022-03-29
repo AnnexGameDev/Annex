@@ -24,7 +24,7 @@ public abstract class AnnexApp : ScaffoldApp
             var assetService = this.Container.Resolve<IAssetService>();
 
             this.SetupAssetBundles(assetService);
-            this.CreateWindow(graphicsService);
+            this.CreateWindow(graphicsService, assetService);
             sceneService.LoadScene<TStartingScene>();
             eventService.Run();
         }
@@ -51,6 +51,6 @@ public abstract class AnnexApp : ScaffoldApp
 #endif
     }
 
-    protected abstract void CreateWindow(IGraphicsService graphicsService);
+    protected abstract void CreateWindow(IGraphicsService graphicsService, IAssetService assetService);
     protected abstract void SetupAssetBundles(IAssetService assetService);
 }

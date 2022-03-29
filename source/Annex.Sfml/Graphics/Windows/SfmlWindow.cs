@@ -1,4 +1,5 @@
-﻿using Annex.Core.Data;
+﻿using Annex.Core.Assets;
+using Annex.Core.Data;
 using Annex.Core.Events.Core;
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Windows;
@@ -63,7 +64,7 @@ namespace Annex.Sfml.Graphics.Windows
             this.WindowPosition = new Vector2i(OnWindowPositionChanged);
             this.WindowResolution = new Vector2ui(OnWindowResolutionChanged);
             this.CreateWindow();
-
+            
             coreEventService.Add(CoreEventPriority.Graphics, new DrawGameEvent(this, sceneService));
             coreEventService.Add(CoreEventPriority.UserInput, new DoEvents(this));
         }
@@ -147,6 +148,7 @@ namespace Annex.Sfml.Graphics.Windows
 
             return Keyboard.IsKeyPressed(key.ToSfmlKeyboardKey());
         }
+        #endregion
 
         public Camera? GetCamera(string cameraId) {
             return this.CameraCache.GetCamera(cameraId)?.Camera;
@@ -155,7 +157,16 @@ namespace Annex.Sfml.Graphics.Windows
         public void AddCamera(Camera camera) {
             this.CameraCache.AddCamera(camera);
         }
-        #endregion
+
+        public void SetIcon(uint sizeX, uint sizeY, IAsset icon) {
+            using var image = new Image(icon.ToBytes());
+            this._renderWindow?.SetIcon(sizeX, sizeY, image.Pixels);
+        }
+
+        public void SetMouseImage(IAsset img, uint sizeX, uint sizeY, uint offsetX, uint offsetY) {
+            using var image = new Image(img.ToBytes());
+            this._renderWindow?.SetMouseCursor(new Cursor(image.Pixels, new SFML.System.Vector2u(sizeX, sizeY), new SFML.System.Vector2u(offsetX, offsetY)));
+        }
 
         private class DrawGameEvent : Core.Events.Event
         {
