@@ -1,6 +1,7 @@
 ﻿using Annex.Core;
 using Annex.Core.Assets;
 using Annex.Core.Assets.Bundles;
+using Annex.Core.Data;
 using Annex.Core.Graphics;
 using Annex.Sfml.Graphics;
 using SampleProject.Scenes.Level1;
@@ -29,10 +30,25 @@ namespace SampleProject
             window.IsVisible = true;
             window.WindowResolution.Set(960, 640);
             window.WindowSize.Set(960, 640);
+
+            var uiCamera = new Camera("ui") {
+                Region = new FloatRect(0, 0, 1, 1),
+                Center = new Vector2f(960 / 2, 640 / 2),
+                Size = new Vector2f(960, 640)
+            };
+            var gameContent = new Camera("world") {
+                Region = new FloatRect(0, 0, 1, 1),
+                Size = new Vector2f(960, 640),
+            };
+
+            window.AddCamera(uiCamera);
+            window.AddCamera(gameContent);
         }
 
         protected override void RegisterTypes(IContainer container) {
             base.RegisterTypes(container);
+
+            container.Resolve<ILogService>().Filter.SetSeverity(LogSeverity.Verbose, false);
 
             container.Register<IGraphicsEngine, SfmlGraphicsEngine>();
             container.Register<Level1>();

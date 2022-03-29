@@ -12,6 +12,9 @@ namespace Annex.Core.Graphics.Windows
         string Title { get; set; }
         bool IsVisible { get; set; }
 
+        Camera? GetCamera(string cameraId);
+        void AddCamera(Camera camera);
+
         bool IsKeyDown(KeyboardKey key);
     }
 }

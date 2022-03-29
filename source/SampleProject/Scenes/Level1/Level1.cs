@@ -22,6 +22,7 @@ namespace SampleProject.Scenes.Level1
 
             var mainWindow = graphicsService.GetWindow("MainWindow");
             this.Events.Add(CoreEventPriority.UserInput, new PlayerMovementEvent(this._player, mainWindow, 10));
+            mainWindow.GetCamera("world").Center = this._player.Position;
         }
 
         // public Level1() : base("level1.html") {

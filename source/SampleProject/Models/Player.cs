@@ -9,7 +9,7 @@ namespace SampleProject.Models
         public readonly Vector2f Position;
 
         private readonly DrawContext _sprite;
-        public readonly Vector2f Size = new Vector2f(50, 50);
+        public readonly Vector2f Size = new Vector2f(200, 200);
         public Shared<float> Rotation = new Shared<float>(0);
         private readonly TextContext _hoverText;
 
@@ -23,7 +23,8 @@ namespace SampleProject.Models
                 RenderColor = KnownColor.Red,
                 RenderSize = this.Size,
                 Rotation = this.Rotation,
-                RenderOffset = new ScalingVector2f(this.Size, new Vector2f(-0.5f, -1f))
+                RenderOffset = new ScalingVector2f(this.Size, new Vector2f(-0.5f, -1f)),
+                Camera = "world"
             };
 
             this._hoverText = new TextContext(this.Name, "lato.ttf") {
@@ -34,8 +35,9 @@ namespace SampleProject.Models
                 Color = KnownColor.White,
                 BorderColor = KnownColor.Black,
                 BorderThickness = 3,
-                FontSize = 16,
-                Rotation = this.Rotation
+                FontSize = 48,
+                Rotation = this.Rotation,
+                Camera = "world"
             };
 
             //this._sprite = new SpriteSheetContext("player.png", 4, 4) {

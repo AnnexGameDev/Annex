@@ -1,8 +1,10 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Events.Core;
+using Annex.Core.Graphics;
 using Annex.Core.Graphics.Windows;
 using Annex.Core.Input;
 using Annex.Core.Scenes;
+using Annex.Sfml.Collections.Generic;
 using Annex.Sfml.Extensions;
 using Annex.Sfml.Graphics.PlatformTargets;
 using SFML.Graphics;
@@ -54,8 +56,8 @@ namespace Annex.Sfml.Graphics.Windows
             }
         }
 
-        public SfmlWindow(ICoreEventService coreEventService, IInputService inputHandlerService, ISceneService sceneService, IPlatformTargetFactory platformTargetFactory)
-            : base(platformTargetFactory) {
+        public SfmlWindow(ICoreEventService coreEventService, IInputService inputHandlerService, ISceneService sceneService, IPlatformTargetFactory platformTargetFactory, ICameraCache cameraCache)
+            : base(platformTargetFactory, cameraCache) {
             this._inputHandlerService = inputHandlerService;
             this.WindowSize = new Vector2ui(OnWindowSizeChanged);
             this.WindowPosition = new Vector2i(OnWindowPositionChanged);
@@ -144,6 +146,14 @@ namespace Annex.Sfml.Graphics.Windows
                 return false;
 
             return Keyboard.IsKeyPressed(key.ToSfmlKeyboardKey());
+        }
+
+        public Camera? GetCamera(string cameraId) {
+            return this.CameraCache.GetCamera(cameraId)?.Camera;
+        }
+
+        public void AddCamera(Camera camera) {
+            this.CameraCache.AddCamera(camera);
         }
         #endregion
 
