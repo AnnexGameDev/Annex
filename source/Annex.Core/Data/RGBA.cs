@@ -10,10 +10,10 @@
         public RGBA(uint color) {
             var colorData = BitConverter.GetBytes(color);
 
-            R = colorData[0];
-            G = colorData[1];
-            B = colorData[2];
-            A = colorData[3];
+            R = colorData[3];
+            G = colorData[2];
+            B = colorData[1];
+            A = colorData[0];
         }
 
         public RGBA() : this(0, 0, 0) {
