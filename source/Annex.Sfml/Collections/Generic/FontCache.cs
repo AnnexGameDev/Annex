@@ -14,17 +14,23 @@ namespace Annex.Sfml.Collections.Generic
         }
 
         public Font GetFont(string fontId) {
+
+            if (this._cache.TryGetValue(fontId, out var font)) {
+                return font;
+            }
+
             var asset = this._assetService.Fonts.GetAsset(fontId);
 
-            if (asset is not Font font) {
+            if (asset is not Font newFont) {
                 if (asset.FilepathSupported) {
-                    font = new Font(asset.FilePath);
+                    newFont = new Font(asset.FilePath);
                 } else {
-                    font = new Font(asset.ToBytes());
+                    newFont = new Font(asset.ToBytes());
                 }
             }
 
-            return font;
+            this._cache.Add(fontId, newFont);
+            return newFont;
         }
     }
 }
