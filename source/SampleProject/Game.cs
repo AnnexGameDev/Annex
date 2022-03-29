@@ -33,7 +33,7 @@ namespace SampleProject
 
             var uiCamera = new Camera("ui") {
                 Region = new FloatRect(0, 0, 1, 1),
-                Center = new Vector2f(960 / 2, 640 / 2),
+                Center = new Vector2f(960/2, 640/2),
                 Size = new Vector2f(960, 640)
             };
             var gameContent = new Camera("world") {

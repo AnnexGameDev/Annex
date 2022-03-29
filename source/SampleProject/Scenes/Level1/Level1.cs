@@ -1,7 +1,9 @@
 ﻿using Annex.Core.Broadcasts;
 using Annex.Core.Broadcasts.Messages;
+using Annex.Core.Data;
 using Annex.Core.Events.Core;
 using Annex.Core.Graphics;
+using Annex.Core.Graphics.Contexts;
 using Annex.Core.Graphics.Windows;
 using Annex.Core.Scenes.Components;
 using SampleProject.Models;
@@ -15,6 +17,8 @@ namespace SampleProject.Scenes.Level1
         private readonly Player _player;
         private readonly IBroadcast<RequestStopAppMessage> _requestStopAppMessage;
 
+        public SolidRectangleContext UIElement { get; }
+
         public Level1(IBroadcast<RequestStopAppMessage> requestStopAppMessage, IGraphicsService graphicsService) {
             this._requestStopAppMessage = requestStopAppMessage;
             this._player = new Player();
@@ -22,7 +26,15 @@ namespace SampleProject.Scenes.Level1
 
             var mainWindow = graphicsService.GetWindow("MainWindow");
             this.Events.Add(CoreEventPriority.UserInput, new PlayerMovementEvent(this._player, mainWindow, 10));
-            mainWindow.GetCamera("world").Center = this._player.Position;
+            var camera = mainWindow.GetCamera("world");
+            camera.Center = this._player.Position;
+            camera.Rotation = this._player.Rotation;
+
+            this.UIElement = new SolidRectangleContext(KnownColor.Purple, new Vector2f(0, 0), new Vector2f(300, 200)) {
+                Camera = "ui",
+                BorderThickness = 5,
+                BorderColor = KnownColor.Blue,
+            };
         }
 
         // public Level1() : base("level1.html") {
@@ -41,6 +53,7 @@ namespace SampleProject.Scenes.Level1
         public override void Draw(ICanvas canvas) {
             this._grassyPlain.Draw(canvas);
             this._player.Draw(canvas);
+            canvas.Draw(this.UIElement);
             base.Draw(canvas);
         }
     }

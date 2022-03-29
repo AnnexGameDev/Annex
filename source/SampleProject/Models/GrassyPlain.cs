@@ -1,4 +1,5 @@
-﻿using Annex.Core.Graphics;
+﻿using Annex.Core.Data;
+using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
 
 namespace SampleProject.Models
@@ -9,7 +10,7 @@ namespace SampleProject.Models
 
         public GrassyPlain() {
             this._plainTexture = new TextureContext("plain.png") {
-                Camera = "game"
+                Camera = "world",
             };
         }
 
