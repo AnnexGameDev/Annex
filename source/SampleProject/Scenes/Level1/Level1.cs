@@ -1,5 +1,7 @@
-﻿using Annex.Core.Broadcasts;
+﻿using Annex.Core;
+using Annex.Core.Broadcasts;
 using Annex.Core.Broadcasts.Messages;
+using Annex.Core.Collections.Generic;
 using Annex.Core.Data;
 using Annex.Core.Events.Core;
 using Annex.Core.Graphics;
@@ -8,6 +10,7 @@ using Annex.Core.Graphics.Windows;
 using Annex.Core.Scenes.Components;
 using SampleProject.Models;
 using SampleProject.Scenes.Level1.Events;
+using System.Linq;
 
 namespace SampleProject.Scenes.Level1
 {
@@ -18,6 +21,7 @@ namespace SampleProject.Scenes.Level1
         private readonly IBroadcast<RequestStopAppMessage> _requestStopAppMessage;
 
         public SolidRectangleContext UIElement { get; }
+        public BatchTextureContext Batch { get; }
 
         public Level1(IBroadcast<RequestStopAppMessage> requestStopAppMessage, IGraphicsService graphicsService) {
             this._requestStopAppMessage = requestStopAppMessage;
@@ -34,6 +38,21 @@ namespace SampleProject.Scenes.Level1
                 Camera = "ui",
                 BorderThickness = 5,
                 BorderColor = KnownColor.Blue,
+            };
+
+            var positions = Collection.Create<object>(4).Indicies(i => i * (float)100);
+            var allPossiblePositions = Collection.Permute(positions, positions, (a, b) => (a, b));
+
+            var rects = Collection.Create<object>(4).Indicies(i => i * 96);
+            var allRects = Collection.Permute(rects, rects, (a, b) => (a, b, 96, 96));
+
+            this.Batch = new BatchTextureContext("sprites/player.png", allPossiblePositions.ToArray(), Updatability.NeverUpdates) {
+                RenderSizes = Collection.Create<(float, float)>(16, (50, 50)).ToArray(),
+                RenderOffsets = Collection.Create<(float, float)>(16, (-25, -25)).ToArray(),
+                Camera = "world",
+                //RenderColors = Collection.Create<RGBA>(16, KnownColor.White).ToArray(),
+                SourceTextureRects = allRects.ToArray(),
+                Rotations = Collection.Create<float>(16).Indicies(i => i * (float)25).ToArray(),
             };
         }
 
@@ -53,7 +72,7 @@ namespace SampleProject.Scenes.Level1
         public override void Draw(ICanvas canvas) {
             this._grassyPlain.Draw(canvas);
             this._player.Draw(canvas);
-            canvas.Draw(this.UIElement);
+            canvas.Draw(this.Batch);
             base.Draw(canvas);
         }
     }

@@ -11,5 +11,19 @@
                 action(element);
             }
         }
+
+        public static IEnumerable<K> Indicies<T, K>(this IEnumerable<T> collection, Func<int, K> selector) {
+            int count = collection.Count();
+            for (int i = 0; i < count; i++) {
+                yield return selector(i);
+            }
+        }
+
+        public static IEnumerable<K> Select<T, K>(this IEnumerable<T> collection, Func<int, T, K> selector) {
+            int count = collection.Count();
+            for (int i = 0; i < count; i++) {
+                yield return selector(i, collection.ElementAt(i));
+            }
+        }
     }
 }

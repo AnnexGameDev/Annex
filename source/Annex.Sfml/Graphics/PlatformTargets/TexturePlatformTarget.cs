@@ -21,7 +21,7 @@ namespace Annex.Sfml.Graphics.PlatformTargets
             float sourceX = GetSourceWidth(textureWidth);
             float sourceY = GetSourceHeight(textureHeight);
             float desiredRenderX = GetDesiredRenderX(textureWidth);
-            float desiredRenderY = GetDesiredRenderX(textureHeight);
+            float desiredRenderY = GetDesiredRenderY(textureHeight);
 
             float scaleX = desiredRenderX / sourceX;
             float scaleY = desiredRenderY / sourceY;

@@ -23,6 +23,7 @@ namespace Annex.Sfml.Graphics
             this._container.RegisterAggregate<IPlatformTargetCreator, TexturePlatformTargetCreator>();
             this._container.RegisterAggregate<IPlatformTargetCreator, SpritesheetPlatformTargetCreator>();
             this._container.RegisterAggregate<IPlatformTargetCreator, SolidRectanglePlatformTargetCreator>();
+            this._container.RegisterAggregate<IPlatformTargetCreator, BatchTexturePlatformTargetCreator>();
             this._container.Register<ICameraCache, CameraCache>();
         }
     }
