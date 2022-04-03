@@ -19,9 +19,14 @@ namespace Annex.Sfml.Graphics.Windows
         private RenderWindow? _renderWindow;
         protected override RenderTarget? _renderTarget => _renderWindow;
 
-        public Vector2ui WindowResolution { get; }
-        public Vector2ui WindowSize { get; }
-        public Vector2i WindowPosition { get; }
+        private Vector2f _windowResolution = new();
+        public IVector2<float> WindowResolution => this._windowResolution;
+
+        private Vector2f _windowSize = new();
+        public IVector2<float> WindowSize => this._windowSize;
+
+        private Vector2f _windowPosition = new();
+        public IVector2<float> WindowPosition => this._windowPosition;
 
         private string _title = string.Empty;
         public string Title
@@ -60,26 +65,24 @@ namespace Annex.Sfml.Graphics.Windows
         public SfmlWindow(ICoreEventService coreEventService, IInputService inputHandlerService, ISceneService sceneService, IPlatformTargetFactory platformTargetFactory, ICameraCache cameraCache)
             : base(platformTargetFactory, cameraCache) {
             this._inputHandlerService = inputHandlerService;
-            this.WindowSize = new Vector2ui(OnWindowSizeChanged);
-            this.WindowPosition = new Vector2i(OnWindowPositionChanged);
-            this.WindowResolution = new Vector2ui(OnWindowResolutionChanged);
             this.CreateWindow();
             
             coreEventService.Add(CoreEventPriority.Graphics, new DrawGameEvent(this, sceneService));
             coreEventService.Add(CoreEventPriority.UserInput, new DoEvents(this));
-        }
 
-        private void OnWindowResolutionChanged() {
-            if (this.WindowResolution != null)
-                this.ReCreateWindow();
-        }
+            var defaultCamera = new Camera(CameraId.Default) {
+                Region = new Core.Data.FloatRect(0, 0, 1, 1),
+                Size = this.WindowResolution,
+                Center = new ScalingVector2f(this.WindowResolution, 0.5f, 0.5f),
+            };  
+            this.AddCamera(defaultCamera);
 
-        private void OnWindowSizeChanged() {
-            this._renderWindow?.Size.Set(this.WindowSize);
-        }
-
-        private void OnWindowPositionChanged() {
-            this._renderWindow?.Position.Set(this.WindowPosition);
+            var uiCamera = new Camera(CameraId.UI) {
+                Region = new Core.Data.FloatRect(0, 0, 1, 1),
+                Size = this.WindowResolution,
+                Center = new ScalingVector2f(this.WindowResolution, 0.5f, 0.5f),
+            };
+            this.AddCamera(uiCamera);
         }
 
         private void ReCreateWindow() {
@@ -88,7 +91,7 @@ namespace Annex.Sfml.Graphics.Windows
         }
 
         private void CreateWindow() {
-            var videoMode = new VideoMode(this.WindowResolution.X, this.WindowResolution.Y);
+            var videoMode = new VideoMode((uint)this.WindowResolution.X, (uint)this.WindowResolution.Y);
             this._renderWindow = new RenderWindow(videoMode, this.Title, this.WindowStyle.ToSfmlStyle());
 
             this._renderWindow.Size.Set(this.WindowSize);
@@ -150,6 +153,8 @@ namespace Annex.Sfml.Graphics.Windows
         }
         #endregion
 
+        public Camera? GetCamera(CameraId cameraId) => GetCamera(cameraId.ToString());
+
         public Camera? GetCamera(string cameraId) {
             return this.CameraCache.GetCamera(cameraId)?.Camera;
         }
@@ -166,6 +171,33 @@ namespace Annex.Sfml.Graphics.Windows
         public void SetMouseImage(IAsset img, uint sizeX, uint sizeY, uint offsetX, uint offsetY) {
             using var image = new Image(img.ToBytes());
             this._renderWindow?.SetMouseCursor(new Cursor(image.Pixels, new SFML.System.Vector2u(sizeX, sizeY), new SFML.System.Vector2u(offsetX, offsetY)));
+        }
+
+        public void SetResolution(float resolutionX, float resolutionY) {
+            this._windowResolution.Set(resolutionX, resolutionY);
+            this.ReCreateWindow();
+        }
+
+        public void SetResolution(IVector2<float> newResolution) {
+            this.SetResolution(newResolution.X, newResolution.Y);
+        }
+
+        public void SetSize(float sizeX, float sizeY) {
+            this._windowSize.Set(sizeX, sizeY);
+            this._renderWindow?.Size.Set(this.WindowSize);
+        }
+
+        public void SetSize(IVector2<float> newSize) {
+            this.SetSize(newSize.X, newSize.Y);
+        }
+
+        public void SetPosition(float x, float y) {
+            this._windowPosition.Set(x, y);
+            this._renderWindow?.Position.Set(this.WindowPosition);
+        }
+
+        public void SetPosition(IVector2<float> newPosition) {
+            this.SetPosition(newPosition.X, newPosition.Y);
         }
 
         private class DrawGameEvent : Core.Events.Event

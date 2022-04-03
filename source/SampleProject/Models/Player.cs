@@ -24,7 +24,6 @@ namespace SampleProject.Models
                 RenderSize = this.Size,
                 Rotation = this.Rotation,
                 RenderOffset = new ScalingVector2f(this.Size, new Vector2f(-0.5f, -1f)),
-                Camera = "world"
             };
 
             this._hoverText = new TextContext(this.Name, "lato.ttf") {
@@ -37,7 +36,6 @@ namespace SampleProject.Models
                 BorderThickness = 3,
                 FontSize = 48,
                 Rotation = this.Rotation,
-                Camera = "world"
             };
 
             //this._sprite = new SpriteSheetContext("player.png", 4, 4) {

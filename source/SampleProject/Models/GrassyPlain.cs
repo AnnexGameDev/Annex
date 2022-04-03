@@ -10,7 +10,6 @@ namespace SampleProject.Models
 
         public GrassyPlain() {
             this._plainTexture = new TextureContext("plain.png") {
-                Camera = "world",
             };
         }
 

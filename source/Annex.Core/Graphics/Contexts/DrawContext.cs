@@ -4,7 +4,7 @@
     {
         public IDisposable? PlatformTarget { get; private set; }
 
-        public string? Camera { get; init; }
+        public string? Camera { get; init; } = CameraId.Default.ToString();
 
         public void SetPlatformTarget(IDisposable? platformTarget) {
             this.PlatformTarget?.Dispose();

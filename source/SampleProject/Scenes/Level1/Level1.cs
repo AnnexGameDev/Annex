@@ -30,12 +30,12 @@ namespace SampleProject.Scenes.Level1
 
             var mainWindow = graphicsService.GetWindow("MainWindow");
             this.Events.Add(CoreEventPriority.UserInput, new PlayerMovementEvent(this._player, mainWindow, 10));
-            var camera = mainWindow.GetCamera("world");
+            var camera = mainWindow.GetCamera(CameraId.Default);
             camera.Center = this._player.Position;
             camera.Rotation = this._player.Rotation;
 
             this.UIElement = new SolidRectangleContext(KnownColor.Purple, new Vector2f(0, 0), new Vector2f(300, 200)) {
-                Camera = "ui",
+                Camera = CameraId.UI.ToString(),
                 BorderThickness = 5,
                 BorderColor = KnownColor.Blue,
             };
@@ -49,7 +49,7 @@ namespace SampleProject.Scenes.Level1
             this.Batch = new BatchTextureContext("sprites/player.png", allPossiblePositions.ToArray(), Updatability.NeverUpdates) {
                 RenderSizes = Collection.Create<(float, float)>(16, (50, 50)).ToArray(),
                 RenderOffsets = Collection.Create<(float, float)>(16, (-25, -25)).ToArray(),
-                Camera = "world",
+                Camera = CameraId.Default.ToString(),
                 //RenderColors = Collection.Create<RGBA>(16, KnownColor.White).ToArray(),
                 SourceTextureRects = allRects.ToArray(),
                 Rotations = Collection.Create<float>(16).Indicies(i => i * (float)25).ToArray(),

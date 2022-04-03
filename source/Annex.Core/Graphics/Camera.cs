@@ -10,6 +10,10 @@ namespace Annex.Core.Graphics
         public IVector2<float> Center { get; set; } = new Vector2f();
         public Shared<float> Rotation { get; set; } = 0;
 
+        public Camera(CameraId id) : this(id.ToString()) {
+
+        }
+
         public Camera(string id) {
             this.Id = id;
         }

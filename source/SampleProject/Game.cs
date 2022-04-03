@@ -28,21 +28,8 @@ namespace SampleProject
         protected override void CreateWindow(IGraphicsService graphicsService, IAssetService assetService) {
             var window = graphicsService.CreateWindow("MainWindow");
             window.IsVisible = true;
-            window.WindowResolution.Set(960, 640);
-            window.WindowSize.Set(960, 640);
-
-            var uiCamera = new Camera("ui") {
-                Region = new FloatRect(0, 0, 1, 1),
-                Center = new Vector2f(960/2, 640/2),
-                Size = new Vector2f(960, 640)
-            };
-            var gameContent = new Camera("world") {
-                Region = new FloatRect(0, 0, 1, 1),
-                Size = new Vector2f(960, 640),
-            };
-
-            window.AddCamera(uiCamera);
-            window.AddCamera(gameContent);
+            window.SetResolution(960, 640);
+            window.SetSize(960, 640);
 
             var icon = assetService.Textures.GetAsset("icons/icon.png");
             var cursor = assetService.Textures.GetAsset("cursors/cursor.png");

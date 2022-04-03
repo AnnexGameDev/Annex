@@ -4,14 +4,14 @@ namespace Annex.Sfml.Extensions
 {
     public static class VectorExtensions
     {
-        public static void Set(this SFML.System.Vector2i vector, Vector2i value) {
-            vector.X = value.X;
-            vector.Y = value.Y;
+        public static void Set(this SFML.System.Vector2i vector, IVector2<float> value) {
+            vector.X = (int)value.X;
+            vector.Y = (int)value.Y;
         }
 
-        public static void Set(this SFML.System.Vector2u vector, Vector2ui value) {
-            vector.X = value.X;
-            vector.Y = value.Y;
+        public static void Set(this SFML.System.Vector2u vector, IVector2<float> value) {
+            vector.X = (uint)value.X;
+            vector.Y = (uint)value.Y;
         }
 
         public static bool DoesNotEqual(this SFML.System.Vector2f vector, IVector2<float>? value) {

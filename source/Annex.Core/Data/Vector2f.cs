@@ -2,10 +2,10 @@
 {
     public class Vector2f : VectorBase<float>
     {
-        public Vector2f(Action? onChangeCallback = null) : this(0, 0, onChangeCallback) {
+        public Vector2f() : this(0, 0) {
         }
 
-        public Vector2f(float x, float y, Action? onChangeCallback = null) : base(x, y, onChangeCallback) {
+        public Vector2f(float x, float y) : base(x, y) {
         }
 
         public void Scale(float scale) {
@@ -16,6 +16,14 @@
         public void Add(float dx, float dy) {
             this.X += dx;
             this.Y += dy;
+        }
+
+        public void Add(IVector2<float> vector) {
+            this.Add(vector.X, vector.Y);
+        }
+
+        public void Set(IVector2<float> vector) {
+            this.Set(vector.X, vector.Y);
         }
     }
 }
