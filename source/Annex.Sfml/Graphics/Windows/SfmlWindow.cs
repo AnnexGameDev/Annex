@@ -173,33 +173,21 @@ namespace Annex.Sfml.Graphics.Windows
             this._renderWindow?.SetMouseCursor(new Cursor(image.Pixels, new SFML.System.Vector2u(sizeX, sizeY), new SFML.System.Vector2u(offsetX, offsetY)));
         }
 
-        public void SetResolution(float resolutionX, float resolutionY) {
-            this._windowResolution.Set(resolutionX, resolutionY);
+        public void SetResolution(float x, float y) {
+            this._windowResolution.Set(x, y);
             this.ReCreateWindow();
         }
 
-        public void SetResolution(IVector2<float> newResolution) {
-            this.SetResolution(newResolution.X, newResolution.Y);
-        }
-
-        public void SetSize(float sizeX, float sizeY) {
-            this._windowSize.Set(sizeX, sizeY);
+        public void SetSize(float x, float y) {
+            this._windowSize.Set(x, y);
             this._renderWindow?.Size.Set(this.WindowSize);
-        }
-
-        public void SetSize(IVector2<float> newSize) {
-            this.SetSize(newSize.X, newSize.Y);
         }
 
         public void SetPosition(float x, float y) {
             this._windowPosition.Set(x, y);
             this._renderWindow?.Position.Set(this.WindowPosition);
         }
-
-        public void SetPosition(IVector2<float> newPosition) {
-            this.SetPosition(newPosition.X, newPosition.Y);
-        }
-
+        
         private class DrawGameEvent : Core.Events.Event
         {
             private readonly SfmlWindow _sfmlWindow;

@@ -13,11 +13,9 @@ namespace Annex.Core.Graphics.Windows
         string Title { get; set; }
         bool IsVisible { get; set; }
 
-        void SetResolution(float resolutionX, float resolutionY);
-        void SetResolution(IVector2<float> newResolution);
-        void SetSize(float sizeX, float sizeY);
-        void SetSize(IVector2<float> newSize);
-        void SetPosition(IVector2<float> newPosition);
+        void SetResolution(float x, float y);
+        void SetSize(float x, float y);
+        void SetPosition(float x, float y);
 
         Camera? GetCamera(CameraId cameraId);
         Camera? GetCamera(string cameraId);
