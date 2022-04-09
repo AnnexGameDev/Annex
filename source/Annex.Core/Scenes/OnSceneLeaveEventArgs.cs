@@ -1,4 +1,4 @@
-﻿namespace Annex.Core.Scenes.Components
+﻿namespace Annex.Core.Scenes
 {
     public class OnSceneLeaveEventArgs
     {

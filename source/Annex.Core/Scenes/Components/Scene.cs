@@ -1,18 +1,26 @@
-﻿using Annex.Core.Events;
+﻿using Annex.Core.Data;
+using Annex.Core.Events;
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Windows;
 using Annex.Core.Input.InputEvents;
 
 namespace Annex.Core.Scenes.Components
 {
-    public class Scene : IScene
+    public class Scene : UIElement, IScene
     {
-        private bool disposedValue;
-
         public IPriorityEventQueue Events { get; }
 
-        public Scene() {
+        public Scene(
+            string elementId = "",
+            IVector2<float>? size = null,
+            IVector2<float>? position = null
+            ) 
+                : base(elementId, position ?? new Vector2f(), size ?? new Vector2f())
+            {
             this.Events = new PriorityEventQueue();
+        }
+
+        protected override void DrawInternal(ICanvas canvas) {
         }
 
         public virtual void OnEnter(OnSceneEnterEventArgs onSceneEnterEventArgs) {
@@ -40,34 +48,6 @@ namespace Annex.Core.Scenes.Components
         }
 
         public virtual void OnMouseScrollWheelMoved(IWindow window, MouseScrollWheelMovedEvent mouseScrollWheelMovedEvent) {
-        }
-
-        public virtual void Draw(ICanvas canvas) {
-        }
-
-        protected virtual void Dispose(bool disposing) {
-            if (!disposedValue) {
-                if (disposing) {
-                    // TODO: dispose managed state (managed objects)
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-                // TODO: set large fields to null
-                disposedValue = true;
-            }
-        }
-
-        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-        // ~Scene()
-        // {
-        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        //     Dispose(disposing: false);
-        // }
-
-        public void Dispose() {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
         }
     }
 }
