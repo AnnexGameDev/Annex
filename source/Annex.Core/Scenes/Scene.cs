@@ -2,7 +2,6 @@
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Windows;
 using Annex.Core.Input.InputEvents;
-using Annex.Core.Scenes.Components;
 
 namespace Annex.Core.Scenes
 {

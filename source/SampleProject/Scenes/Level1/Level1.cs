@@ -69,11 +69,10 @@ namespace SampleProject.Scenes.Level1
             this._requestStopAppMessage.Publish(this, new RequestStopAppMessage());
         }
 
-        public override void Draw(ICanvas canvas) {
+        protected override void DrawInternal(ICanvas canvas) {
             this._grassyPlain.Draw(canvas);
             this._player.Draw(canvas);
             canvas.Draw(this.Batch);
-            base.Draw(canvas);
         }
     }
 }

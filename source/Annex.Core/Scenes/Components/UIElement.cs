@@ -1,16 +1,39 @@
-﻿using Annex.Core.Graphics;
+﻿using Annex.Core.Data;
+using Annex.Core.Graphics;
 
 namespace Annex.Core.Scenes.Components
 {
-    public abstract class UIElement : IDrawable
+    public abstract partial class UIElement
     {
-        private bool disposedValue;
+        public string ElementID { get; set; }
+        public IVector2<float> Size { get; set; }
+        public IVector2<float> Position { get; set; }
+        public bool Visible { get; set; }
 
-        public abstract void Draw(ICanvas canvas);
+        public UIElement(string elementId, IVector2<float> position, IVector2<float> size) {
+            this.ElementID = elementId;
+            this.Position = position;
+            this.Size = size;
+            this.Visible = true;
+        }
+    }
+
+    public abstract partial class UIElement : IDrawable
+    {
+        private bool disposedValue = false;
+
+        public void Draw(ICanvas canvas) {
+            if (this.Visible)
+                this.DrawInternal(canvas);
+        }
+
+        protected abstract void DrawInternal(ICanvas canvas);
 
         protected virtual void Dispose(bool disposing) {
-            if (!disposedValue) {
-                if (disposing) {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
                     // TODO: dispose managed state (managed objects)
                 }
 
