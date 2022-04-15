@@ -17,5 +17,7 @@ namespace Annex.Sfml.Collections.Generic
             }
             return null;
         }
+
+        public SfmlCamera? GetCamera(CameraId cameraId) => GetCamera(cameraId.ToString());
     }
 }

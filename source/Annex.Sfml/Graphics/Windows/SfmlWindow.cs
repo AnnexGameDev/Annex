@@ -187,7 +187,38 @@ namespace Annex.Sfml.Graphics.Windows
             this._windowPosition.Set(x, y);
             this._renderWindow?.Position.Set(this.WindowPosition);
         }
-        
+
+        public IVector2<float> GetMousePos(CameraId cameraId = CameraId.UI) {
+            var mousePos = Mouse.GetPosition(this._renderWindow);
+            var camera = this.CameraCache.GetCamera(cameraId);
+
+            if (camera == null)
+                throw new NullReferenceException($"The camera {cameraId} couldn't be found");
+
+            if (this._renderWindow == null)
+                throw new NullReferenceException($"{nameof(_renderWindow)} is null when performing {nameof(GetMousePos)}");
+
+            var viewPos = this._renderWindow.MapPixelToCoords(mousePos, camera.View);
+
+            return new Vector2f(viewPos.X, viewPos.Y);
+        }
+
+        public bool IsMouseButtonDown(MouseButton button) {
+            return Mouse.IsButtonPressed(button.ToSfml());
+        }
+
+        public bool IsControllerConnected(uint controllerId) {
+            return Joystick.IsConnected(controllerId);
+        }
+
+        public bool IsControllerButtonPressed(uint controllerId, ControllerButton button) {
+            return Joystick.IsButtonPressed(controllerId, button.ToSfml());
+        }
+
+        public float GetControllerJoystickAxis(uint controllerId, ControllerJoystickAxis axis) {
+            return Joystick.GetAxisPosition(controllerId, axis.ToSfml());
+        }
+
         private class DrawGameEvent : Core.Events.Event
         {
             private readonly SfmlWindow _sfmlWindow;
@@ -218,6 +249,7 @@ namespace Annex.Sfml.Graphics.Windows
             protected override void Run() {
                 if (this._sfmlWindow._renderWindow is RenderWindow buffer) {
                     buffer.DispatchEvents();
+                    Joystick.Update();
                 }
             }
         }

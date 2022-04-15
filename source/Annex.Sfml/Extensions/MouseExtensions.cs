@@ -8,5 +8,9 @@ namespace Annex.Sfml.Extensions
         public static MouseButton ToMouseButton(this Mouse.Button button) {
             return (MouseButton)button;
         }
+
+        public static Mouse.Button ToSfml(this MouseButton button) {
+            return (Mouse.Button)button;
+        }
     }
 }

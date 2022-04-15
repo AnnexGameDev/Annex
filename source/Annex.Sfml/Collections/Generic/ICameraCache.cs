@@ -43,6 +43,7 @@ namespace Annex.Sfml.Collections.Generic
 
     public interface ICameraCache
     {
+        SfmlCamera? GetCamera(CameraId cameraId);
         SfmlCamera? GetCamera(string cameraId);
         void AddCamera(Camera camera);
     }

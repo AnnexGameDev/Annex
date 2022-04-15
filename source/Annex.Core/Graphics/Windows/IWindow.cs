@@ -23,6 +23,17 @@ namespace Annex.Core.Graphics.Windows
 
         void SetIcon(uint sizeX, uint sizeY, IAsset asset);
         void SetMouseImage(IAsset img, uint sizeX, uint sizeY, uint offsetX, uint offsetY);
+
+        // Mouse
+        IVector2<float> GetMousePos(CameraId cameraId = CameraId.UI);
+        bool IsMouseButtonDown(MouseButton button);
+
+        // Keyboard
         bool IsKeyDown(KeyboardKey key);
+
+        // Controllers
+        bool IsControllerConnected(uint controllerId);
+        bool IsControllerButtonPressed(uint controllerId, ControllerButton button);
+        float GetControllerJoystickAxis(uint controllerId, ControllerJoystickAxis axis);
     }
 }
