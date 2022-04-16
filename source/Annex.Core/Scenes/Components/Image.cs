@@ -12,7 +12,7 @@ namespace Annex.Core.Scenes.Components
             set => BackgroundContext.TextureId.Value = value;
         }
 
-        public Image(string elementId, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size) {
+        public Image(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size) {
             this.BackgroundContext = new TextureContext(string.Empty, this.Position) {
                 RenderSize = this.Size,
                 Camera = CameraId.UI.ToString()

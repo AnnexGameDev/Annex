@@ -28,7 +28,7 @@ namespace Annex.Core.Scenes.Layouts.Html
         private void ProcessChildren(IParentElement parentInstance, XElement parentElement, Styles styles) {
             foreach (var childElement in parentElement.Elements()) {
 
-                if (!this.TryCreateInstance(childElement.Name.ToString(), out var childInstance)) {
+                if (!this.TryCreateInstance(childElement, styles, out var childInstance)) {
                     continue;
                 }
 
@@ -41,20 +41,25 @@ namespace Annex.Core.Scenes.Layouts.Html
             }
         }
 
-        private bool TryCreateInstance(string elementName, out IUIElement uiElement) {
+        private bool TryCreateInstance(XElement element, Styles styles, out IUIElement uiElement) {
 
-            string? modifiedName = elementName switch {
+            string? typeToInstantiate = element.Name.ToString();
+            typeToInstantiate = typeToInstantiate switch {
                 "picture" => "image",
                 "script" => null,
-                _ => elementName
+                _ => typeToInstantiate
             };
 
-            if (modifiedName == null) {
+            if (GetStringAttribute("class", element, styles) is string className) {
+                typeToInstantiate = className;
+            }
+
+            if (typeToInstantiate == null) {
                 uiElement = default;
                 return false;
             }
 
-            uiElement = UIElementFactory.CreateInstance(modifiedName);
+            uiElement = UIElementFactory.CreateInstance(typeToInstantiate);
             return true;
         }
 

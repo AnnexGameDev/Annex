@@ -10,8 +10,8 @@ namespace Annex.Core.Scenes.Components
         public IVector2<float> Position { get; }
         public bool Visible { get; set; }
 
-        public UIElement(string elementId, IVector2<float>? position = null, IVector2<float>? size = null) {
-            this.ElementID = elementId;
+        public UIElement(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) {
+            this.ElementID = elementId ?? string.Empty;
             this.Position = position ?? new Vector2f();
             this.Size = size ?? new Vector2f();
             this.Visible = true;
