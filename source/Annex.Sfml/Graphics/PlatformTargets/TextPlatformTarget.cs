@@ -29,7 +29,12 @@ namespace Annex.Sfml.Graphics.PlatformTargets
             renderTarget.Draw(this._text);
         }
 
-        private void UpdateIfNeeded() {
+        private void UpdateIfNeeded() { 
+
+            if (string.IsNullOrEmpty(this._textContext.Font.Value) || string.IsNullOrWhiteSpace(this._textContext.Text.Value)) {
+                return;
+            }
+
             var font = UpdateFont(this._textContext.Font.Value);
             var text = UpdateText(this._textContext.Text.Value);
             var fontSize = UpdateFontSize(this._textContext.FontSize);

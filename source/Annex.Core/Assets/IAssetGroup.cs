@@ -5,6 +5,7 @@ namespace Annex.Core.Assets
     public interface IAssetGroup
     {
         void AddBundle(IAssetBundle bundle);
-        IAsset GetAsset(string textureId);
+
+        IAsset? GetAsset(string assetId);
     }
 }

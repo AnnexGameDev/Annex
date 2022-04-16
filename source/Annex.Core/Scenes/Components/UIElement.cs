@@ -3,23 +3,19 @@ using Annex.Core.Graphics;
 
 namespace Annex.Core.Scenes.Components
 {
-    public abstract partial class UIElement
+    public abstract class UIElement : IUIElement
     {
         public string ElementID { get; set; }
-        public IVector2<float> Size { get; set; }
-        public IVector2<float> Position { get; set; }
+        public IVector2<float> Size { get; }
+        public IVector2<float> Position { get; }
         public bool Visible { get; set; }
 
-        public UIElement(string elementId, IVector2<float> position, IVector2<float> size) {
+        public UIElement(string elementId, IVector2<float>? position = null, IVector2<float>? size = null) {
             this.ElementID = elementId;
-            this.Position = position;
-            this.Size = size;
+            this.Position = position ?? new Vector2f();
+            this.Size = size ?? new Vector2f();
             this.Visible = true;
         }
-    }
-
-    public abstract partial class UIElement : IDrawable
-    {
         private bool disposedValue = false;
 
         public void Draw(ICanvas canvas) {

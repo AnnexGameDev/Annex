@@ -8,6 +8,7 @@ namespace Annex.Sfml.Collections.Generic
     {
         private readonly ICache<string, Texture> _cache = new Cache<string, Texture>();
         private readonly IAssetService _assetService;
+        private readonly Texture _invalidTexture = new Texture(1, 1);
 
         public TextureCache(IAssetService assetService) {
             this._assetService = assetService;
@@ -19,6 +20,10 @@ namespace Annex.Sfml.Collections.Generic
             }
 
             var asset = this._assetService.Textures.GetAsset(textureId);
+
+            if (asset == null) {
+                return _invalidTexture;
+            }
 
             if (asset.Target is not Texture newTexture) {
 

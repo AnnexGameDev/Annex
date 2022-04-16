@@ -12,6 +12,10 @@ namespace Annex.Sfml.Graphics.PlatformTargets
         }
 
         protected override void UpdateIfNeeded() {
+            if (string.IsNullOrEmpty(this._spritesheetContext.TextureId.Value)) {
+                return;
+            }
+
             var texture = this.UpdateTexture(this._spritesheetContext.TextureId.Value);
 
             int frameSizeX = (int)texture.Size.X / this._spritesheetContext.NumColumns;

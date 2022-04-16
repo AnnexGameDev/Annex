@@ -27,5 +27,7 @@ namespace Annex.Core.Data
             this._x = x;
             this._y = y;
         }
+
+        public void Set(IVector2<T> vector) => this.Set(vector.X, vector.Y);
     }
 }

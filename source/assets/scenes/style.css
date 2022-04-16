@@ -1,0 +1,24 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+}
+
+scene {
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 5px solid black;
+    position: relative;
+    margin: 0px auto;
+    display: block;
+    width: 960px;
+    height: 640px;
+}
+
+picture {
+	position: absolute;
+	border: none;
+}

@@ -7,6 +7,8 @@ using Annex.Core.Graphics;
 using Annex.Core.Input;
 using Annex.Core.Input.Platforms;
 using Annex.Core.Scenes;
+using Annex.Core.Scenes.Layouts;
+using Annex.Core.Scenes.Layouts.Html;
 using Annex.Core.Time;
 using Scaffold;
 using Scaffold.DependencyInjection;
@@ -36,6 +38,7 @@ public abstract class AnnexApp : ScaffoldApp
     protected override void RegisterTypes(IContainer container) {
         base.RegisterTypes(container);
 
+        container.Register<IHtmlSceneLoader, HtmlSceneLoader>();
         container.RegisterSingleton<ICoreEventService, CoreEventService>();
         container.Register<IInputService, InputService>();
         container.RegisterSingleton<ITimeService, StopwatchTimeService>();

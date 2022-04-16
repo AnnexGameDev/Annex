@@ -1,12 +1,11 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Events;
-using Annex.Core.Graphics;
 using Annex.Core.Graphics.Windows;
 using Annex.Core.Input.InputEvents;
 
 namespace Annex.Core.Scenes.Components
 {
-    public class Scene : UIElement, IScene
+    public class Scene : Container, IScene
     {
         public IPriorityEventQueue Events { get; }
 
@@ -18,9 +17,6 @@ namespace Annex.Core.Scenes.Components
                 : base(elementId, position ?? new Vector2f(), size ?? new Vector2f())
             {
             this.Events = new PriorityEventQueue();
-        }
-
-        protected override void DrawInternal(ICanvas canvas) {
         }
 
         public virtual void OnEnter(OnSceneEnterEventArgs onSceneEnterEventArgs) {

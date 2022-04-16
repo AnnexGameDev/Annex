@@ -12,6 +12,11 @@ namespace Annex.Sfml.Graphics.PlatformTargets
         }
 
         protected override void UpdateIfNeeded() {
+
+            if (string.IsNullOrEmpty(this._textureContext.TextureId.Value)) {
+                return;
+            }
+
             var texture = UpdateTexture(this._textureContext.TextureId.Value);
             var rect = UpdateTextureRect(this._textureContext.SourceTextureRect);
 

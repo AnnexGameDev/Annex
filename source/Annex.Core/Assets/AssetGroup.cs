@@ -1,4 +1,5 @@
 ﻿using Annex.Core.Assets.Bundles;
+using Scaffold.Logging;
 
 namespace Annex.Core.Assets
 {
@@ -10,14 +11,15 @@ namespace Annex.Core.Assets
             this._bundles.Add(bundle);
         }
 
-        public IAsset GetAsset(string assetId) {
+        public IAsset? GetAsset(string assetId) {
 
             var bundles = this._bundles
                 .Select(bundle => bundle.GetAsset(assetId))
                 .Where(asset => asset != null);
 
             if (bundles.Count() != 1) {
-                throw new AggregateException($"Unable to find asset {assetId}");
+                Log.Trace(LogSeverity.Error, $"Unable to find asset {assetId}");
+                return null;
             }
 
             return bundles.Single()!;

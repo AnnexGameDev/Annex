@@ -8,6 +8,7 @@ using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
 using Annex.Core.Graphics.Windows;
 using Annex.Core.Scenes.Components;
+using Annex.Core.Scenes.Layouts.Html;
 using SampleProject.Models;
 using SampleProject.Scenes.Level1.Events;
 using System.Linq;
@@ -23,7 +24,10 @@ namespace SampleProject.Scenes.Level1
         public SolidRectangleContext UIElement { get; }
         public BatchTextureContext Batch { get; }
 
-        public Level1(IBroadcast<RequestStopAppMessage> requestStopAppMessage, IGraphicsService graphicsService) {
+        public Level1(IBroadcast<RequestStopAppMessage> requestStopAppMessage, IGraphicsService graphicsService, IHtmlSceneLoader htmlSceneLoader) {
+
+            htmlSceneLoader.Load("level1.html", this);
+
             this._requestStopAppMessage = requestStopAppMessage;
             this._player = new Player();
             this._grassyPlain = new GrassyPlain();
@@ -73,6 +77,8 @@ namespace SampleProject.Scenes.Level1
             this._grassyPlain.Draw(canvas);
             this._player.Draw(canvas);
             canvas.Draw(this.Batch);
+
+            base.DrawInternal(canvas);
         }
     }
 }

@@ -31,8 +31,8 @@ namespace SampleProject
             window.SetResolution(960, 640);
             window.SetSize(960, 640);
 
-            var icon = assetService.Textures.GetAsset("icons/icon.png");
-            var cursor = assetService.Textures.GetAsset("cursors/cursor.png");
+            var icon = assetService.Textures.GetAsset("icons/icon.png")!;
+            var cursor = assetService.Textures.GetAsset("cursors/cursor.png")!;
 
             window.SetIcon(100, 100, icon);
             window.SetMouseImage(cursor, 16, 16, 0, 0);
@@ -51,10 +51,12 @@ namespace SampleProject
             string assetRoot = GetAssetRoot();
             string textureRoot = Path.Combine(assetRoot, "textures");
             string fontsRoot = Path.Combine(assetRoot, "fonts");
+            string sceneDataRoot = Path.Combine(assetRoot, "scenes");
 
 #if DEBUG
             assetService.Textures.AddBundle(new PakFileBundle("textures.pak", "*.png", textureRoot));
             assetService.Fonts.AddBundle(new PakFileBundle("fonts.pak", "*.ttf", fontsRoot));
+            assetService.SceneData.AddBundle(new FileSystemBundle("*.html", sceneDataRoot));
 #else
             assetService.Textures.AddBundle(new PakFileBundle("texture.pak"));
             assetService.Fonts.AddBundle(new PakFileBundle("fonts.pak"));

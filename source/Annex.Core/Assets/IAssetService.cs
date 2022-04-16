@@ -4,5 +4,6 @@
     {
         public IAssetGroup Textures { get; }
         public IAssetGroup Fonts { get; }
+        public IAssetGroup SceneData { get; }
     }
 }
