@@ -17,6 +17,51 @@ namespace Annex.Core.Scenes.Components
             this._children.Add(child);
         }
 
+        public IUIElement? GetElementById(string id) {
+
+            if (this.ElementID == id) {
+                return this;
+            }
+
+            for (int i = 0; i < this._children.Count; i++) {
+                var child = this._children[i];
+                if (child.ElementID == id) {
+                    return child;
+                }
+
+                // Look in the child if the child has sub-elements
+                if (child is IParentElement childParent) {
+                    var foundElement = childParent.GetElementById(id);
+                    if (foundElement != null) {
+                        return foundElement;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public IUIElement? GetFirstVisibleElement(float x, float y) {
+
+            if (!this.IsInBounds(x, y))
+                return null;
+
+            for (int i = this._children.Count - 1; i >= 0; i--) {
+                var child = this._children[i];
+
+                if (!child.Visible) {
+                    continue;
+                }
+                // Do we hit a sub-child element?
+                if (child is IParentElement childParent && childParent.GetFirstVisibleElement(x, y) is IUIElement hitChild) {
+                    return hitChild;
+                }
+            }
+
+            // Otherwise, return ourselves.
+            return this;
+        }
+
         protected override void DrawInternal(ICanvas canvas) {
             base.DrawInternal(canvas);
             foreach (var child in this._children) {

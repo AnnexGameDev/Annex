@@ -51,5 +51,13 @@ namespace Annex.Core.Scenes.Components
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
+
+        public bool IsInBounds(float x, float y) {
+            if (x < this.Position.X || x > this.Position.X + this.Size.X)
+                return false;
+            if (y < this.Position.Y || y > this.Position.Y + this.Size.Y)
+                return false;
+            return true;
+        }
     }
 }

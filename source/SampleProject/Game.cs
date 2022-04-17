@@ -1,7 +1,6 @@
 ﻿using Annex.Core;
 using Annex.Core.Assets;
 using Annex.Core.Assets.Bundles;
-using Annex.Core.Data;
 using Annex.Core.Graphics;
 using Annex.Sfml.Graphics;
 using SampleProject.Scenes.Level1;

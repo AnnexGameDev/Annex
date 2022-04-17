@@ -9,5 +9,7 @@ namespace Annex.Core.Scenes.Components
         IVector2<float> Size { get; }
         IVector2<float> Position { get; }
         bool Visible { get; set; }
+
+        bool IsInBounds(float x, float y);
     }
 }
