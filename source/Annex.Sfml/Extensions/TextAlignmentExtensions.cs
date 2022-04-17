@@ -8,7 +8,7 @@ namespace Annex.Sfml.Extensions
         public static float Align(this VerticalAlignment alignment, FloatRect bounds) {
             return alignment switch {
                 VerticalAlignment.Top => 0,
-                VerticalAlignment.Center => bounds.Height / 2f,
+                VerticalAlignment.Middle => bounds.Height / 2f,
                 VerticalAlignment.Bottom => bounds.Height,
                 _ => throw new InvalidOperationException($"Unknown vertical alignment: {alignment}")
             };

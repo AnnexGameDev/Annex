@@ -25,5 +25,15 @@
         public void Set(IVector2<float> vector) {
             this.Set(vector.X, vector.Y);
         }
+
+        public static Vector2f SumOf(params IVector2<float>[] vectors) {
+            var sum = new Vector2f();
+
+            foreach (var v in vectors) {
+                sum.Add(v);
+            }
+
+            return sum;
+        }
     }
 }

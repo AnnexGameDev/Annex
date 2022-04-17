@@ -3,7 +3,7 @@
     public class OffsetVector2f : IVector2<float>
     {
         public IVector2<float> BaseVector { get; }
-        public IVector2<float> OffsetVector { get; }
+        public IVector2<float> OffsetVector { get; private set; }
 
         public float X => this.BaseVector.X + this.OffsetVector.X;
         public float Y => this.BaseVector.Y + this.OffsetVector.Y;
@@ -18,7 +18,7 @@
         }
 
         public void Set(IVector2<float> vector) {
-            throw new NotImplementedException($"{nameof(OffsetVector2f)} doesn't support {nameof(Set)}");
+            this.OffsetVector = vector;
         }
 
         public void Set(float x, float y) {

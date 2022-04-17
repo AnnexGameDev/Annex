@@ -1,10 +1,39 @@
-<style  id="background"
-        size="300, 300"
+<style  id="background" 
+        size="100%, 100%" 
         texture="ui/background/splash.png">
 </style>
+<style  id="menu-button"
+        font-size="18"
+        font="default"
+        text-alignment="center, middle">
+</style>
 
-<scene  style-id="scene">
-    <picture    style-id="background"
-                class="imgBackground"></picture>
-    <script src="style.js"></script>
+<scene  size="960, 640">
+        <picture style-id="background"></picture>
+        <label  text="The Lesser Key" 
+                font-size="78"
+                font="default"
+                text-alignment="center, middle"
+                font-color="white"
+                position="50%, 25%">
+        </label>
+
+        <container      position="25%, 50%" 
+                        size="60%, 50">
+                <label  style-id="menu-button" 
+                        text="Join Server"
+                        position="10%, 0">
+                </label>
+                
+                <label  style-id="menu-button"
+                        position="45%, 0"
+                        text="Host Server">
+                </label>
+
+                <label  style-id="menu-button"
+                        position="70%, 0"
+                        text="Leave">
+                </label>
+        </container>
+        <script src="style.js"></script>
 </scene>

@@ -8,7 +8,7 @@ namespace Annex.Core.Scenes.Components
     {
         private ConcurrentList<IUIElement> _children = new();
 
-        public Container(string elementId, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size) {
+        public Container(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size) {
         }
 
         public IEnumerable<IUIElement> Children => _children;

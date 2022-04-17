@@ -25,5 +25,9 @@
                 yield return selector(i, collection.ElementAt(i));
             }
         }
+
+        public static string ToCamelCaseWord(this string str) {
+            return $"{char.ToUpper(str[0])}{str[1..].ToLower()}";
+        }
     }
 }

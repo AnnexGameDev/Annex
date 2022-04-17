@@ -12,7 +12,7 @@ namespace Annex.Core.Graphics.Contexts
     public enum VerticalAlignment
     {
         Top,
-        Center,
+        Middle,
         Bottom,
     }
 

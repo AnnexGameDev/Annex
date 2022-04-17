@@ -13,7 +13,6 @@ namespace Annex.Sfml.Graphics.PlatformTargets
         private readonly TextContext _textContext;
         private readonly IFontCache _fontCache;
 
-
         public TextPlatformTarget(TextContext textContext, IFontCache fontCache) {
             this._textContext = textContext;
             this._fontCache = fontCache;
@@ -29,7 +28,7 @@ namespace Annex.Sfml.Graphics.PlatformTargets
             renderTarget.Draw(this._text);
         }
 
-        private void UpdateIfNeeded() { 
+        private void UpdateIfNeeded() {
 
             if (string.IsNullOrEmpty(this._textContext.Font.Value) || string.IsNullOrWhiteSpace(this._textContext.Text.Value)) {
                 return;

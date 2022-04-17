@@ -1,3 +1,8 @@
+@font-face {
+	font-family: "scene default";
+	src: url("../fonts/default.ttf") format("truetype");
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -16,6 +21,15 @@ scene {
     display: block;
     width: 960px;
     height: 640px;
+}
+
+container {
+	position: absolute;
+	display: inline-block;
+}
+
+label {
+	position: absolute;
 }
 
 picture {

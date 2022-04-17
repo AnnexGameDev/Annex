@@ -31,11 +31,33 @@
             A = a;
         }
 
-        public static RGBA Parse(string colorName) {
-            if (Enum.TryParse<KnownColor>(colorName, out var color)) {
-                new RGBA((uint)color);
+        public static RGBA Parse(string arg) {
+            // Maybe it's a name
+            if (Enum.TryParse<KnownColor>(arg.ToCamelCaseWord(), out var color)) {
+                return new RGBA((uint)color);
             }
-            throw new ArgumentException($"No color exists with the name: {colorName}");
+
+            // Maybe it's RGB?
+            var colorData = arg.Split(",").Select(val => val.Trim());
+
+            if (colorData.Count() == 3) {
+                var byteColorData = colorData.Select(val => byte.Parse(val)).ToArray();
+                return new RGBA(byteColorData[0], byteColorData[1], byteColorData[2]);
+            }
+
+            if (colorData.Count() == 4) {
+                var byteColorData = colorData.Select(val => byte.Parse(val)).ToArray();
+                return new RGBA(byteColorData[0], byteColorData[1], byteColorData[2], byteColorData[3]);
+            }
+
+            throw new ArgumentException($"Unable to convert to color: {arg}");
+        }
+
+        internal void Set(RGBA value) {
+            this.R = value.R;
+            this.G = value.G;
+            this.B = value.B;
+            this.A = value.A;
         }
 
         public static implicit operator RGBA(KnownColor knownColor) {

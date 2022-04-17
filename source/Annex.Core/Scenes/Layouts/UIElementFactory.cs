@@ -24,8 +24,10 @@ namespace Annex.Core.Scenes.Layouts
 
         public static IUIElement CreateInstance(string name) {
             var type = _uiElementTypes[name.ToLower()];
-            var instance = (IUIElement)Activator.CreateInstance(type)!;
-            return instance;
+
+            var constructor = type.GetConstructors().First(c => c.GetParameters().All(p => p.IsOptional));
+            var args = constructor.GetParameters().Select(c => c.RawDefaultValue).ToArray();
+            return (IUIElement)constructor.Invoke(args);
         }
     }
 }

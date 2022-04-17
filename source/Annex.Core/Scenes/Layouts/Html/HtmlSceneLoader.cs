@@ -1,5 +1,6 @@
 ﻿using Annex.Core.Assets;
 using Annex.Core.Data;
+using Annex.Core.Graphics.Contexts;
 using Annex.Core.Scenes.Components;
 using System.Xml.Linq;
 
@@ -90,6 +91,39 @@ namespace Annex.Core.Scenes.Layouts.Html
             if (instance is Image img) {
                 this.SetTexture(img, element, styles);
             }
+
+            if (instance is Label label) {
+                this.SetText(label, element, styles);
+            }
+        }
+
+        private void SetText(Label label, XElement element, Styles styles) {
+            if (GetStringAttribute("text", element, styles) is string text) {
+                label.Text = text;
+            }
+
+            if (GetStringAttribute("text-alignment", element, styles) is string alignment) {
+                var data = alignment.Split(",");
+                string horizontalAlignment = data[0].Trim().ToCamelCaseWord();
+                string verticalAlignment = data[1].Trim().ToCamelCaseWord();
+
+                label.HorizontalTextAlignment = Enum.Parse<HorizontalAlignment>(horizontalAlignment);
+                label.VerticalTextAlignment = Enum.Parse<VerticalAlignment>(verticalAlignment);
+            }
+
+            if (GetStringAttribute("font", element, styles) is string font) {
+                label.Font = font + ".ttf";
+            } else {
+                label.Font = "default.ttf";
+            }
+
+            if (GetStringAttribute("font-size", element, styles) is string fontSize) {
+                label.FontSize = uint.Parse(fontSize);
+            }
+
+            if (GetStringAttribute("font-color", element, styles) is string fontColor) {
+                label.FontColor = RGBA.Parse(fontColor);
+            }
         }
 
         private void SetTexture(Image img, XElement element, Styles styles) {
@@ -105,8 +139,10 @@ namespace Annex.Core.Scenes.Layouts.Html
         }
 
         private void SetPosition(IUIElement instance, IUIElement? parent, XElement element, Styles styles) {
-            if (GetVectorAttribute("position", parent?.Position, element, styles) is IVector2<float> value) {
-                instance.Position.Set(value);
+            if (GetVectorAttribute("position", parent?.Size, element, styles) is Vector2f value) {
+                instance.Position.Set(Vector2f.SumOf(value, parent?.Position ?? new Vector2f()));
+            } else {
+                instance.Position.Set(parent?.Position ?? new Vector2f());
             }
         }
 
@@ -116,25 +152,24 @@ namespace Annex.Core.Scenes.Layouts.Html
             return elementValue ?? styleValue;
         }
 
-        private IVector2<float>? GetVectorAttribute(string attributeName, IVector2<float>? parentvalue, XElement element, Styles styles) {
+        private float ComputeVectorValue(string val, float parentVal) {
+            return val.EndsWith("%") ? parentVal * float.Parse(val[..^1]) / 100 : float.Parse(val);
+        }
+
+        private IVector2<float>? GetVectorAttribute(string attributeName, IVector2<float>? parentValue, XElement element, Styles styles) {
             var finalValue = GetStringAttribute(attributeName, element, styles);
             if (finalValue == null) {
                 return null;
             }
 
-            float?[] data = finalValue.Split(',')
-                .Select(val => val.Trim())
-                .Select(val => val.EndsWith("%") ? (float?)null : float.Parse(val))
-                .ToArray();
+            var data = finalValue.Split(',').Select(val => val.Trim()).ToArray();
+            string x = data[0];
+            string y = data[1];
 
-            data[0] ??= parentvalue?.X;
-            data[1] ??= parentvalue?.Y;
 
-            if (data.Any(val => val == null)) {
-                throw new InvalidOperationException($"% isn't supported for the property {attributeName} for an element {element.Name}");
-            }
-
-            return new Vector2f((float)data[0]!, (float)data[1]!);
+            float xf = ComputeVectorValue(x, parentValue?.X ?? 0);
+            float yf = ComputeVectorValue(y, parentValue?.Y ?? 0);
+            return new Vector2f(xf, yf);
         }
 
         #endregion

@@ -28,28 +28,48 @@ function Get(e, style, property) {
     return undefined;
 }
 
-function Add(style, e, property) {
-    style[property] = CouldExist(e.getAttribute(property));
-}
+function GetXY(e, style, propertyName) {
+    var propertyValue = Get(e, style, propertyName);
+    if (propertyValue == undefined)
+        return undefined;
 
-function ApplySize(e, style) {
-    var size = Get(e, style, "size");
-    if (size == undefined)
-        return;
-
-    var sizes = size.split(',');
-    var x = sizes[0].trim();
-    var y = sizes[1].trim();
+    var values = propertyValue.split(',');
+    var x = values[0].trim();
+    var y = values[1].trim();
 
     if (x.slice(-1) != "%") {
         x = x + "px";
     }
+
     if (y.slice(-1) != "%") {
         y = y + "px";
     }
 
-    e.style.width = x;
-    e.style.height = y;
+    return [x, y];
+}
+
+function Add(style, e, property) {
+    style[property] = CouldExist(e.getAttribute(property));
+}
+
+function ApplyPosition(e, style) {
+    var positions = GetXY(e, style, "position");
+
+    if (positions == undefined)
+        return;
+
+    e.style.left = positions[0];
+    e.style.top = positions[1];
+}
+
+function ApplySize(e, style) {
+    var sizes = GetXY(e, style, "size");
+
+    if (sizes == undefined)
+        return;
+
+    e.style.width = sizes[0];
+    e.style.height = sizes[1];
 }
 
 function ApplyTexture(e, style) {
@@ -63,6 +83,73 @@ function ApplyTexture(e, style) {
     }
 }
 
+function ApplyText(e, style) {
+    var text = Get(e, style, "text");
+
+    if (text == undefined)
+        return;
+
+    var span = document.createElement("span");
+    span.innerHTML = text;
+    e.appendChild(span);
+
+    var font = Get(e, style, "font");
+    if (font != undefined) {
+        if (font == "default")
+            font = "scene default";
+    
+        e.style.fontFamily = font;
+    }
+
+    var fontSize = Get(e, style, "font-size");
+    if (fontSize != undefined) {
+        e.style.fontSize = fontSize + "px";
+    }
+
+    var fontColor = Get(e, style, "font-color");
+    if (fontColor != undefined) {
+        if (fontColor.split(',').length != 1) {
+            fontColor = "rgb(" + fontColor + ")";
+        }
+        e.style.color = fontColor;
+    }
+
+    var alignment = Get(e, style, "text-alignment");
+    if (alignment == undefined)
+        return;
+        
+    var alignments = alignment.split(',');
+    var halignment = alignments[0].trim();
+    var valignment = alignments[1].trim();
+
+    var canvas = document.createElement("canvas");
+    var context = canvas.getContext("2d");
+    context.font = fontSize + "px " + font;
+    var metrics = context.measureText(text);
+
+    var width = metrics.width;
+    var height = e.offsetHeight;
+
+    if (halignment == "left") {
+        e.style.left = "calc(" + e.style.left + " - " + width + "px)";
+    }
+    if (halignment == "right") {
+        // do nothing
+    }
+    if (halignment == "center") {
+        e.style.left = "calc(" + e.style.left + " - " + width + "px / 2)";
+    }
+    if (valignment == "top") {
+        // do nothing
+    }
+    if (valignment == "middle") {
+        e.style.top = "calc(" + e.style.top + " - " + height + "px / 2)";
+    }
+    if (valignment == "bottom") {
+        e.style.top = "calc(" + e.style.top + " - " + height + "px)";
+    }
+}
+
 function ProcessTag(tag) {
     var elements = document.getElementsByTagName(tag);
     for (var i = 0; i < elements.length; i++) {
@@ -70,8 +157,10 @@ function ProcessTag(tag) {
         var styleId = element.getAttribute("style-id")
         var style = styles[styleId];
 
+        ApplyPosition(element, style);
         ApplySize(element, style);
         ApplyTexture(element, style);
+        ApplyText(element, style);
     }
 }
 
@@ -85,8 +174,19 @@ function CreateStyles() {
         var style = {}
 
         // Add style properties here
-        Add(style, styleElement, "size");
-        Add(style, styleElement, "texture");
+        var stylesToUse = [
+            "size",
+            "texture",
+            "text",
+            "font-size",
+            "font",
+            "text-alignment",
+            "font-color",
+            "position",
+        ];
+        for (var ii = 0; ii < stylesToUse.length; ii++) {
+            Add(style, styleElement, stylesToUse[ii]);
+        }
 
         styles[id] = style;
     }
@@ -103,5 +203,5 @@ link.setAttribute('href', 'style.css');
 head.appendChild(link);
 
 var styles = CreateStyles();
-var tagsToFormat = ["scene", "picture"]
+var tagsToFormat = ["scene", "picture", "container", "label"]
 tagsToFormat.forEach(tag => ProcessTag(tag))
