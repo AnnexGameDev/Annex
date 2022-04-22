@@ -60,6 +60,8 @@ namespace Annex.Core.Scenes.Components
         }
 
         protected override void DrawInternal(ICanvas canvas) {
+            this._background.Draw(canvas);
+            this._label.Draw(canvas);
         }
     }
 }
