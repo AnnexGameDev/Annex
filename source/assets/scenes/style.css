@@ -28,11 +28,28 @@ container {
 	display: inline-block;
 }
 
+span {
+	position: relative;
+	left: 0px;
+	top: 0px;
+}
+
 label {
 	position: absolute;
+	background-size: 100% 100%;
 }
 
 picture {
 	position: absolute;
+	border: none;
+}
+
+button {
+	position: absolute;
+	border: none;
+	background-size: 100% 100%;
+}
+
+button.active {
 	border: none;
 }

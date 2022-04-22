@@ -5,35 +5,38 @@
 <style  id="menu-button"
         font-size="18"
         font="default"
-        text-alignment="center, middle">
+        size="30%, 100%"
+        texture="ui/buttons/orangefade.png">
 </style>
 
 <scene  size="960, 640">
         <picture style-id="background"></picture>
-        <label  text="The Lesser Key" 
-                font-size="78"
+
+        <label  text="The Lesser Key"
+                font-size="76"
                 font="default"
-                text-alignment="center, middle"
                 font-color="white"
+                text-alignment="center, middle"
                 position="50%, 25%">
         </label>
 
         <container      position="25%, 50%" 
-                        size="60%, 50">
-                <label  style-id="menu-button" 
+                        size="50%, 50"
+                        texture="ui/buttons/whitebox.png">
+                <button style-id="menu-button" 
                         text="Join Server"
-                        position="10%, 0">
-                </label>
+                        position="0, 0">
+                </button>
                 
-                <label  style-id="menu-button"
-                        position="45%, 0"
+                <button style-id="menu-button"
+                        position="35%, 0"
                         text="Host Server">
-                </label>
+                </button>
 
-                <label  style-id="menu-button"
+                <button style-id="menu-button"
                         position="70%, 0"
                         text="Leave">
-                </label>
+                </button>
         </container>
-        <script src="style.js"></script>
 </scene>
+<script src="style.js"></script>

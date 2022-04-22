@@ -4,7 +4,7 @@ using Annex.Core.Graphics.Contexts;
 
 namespace Annex.Core.Scenes.Components
 {
-    public class Label : UIElement
+    public class Label : UIElement, ILabel
     {
         protected readonly TextContext RenderText;
 
@@ -38,7 +38,8 @@ namespace Annex.Core.Scenes.Components
             get => RenderText.VerticalAlignment;
             set => RenderText.VerticalAlignment = value;
         }
-        public IVector2<float> TextOffset
+
+        public IVector2<float> TextPositionOffset
         {
             get => RenderText.PositionOffset!;
             set => RenderText.PositionOffset!.Set(value);
@@ -47,7 +48,7 @@ namespace Annex.Core.Scenes.Components
         public Label(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size) {
             this.RenderText = new TextContext(string.Empty, "default.ttf") {
                 Position = this.Position,
-                PositionOffset = new OffsetVector2f(this.Size, new Vector2f()),
+                PositionOffset = new Vector2f(),
                 Camera = CameraId.UI.ToString(),
                 FontSize = new Shared<uint>(11),
                 Color = KnownColor.Black

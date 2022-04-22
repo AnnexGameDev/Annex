@@ -4,7 +4,7 @@ using Annex.Core.Graphics.Contexts;
 
 namespace Annex.Core.Scenes.Components
 {
-    public class Image : UIElement
+    public class Image : UIElement, IImage
     {
         protected readonly TextureContext BackgroundContext;
         public string BackgroundTextureId { 
