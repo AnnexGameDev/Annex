@@ -88,16 +88,16 @@ namespace Annex.Core.Scenes.Layouts.Html
             this.SetPosition(instance, parent, element, styles);
             this.SetSize(instance, parent, element, styles);
 
-            if (instance is Image img) {
+            if (instance is IImage img) {
                 this.SetTexture(img, element, styles);
             }
 
-            if (instance is Label label) {
+            if (instance is ILabel label) {
                 this.SetText(label, element, styles);
             }
         }
 
-        private void SetText(Label label, XElement element, Styles styles) {
+        private void SetText(ILabel label, XElement element, Styles styles) {
             if (GetStringAttribute("text", element, styles) is string text) {
                 label.Text = text;
             }
@@ -117,6 +117,10 @@ namespace Annex.Core.Scenes.Layouts.Html
                 label.Font = "default.ttf";
             }
 
+            if (GetVectorAttribute("text-offset", label.Size, element, styles) is IVector2<float> offset) {
+                label.TextPositionOffset = new Vector2f(-offset.X, offset.Y);
+            }
+
             if (GetStringAttribute("font-size", element, styles) is string fontSize) {
                 label.FontSize = uint.Parse(fontSize);
             }
@@ -126,7 +130,7 @@ namespace Annex.Core.Scenes.Layouts.Html
             }
         }
 
-        private void SetTexture(Image img, XElement element, Styles styles) {
+        private void SetTexture(IImage img, XElement element, Styles styles) {
             if (GetStringAttribute("texture", element, styles) is string textureId) {
                 img.BackgroundTextureId = textureId;
             }

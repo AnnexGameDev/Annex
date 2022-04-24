@@ -89,10 +89,6 @@ function ApplyText(e, style) {
     if (text == undefined)
         return;
 
-    var span = document.createElement("span");
-    span.innerHTML = text;
-    e.appendChild(span);
-
     var font = Get(e, style, "font");
     if (font != undefined) {
         if (font == "default")
@@ -114,6 +110,15 @@ function ApplyText(e, style) {
         e.style.color = fontColor;
     }
 
+    var te = document.createElement("text");
+    te.innerHTML = text;
+    e.appendChild(te);
+
+    var canvas = document.createElement("canvas");
+    var context = canvas.getContext("2d");
+    context.font = fontSize + "px " + font;
+    var metrics = context.measureText(text);
+    
     var offsets = GetXY(e, style, "text-offset");
     var offsetX = "0px";
     var offsetY = "0px";
@@ -121,11 +126,21 @@ function ApplyText(e, style) {
     if (offsets != undefined) {
         offsetX = offsets[0];
         offsetY = offsets[1];
+        
+        var parentHeight = window.getComputedStyle(e).height;
+        var parentWidth = window.getComputedStyle(e).width;
 
-        if (offsetX.endsWith("%") || offsetY.endsWith("%")) {
-            throw("% is not supported in offsets!");
+        if (offsetX.endsWith("%")) {
+            offsetX = parentWidth + " * " + offsetX.slice(0, -1) + " / 100";
+        }
+
+        if (offsetY.endsWith("%")) {
+            offsetY = parentHeight + " * " + offsetY.slice(0, -1) + " / 100";
         }
     }
+
+    var textWidth = window.getComputedStyle(te).width;
+    var textHeight = window.getComputedStyle(te).height;
 
     var alignment = Get(e, style, "text-alignment");
     if (alignment != undefined) {
@@ -133,36 +148,27 @@ function ApplyText(e, style) {
         var halignment = alignments[0].trim();
         var valignment = alignments[1].trim();
     
-        var canvas = document.createElement("canvas");
-        var context = canvas.getContext("2d");
-        context.font = fontSize + "px " + font;
-        var metrics = context.measureText(text);
-    
-        var width = metrics.width;
-        var height = e.parentElement.clientHeight;
-    
         if (halignment == "left") {
-            offsetX = offsetX + " - " + width + "px";
         }
         if (halignment == "right") {
+            offsetX = offsetX + " - " + textWidth;
             // do nothing
         }
         if (halignment == "center") {
-            offsetX = offsetX + " - " + width + "px / 2";
+            offsetX = offsetX + " - " + textWidth + " / 2";
         }
         if (valignment == "top") {
             // do nothing
         }
         if (valignment == "middle") {
-            offsetY = offsetY + " - " + height + "px / 2";
+            offsetY = offsetY + " - " + textHeight + " / 2";
         }
         if (valignment == "bottom") {
-            offsetY = offsetY + " - " + height + "px";
+            offsetY = offsetY + " - " + textHeight;
         }
     }
-    var bounds = e.getBoundingClientRect();
-    span.style.left = "calc(" + offsetX + ")";
-    span.style.top = "calc(" + offsetY + ")";
+    te.style.left = "calc(" + offsetX + ")";
+    te.style.top = "calc(" + offsetY + ")";
 }
 
 function ProcessTag(tag) {
@@ -221,6 +227,7 @@ head.appendChild(link);
 var styles = CreateStyles();
 var tagsToFormat = ["scene", "container", "picture", "label", "button"]
 
-document.addEventListener("DOMContentLoaded", function(e) {
-    tagsToFormat.forEach(tag => ProcessTag(tag))
-});
+// Delay by 50ms to make things easy
+setTimeout(function(e) {
+    tagsToFormat.forEach(tag => ProcessTag(tag));
+}, 50);

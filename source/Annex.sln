@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Helpers", "Helpers", "{CDA8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests.Core", "UnitTests.Core\UnitTests.Core.csproj", "{7F691A42-70A0-4B3E-9A32-E9D849E9CDE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Annex.Sfml", "Annex.Sfml\Annex.Sfml.csproj", "{78D7DB5C-373A-47D3-B21F-90CC4F9B1F6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Annex.Sfml", "Annex.Sfml\Annex.Sfml.csproj", "{78D7DB5C-373A-47D3-B21F-90CC4F9B1F6D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

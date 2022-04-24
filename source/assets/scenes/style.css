@@ -28,15 +28,10 @@ container {
 	display: inline-block;
 }
 
-span {
-	position: relative;
-	left: 0px;
-	top: 0px;
-}
-
 label {
-	position: absolute;
+	position: relative;
 	background-size: 100% 100%;
+	display: block;
 }
 
 picture {
@@ -52,4 +47,11 @@ button {
 
 button.active {
 	border: none;
+}
+
+text {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	white-space: nowrap;
 }
