@@ -6,7 +6,7 @@ namespace Annex.Core.Scenes.Components
 {
     public class Label : UIElement, ILabel
     {
-        protected readonly TextContext RenderText;
+        public readonly TextContext RenderText;
 
         public string Text
         {

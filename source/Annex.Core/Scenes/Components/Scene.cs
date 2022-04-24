@@ -48,11 +48,13 @@ namespace Annex.Core.Scenes.Components
 
         public virtual void OnMouseButtonPressed(IWindow window, MouseButtonPressedEvent mouseButtonPressedEvent) {
             var newFocusElement = GetFirstVisibleElement(mouseButtonPressedEvent.WindowX, mouseButtonPressedEvent.WindowY);
-            this.FocusElement?.OnLostFocus();
-            this.FocusElement = newFocusElement;
-            this.FocusElement?.OnGainedFocus();
+            newFocusElement?.OnMouseButtonPressed(mouseButtonPressedEvent);
 
-            this.FocusElement?.OnMouseButtonPressed(mouseButtonPressedEvent);
+            if (this.FocusElement != newFocusElement) {
+                this.FocusElement?.OnLostFocus();
+                this.FocusElement = newFocusElement;
+                this.FocusElement?.OnGainedFocus();
+            }
         }
 
         public virtual void OnMouseButtonReleased(IWindow window, MouseButtonReleasedEvent mouseButtonReleasedEvent) {

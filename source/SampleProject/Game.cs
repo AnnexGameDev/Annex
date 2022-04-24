@@ -42,7 +42,7 @@ namespace SampleProject
 
             container.Resolve<ILogService>().Filter.SetSeverity(LogSeverity.Verbose, false);
 
-            container.Register<IGraphicsEngine, SfmlGraphicsEngine>();
+            container.RegisterSingleton<IGraphicsEngine, SfmlGraphicsEngine>();
             container.Register<Level1>();
         }
 

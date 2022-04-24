@@ -107,6 +107,15 @@ namespace Annex.Sfml.Graphics.PlatformTargets
                 }
             }
 
+            protected override void Destroy(bool disposing) {
+                base.Destroy(disposing);
+
+                if (disposing) {
+                    this._texture.Dispose();
+                    this._vertexArray.Dispose();
+                    // _drawContext isn't owned by us.
+                }
+            }
         }
     }
 }

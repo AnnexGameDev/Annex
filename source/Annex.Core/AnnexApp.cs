@@ -26,6 +26,8 @@ public abstract class AnnexApp : ScaffoldApp
             var graphicsService = this.Container.Resolve<IGraphicsService>();
             var assetService = this.Container.Resolve<IAssetService>();
 
+            this.Container.Resolve<GraphicsEngine>();
+
             this.SetupAssetBundles(assetService);
             this.CreateWindow(graphicsService, assetService);
             sceneService.LoadScene<TStartingScene>();

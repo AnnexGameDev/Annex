@@ -21,6 +21,7 @@ namespace Annex.Sfml.Graphics.PlatformTargets
 
         public override void Dispose() {
             this._text.Dispose();
+            // _textContext isn't owned by us
         }
 
         protected override void Draw(RenderTarget renderTarget) {
@@ -126,6 +127,17 @@ namespace Annex.Sfml.Graphics.PlatformTargets
                 this._text.Font = sfmlFont;
             }
             return this._text.Font;
+        }
+
+        public Core.Data.FloatRect GetTextBounds() {
+            return this._text.GetLocalBounds().ToAnnex();
+        }
+
+        public float GetCharacterX(int index) {
+            if (index == this._text.DisplayedString.Length) {
+                return this.GetTextBounds().Width;
+            }
+            return this._text.FindCharacterPos((uint)index).X;
         }
     }
 }

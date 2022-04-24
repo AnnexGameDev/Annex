@@ -6,59 +6,59 @@ namespace Annex.Core.Scenes.Components
 {
     public abstract class LabeledTextureUIElement : UIElement, IButton, ILabel
     {
-        private readonly Image _background;
-        private readonly Label _label;
+        protected readonly Image Image;
+        protected readonly Label Label;
 
         public string BackgroundTextureId
         {
-            get => this._background.BackgroundTextureId;
-            set => this._background.BackgroundTextureId = value;
+            get => this.Image.BackgroundTextureId;
+            set => this.Image.BackgroundTextureId = value;
         }
         public string Text
         {
-            get => this._label.Text;
-            set => this._label.Text = value;
+            get => this.Label.Text;
+            set => this.Label.Text = value;
         }
         public string Font
         {
-            get => this._label.Font;
-            set => this._label.Font = value;
+            get => this.Label.Font;
+            set => this.Label.Font = value;
         }
         public uint FontSize
         {
-            get => this._label.FontSize;
-            set => this._label.FontSize = value;
+            get => this.Label.FontSize;
+            set => this.Label.FontSize = value;
         }
         public RGBA FontColor
         {
-            get => this._label.FontColor;
-            set => this._label.FontColor = value;
+            get => this.Label.FontColor;
+            set => this.Label.FontColor = value;
         }
         public HorizontalAlignment HorizontalTextAlignment
         {
-            get => this._label.HorizontalTextAlignment;
-            set => this._label.HorizontalTextAlignment = value;
+            get => this.Label.HorizontalTextAlignment;
+            set => this.Label.HorizontalTextAlignment = value;
         }
         public VerticalAlignment VerticalTextAlignment
         {
-            get => this._label.VerticalTextAlignment;
-            set => this._label.VerticalTextAlignment = value;
+            get => this.Label.VerticalTextAlignment;
+            set => this.Label.VerticalTextAlignment = value;
         }
         public IVector2<float> TextPositionOffset
         {
-            get => this._label.TextPositionOffset;
-            set => this._label.TextPositionOffset = value;
+            get => this.Label.TextPositionOffset;
+            set => this.Label.TextPositionOffset = value;
         }
 
         public LabeledTextureUIElement(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size) {
 
-            this._background = new Image($"{elementId}.background", this.Position, this.Size);
-            this._label = new Label($"{elementId}.label", this.Position, this.Size);
+            this.Image = new Image($"{elementId}.background", this.Position, this.Size);
+            this.Label = new Label($"{elementId}.label", this.Position, this.Size);
         }
 
         protected override void DrawInternal(ICanvas canvas) {
-            this._background.Draw(canvas);
-            this._label.Draw(canvas);
+            this.Image.Draw(canvas);
+            this.Label.Draw(canvas);
         }
     }
 }

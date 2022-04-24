@@ -16,11 +16,6 @@ namespace Annex.Sfml.Graphics.PlatformTargets
             this._rectangle = new RectangleShape();
         }
 
-
-        public override void Dispose() {
-            this._rectangleContext.Dispose();
-        }
-
         protected override void Draw(RenderTarget renderTarget) {
             this.UpdateIfNeeded();
             renderTarget.Draw(this._rectangle);
@@ -46,6 +41,11 @@ namespace Annex.Sfml.Graphics.PlatformTargets
             if (this._rectangle.OutlineThickness != (this._rectangleContext.BorderThickness?.Value ?? defaultThickness)) {
                 this._rectangle.OutlineThickness = (this._rectangleContext.BorderThickness?.Value ?? defaultThickness);
             }
+        }
+
+        public override void Dispose() {
+            this._rectangle.Dispose();
+            // _rectangleContext is not owned by us
         }
     }
 }

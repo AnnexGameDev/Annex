@@ -19,5 +19,12 @@ namespace Annex.Core.Data
             this.Width = width;
             this.Height = height;
         }
+
+        public void Set(float top, float left, float width, float height) {
+            this.Top = top;
+            this.Left = left;
+            this.Width = width;
+            this.Height = height;
+        }
     }
 }

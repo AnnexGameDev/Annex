@@ -10,6 +10,10 @@ namespace Annex.Sfml.Extensions
             return new FloatRect(rect.Left, rect.Top, rect.Height, rect.Height);
         }
 
+        public static Annex.Core.Data.FloatRect ToAnnex(this FloatRect rect) {
+            return new Core.Data.FloatRect(rect.Top, rect.Left, rect.Width, rect.Height);
+        }
+
         public static bool DoesNotEqual(this FloatRect sfmlRect, Core.Data.FloatRect? annexRect, int top = 0, int left = 0, int width = 0, int height = 0) {
             if (annexRect == null) {
                 if (sfmlRect.Top == top
