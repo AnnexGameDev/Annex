@@ -55,3 +55,7 @@ text {
 	left: 0px;
 	white-space: nowrap;
 }
+
+textbox {
+	position: absolute;
+}

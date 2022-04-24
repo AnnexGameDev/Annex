@@ -4,7 +4,7 @@ using Annex.Core.Graphics.Contexts;
 
 namespace Annex.Core.Scenes.Components
 {
-    public class Button : UIElement, IButton
+    public abstract class LabeledTextureUIElement : UIElement, IButton, ILabel
     {
         private readonly Image _background;
         private readonly Label _label;
@@ -50,7 +50,7 @@ namespace Annex.Core.Scenes.Components
             set => this._label.TextPositionOffset = value;
         }
 
-        public Button(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size) {
+        public LabeledTextureUIElement(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size) {
 
             this._background = new Image($"{elementId}.background", this.Position, this.Size);
             this._label = new Label($"{elementId}.label", this.Position, this.Size);
