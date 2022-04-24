@@ -1,13 +1,13 @@
 ﻿using Scaffold.Platform;
 
-namespace Annex.Core.Platform
+namespace Annex.Core.Helpers
 {
-    public class Clipboard
+    public class ClipboardHelper
     {
         private static object _lock = new();
         private static IClipboardService? _clipboardServiceInstance = null;
 
-        public Clipboard(IClipboardService clipboardService) {
+        public ClipboardHelper(IClipboardService clipboardService) {
             _clipboardServiceInstance = clipboardService;
         }
 

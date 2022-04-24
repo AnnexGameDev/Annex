@@ -10,6 +10,7 @@ namespace Annex.Core.Scenes.Components
         public IVector2<float> Size { get; }
         public IVector2<float> Position { get; }
         public bool Visible { get; set; }
+        protected bool IsFocused { get; private set; }
 
         public UIElement(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) {
             this.ElementID = elementId ?? string.Empty;
@@ -62,9 +63,11 @@ namespace Annex.Core.Scenes.Components
         }
 
         public virtual void OnLostFocus() {
+            this.IsFocused = false;
         }
 
         public virtual void OnGainedFocus() {
+            this.IsFocused = true;
         }
 
         public virtual void OnMouseButtonPressed(MouseButtonPressedEvent mouseButtonPressedEvent) {

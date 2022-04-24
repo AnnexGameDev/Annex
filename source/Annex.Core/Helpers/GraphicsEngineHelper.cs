@@ -2,13 +2,13 @@
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
 
-namespace Annex.Core.Platform
+namespace Annex.Core.Helpers
 {
-    public class GraphicsEngine
+    public class GraphicsEngineHelper
     {
         public static IGraphicsEngine? _graphicsEngine = null;
 
-        public GraphicsEngine(IGraphicsEngine graphicsEngine) {
+        public GraphicsEngineHelper(IGraphicsEngine graphicsEngine) {
             _graphicsEngine = graphicsEngine;
         }
 

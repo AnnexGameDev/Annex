@@ -4,9 +4,9 @@ using Annex.Core.Broadcasts.Messages;
 using Annex.Core.Events;
 using Annex.Core.Events.Core;
 using Annex.Core.Graphics;
+using Annex.Core.Helpers;
 using Annex.Core.Input;
 using Annex.Core.Input.Platforms;
-using Annex.Core.Platform;
 using Annex.Core.Scenes;
 using Annex.Core.Scenes.Components;
 using Annex.Core.Scenes.Layouts.Html;
@@ -26,7 +26,9 @@ public abstract class AnnexApp : ScaffoldApp
             var graphicsService = this.Container.Resolve<IGraphicsService>();
             var assetService = this.Container.Resolve<IAssetService>();
 
-            this.Container.Resolve<GraphicsEngine>();
+            this.Container.Resolve<ClipboardHelper>();
+            this.Container.Resolve<GraphicsEngineHelper>();
+            this.Container.Resolve<GameTimeHelper>();
 
             this.SetupAssetBundles(assetService);
             this.CreateWindow(graphicsService, assetService);
@@ -51,8 +53,6 @@ public abstract class AnnexApp : ScaffoldApp
         container.Register<IAssetGroup, AssetGroup>();
         container.Register<IPriorityEventQueue, PriorityEventQueue>();
         container.RegisterBroadcast<RequestStopAppMessage>();
-
-        container.Resolve<Clipboard>();
 
 #if WINDOWS
         container.Register<IPlatformKeyboardService, WindowsKeyboardService>();

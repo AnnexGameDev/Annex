@@ -1,5 +1,5 @@
 ﻿using Annex.Core.Graphics;
-using Annex.Core.Platform;
+using Annex.Core.Helpers;
 using Annex.Core.Scenes.Components;
 using FluentAssertions;
 using Moq;
@@ -19,8 +19,8 @@ namespace Annex.Core.Tests.Scenes.Components
         public TextboxTests() {
             this._fixture.Register(_fixture.Create<TextBox>);
 
-            new Clipboard(_clipboardServiceMock.Object);
-            new GraphicsEngine(_graphicsEngineMock.Object);
+            new ClipboardHelper(_clipboardServiceMock.Object);
+            new GraphicsEngineHelper(_graphicsEngineMock.Object);
         }
 
         [Fact]
