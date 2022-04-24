@@ -9,13 +9,23 @@ namespace Annex.Core.Scenes.Components
     {
         public IPriorityEventQueue Events { get; }
 
+        /// <summary>
+        /// The IUIElement that currently has the focus
+        /// </summary>
+        private IUIElement? _focusElement;
+        public IUIElement? FocusElement
+        {
+            get => this._focusElement;
+            // We don't want ourselves as the focus element. Otherwise we'll stackoverflow in the UI handlers
+            private set => this._focusElement = value == this ? null : value;
+        }
+
         public Scene(
             string elementId = "",
             IVector2<float>? size = null,
             IVector2<float>? position = null
-            ) 
-                : base(elementId, position ?? new Vector2f(), size ?? new Vector2f())
-            {
+            )
+                : base(elementId, position ?? new Vector2f(), size ?? new Vector2f()) {
             this.Events = new PriorityEventQueue();
         }
 
@@ -26,24 +36,48 @@ namespace Annex.Core.Scenes.Components
         }
 
         public virtual void OnKeyboardKeyPressed(IWindow window, KeyboardKeyPressedEvent keyboardKeyPressedEvent) {
+            this.FocusElement?.OnKeyboardKeyPressed(keyboardKeyPressedEvent);
         }
 
         public virtual void OnKeyboardKeyReleased(IWindow window, KeyboardKeyReleasedEvent keyboardKeyReleasedEvent) {
+            this.FocusElement?.OnKeyboardKeyReleased(keyboardKeyReleasedEvent);
         }
 
         public virtual void OnWindowClosed(IWindow window) {
         }
 
         public virtual void OnMouseButtonPressed(IWindow window, MouseButtonPressedEvent mouseButtonPressedEvent) {
+            var newFocusElement = GetFirstVisibleElement(mouseButtonPressedEvent.WindowX, mouseButtonPressedEvent.WindowY);
+            this.FocusElement?.OnLostFocus();
+            this.FocusElement = newFocusElement;
+            this.FocusElement?.OnGainedFocus();
+
+            this.FocusElement?.OnMouseButtonPressed(mouseButtonPressedEvent);
         }
 
         public virtual void OnMouseButtonReleased(IWindow window, MouseButtonReleasedEvent mouseButtonReleasedEvent) {
+
+            if (this.FocusElement?.IsInBounds(mouseButtonReleasedEvent.WindowX, mouseButtonReleasedEvent.WindowY) == true) {
+                this.FocusElement?.OnMouseButtonReleased(mouseButtonReleasedEvent);
+            }
         }
 
+        private IUIElement? _lastMouseMovedElement = null;
         public virtual void OnMouseMoved(IWindow window, MouseMovedEvent mouseMovedEvent) {
+
+            var newLastMovedElement = this.GetFirstVisibleElement(mouseMovedEvent.WindowX, mouseMovedEvent.WindowY);
+            if (this._lastMouseMovedElement != newLastMovedElement) {
+                this._lastMouseMovedElement?.OnMouseLeft(mouseMovedEvent);
+            }
+            this._lastMouseMovedElement = newLastMovedElement;
+            this._lastMouseMovedElement?.OnMouseMoved(mouseMovedEvent);
         }
 
         public virtual void OnMouseScrollWheelMoved(IWindow window, MouseScrollWheelMovedEvent mouseScrollWheelMovedEvent) {
+            var mousePosition = window.GetMousePos(Graphics.CameraId.UI);
+            if (this.FocusElement?.IsInBounds(mousePosition.X, mousePosition.Y) == true) {
+                this.FocusElement?.OnMouseScrollWheelMoved(mouseScrollWheelMovedEvent);
+            }
         }
     }
 }

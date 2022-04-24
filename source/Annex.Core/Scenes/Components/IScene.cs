@@ -1,9 +1,8 @@
 ﻿using Annex.Core.Events;
 using Annex.Core.Graphics.Windows;
 using Annex.Core.Input.InputEvents;
-using Annex.Core.Scenes.Components;
 
-namespace Annex.Core.Scenes
+namespace Annex.Core.Scenes.Components
 {
     public interface IScene : IUIElement, IParentElement
     {

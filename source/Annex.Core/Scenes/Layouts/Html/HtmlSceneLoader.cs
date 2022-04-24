@@ -118,7 +118,7 @@ namespace Annex.Core.Scenes.Layouts.Html
             }
 
             if (GetVectorAttribute("text-offset", label.Size, element, styles) is IVector2<float> offset) {
-                label.TextPositionOffset = new Vector2f(-offset.X, offset.Y);
+                label.TextPositionOffset = new Vector2f(offset.X, offset.Y);
             }
 
             if (GetStringAttribute("font-size", element, styles) is string fontSize) {

@@ -1,4 +1,6 @@
-﻿namespace Annex.Core.Scenes
+﻿using Annex.Core.Scenes.Components;
+
+namespace Annex.Core.Scenes
 {
     public class OnSceneEnterEventArgs
     {

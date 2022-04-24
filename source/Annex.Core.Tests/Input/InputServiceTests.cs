@@ -2,6 +2,7 @@
 using Annex.Core.Input;
 using Annex.Core.Input.InputEvents;
 using Annex.Core.Scenes;
+using Annex.Core.Scenes.Components;
 using Moq;
 using Scaffold.Tests.Core.Attributes;
 using Scaffold.Tests.Core.Fixture;

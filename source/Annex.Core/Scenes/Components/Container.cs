@@ -4,7 +4,7 @@ using Scaffold.Collections.Generic;
 
 namespace Annex.Core.Scenes.Components
 {
-    public class Container : Image, IParentElement
+    public class Container : UIElement, IParentElement
     {
         private ConcurrentList<IUIElement> _children = new();
 
@@ -53,8 +53,14 @@ namespace Annex.Core.Scenes.Components
                     continue;
                 }
                 // Do we hit a sub-child element?
-                if (child is IParentElement childParent && childParent.GetFirstVisibleElement(x, y) is IUIElement hitChild) {
-                    return hitChild;
+                if (child is IParentElement childParent) {
+                    if (childParent.GetFirstVisibleElement(x, y) is IUIElement hitChild) {
+                        return hitChild;
+                    }
+                } else {
+                    if (child.IsInBounds(x,y)) {
+                        return child;
+                    }
                 }
             }
 
@@ -63,7 +69,6 @@ namespace Annex.Core.Scenes.Components
         }
 
         protected override void DrawInternal(ICanvas canvas) {
-            base.DrawInternal(canvas);
             foreach (var child in this._children) {
                 child.Draw(canvas);
             }

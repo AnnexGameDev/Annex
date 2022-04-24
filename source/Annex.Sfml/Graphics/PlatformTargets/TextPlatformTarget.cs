@@ -31,6 +31,7 @@ namespace Annex.Sfml.Graphics.PlatformTargets
         private void UpdateIfNeeded() {
 
             if (string.IsNullOrEmpty(this._textContext.Font.Value) || string.IsNullOrWhiteSpace(this._textContext.Text.Value)) {
+                this._text.DisplayedString = string.Empty;
                 return;
             }
 
@@ -61,7 +62,7 @@ namespace Annex.Sfml.Graphics.PlatformTargets
                 horizontalAlignment.Align(bounds),
                 verticalAlignment.Align(bounds)
             );
-            desiredOrigin.X += positionOffset?.X ?? 0;
+            desiredOrigin.X -= positionOffset?.X ?? 0;
             desiredOrigin.Y -= positionOffset?.Y ?? 0;
 
             desiredOrigin.X += bounds.Left;

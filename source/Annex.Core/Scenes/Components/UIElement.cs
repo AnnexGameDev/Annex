@@ -1,5 +1,6 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Graphics;
+using Annex.Core.Input.InputEvents;
 
 namespace Annex.Core.Scenes.Components
 {
@@ -58,6 +59,33 @@ namespace Annex.Core.Scenes.Components
             if (y < this.Position.Y || y > this.Position.Y + this.Size.Y)
                 return false;
             return true;
+        }
+
+        public virtual void OnLostFocus() {
+        }
+
+        public virtual void OnGainedFocus() {
+        }
+
+        public virtual void OnMouseButtonPressed(MouseButtonPressedEvent mouseButtonPressedEvent) {
+        }
+
+        public virtual void OnMouseButtonReleased(MouseButtonReleasedEvent mouseButtonReleasedEvent) {
+        }
+
+        public virtual void OnMouseMoved(MouseMovedEvent mouseMovedEvent) {
+        }
+
+        public virtual void OnKeyboardKeyPressed(KeyboardKeyPressedEvent keyboardKeyPressedEvent) {
+        }
+
+        public virtual void OnKeyboardKeyReleased(KeyboardKeyReleasedEvent keyboardKeyReleasedEvent) {
+        }
+
+        public virtual void OnMouseScrollWheelMoved(MouseScrollWheelMovedEvent mouseScrollWheelMovedEvent) {
+        }
+
+        public virtual void OnMouseLeft(MouseMovedEvent mouseMovedEvent) {
         }
     }
 }

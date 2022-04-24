@@ -6,7 +6,9 @@ using Annex.Core.Events.Core;
 using Annex.Core.Graphics;
 using Annex.Core.Input;
 using Annex.Core.Input.Platforms;
+using Annex.Core.Platform;
 using Annex.Core.Scenes;
+using Annex.Core.Scenes.Components;
 using Annex.Core.Scenes.Layouts.Html;
 using Annex.Core.Time;
 using Scaffold;
@@ -47,6 +49,8 @@ public abstract class AnnexApp : ScaffoldApp
         container.Register<IAssetGroup, AssetGroup>();
         container.Register<IPriorityEventQueue, PriorityEventQueue>();
         container.RegisterBroadcast<RequestStopAppMessage>();
+
+        container.Resolve<Clipboard>();
 
 #if WINDOWS
         container.Register<IPlatformKeyboardService, WindowsKeyboardService>();

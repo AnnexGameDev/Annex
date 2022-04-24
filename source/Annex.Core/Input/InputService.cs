@@ -2,6 +2,7 @@
 using Annex.Core.Input.InputEvents;
 using Annex.Core.Input.Platforms;
 using Annex.Core.Scenes;
+using Annex.Core.Scenes.Components;
 using Scaffold.Logging;
 
 namespace Annex.Core.Input
