@@ -37,11 +37,11 @@ namespace Annex.Core.Graphics.Contexts
         }
 
         public void SetRow(int row) {
-            this.Row = Row % this.NumRows;
+            this.Row = row % this.NumRows;
         }
 
         public void SetColumn(int column) {
-            this.Column = Column % this.NumColumns;
+            this.Column = column % this.NumColumns;
         }
     }
 }

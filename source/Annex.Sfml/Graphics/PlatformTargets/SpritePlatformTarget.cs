@@ -45,7 +45,7 @@ namespace Annex.Sfml.Graphics.PlatformTargets
 
         protected IntRect UpdateTextureRect(int top, int left, int width, int height) {
             if (this._sprite.TextureRect.DoesNotEqual(null, top, left, width, height)) {
-                this._sprite.TextureRect = new IntRect(top, left, width, height);
+                this._sprite.TextureRect = new IntRect(left, top, width, height);
             }
             return this._sprite.TextureRect;
         }

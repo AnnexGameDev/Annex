@@ -8,7 +8,7 @@ namespace SampleProject.Models
     {
         public readonly Vector2f Position;
 
-        private readonly DrawContext _sprite;
+        private readonly SpritesheetContext _sprite;
         public readonly Vector2f Size = new Vector2f(200, 200);
         public Shared<float> Rotation = new Shared<float>(0);
         private readonly TextContext _hoverText;
@@ -37,27 +37,12 @@ namespace SampleProject.Models
                 FontSize = 48,
                 Rotation = this.Rotation,
             };
-
-            //this._sprite = new SpriteSheetContext("player.png", 4, 4) {
-            //    RenderPosition = new OffsetVector(this.Position, Vector.Create(-48, -90))
-            //};
-            //this._hoverText = new TextContext(this.Name, "Augusta.ttf") {
-            //    RenderPosition = new OffsetVector(this.Position, Vector.Create(-48, -100)),
-            //    Alignment = new TextAlignment() {
-            //        HorizontalAlignment = HorizontalAlignment.Center,
-            //        Size = Vector.Create(96, 0)
-            //    },
-            //    FontColor = RGBA.White,
-            //    BorderColor = RGBA.Black,
-            //    BorderThickness = 3,
-            //    FontSize = 16
-            //};
         }
 
 
-        //internal void Animate() {
-        //    this._sprite.StepColumn();
-        //}
+        internal void Animate() {
+            this._sprite.StepColumn();
+        }
 
         public void Draw(ICanvas canvas) {
             canvas.Draw(this._sprite);
