@@ -7,7 +7,6 @@ using Annex.Core.Events.Core;
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
 using Annex.Core.Graphics.Windows;
-using Annex.Core.Helpers;
 using Annex.Core.Scenes.Components;
 using SampleProject.Models;
 using SampleProject.Scenes.Level1.Events;
@@ -25,8 +24,6 @@ namespace SampleProject.Scenes.Level1
         public BatchTextureContext Batch { get; }
 
         public Level1(IBroadcast<RequestStopAppMessage> requestStopAppMessage, IGraphicsService graphicsService) {
-
-            HtmlSceneLoaderHelper.Load("level1.html", this);
 
             this._requestStopAppMessage = requestStopAppMessage;
             this._player = new Player();

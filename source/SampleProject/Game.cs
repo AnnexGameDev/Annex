@@ -7,6 +7,7 @@ using Annex.Core.Networking.Engines.DotNet;
 using Annex.Sfml.Graphics;
 using SampleProject.Scenes.Level1;
 using SampleProject.Scenes.Level2;
+using SampleProject.Scenes.Level3;
 using Scaffold.DependencyInjection;
 using Scaffold.Logging;
 using System.IO;
@@ -19,7 +20,7 @@ namespace SampleProject
 #if !DEBUG
             try {
 #endif
-            new Game().Run<Level2>();
+            new Game().Run<Level3>();
 #if !DEBUG
             } catch (Exception e) {
                 Log.Trace(LogSeverity.Error, "Exception in main", exception: e);
@@ -49,6 +50,7 @@ namespace SampleProject
             container.RegisterSingleton<IGraphicsEngine, SfmlGraphicsEngine>();
             container.Register<Level1>();
             container.Register<Level2>();
+            container.Register<Level3>();
         }
 
         protected override void SetupAssetBundles(IAssetService assetService) {
