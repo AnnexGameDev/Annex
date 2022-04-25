@@ -178,6 +178,27 @@ namespace Annex.Core.Scenes.Components
         public override void OnKeyboardKeyPressed(KeyboardKeyPressedEvent keyboardKeyPressedEvent) {
             base.OnKeyboardKeyPressed(keyboardKeyPressedEvent);
 
+            if (keyboardKeyPressedEvent.Key == KeyboardKey.X) {
+                if (KeyboardHelper.IsControlPressed()) {
+                    this.CutSelectedText();
+                    return;
+                }
+            }
+
+            if (keyboardKeyPressedEvent.Key == KeyboardKey.C) {
+                if (KeyboardHelper.IsControlPressed()) {
+                    this.CopySelectedText();
+                    return;
+                }
+            }
+
+            if (keyboardKeyPressedEvent.Key == KeyboardKey.V) {
+                if (KeyboardHelper.IsControlPressed()) {
+                    this.PasteText();
+                    return;
+                }
+            }
+
             if (keyboardKeyPressedEvent.Key == KeyboardKey.A) {
                 if (KeyboardHelper.IsControlPressed()) {
                     this.CursorIndex = 0;

@@ -95,6 +95,19 @@ namespace Annex.Core.Scenes.Layouts.Html
             if (instance is ILabel label) {
                 this.SetText(label, element, styles);
             }
+
+            if (instance is IPasswordBox pb) {
+                this.SetPasswordBox(pb, element, styles);
+            }
+        }
+
+        private void SetPasswordBox(IPasswordBox pb, XElement element, Styles styles) {
+            if (GetStringAttribute("password-char", element, styles) is string passwordChar) {
+                if (passwordChar.Length != 1) {
+                    throw new InvalidOperationException($"password-char must be of length 1: {passwordChar}");
+                }
+                pb.PasswordChar = passwordChar[0];
+            }
         }
 
         private void SetText(ILabel label, XElement element, Styles styles) {

@@ -225,7 +225,7 @@ link.setAttribute('href', 'style.css');
 head.appendChild(link);
 
 var styles = CreateStyles();
-var tagsToFormat = ["scene", "container", "picture", "label", "button", "textbox"]
+var tagsToFormat = ["scene", "container", "picture", "label", "button", "textbox", "passwordbox"]
 
 // Delay by 50ms to make things easy
 setTimeout(function(e) {
