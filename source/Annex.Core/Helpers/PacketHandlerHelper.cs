@@ -32,11 +32,10 @@ namespace Annex.Core.Helpers
             }
         }
 
-        public static void HandlePacket(Connection connection, IncomingPacket packet) {
-            int id = packet.ReadInt();
+        public static void HandlePacket(Connection connection, int packetId, IncomingPacket packet) {
 
-            if (_handlers?.TryGetValue(id, out var handler) != true) {
-                Log.Trace(LogSeverity.Error, $"No packet handler exists for the packet id {id}");
+            if (_handlers?.TryGetValue(packetId, out var handler) != true) {
+                Log.Trace(LogSeverity.Error, $"No packet handler exists for the packet id {packetId}");
                 return;
             }
 

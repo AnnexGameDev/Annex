@@ -4,6 +4,7 @@ namespace Annex.Core.Networking
 {
     public interface IClientEndpoint : IEndpoint
     {
+        Connection? Connection { get; }
         void Send(OutgoingPacket packet);
     }
 }

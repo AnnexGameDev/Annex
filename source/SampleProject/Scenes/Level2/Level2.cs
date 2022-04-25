@@ -19,9 +19,20 @@ namespace SampleProject.Scenes.Level2
             this._server.Start();
             this._client.Start();
 
-            using var message = new OutgoingPacket(PacketId.SimpleMessage);
+            // TODO: Wait for client to be connected, but otherwise works
+
+            using var message = new OutgoingPacket((int)PacketId.SimpleMessage);
             message.Write("Hello world!");
             this._client.Send(message);
+        }
+
+        protected override void Dispose(bool disposing) {
+            base.Dispose(disposing);
+
+            if (disposing) {
+                this._client.Dispose();
+                this._server.Dispose();
+            }
         }
     }
 

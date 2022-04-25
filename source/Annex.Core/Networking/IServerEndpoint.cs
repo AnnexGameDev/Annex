@@ -4,6 +4,7 @@ namespace Annex.Core.Networking
 {
     public interface IServerEndpoint : IEndpoint
     {
-        void SendTo(Connection connection, OutgoingPacket packet);
+        IEnumerable<Connection> ClientConnections { get; }
+        void Send(Connection connection, OutgoingPacket packet);
     }
 }

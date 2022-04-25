@@ -19,11 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Scaffold" Version="2022.4.24.15815" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Networking\Engines\DotNet\Endpoints\" />
+    <PackageReference Include="Scaffold" Version="2022.4.25.10405" />
   </ItemGroup>
 
 </Project>

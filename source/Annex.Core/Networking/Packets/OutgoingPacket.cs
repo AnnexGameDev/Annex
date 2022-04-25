@@ -9,6 +9,8 @@ namespace Annex.Core.Networking.Packets
 
         public long Length => this._memoryStream.Length;
 
+        public int PacketId { get; }
+
         private string? _traceId;
 
         [Conditional("DEBUG")]
@@ -35,15 +37,8 @@ namespace Annex.Core.Networking.Packets
             this._writer = new BinaryWriter(this._memoryStream);
         }
 
-        public OutgoingPacket(object packetId) : this() {
-            if (!packetId.GetType().IsAssignableTo(typeof(int))) {
-                throw new InvalidCastException($"Unable to cast {packetId.GetType().Name} to {typeof(int).Name}");
-            }
-            this.Write((int)packetId);
-        }
-
         public OutgoingPacket(int packetId) : this() {
-            this.Write(packetId);
+            this.PacketId = packetId;
         }
 
         public byte[] Data() {
