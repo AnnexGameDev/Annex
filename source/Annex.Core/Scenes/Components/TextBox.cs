@@ -144,6 +144,10 @@ namespace Annex.Core.Scenes.Components
                 this._endSelectMouseX = mouseButtonPressedEvent.WindowX;
                 this.UpdateTextSelection_FromMouseEvent();
             }
+
+            if (mouseButtonPressedEvent.Button == MouseButton.Left || mouseButtonPressedEvent.Button == MouseButton.Right) {
+                this.CloseContextMenu();
+            }
         }
 
         public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent) {
@@ -157,8 +161,7 @@ namespace Annex.Core.Scenes.Components
 
         public override void OnLostFocus() {
             base.OnLostFocus();
-            this._rightClickContextMenu?.Dispose();
-            this._rightClickContextMenu = null;
+            this.CloseContextMenu();
             this.ClearSelectText();
         }
 
@@ -274,6 +277,11 @@ namespace Annex.Core.Scenes.Components
             // Replace as normal.
             this.Text = this.Text.Insert(this.CursorIndex, text);
             this.CursorIndex += text.Length;
+        }
+
+        private void CloseContextMenu() {
+            this._rightClickContextMenu?.Dispose();
+            this._rightClickContextMenu = null;
         }
 
         #region Clipboard actions
