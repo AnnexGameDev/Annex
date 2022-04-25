@@ -7,6 +7,9 @@ namespace Annex.Core.Helpers
         private static ITimeService? _timeService = null;
 
         public GameTimeHelper(ITimeService timeService) {
+            if (_timeService != null) {
+                throw new InvalidOperationException("Static helper resource is already instanciated");
+            }
             _timeService = timeService;
         }
 

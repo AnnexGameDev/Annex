@@ -8,6 +8,9 @@ namespace Annex.Core.Helpers
         private static IClipboardService? _clipboardServiceInstance = null;
 
         public ClipboardHelper(IClipboardService clipboardService) {
+            if (_clipboardServiceInstance != null) {
+                throw new InvalidOperationException("Static helper resource is already instanciated");
+            }
             _clipboardServiceInstance = clipboardService;
         }
 

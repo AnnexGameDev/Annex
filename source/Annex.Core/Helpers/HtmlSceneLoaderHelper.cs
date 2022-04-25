@@ -8,6 +8,9 @@ namespace Annex.Core.Helpers
         private static IHtmlSceneLoader? _htmlSceneLoader;
 
         public HtmlSceneLoaderHelper(IHtmlSceneLoader htmlSceneLoader) {
+            if (_htmlSceneLoader != null) {
+                throw new InvalidOperationException("Static helper resource is already instanciated");
+            }
             _htmlSceneLoader = htmlSceneLoader;
         }
 

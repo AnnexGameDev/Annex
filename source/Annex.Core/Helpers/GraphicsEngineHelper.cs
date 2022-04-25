@@ -9,6 +9,9 @@ namespace Annex.Core.Helpers
         public static IGraphicsEngine? _graphicsEngine = null;
 
         public GraphicsEngineHelper(IGraphicsEngine graphicsEngine) {
+            if (_graphicsEngine != null) {
+                throw new InvalidOperationException("Static helper resource is already instanciated");
+            }
             _graphicsEngine = graphicsEngine;
         }
 

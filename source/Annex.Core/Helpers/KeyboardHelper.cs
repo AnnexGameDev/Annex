@@ -7,6 +7,9 @@ namespace Annex.Core.Helpers
         private static IPlatformKeyboardService? _keyboardService;
 
         public KeyboardHelper(IPlatformKeyboardService platformKeyboardService) {
+            if (_keyboardService !=null) {
+                throw new InvalidOperationException("Static helper resource is already instanciated");
+            }
             _keyboardService = platformKeyboardService;
         }
 
