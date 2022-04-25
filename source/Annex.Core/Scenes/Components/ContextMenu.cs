@@ -12,7 +12,8 @@ namespace Annex.Core.Scenes.Components
         public ContextMenu(IVector2<float> position, params Item[] contextMenuItems) : base(position: position) {
             this._background = new SolidRectangleContext(KnownColor.White, this.Position, this.Size) {
                 BorderColor = KnownColor.Black,
-                BorderThickness = 1
+                BorderThickness = 1,
+                Camera = CameraId.UI.ToString()
             };
 
             // We need the widths to be consistent throughout
@@ -51,7 +52,9 @@ namespace Annex.Core.Scenes.Components
                 this.FontSize = 18;
                 this.TextPositionOffset = new Vector2f(5, this.Size.Y / 2);
 
-                this._hoveredBackground = new SolidRectangleContext(KnownColor.Teal, this.Position, this.Size);
+                this._hoveredBackground = new SolidRectangleContext(KnownColor.Teal, this.Position, this.Size) {
+                    Camera = CameraId.UI.ToString()
+                };
 
                 this.HorizontalTextAlignment = HorizontalAlignment.Left;
                 this.VerticalTextAlignment = VerticalAlignment.Middle;

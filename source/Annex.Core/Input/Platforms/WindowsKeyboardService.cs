@@ -8,25 +8,34 @@ namespace Annex.Core.Input.Platforms
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true, CallingConvention = CallingConvention.Winapi)]
         public static extern short GetKeyState(int keyCode);
 
-        private bool IsKeyDown(VK key) {
-            var keyState = ((ushort)GetKeyState((int)key)) & 0xffffff;
-            return keyState != 0;
+        private bool IsKeyToggled(VK key) {
+            var state = GetKeyState((int)key);
+            return (state & 0b1) > 0;
+        }
+
+        private bool IsKeyPressed(VK key) {
+            var state = GetKeyState((int)key);
+            return (state & 0b100000000000000) > 0;
         }
         
         public bool IsCapsLockOn() {
-            return IsKeyDown(VK.CAPITAL);
+            return IsKeyToggled(VK.CAPITAL);
         }
 
         public bool IsNumLockOn() {
-            return IsKeyDown(VK.NUMLOCK);
+            return IsKeyToggled(VK.NUMLOCK);
         }
 
         public bool IsScrollLockOn() {
-            return IsKeyDown(VK.SCROLL);
+            return IsKeyToggled(VK.SCROLL);
         }
 
         public bool IsShiftPressed() {
-            return IsKeyDown(VK.LSHIFT) || IsKeyDown(VK.RSHIFT);
+            return IsKeyPressed(VK.LSHIFT) || IsKeyPressed(VK.RSHIFT);
+        }
+
+        public bool IsControlPressed() {
+            return IsKeyPressed(VK.CONTROL);
         }
     }
 }

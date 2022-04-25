@@ -4,6 +4,7 @@ using Annex.Core.Graphics.Contexts;
 using Annex.Core.Helpers;
 using Annex.Core.Input;
 using Annex.Core.Input.InputEvents;
+using Scaffold.Logging;
 
 namespace Annex.Core.Scenes.Components
 {
@@ -128,7 +129,7 @@ namespace Annex.Core.Scenes.Components
                 this.UpdateTextSelection_FromMouseEvent();
 
                 // Take advantage of text selection above to compute the cursor index
-                this.CursorIndex = this.SelectionStart + this.SelectionLength;
+                this.CursorIndex = this.SelectionStart;
                 this._cursorVisible = true;
                 this._nextToggleCursorVisiblity = GameTimeHelper.Now();
             }
@@ -174,9 +175,89 @@ namespace Annex.Core.Scenes.Components
             this.UpdateTextSelection();
         }
 
+        public override void OnKeyboardKeyPressed(KeyboardKeyPressedEvent keyboardKeyPressedEvent) {
+            base.OnKeyboardKeyPressed(keyboardKeyPressedEvent);
+
+            if (keyboardKeyPressedEvent.Key == KeyboardKey.A) {
+                if (KeyboardHelper.IsControlPressed()) {
+                    this.CursorIndex = 0;
+                    this.SelectionStart = 0;
+                    this.SelectionLength = this.Text.Length;
+                    return;
+                }
+            }
+
+            // TODO: What happens if shift is pressed
+            if (keyboardKeyPressedEvent.Key == KeyboardKey.Left) {
+                this._cursorVisible = true;
+                this.CursorIndex = Math.Max(0, this.CursorIndex - 1);
+                return;
+            }
+            if (keyboardKeyPressedEvent.Key == KeyboardKey.Right) {
+                this._cursorVisible = true;
+                this.CursorIndex = Math.Min(this.Text.Length, this.CursorIndex + 1);
+                return;
+            }
+
+            var content = keyboardKeyPressedEvent.LiteralContent;
+
+            // If there's no selection, we need to handle backspace and delete differently.
+            if (!this._hasSelection) {
+                if (keyboardKeyPressedEvent.Key == KeyboardKey.BackSpace) {
+
+                    // Nothing to backspace?
+                    if (this.CursorIndex == 0) {
+                        return; 
+                    }
+
+                    this.Text = this.Text.Remove(this.CursorIndex - 1, 1);
+                    this.CursorIndex--;
+                    return;
+                }
+
+                if (keyboardKeyPressedEvent.Key == KeyboardKey.Delete) {
+                    // Nothing to delete?
+                    if (this.CursorIndex == this.Text.Length) {
+                        return;
+                    }
+                    this.Text = this.Text.Remove(this.CursorIndex, 1);
+                    return;
+                }
+            }
+
+            // Should we add content if it's empty?
+            if (content.Length == 0) {
+                if (keyboardKeyPressedEvent.Key != KeyboardKey.Backspace && keyboardKeyPressedEvent.Key != KeyboardKey.Delete) {
+                    return;
+                }
+            }
+
+            AddTextAtCursorOrSelection(keyboardKeyPressedEvent.LiteralContent);
+        }
+
+        private void AddTextAtCursorOrSelection(string text) {
+            this._cursorVisible = true;
+
+            if (this.CursorIndex < 0 || this.CursorIndex > this.Text.Length) {
+                Log.Trace(LogSeverity.Error, $"{nameof(this.CursorIndex)} for Textbox with content {this.Text} is out of range: {this.CursorIndex}");
+                return;
+            }
+
+            if (this._hasSelection) {
+
+                this.Text = this.Text.Remove(this.SelectionStart, this.SelectionLength);
+                this.CursorIndex = this.SelectionStart;
+                this.ClearSelectText();
+            }
+
+            // Replace as normal.
+            this.Text = this.Text.Insert(this.CursorIndex, text);
+            this.CursorIndex += text.Length;
+        }
+
         #region Clipboard actions
         private void PasteText() {
-            this.Text = ClipboardHelper.GetString() ?? string.Empty;
+            AddTextAtCursorOrSelection(ClipboardHelper.GetString() ?? string.Empty);
         }
 
         private void CopySelectedText() {

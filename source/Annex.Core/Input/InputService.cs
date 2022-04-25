@@ -28,6 +28,10 @@ namespace Annex.Core.Input
         public void HandleKeyboardKeyPressed(IWindow window, KeyboardKey key) {
             Log.Trace(LogSeverity.Verbose, $"KeyboardKey Pressed: {key}");
 
+            if (key == KeyboardKey.Unknown) {
+                return;
+            }
+
             bool shift = this._platformKeyboardService.IsShiftPressed();
             bool capsLock = this._platformKeyboardService.IsCapsLockOn();
             var keyPressedEvent = new KeyboardKeyPressedEvent(key, shift, capsLock);
@@ -38,6 +42,11 @@ namespace Annex.Core.Input
 
         public void HandleKeyboardKeyReleased(IWindow window, KeyboardKey key) {
             Log.Trace(LogSeverity.Verbose, $"KeyboardKey Released: {key}");
+
+            if (key == KeyboardKey.Unknown) {
+                return;
+            }
+
             var keyReleasedEvent = new KeyboardKeyReleasedEvent(key);
             this._keyboardKeyPressed[(int)key] = false;
             this._currentScene.OnKeyboardKeyReleased(window, keyReleasedEvent);

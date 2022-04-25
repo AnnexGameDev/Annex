@@ -6,5 +6,6 @@
         bool IsNumLockOn();
         bool IsScrollLockOn();
         bool IsShiftPressed();
+        bool IsControlPressed();
     }
 }
