@@ -50,5 +50,11 @@ namespace Annex.Core.Events
                 this.GetOrCreateQueue(priority).Step();
             }
         }
+
+        public void Dispose() {
+            foreach (var eventQueue in this._eventQueues.Values) {
+                eventQueue.Dispose();
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Annex.Core.Networking;
+﻿using Annex.Core.Networking.Connections;
 using Annex.Core.Networking.Packets;
 using Scaffold.DependencyInjection;
 using Scaffold.Logging;

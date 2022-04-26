@@ -1,4 +1,5 @@
-﻿using Annex.Core.Networking.Packets;
+﻿using Annex.Core.Networking.Connections;
+using Annex.Core.Networking.Packets;
 using Scaffold.Logging;
 using System.Net;
 
@@ -19,7 +20,7 @@ namespace Annex.Core.Networking.Engines.DotNet.Endpoints
             this.SendTo(tcpConnection, packet);
         }
 
-        public override void Start() {
+        public void Start() {
             this.Socket.Bind(new IPEndPoint(IPAddress.Loopback, this.Config.Port));
             this.Socket.Listen(5);
             this.Socket.BeginAccept(OnAcceptCallback, null);
@@ -30,7 +31,8 @@ namespace Annex.Core.Networking.Engines.DotNet.Endpoints
             this.Socket.BeginAccept(OnAcceptCallback, null);
 
             var client = this.Socket.EndAccept(ar);
-            this.HandleNewConnection(client);
+            var connection = new TcpConnection(client);
+            this.HandleNewConnection(connection);
         }
     }
 }

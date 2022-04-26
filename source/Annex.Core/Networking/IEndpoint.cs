@@ -2,6 +2,5 @@
 {
     public interface IEndpoint : IDisposable
     {
-        void Start();
     }
 }

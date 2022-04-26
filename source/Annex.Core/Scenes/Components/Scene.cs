@@ -81,5 +81,13 @@ namespace Annex.Core.Scenes.Components
                 this.FocusElement?.OnMouseScrollWheelMoved(mouseScrollWheelMovedEvent);
             }
         }
+
+        protected override void Dispose(bool disposing) {
+            base.Dispose(disposing);
+
+            if (disposing) {
+                this.Events.Dispose();
+            }
+        }
     }
 }

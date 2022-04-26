@@ -17,8 +17,7 @@ namespace Annex.Core.Networking.Engines.DotNet.Endpoints
             this.Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         }
 
-        protected void HandleNewConnection(Socket socket) {
-            var connection = new TcpConnection(socket);
+        protected void HandleNewConnection(TcpConnection connection) {
 
             if (this.Connections.Contains(connection)) {
                 Log.Trace(LogSeverity.Error, $"Connection {connection} is already registered");
@@ -27,6 +26,15 @@ namespace Annex.Core.Networking.Engines.DotNet.Endpoints
 
             this.Connections.Add(connection);
             connection.ListenForIncomingPackets();
+        }
+
+        protected void HandleDisconnectedConnection(TcpConnection connection) {
+            if (!this.Connections.Contains(connection)) {
+                Log.Trace(LogSeverity.Error, $"Connection {connection} is not registered");
+                return;
+            }
+
+            this.Connections.Remove(connection);
         }
 
         protected void SendTo(TcpConnection connection, OutgoingPacket packet) {
@@ -46,7 +54,5 @@ namespace Annex.Core.Networking.Engines.DotNet.Endpoints
             this.Socket.Disconnect(false);
             this.Socket.Dispose();
         }
-
-        public abstract void Start();
     }
 }

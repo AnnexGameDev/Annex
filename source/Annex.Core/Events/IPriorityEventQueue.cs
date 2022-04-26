@@ -1,6 +1,6 @@
 ﻿namespace Annex.Core.Events
 {
-    public interface IPriorityEventQueue
+    public interface IPriorityEventQueue : IDisposable
     {
         IEnumerable<long> Priorities { get; }
         void Add(long priority, IEvent @event);

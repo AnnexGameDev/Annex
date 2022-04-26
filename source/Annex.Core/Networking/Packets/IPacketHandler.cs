@@ -1,4 +1,6 @@
-﻿namespace Annex.Core.Networking.Packets
+﻿using Annex.Core.Networking.Connections;
+
+namespace Annex.Core.Networking.Packets
 {
     public interface IPacketHandler
     {

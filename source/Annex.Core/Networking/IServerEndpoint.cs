@@ -1,4 +1,5 @@
-﻿using Annex.Core.Networking.Packets;
+﻿using Annex.Core.Networking.Connections;
+using Annex.Core.Networking.Packets;
 
 namespace Annex.Core.Networking
 {
@@ -6,5 +7,6 @@ namespace Annex.Core.Networking
     {
         IEnumerable<Connection> ClientConnections { get; }
         void Send(Connection connection, OutgoingPacket packet);
+        void Start();
     }
 }

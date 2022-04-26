@@ -34,5 +34,13 @@ namespace Annex.Core.Events
             }
             this._lastStep = lastStep + step;
         }
+
+        public void Dispose() {
+            foreach (var gameEvent in this._queueItems) {
+                if (gameEvent is IDisposable disposable) {
+                    disposable.Dispose();
+                }
+            }
+        }
     }
 }

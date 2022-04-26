@@ -1,10 +1,21 @@
-﻿namespace Annex.Core.Networking
+﻿namespace Annex.Core.Networking.Connections
 {
     public class Connection : IDisposable
     {
         private bool disposedValue;
-
         public Guid Id { get; } = Guid.NewGuid();
+
+        public event EventHandler? ConnectionStateChanged;
+        private ConnectionState _state = ConnectionState.Unknown;
+        public ConnectionState State
+        {
+            get => this._state;
+            protected set
+            {
+                this._state = value;
+                this.ConnectionStateChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
 
         public override int GetHashCode() {
             return this.Id.GetHashCode();

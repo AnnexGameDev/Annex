@@ -1,6 +1,6 @@
 ﻿namespace Annex.Core.Events
 {
-    public interface IEventQueue
+    public interface IEventQueue : IDisposable
     {
         void Step();
 

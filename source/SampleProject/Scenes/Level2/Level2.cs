@@ -1,6 +1,12 @@
-﻿using Annex.Core.Networking;
+﻿using Annex.Core.Broadcasts;
+using Annex.Core.Broadcasts.Messages;
+using Annex.Core.Events.Core;
+using Annex.Core.Graphics.Windows;
+using Annex.Core.Networking;
+using Annex.Core.Networking.Connections;
 using Annex.Core.Networking.Packets;
 using Annex.Core.Scenes.Components;
+using SampleProject.Scenes.Level2.Events;
 using System;
 
 namespace SampleProject.Scenes.Level2
@@ -8,31 +14,27 @@ namespace SampleProject.Scenes.Level2
     public class Level2 : Scene
     {
         private readonly IServerEndpoint _server;
-        private readonly IClientEndpoint _client;
+        private readonly IBroadcast<RequestStopAppMessage> _requestStopAppMessage;
 
-        public Level2(INetworkingEngine networkingEngine) {
-
+        public Level2(IBroadcast<RequestStopAppMessage> requestStopAppMessage, INetworkingEngine networkingEngine) {
+            this._requestStopAppMessage = requestStopAppMessage;
             var config = new EndpointConfiguration();
             this._server = networkingEngine.CreateServer(config);
-            this._client = networkingEngine.CreateClient(config);
-
             this._server.Start();
-            this._client.Start();
-
-            // TODO: Wait for client to be connected, but otherwise works
-
-            using var message = new OutgoingPacket((int)PacketId.SimpleMessage);
-            message.Write("Hello world!");
-            this._client.Send(message);
+            this.Events.Add(CoreEventPriority.Networking, new SendDataEvent(networkingEngine));
         }
 
         protected override void Dispose(bool disposing) {
             base.Dispose(disposing);
 
             if (disposing) {
-                this._client.Dispose();
                 this._server.Dispose();
             }
+        }
+
+        public override void OnWindowClosed(IWindow window) {
+            base.OnWindowClosed(window);
+            this._requestStopAppMessage.Publish(this, new RequestStopAppMessage());
         }
     }
 

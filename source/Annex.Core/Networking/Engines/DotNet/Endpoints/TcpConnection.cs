@@ -1,4 +1,5 @@
 ﻿using Annex.Core.Helpers;
+using Annex.Core.Networking.Connections;
 using Annex.Core.Networking.Packets;
 using System.Net.Sockets;
 
@@ -6,23 +7,23 @@ namespace Annex.Core.Networking.Engines.DotNet.Endpoints
 {
     public class TcpConnection : Connection
     {
-        private readonly Socket _socket;
+        protected readonly Socket Socket;
         private byte[] _incomingData;
         private byte[] _unprocessedData;
 
         public TcpConnection(Socket socket) {
-            _socket = socket;
+            Socket = socket;
 
-            this._incomingData = new byte[this._socket.ReceiveBufferSize];
+            this._incomingData = new byte[this.Socket.ReceiveBufferSize];
             this._unprocessedData = new byte[0];
         }
 
         internal void ListenForIncomingPackets() {
-            this._socket.BeginReceive(this._incomingData, 0, this._incomingData.Length, SocketFlags.None, OnReceiveCallback, null);
+            this.Socket.BeginReceive(this._incomingData, 0, this._incomingData.Length, SocketFlags.None, OnReceiveCallback, null);
         }
 
         private void OnReceiveCallback(IAsyncResult ar) {
-            int lengthOfIncomingData = this._socket.EndReceive(ar);
+            int lengthOfIncomingData = this.Socket.EndReceive(ar);
 
             if (lengthOfIncomingData == 0) {
                 // Disconnection
@@ -31,7 +32,7 @@ namespace Annex.Core.Networking.Engines.DotNet.Endpoints
             this.QueueDataForProcessing(this._incomingData, 0, lengthOfIncomingData);
             while (this.ProcessNextIncomingPacketData()) ;
 
-            this._socket.BeginReceive(this._incomingData, 0, this._incomingData.Length, SocketFlags.None, OnReceiveCallback, null);
+            this.Socket.BeginReceive(this._incomingData, 0, this._incomingData.Length, SocketFlags.None, OnReceiveCallback, null);
         }
 
         private bool ProcessNextIncomingPacketData() {
@@ -82,19 +83,19 @@ namespace Annex.Core.Networking.Engines.DotNet.Endpoints
             Array.Copy(packetIdData, 0, outgoingData, messageSizeData.Length, packetIdData.Length);
             Array.Copy(packetData, 0, outgoingData, messageSizeData.Length + packetIdData.Length, packetData.Length);
 
-            this._socket.BeginSend(outgoingData, 0, outgoingData.Length, SocketFlags.None, OnSendCallback, null);
+            this.Socket.BeginSend(outgoingData, 0, outgoingData.Length, SocketFlags.None, OnSendCallback, null);
         }
 
         private void OnSendCallback(IAsyncResult ar) {
-            this._socket.EndSend(ar);
+            this.Socket.EndSend(ar);
         }
 
         protected override void Dispose(bool disposing) {
             base.Dispose(disposing);
 
             if (disposing) {
-                this._socket.Disconnect(false);
-                this._socket.Dispose();
+                this.Socket.Disconnect(false);
+                this.Socket.Dispose();
             }
         }
     }
