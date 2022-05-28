@@ -1,7 +1,7 @@
-﻿using Annex.Events;
+﻿using Annex_Old.Events;
 using System.Collections.Generic;
 
-namespace Annex.Audio.Sfml.Events
+namespace Annex_Old.Audio.Sfml.Events
 {
     internal class SoundGCEvent : GameEvent
     {

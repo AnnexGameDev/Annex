@@ -1,10 +1,10 @@
-﻿using Annex.Data.Shared;
-using Annex.Graphics;
-using Annex.Graphics.Events;
-using Annex.Scenes.Controllers;
+﻿using Annex_Old.Data.Shared;
+using Annex_Old.Graphics;
+using Annex_Old.Graphics.Events;
+using Annex_Old.Scenes.Controllers;
 using System;
 
-namespace Annex.Scenes.Components
+namespace Annex_Old.Scenes.Components
 {
     public enum RemoveState
     {

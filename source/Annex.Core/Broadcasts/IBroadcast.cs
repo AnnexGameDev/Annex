@@ -1,4 +1,4 @@
-﻿namespace Annex.Core.Broadcasts
+﻿namespace Annex_Old.Core.Broadcasts
 {
     public interface IBroadcast<T>
     {

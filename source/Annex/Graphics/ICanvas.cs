@@ -1,10 +1,10 @@
-﻿using Annex.Data.Shared;
-using Annex.Graphics.Cameras;
-using Annex.Graphics.Events;
-using Annex.Services;
+﻿using Annex_Old.Data.Shared;
+using Annex_Old.Graphics.Cameras;
+using Annex_Old.Graphics.Events;
+using Annex_Old.Services;
 using System;
 
-namespace Annex.Graphics
+namespace Annex_Old.Graphics
 {
     public interface ICanvas : IDrawableSurface, IHardwarePollable, IService
     {

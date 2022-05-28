@@ -1,6 +1,6 @@
-﻿using Annex.Services;
+﻿using Annex_Old.Services;
 
-namespace Annex.Logging
+namespace Annex_Old.Logging
 {
     public interface ILogService : IService
     {

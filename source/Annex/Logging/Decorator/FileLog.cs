@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Annex.Logging.Decorator
+namespace Annex_Old.Logging.Decorator
 {
     public class FileLog : DecoratableLog
     {

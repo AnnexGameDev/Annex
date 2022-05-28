@@ -1,6 +1,6 @@
-﻿using Annex.Data.Shared;
+﻿using Annex_Old.Data.Shared;
 
-namespace Annex.Scenes.Layouts.Html
+namespace Annex_Old.Scenes.Layouts.Html
 {
     public class HtmlAttributeResolver
     {

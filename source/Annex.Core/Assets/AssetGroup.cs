@@ -1,7 +1,7 @@
-﻿using Annex.Core.Assets.Bundles;
+﻿using Annex_Old.Core.Assets.Bundles;
 using Scaffold.Logging;
 
-namespace Annex.Core.Assets
+namespace Annex_Old.Core.Assets
 {
     internal class AssetGroup : IAssetGroup
     {

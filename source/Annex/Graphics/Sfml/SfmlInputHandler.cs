@@ -1,11 +1,11 @@
-﻿using Annex.Graphics.Events;
-using Annex.Scenes;
-using Annex.Services;
+﻿using Annex_Old.Graphics.Events;
+using Annex_Old.Scenes;
+using Annex_Old.Services;
 using SFML.Graphics;
 using SFML.Window;
 using System;
 
-namespace Annex.Graphics.Sfml
+namespace Annex_Old.Graphics.Sfml
 {
     public class SfmlInputHandler : InputHandler
     {

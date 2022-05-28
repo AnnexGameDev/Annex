@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Annex.Graphics.Contexts
+namespace Annex_Old.Graphics.Contexts
 {
     internal interface IPlatformTarget : IDisposable
     {

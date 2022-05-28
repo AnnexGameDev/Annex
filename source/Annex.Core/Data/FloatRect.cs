@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Annex.Core.Data
+namespace Annex_Old.Core.Data
 {
     [DebuggerDisplay("Top:{Top.Value} Left:{Left.Value} Width:{Width.Value} Height:{Height.Value}")]
     public class FloatRect

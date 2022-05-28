@@ -1,6 +1,6 @@
-﻿using Annex.Scenes.Components;
+﻿using Annex_Old.Scenes.Components;
 
-namespace Annex.Scenes
+namespace Annex_Old.Scenes
 {
     public class OnSceneEnterEvent
     {

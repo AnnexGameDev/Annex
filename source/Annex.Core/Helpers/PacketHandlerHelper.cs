@@ -1,10 +1,10 @@
-﻿using Annex.Core.Networking.Connections;
-using Annex.Core.Networking.Packets;
+﻿using Annex_Old.Core.Networking.Connections;
+using Annex_Old.Core.Networking.Packets;
 using Scaffold.DependencyInjection;
 using Scaffold.Logging;
 using System.Reflection;
 
-namespace Annex.Core.Helpers
+namespace Annex_Old.Core.Helpers
 {
     internal class PacketHandlerHelper
     {

@@ -1,6 +1,6 @@
-﻿using Annex.Core.Assets.Bundles;
+﻿using Annex_Old.Core.Assets.Bundles;
 
-namespace Annex.Core.Assets
+namespace Annex_Old.Core.Assets
 {
     public interface IAssetGroup
     {

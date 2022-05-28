@@ -1,6 +1,6 @@
 ﻿using SFML.Graphics;
 
-namespace Annex.Sfml.Extensions
+namespace Annex_Old.Sfml.Extensions
 {
     public static class IntRectExtensions
     {

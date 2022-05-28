@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Annex.Core.Data
+namespace Annex_Old.Core.Data
 {
     [DebuggerDisplay("X:{X} Y:{Y}")]
     public class VectorBase<T> : IVector2<T> where T : struct

@@ -1,11 +1,11 @@
-﻿using Annex.Core.Graphics;
-using Annex.Core.Graphics.Contexts;
-using Annex.Sfml.Collections.Generic;
-using Annex.Sfml.Graphics.PlatformTargets;
+﻿using Annex_Old.Core.Graphics;
+using Annex_Old.Core.Graphics.Contexts;
+using Annex_Old.Sfml.Collections.Generic;
+using Annex_Old.Sfml.Graphics.PlatformTargets;
 using Scaffold.Logging;
 using SFML.Graphics;
 
-namespace Annex.Sfml.Graphics.Windows
+namespace Annex_Old.Sfml.Graphics.Windows
 {
     internal abstract class SfmlCanvas : ICanvas
     {

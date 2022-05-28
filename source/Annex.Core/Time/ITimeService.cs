@@ -1,4 +1,4 @@
-﻿namespace Annex.Core.Time
+﻿namespace Annex_Old.Core.Time
 {
     public interface ITimeService
     {

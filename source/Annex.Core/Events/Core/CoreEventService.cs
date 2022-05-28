@@ -1,8 +1,8 @@
-﻿using Annex.Core.Broadcasts;
-using Annex.Core.Broadcasts.Messages;
-using Annex.Core.Scenes;
+﻿using Annex_Old.Core.Broadcasts;
+using Annex_Old.Core.Broadcasts.Messages;
+using Annex_Old.Core.Scenes;
 
-namespace Annex.Core.Events.Core
+namespace Annex_Old.Core.Events.Core
 {
     internal class CoreEventService : ICoreEventService, IDisposable
     {

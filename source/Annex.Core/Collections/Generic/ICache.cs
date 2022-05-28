@@ -1,4 +1,4 @@
-﻿namespace Annex.Core.Collections.Generic
+﻿namespace Annex_Old.Core.Collections.Generic
 {
     public interface ICache<TKey, TValue> where TKey : notnull
     {

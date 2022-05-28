@@ -1,7 +1,7 @@
-﻿using Annex.Core.Collections.Generic;
-using Annex.Core.Graphics;
+﻿using Annex_Old.Core.Collections.Generic;
+using Annex_Old.Core.Graphics;
 
-namespace Annex.Sfml.Collections.Generic
+namespace Annex_Old.Sfml.Collections.Generic
 {
     internal class CameraCache : ICameraCache
     {

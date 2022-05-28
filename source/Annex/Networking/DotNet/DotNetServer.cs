@@ -1,8 +1,8 @@
-﻿using Annex.Networking.Configuration;
-using Annex.Networking.Packets;
+﻿using Annex_Old.Networking.Configuration;
+using Annex_Old.Networking.Packets;
 using System;
 
-namespace Annex.Networking.DotNet
+namespace Annex_Old.Networking.DotNet
 {
     public class DotNetServer<T> : ServerEndpoint<T>, IServer where T : Connection, new()
     {

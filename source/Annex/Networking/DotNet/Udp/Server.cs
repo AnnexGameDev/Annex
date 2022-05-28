@@ -1,6 +1,6 @@
-﻿using Annex.Networking.Configuration;
+﻿using Annex_Old.Networking.Configuration;
 
-namespace Annex.Networking.DotNet.Udp
+namespace Annex_Old.Networking.DotNet.Udp
 {
     public class Server : UdpSocket
     {

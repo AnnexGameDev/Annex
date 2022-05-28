@@ -1,9 +1,9 @@
-﻿using Annex.Networking.Configuration;
-using Annex.Networking.Packets;
+﻿using Annex_Old.Networking.Configuration;
+using Annex_Old.Networking.Packets;
 using System;
 using System.Collections.Generic;
 
-namespace Annex.Networking
+namespace Annex_Old.Networking
 {
     public abstract class ServerEndpoint<T> : SocketEndpoint<T>, IServer where T : Connection, new()
     {

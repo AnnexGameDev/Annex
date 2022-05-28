@@ -1,7 +1,7 @@
-﻿using Annex.Core.Input;
+﻿using Annex_Old.Core.Input;
 using SFML.Window;
 
-namespace Annex.Sfml.Extensions
+namespace Annex_Old.Sfml.Extensions
 {
     public static class MouseExtensions
     {

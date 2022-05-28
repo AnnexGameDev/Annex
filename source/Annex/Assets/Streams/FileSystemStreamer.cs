@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Annex.Assets.Streams
+namespace Annex_Old.Assets.Streams
 {
     public class FileSystemStreamer : DataStreamer
     {

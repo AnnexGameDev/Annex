@@ -1,8 +1,8 @@
-﻿using Annex.Core.Assets;
-using Annex.Core.Data;
-using Annex.Core.Input;
+﻿using Annex_Old.Core.Assets;
+using Annex_Old.Core.Data;
+using Annex_Old.Core.Input;
 
-namespace Annex.Core.Graphics.Windows
+namespace Annex_Old.Core.Graphics.Windows
 {
     public interface IWindow
     {

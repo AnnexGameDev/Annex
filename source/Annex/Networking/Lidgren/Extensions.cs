@@ -1,6 +1,6 @@
 ﻿using Lidgren.Network;
 
-namespace Annex.Networking.Lidgren
+namespace Annex_Old.Networking.Lidgren
 {
     public static class Extensions
     {

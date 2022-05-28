@@ -1,8 +1,8 @@
-﻿using Annex.Core.Graphics;
-using Annex.Sfml.Extensions;
+﻿using Annex_Old.Core.Graphics;
+using Annex_Old.Sfml.Extensions;
 using SFML.Graphics;
 
-namespace Annex.Sfml.Collections.Generic
+namespace Annex_Old.Sfml.Collections.Generic
 {
     public class SfmlCamera
     {

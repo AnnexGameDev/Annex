@@ -1,8 +1,8 @@
-﻿using Annex.Core.Networking.Connections;
+﻿using Annex_Old.Core.Networking.Connections;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Annex.Core.Networking.Engines.DotNet.Endpoints
+namespace Annex_Old.Core.Networking.Engines.DotNet.Endpoints
 {
     internal class TcpClientConnection : TcpConnection
     {

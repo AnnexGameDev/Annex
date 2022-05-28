@@ -1,6 +1,6 @@
-﻿using Annex.Core.Graphics.Windows;
+﻿using Annex_Old.Core.Graphics.Windows;
 
-namespace Annex.Core.Graphics
+namespace Annex_Old.Core.Graphics
 {
     internal class GraphicsService : IGraphicsService
     {

@@ -1,9 +1,9 @@
-﻿using Annex.Assets.Converters;
-using Annex.Assets.Streams;
+﻿using Annex_Old.Assets.Converters;
+using Annex_Old.Assets.Streams;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Annex.Assets
+namespace Annex_Old.Assets
 {
     public abstract class AssetManager : IAssetManager
     {

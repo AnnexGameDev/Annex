@@ -1,4 +1,4 @@
-﻿namespace Annex.Core.Events.Core
+﻿namespace Annex_Old.Core.Events.Core
 {
     public enum CoreEventPriority : long
     {

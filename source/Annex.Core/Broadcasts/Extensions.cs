@@ -1,6 +1,6 @@
 ﻿using Scaffold.DependencyInjection;
 
-namespace Annex.Core.Broadcasts
+namespace Annex_Old.Core.Broadcasts
 {
     public static partial class Extensions
     {

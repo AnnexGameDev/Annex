@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Annex.Graphics.Events
+namespace Annex_Old.Graphics.Events
 {
     public class MouseWheelMovedEvent : HardwareEvent
     {

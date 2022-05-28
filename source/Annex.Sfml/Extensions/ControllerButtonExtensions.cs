@@ -1,6 +1,6 @@
-﻿using Annex.Core.Input;
+﻿using Annex_Old.Core.Input;
 
-namespace Annex.Sfml.Extensions
+namespace Annex_Old.Sfml.Extensions
 {
     public static class ControllerButtonExtensions
     {

@@ -1,7 +1,7 @@
-﻿using Annex.Core.Graphics.Contexts;
-using Annex.Sfml.Collections.Generic;
+﻿using Annex_Old.Core.Graphics.Contexts;
+using Annex_Old.Sfml.Collections.Generic;
 
-namespace Annex.Sfml.Graphics.PlatformTargets
+namespace Annex_Old.Sfml.Graphics.PlatformTargets
 {
     internal class BatchTexturePlatformTargetCreator : PlatformTargetCreator<BatchTexturePlatformTarget>
     {

@@ -1,12 +1,12 @@
-﻿using Annex.Core.Broadcasts;
-using Annex.Core.Broadcasts.Messages;
-using Annex.Core.Events.Core;
+﻿using Annex_Old.Core.Broadcasts;
+using Annex_Old.Core.Broadcasts.Messages;
+using Annex_Old.Core.Events.Core;
 using Moq;
 using Scaffold.Tests.Core.Fixture;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Annex.Core.Tests.Events.Core
+namespace Annex_Old.Core.Tests.Events.Core
 {
     public class CoreEventServiceTests
     {

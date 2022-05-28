@@ -1,10 +1,10 @@
-﻿using Annex.Events;
-using Annex.Networking.Configuration;
-using Annex.Networking.Packets;
-using Annex.Services;
+﻿using Annex_Old.Events;
+using Annex_Old.Networking.Configuration;
+using Annex_Old.Networking.Packets;
+using Annex_Old.Services;
 using System;
 
-namespace Annex.Networking.DotNet
+namespace Annex_Old.Networking.DotNet
 {
     public class DotNetClient<T> : ClientEndpoint<T>, IClient where T : Connection, new()
     {

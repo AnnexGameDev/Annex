@@ -1,7 +1,7 @@
-﻿using Annex.Networking.Configuration;
-using Annex.Networking.Packets;
+﻿using Annex_Old.Networking.Configuration;
+using Annex_Old.Networking.Packets;
 
-namespace Annex.Networking
+namespace Annex_Old.Networking
 {
     public abstract class ClientEndpoint<T> : SocketEndpoint<T>, IClient where T : Connection, new()
     {

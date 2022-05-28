@@ -1,6 +1,6 @@
-﻿using Annex.Core.Data;
+﻿using Annex_Old.Core.Data;
 
-namespace Annex.Core.Graphics
+namespace Annex_Old.Core.Graphics
 {
     public class Camera
     {

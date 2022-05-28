@@ -1,6 +1,6 @@
-﻿using Annex.Core.Networking.Connections;
+﻿using Annex_Old.Core.Networking.Connections;
 
-namespace Annex.Core.Networking.Packets
+namespace Annex_Old.Core.Networking.Packets
 {
     public interface IPacketHandler
     {

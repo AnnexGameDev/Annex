@@ -1,8 +1,8 @@
-﻿using Annex.Core.Assets;
-using Annex.Core.Collections.Generic;
+﻿using Annex_Old.Core.Assets;
+using Annex_Old.Core.Collections.Generic;
 using SFML.Graphics;
 
-namespace Annex.Sfml.Collections.Generic
+namespace Annex_Old.Sfml.Collections.Generic
 {
     internal class FontCache : IFontCache
     {

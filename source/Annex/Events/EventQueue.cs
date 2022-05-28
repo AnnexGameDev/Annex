@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using static Annex.Events.Errors;
+using static Annex_Old.Events.Errors;
 
-namespace Annex.Events
+namespace Annex_Old.Events
 {
     public sealed class EventQueue
     {

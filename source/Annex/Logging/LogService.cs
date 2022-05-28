@@ -1,9 +1,9 @@
-﻿using Annex.Logging.Decorator;
+﻿using Annex_Old.Logging.Decorator;
 using System;
 using System.Diagnostics;
 using System.Threading;
 
-namespace Annex.Logging
+namespace Annex_Old.Logging
 {
     public class LogService : ILogService
     {

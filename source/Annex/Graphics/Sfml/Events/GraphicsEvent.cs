@@ -1,9 +1,9 @@
-﻿using Annex.Events;
-using Annex.Services;
+﻿using Annex_Old.Events;
+using Annex_Old.Services;
 using System;
-using static Annex.Graphics.EventIDs;
+using static Annex_Old.Graphics.EventIDs;
 
-namespace Annex.Graphics.Sfml.Events
+namespace Annex_Old.Graphics.Sfml.Events
 {
     public class GraphicsEvent : GameEvent {
         private readonly ICanvas _canvas;
@@ -16,7 +16,7 @@ namespace Annex.Graphics.Sfml.Events
             this._postdraw = postDraw;
         }
 
-        protected override void Run(Annex.Events.EventArgs gameEventArgs) {
+        protected override void Run(Annex_Old.Events.EventArgs gameEventArgs) {
             this._predraw.Invoke();
             ServiceProvider.SceneService.CurrentScene.Draw(this._canvas);
             this._postdraw.Invoke();

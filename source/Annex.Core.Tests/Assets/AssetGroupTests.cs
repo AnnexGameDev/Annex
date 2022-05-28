@@ -1,5 +1,5 @@
-﻿using Annex.Core.Assets;
-using Annex.Core.Assets.Bundles;
+﻿using Annex_Old.Core.Assets;
+using Annex_Old.Core.Assets.Bundles;
 using FluentAssertions;
 using Moq;
 using Scaffold.Tests.Core;
@@ -8,7 +8,7 @@ using Scaffold.Tests.Core.Fixture;
 using System;
 using Xunit;
 
-namespace Annex.Core.Tests.Assets
+namespace Annex_Old.Core.Tests.Assets
 {
     public class AssetGroupTests
     {

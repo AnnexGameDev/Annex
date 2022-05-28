@@ -1,4 +1,4 @@
-﻿namespace Annex.Core
+﻿namespace Annex_Old.Core
 {
     public static class Extensions
     {

@@ -1,7 +1,7 @@
-﻿using Annex.Core.Graphics.Windows;
+﻿using Annex_Old.Core.Graphics.Windows;
 using SFML.Window;
 
-namespace Annex.Sfml.Extensions
+namespace Annex_Old.Sfml.Extensions
 {
     internal static class StyleExtensions
     {

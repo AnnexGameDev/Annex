@@ -1,10 +1,10 @@
-﻿using Annex.Core.Data;
-using Annex.Sfml.Collections.Generic;
-using Annex.Sfml.Extensions;
+﻿using Annex_Old.Core.Data;
+using Annex_Old.Sfml.Collections.Generic;
+using Annex_Old.Sfml.Extensions;
 using SFML.Graphics;
 using IntRect = SFML.Graphics.IntRect;
 
-namespace Annex.Sfml.Graphics.PlatformTargets
+namespace Annex_Old.Sfml.Graphics.PlatformTargets
 {
     internal abstract class SpritePlatformTarget : TransformablePlatformTarget
     {

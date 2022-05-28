@@ -1,6 +1,6 @@
-﻿using Annex.Events;
+﻿using Annex_Old.Events;
 
-namespace Annex.Assets.Events
+namespace Annex_Old.Assets.Events
 {
     public class AssetGCEvent : GameEvent
     {

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Annex.Assets.Streams
+namespace Annex_Old.Assets.Streams
 {
     public abstract class DataStreamer : IDataStreamer
     {

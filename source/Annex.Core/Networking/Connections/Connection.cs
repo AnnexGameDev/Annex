@@ -1,4 +1,4 @@
-﻿namespace Annex.Core.Networking.Connections
+﻿namespace Annex_Old.Core.Networking.Connections
 {
     public class Connection : IDisposable
     {

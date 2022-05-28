@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Annex.Core.Networking.Packets
+namespace Annex_Old.Core.Networking.Packets
 {
     public class OutgoingPacket : IPacket
     {

@@ -1,7 +1,7 @@
-﻿using Annex.Core.Data;
+﻿using Annex_Old.Core.Data;
 using SFML.Graphics;
 
-namespace Annex.Sfml.Extensions
+namespace Annex_Old.Sfml.Extensions
 {
     public static class ColorExtensions
     {

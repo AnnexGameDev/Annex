@@ -1,7 +1,7 @@
-﻿using Annex.Core.Graphics.Contexts;
+﻿using Annex_Old.Core.Graphics.Contexts;
 using SFML.Graphics;
 
-namespace Annex.Sfml.Extensions
+namespace Annex_Old.Sfml.Extensions
 {
     internal static class TextAlignmentExtensions
     {

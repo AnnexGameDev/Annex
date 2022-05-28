@@ -1,6 +1,6 @@
 ﻿using Scaffold.Collections.Generic;
 
-namespace Annex.Core.Events
+namespace Annex_Old.Core.Events
 {
     internal class PriorityEventQueue : IPriorityEventQueue
     {

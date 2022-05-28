@@ -1,4 +1,4 @@
-﻿namespace Annex.Core.Events
+﻿namespace Annex_Old.Core.Events
 {
     public interface IEventQueue : IDisposable
     {

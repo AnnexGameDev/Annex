@@ -1,4 +1,4 @@
-﻿namespace Annex.Core.Assets
+﻿namespace Annex_Old.Core.Assets
 {
     internal class AssetService : IAssetService
     {

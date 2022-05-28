@@ -1,4 +1,4 @@
-﻿namespace Annex.Core.Input.Platforms
+﻿namespace Annex_Old.Core.Input.Platforms
 {
     // https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
     internal enum VK

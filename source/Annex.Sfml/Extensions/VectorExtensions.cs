@@ -1,6 +1,6 @@
-﻿using Annex.Core.Data;
+﻿using Annex_Old.Core.Data;
 
-namespace Annex.Sfml.Extensions
+namespace Annex_Old.Sfml.Extensions
 {
     public static class VectorExtensions
     {

@@ -1,7 +1,7 @@
-﻿using Annex.Data.Shared;
-using Annex.Scenes;
+﻿using Annex_Old.Data.Shared;
+using Annex_Old.Scenes;
 
-namespace Annex.Graphics
+namespace Annex_Old.Graphics
 {
     public interface IHardwarePollable
     {

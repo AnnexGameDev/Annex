@@ -1,8 +1,8 @@
-﻿using Annex.Graphics.Contexts;
+﻿using Annex_Old.Graphics.Contexts;
 using SFML.Graphics;
 using SFML.System;
 
-namespace Annex.Graphics.Sfml.Targets
+namespace Annex_Old.Graphics.Sfml.Targets
 {
     internal class TexturePlatformTarget : ITexturePlatformTarget
     {

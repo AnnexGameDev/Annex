@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Annex", "Annex\Annex.csproj", "{793E3C89-6004-43EC-9444-6080770D5F82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Annex_Old", "Annex\Annex_Old.csproj", "{793E3C89-6004-43EC-9444-6080770D5F82}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleProject", "SampleProject\SampleProject.csproj", "{54813A56-2B3C-4EE9-BA53-03FE30F3B2CD}"
 EndProject
@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests.Core", "UnitTests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Annex.Sfml", "Annex.Sfml\Annex.Sfml.csproj", "{78D7DB5C-373A-47D3-B21F-90CC4F9B1F6D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Annex.Lidgren", "Annex.Lidgren\Annex.Lidgren.csproj", "{95509A8B-6164-43DF-BDF9-4D8CC54AC06B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Annex.Lidgren", "Annex.Lidgren\Annex.Lidgren.csproj", "{95509A8B-6164-43DF-BDF9-4D8CC54AC06B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

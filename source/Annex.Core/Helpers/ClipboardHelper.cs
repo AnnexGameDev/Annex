@@ -1,6 +1,6 @@
 ﻿using Scaffold.Platform;
 
-namespace Annex.Core.Helpers
+namespace Annex_Old.Core.Helpers
 {
     public class ClipboardHelper
     {

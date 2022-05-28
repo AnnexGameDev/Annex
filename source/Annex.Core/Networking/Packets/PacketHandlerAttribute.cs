@@ -1,4 +1,4 @@
-﻿namespace Annex.Core.Networking.Packets
+﻿namespace Annex_Old.Core.Networking.Packets
 {
     public class PacketHandlerAttribute : Attribute
     {
