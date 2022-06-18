@@ -1,8 +1,8 @@
-﻿using Annex_Old.Core.Data;
+﻿using Annex.Core.Data;
 using SFML.Graphics;
 using Vector2f = SFML.System.Vector2f;
 
-namespace Annex_Old.Sfml.Graphics.PlatformTargets
+namespace Annex.Sfml.Graphics.PlatformTargets
 {
     internal abstract class TransformablePlatformTarget : PlatformTarget
     {

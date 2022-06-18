@@ -1,4 +1,4 @@
-﻿namespace Annex_Old.Core.Input.InputEvents
+﻿namespace Annex.Core.Input.InputEvents
 {
     public abstract class HardwareEvent
     {

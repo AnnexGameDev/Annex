@@ -1,9 +1,9 @@
-﻿using Annex_Old.Core.Data;
-using Annex_Old.Core.Events;
-using Annex_Old.Core.Graphics.Windows;
-using Annex_Old.Core.Input.InputEvents;
+﻿using Annex.Core.Data;
+using Annex.Core.Events;
+using Annex.Core.Graphics.Windows;
+using Annex.Core.Input.InputEvents;
 
-namespace Annex_Old.Core.Scenes.Components
+namespace Annex.Core.Scenes.Components
 {
     public class Scene : Container, IScene
     {

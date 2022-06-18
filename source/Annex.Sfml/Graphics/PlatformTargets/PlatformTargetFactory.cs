@@ -1,6 +1,6 @@
-﻿using Annex_Old.Core.Graphics.Contexts;
+﻿using Annex.Core.Graphics.Contexts;
 
-namespace Annex_Old.Sfml.Graphics.PlatformTargets
+namespace Annex.Sfml.Graphics.PlatformTargets
 {
     internal class PlatformTargetFactory : IPlatformTargetFactory
     {

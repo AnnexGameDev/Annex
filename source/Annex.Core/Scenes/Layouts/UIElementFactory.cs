@@ -1,7 +1,7 @@
-﻿using Annex_Old.Core.Scenes.Components;
+﻿using Annex.Core.Scenes.Components;
 using System.Reflection;
 
-namespace Annex_Old.Core.Scenes.Layouts
+namespace Annex.Core.Scenes.Layouts
 {
     internal class UIElementFactory
     {

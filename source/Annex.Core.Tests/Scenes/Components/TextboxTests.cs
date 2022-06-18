@@ -1,6 +1,6 @@
-﻿using Annex_Old.Core.Graphics;
-using Annex_Old.Core.Helpers;
-using Annex_Old.Core.Scenes.Components;
+﻿using Annex.Core.Graphics;
+using Annex.Core.Helpers;
+using Annex.Core.Scenes.Components;
 using FluentAssertions;
 using Moq;
 using Scaffold.Platform;
@@ -8,7 +8,7 @@ using Scaffold.Tests.Core.Fixture;
 using System;
 using Xunit;
 
-namespace Annex_Old.Core.Tests.Scenes.Components
+namespace Annex.Core.Tests.Scenes.Components
 {
     public class TextboxTests
     {

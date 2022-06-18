@@ -1,7 +1,7 @@
 ﻿using Scaffold.Logging;
 using System.Collections.Concurrent;
 
-namespace Annex_Old.Core.Assets.Bundles
+namespace Annex.Core.Assets.Bundles
 {
     // TODO: Tests
     // TODO: Clean this up

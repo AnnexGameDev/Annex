@@ -1,4 +1,4 @@
-﻿namespace Annex_Old.Core.Broadcasts.Messages
+﻿namespace Annex.Core.Broadcasts.Messages
 {
     public class RequestStopAppMessage
     { 

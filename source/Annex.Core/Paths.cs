@@ -1,6 +1,6 @@
 ﻿using Scaffold;
 
-namespace Annex_Old.Core
+namespace Annex.Core
 {
     public static class Paths
     {

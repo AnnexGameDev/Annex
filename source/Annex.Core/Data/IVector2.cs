@@ -1,4 +1,4 @@
-﻿namespace Annex_Old.Core.Data
+﻿namespace Annex.Core.Data
 {
     public interface IVector2<T>
     {

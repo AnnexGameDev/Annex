@@ -1,17 +1,17 @@
-﻿using Annex_Old.Core.Assets;
-using Annex_Old.Core.Data;
-using Annex_Old.Core.Graphics.Contexts;
-using Annex_Old.Core.Scenes.Components;
+﻿using Annex.Core.Assets;
+using Annex.Core.Data;
+using Annex.Core.Graphics.Contexts;
+using Annex.Core.Scenes.Components;
 using System.Xml.Linq;
 
-namespace Annex_Old.Core.Scenes.Layouts.Html
+namespace Annex.Core.Scenes.Layouts.Html
 {
     internal class HtmlSceneLoader : IHtmlSceneLoader
     {
         public readonly IAssetGroup _sceneDataAssets;
 
         public HtmlSceneLoader(IAssetService assetService) {
-            this._sceneDataAssets = assetService.SceneData;
+            this._sceneDataAssets = assetService.SceneData();
         }
 
         public void Load(string assetId, IScene sceneInstance) {

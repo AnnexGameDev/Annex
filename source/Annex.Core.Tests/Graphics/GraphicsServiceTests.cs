@@ -1,10 +1,10 @@
-﻿using Annex_Old.Core.Graphics;
+﻿using Annex.Core.Graphics;
 using FluentAssertions;
 using Moq;
 using Scaffold.Tests.Core.Fixture;
 using Xunit;
 
-namespace Annex_Old.Core.Tests.Graphics
+namespace Annex.Core.Tests.Graphics
 {
     public class GraphicsServiceTests
     {

@@ -1,9 +1,9 @@
-﻿using Annex_Old.Core.Helpers;
-using Annex_Old.Core.Networking.Connections;
-using Annex_Old.Core.Networking.Packets;
+﻿using Annex.Core.Helpers;
+using Annex.Core.Networking.Connections;
+using Annex.Core.Networking.Packets;
 using System.Net.Sockets;
 
-namespace Annex_Old.Core.Networking.Engines.DotNet.Endpoints
+namespace Annex.Core.Networking.Engines.DotNet.Endpoints
 {
     public class TcpConnection : Connection
     {

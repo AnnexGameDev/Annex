@@ -1,10 +1,10 @@
-﻿using Annex_Old.Core;
-using Annex_Old.Core.Assets;
-using Annex_Old.Core.Assets.Bundles;
-using Annex_Old.Core.Graphics;
-using Annex_Old.Core.Networking;
-using Annex_Old.Core.Networking.Engines.DotNet;
-using Annex_Old.Sfml.Graphics;
+﻿using Annex.Core;
+using Annex.Core.Assets;
+using Annex.Core.Assets.Bundles;
+using Annex.Core.Graphics;
+using Annex.Core.Networking;
+using Annex.Core.Networking.Engines.DotNet;
+using Annex.Sfml.Graphics;
 using SampleProject.Scenes.Level1;
 using SampleProject.Scenes.Level2;
 using SampleProject.Scenes.Level3;

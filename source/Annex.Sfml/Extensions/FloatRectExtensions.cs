@@ -1,6 +1,6 @@
 ﻿using SFML.Graphics;
 
-namespace Annex_Old.Sfml.Extensions
+namespace Annex.Sfml.Extensions
 {
     internal static class FloatRectExtensions
     {
@@ -10,7 +10,7 @@ namespace Annex_Old.Sfml.Extensions
             return new FloatRect(rect.Left, rect.Top, rect.Height, rect.Height);
         }
 
-        public static Annex_Old.Core.Data.FloatRect ToAnnex(this FloatRect rect) {
+        public static Annex.Core.Data.FloatRect ToAnnex(this FloatRect rect) {
             return new Core.Data.FloatRect(rect.Top, rect.Left, rect.Width, rect.Height);
         }
 

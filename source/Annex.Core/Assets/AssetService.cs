@@ -1,15 +1,16 @@
-﻿namespace Annex_Old.Core.Assets
+﻿namespace Annex.Core.Assets
 {
     internal class AssetService : IAssetService
     {
-        public IAssetGroup Textures { get; }
-        public IAssetGroup Fonts { get; }
-        public IAssetGroup SceneData { get; }
+        private readonly IEnumerable<IAssetGroup> _assetGroups;
 
-        public AssetService(IAssetGroup textures, IAssetGroup fonts, IAssetGroup sceneData) {
-            this.Textures = textures;
-            this.Fonts = fonts;
-            this.SceneData = sceneData;
+        public AssetService(IEnumerable<IAssetGroup> assetGroups) {
+            this._assetGroups = assetGroups;
+        }
+
+        public bool TryGetAssetGroup(string id, out IAssetGroup assetGroup) {
+            assetGroup = this._assetGroups.FirstOrDefault(group => group.Id == id);
+            return assetGroup != null;
         }
     }
 }

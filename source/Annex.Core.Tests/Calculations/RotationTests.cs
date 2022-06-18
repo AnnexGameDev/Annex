@@ -1,8 +1,8 @@
-﻿using Annex_Old.Core.Calculations;
+﻿using Annex.Core.Calculations;
 using FluentAssertions;
 using Xunit;
 
-namespace Annex_Old.Core.Tests.Calculations
+namespace Annex.Core.Tests.Calculations
 {
     public class RotationTests
     {

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Annex_Old.Core
+namespace Annex.Core
 {
     public class Debug
     {

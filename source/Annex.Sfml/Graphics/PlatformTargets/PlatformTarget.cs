@@ -1,6 +1,6 @@
 ﻿using SFML.Graphics;
 
-namespace Annex_Old.Sfml.Graphics.PlatformTargets
+namespace Annex.Sfml.Graphics.PlatformTargets
 {
     public abstract class PlatformTarget : IDisposable
     {

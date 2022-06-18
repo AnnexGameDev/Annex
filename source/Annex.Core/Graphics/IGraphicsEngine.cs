@@ -1,8 +1,8 @@
-﻿using Annex_Old.Core.Data;
-using Annex_Old.Core.Graphics.Contexts;
-using Annex_Old.Core.Graphics.Windows;
+﻿using Annex.Core.Data;
+using Annex.Core.Graphics.Contexts;
+using Annex.Core.Graphics.Windows;
 
-namespace Annex_Old.Core.Graphics
+namespace Annex.Core.Graphics
 {
     public interface IGraphicsEngine
     {

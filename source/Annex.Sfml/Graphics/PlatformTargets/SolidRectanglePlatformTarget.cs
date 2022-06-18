@@ -1,9 +1,9 @@
-﻿using Annex_Old.Core.Data;
-using Annex_Old.Core.Graphics.Contexts;
-using Annex_Old.Sfml.Extensions;
+﻿using Annex.Core.Data;
+using Annex.Core.Graphics.Contexts;
+using Annex.Sfml.Extensions;
 using SFML.Graphics;
 
-namespace Annex_Old.Sfml.Graphics.PlatformTargets
+namespace Annex.Sfml.Graphics.PlatformTargets
 {
     internal class SolidRectanglePlatformTarget : TransformablePlatformTarget
     {

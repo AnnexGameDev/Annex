@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace Annex_Old.Core.Collections.Generic
+namespace Annex.Core.Collections.Generic
 {
     //TODO: TEST ME
     public class Cache<TKey, TValue> : ICache<TKey, TValue> where TKey : notnull

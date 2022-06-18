@@ -1,6 +1,6 @@
-﻿using Annex_Old.Core.Data;
+﻿using Annex.Core.Data;
 
-namespace Annex_Old.Core.Calculations
+namespace Annex.Core.Calculations
 {
     public static class Rotation
     {

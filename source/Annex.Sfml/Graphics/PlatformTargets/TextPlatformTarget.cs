@@ -1,11 +1,11 @@
-﻿using Annex_Old.Core.Data;
-using Annex_Old.Core.Graphics.Contexts;
-using Annex_Old.Sfml.Collections.Generic;
-using Annex_Old.Sfml.Extensions;
+﻿using Annex.Core.Data;
+using Annex.Core.Graphics.Contexts;
+using Annex.Sfml.Collections.Generic;
+using Annex.Sfml.Extensions;
 using SFML.Graphics;
 using Vector2f = SFML.System.Vector2f;
 
-namespace Annex_Old.Sfml.Graphics.PlatformTargets
+namespace Annex.Sfml.Graphics.PlatformTargets
 {
     internal class TextPlatformTarget : PlatformTarget
     {

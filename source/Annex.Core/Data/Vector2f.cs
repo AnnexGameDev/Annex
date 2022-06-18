@@ -1,4 +1,4 @@
-﻿namespace Annex_Old.Core.Data
+﻿namespace Annex.Core.Data
 {
     public class Vector2f : VectorBase<float>
     {

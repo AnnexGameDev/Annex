@@ -1,4 +1,4 @@
-﻿namespace Annex_Old.Core.Scenes.Components
+﻿namespace Annex.Core.Scenes.Components
 {
     public interface ITextbox
     {

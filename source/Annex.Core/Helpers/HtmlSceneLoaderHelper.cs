@@ -1,7 +1,7 @@
-﻿using Annex_Old.Core.Scenes.Components;
-using Annex_Old.Core.Scenes.Layouts.Html;
+﻿using Annex.Core.Scenes.Components;
+using Annex.Core.Scenes.Layouts.Html;
 
-namespace Annex_Old.Core.Helpers
+namespace Annex.Core.Helpers
 {
     public class HtmlSceneLoaderHelper
     {

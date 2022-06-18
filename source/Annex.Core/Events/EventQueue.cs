@@ -1,7 +1,7 @@
-﻿using Annex_Old.Core.Time;
+﻿using Annex.Core.Time;
 using Scaffold.Collections.Generic;
 
-namespace Annex_Old.Core.Events
+namespace Annex.Core.Events
 {
     public class EventQueue : IEventQueue
     {

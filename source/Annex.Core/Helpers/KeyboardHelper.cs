@@ -1,6 +1,6 @@
-﻿using Annex_Old.Core.Input.Platforms;
+﻿using Annex.Core.Input.Platforms;
 
-namespace Annex_Old.Core.Helpers
+namespace Annex.Core.Helpers
 {
     public class KeyboardHelper
     {

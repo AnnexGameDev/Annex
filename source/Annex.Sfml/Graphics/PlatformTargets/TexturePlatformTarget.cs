@@ -1,7 +1,7 @@
-﻿using Annex_Old.Core.Graphics.Contexts;
-using Annex_Old.Sfml.Collections.Generic;
+﻿using Annex.Core.Graphics.Contexts;
+using Annex.Sfml.Collections.Generic;
 
-namespace Annex_Old.Sfml.Graphics.PlatformTargets
+namespace Annex.Sfml.Graphics.PlatformTargets
 {
     internal class TexturePlatformTarget : SpritePlatformTarget
     {

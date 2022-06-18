@@ -1,4 +1,4 @@
-﻿namespace Annex_Old.Core.Events.Core
+﻿namespace Annex.Core.Events.Core
 {
     public interface ICoreService
     {

@@ -1,6 +1,6 @@
-﻿using Annex_Old.Core.Scenes.Components;
+﻿using Annex.Core.Scenes.Components;
 
-namespace Annex_Old.Core.Scenes.Layouts.Html
+namespace Annex.Core.Scenes.Layouts.Html
 {
     public interface IHtmlSceneLoader
     {

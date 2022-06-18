@@ -1,9 +1,9 @@
-﻿using Annex_Old.Core.Networking.Packets;
+﻿using Annex.Core.Networking.Packets;
 using Scaffold.Collections.Generic;
 using Scaffold.Logging;
 using System.Net.Sockets;
 
-namespace Annex_Old.Core.Networking.Engines.DotNet.Endpoints
+namespace Annex.Core.Networking.Engines.DotNet.Endpoints
 {
     public abstract class TcpEndpoint : IEndpoint
     {

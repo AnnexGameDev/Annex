@@ -1,8 +1,8 @@
-﻿using Annex_Old.Core.Scenes.Components;
+﻿using Annex.Core.Scenes.Components;
 using Scaffold.DependencyInjection;
 using Scaffold.Logging;
 
-namespace Annex_Old.Core.Scenes
+namespace Annex.Core.Scenes
 {
     internal class SceneService : ISceneService
     {

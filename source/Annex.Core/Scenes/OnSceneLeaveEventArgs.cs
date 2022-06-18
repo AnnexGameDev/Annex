@@ -1,6 +1,6 @@
-﻿using Annex_Old.Core.Scenes.Components;
+﻿using Annex.Core.Scenes.Components;
 
-namespace Annex_Old.Core.Scenes
+namespace Annex.Core.Scenes
 {
     public class OnSceneLeaveEventArgs
     {

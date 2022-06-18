@@ -1,4 +1,4 @@
-﻿namespace Annex_Old.Core.Input
+﻿namespace Annex.Core.Input
 {
     public enum ControllerJoystickAxis
     {

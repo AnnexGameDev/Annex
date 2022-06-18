@@ -1,11 +1,11 @@
-﻿using Annex_Old.Core.Events;
+﻿using Annex.Core.Events;
 using Moq;
 using Scaffold.Tests.Core;
 using Scaffold.Tests.Core.Fixture;
 using System.Linq;
 using Xunit;
 
-namespace Annex_Old.Core.Tests.Events
+namespace Annex.Core.Tests.Events
 {
     public class EventQueueTests
     {

@@ -1,6 +1,6 @@
 ﻿using SFML.Graphics;
 
-namespace Annex_Old.Sfml.Collections.Generic
+namespace Annex.Sfml.Collections.Generic
 {
     internal interface ITextureCache
     {

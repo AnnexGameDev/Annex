@@ -1,6 +1,6 @@
-﻿using Annex_Old.Core.Events;
-using Annex_Old.Core.Graphics.Windows;
-using Annex_Old.Core.Input;
+﻿using Annex.Core.Events;
+using Annex.Core.Graphics.Windows;
+using Annex.Core.Input;
 using SampleProject.Models;
 
 namespace SampleProject.Scenes.Level1.Events

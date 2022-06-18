@@ -1,10 +1,10 @@
-﻿using Annex_Old.Core.Collections.Generic;
+﻿using Annex.Core.Collections.Generic;
 using FluentAssertions;
 using Scaffold.Tests.Core.Attributes;
 using Scaffold.Tests.Core.Fixture;
 using Xunit;
 
-namespace Annex_Old.Core.Tests.Collections.Generic
+namespace Annex.Core.Tests.Collections.Generic
 {
     public abstract class CacheTestBase<TKey, TValue> where TKey : notnull {
         private readonly IFixture _fixture = new Fixture();

@@ -1,7 +1,7 @@
-﻿using Annex_Old.Core.Networking.Connections;
-using Annex_Old.Core.Networking.Packets;
+﻿using Annex.Core.Networking.Connections;
+using Annex.Core.Networking.Packets;
 
-namespace Annex_Old.Core.Networking
+namespace Annex.Core.Networking
 {
     public interface IClientEndpoint : IEndpoint
     {

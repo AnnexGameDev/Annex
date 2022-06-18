@@ -1,4 +1,4 @@
-﻿namespace Annex_Old.Core.Graphics.Contexts
+﻿namespace Annex.Core.Graphics.Contexts
 {
     public abstract class DrawContext : IDisposable
     {

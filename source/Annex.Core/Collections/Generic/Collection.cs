@@ -1,4 +1,4 @@
-﻿namespace Annex_Old.Core.Collections.Generic
+﻿namespace Annex.Core.Collections.Generic
 {
     public static class Collection
     {

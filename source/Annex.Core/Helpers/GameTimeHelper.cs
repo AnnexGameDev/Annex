@@ -1,6 +1,6 @@
-﻿using Annex_Old.Core.Time;
+﻿using Annex.Core.Time;
 
-namespace Annex_Old.Core.Helpers
+namespace Annex.Core.Helpers
 {
     public class GameTimeHelper
     {

@@ -1,5 +1,5 @@
-﻿using Annex_Old.Core.Scenes;
-using Annex_Old.Core.Scenes.Components;
+﻿using Annex.Core.Scenes;
+using Annex.Core.Scenes.Components;
 using FluentAssertions;
 using Moq;
 using Scaffold.DependencyInjection;
@@ -7,7 +7,7 @@ using Scaffold.Tests.Core.Fixture;
 using System;
 using Xunit;
 
-namespace Annex_Old.Core.Tests.Scenes
+namespace Annex.Core.Tests.Scenes
 {
     public class SceneServiceTests
     {

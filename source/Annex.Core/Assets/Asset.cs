@@ -1,4 +1,4 @@
-﻿namespace Annex_Old.Core.Assets
+﻿namespace Annex.Core.Assets
 {
     // TODO: Tests?
     internal abstract class Asset : IAsset

@@ -1,4 +1,4 @@
-﻿namespace Annex_Old.Core.Broadcasts
+﻿namespace Annex.Core.Broadcasts
 {
     internal class Broadcast<T> : IBroadcast<T>
     {

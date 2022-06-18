@@ -1,4 +1,4 @@
-﻿namespace Annex_Old.Core.Tests.Events
+﻿namespace Annex.Core.Tests.Events
 {
     public class EventTests
     {

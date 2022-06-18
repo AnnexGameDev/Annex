@@ -1,21 +1,21 @@
-﻿using Annex_Old.Core.Assets;
-using Annex_Old.Core.Broadcasts;
-using Annex_Old.Core.Broadcasts.Messages;
-using Annex_Old.Core.Events;
-using Annex_Old.Core.Events.Core;
-using Annex_Old.Core.Graphics;
-using Annex_Old.Core.Helpers;
-using Annex_Old.Core.Input;
-using Annex_Old.Core.Input.Platforms;
-using Annex_Old.Core.Scenes;
-using Annex_Old.Core.Scenes.Components;
-using Annex_Old.Core.Scenes.Layouts.Html;
-using Annex_Old.Core.Time;
+﻿using Annex.Core.Assets;
+using Annex.Core.Broadcasts;
+using Annex.Core.Broadcasts.Messages;
+using Annex.Core.Events;
+using Annex.Core.Events.Core;
+using Annex.Core.Graphics;
+using Annex.Core.Helpers;
+using Annex.Core.Input;
+using Annex.Core.Input.Platforms;
+using Annex.Core.Scenes;
+using Annex.Core.Scenes.Components;
+using Annex.Core.Scenes.Layouts.Html;
+using Annex.Core.Time;
 using Scaffold;
 using Scaffold.DependencyInjection;
 using Scaffold.Logging;
 
-namespace Annex_Old.Core;
+namespace Annex.Core;
 
 public abstract class AnnexApp : ScaffoldApp
 {

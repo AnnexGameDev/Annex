@@ -1,6 +1,6 @@
-﻿using Annex_Old.Core.Graphics.Windows;
+﻿using Annex.Core.Graphics.Windows;
 
-namespace Annex_Old.Core.Input
+namespace Annex.Core.Input
 {
     public interface IInputService
     {

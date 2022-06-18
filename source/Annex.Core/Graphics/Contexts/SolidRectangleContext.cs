@@ -1,6 +1,6 @@
-﻿using Annex_Old.Core.Data;
+﻿using Annex.Core.Data;
 
-namespace Annex_Old.Core.Graphics.Contexts
+namespace Annex.Core.Graphics.Contexts
 {
     public class SolidRectangleContext : DrawContext
     {

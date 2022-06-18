@@ -1,6 +1,6 @@
-﻿using Annex_Old.Core.Graphics.Contexts;
+﻿using Annex.Core.Graphics.Contexts;
 
-namespace Annex_Old.Core.Graphics
+namespace Annex.Core.Graphics
 {
     public interface ICanvas
     {

@@ -1,17 +1,17 @@
-﻿using Annex_Old.Core.Assets;
-using Annex_Old.Core.Data;
-using Annex_Old.Core.Events.Core;
-using Annex_Old.Core.Graphics;
-using Annex_Old.Core.Graphics.Windows;
-using Annex_Old.Core.Input;
-using Annex_Old.Core.Scenes;
-using Annex_Old.Sfml.Collections.Generic;
-using Annex_Old.Sfml.Extensions;
-using Annex_Old.Sfml.Graphics.PlatformTargets;
+﻿using Annex.Core.Assets;
+using Annex.Core.Data;
+using Annex.Core.Events.Core;
+using Annex.Core.Graphics;
+using Annex.Core.Graphics.Windows;
+using Annex.Core.Input;
+using Annex.Core.Scenes;
+using Annex.Sfml.Collections.Generic;
+using Annex.Sfml.Extensions;
+using Annex.Sfml.Graphics.PlatformTargets;
 using SFML.Graphics;
 using SFML.Window;
 
-namespace Annex_Old.Sfml.Graphics.Windows
+namespace Annex.Sfml.Graphics.Windows
 {
     internal class SfmlWindow : SfmlCanvas, IWindow, IDisposable
     {

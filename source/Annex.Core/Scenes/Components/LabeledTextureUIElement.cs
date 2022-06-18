@@ -1,8 +1,8 @@
-﻿using Annex_Old.Core.Data;
-using Annex_Old.Core.Graphics;
-using Annex_Old.Core.Graphics.Contexts;
+﻿using Annex.Core.Data;
+using Annex.Core.Graphics;
+using Annex.Core.Graphics.Contexts;
 
-namespace Annex_Old.Core.Scenes.Components
+namespace Annex.Core.Scenes.Components
 {
     public abstract class LabeledTextureUIElement : UIElement, IButton, ILabel
     {

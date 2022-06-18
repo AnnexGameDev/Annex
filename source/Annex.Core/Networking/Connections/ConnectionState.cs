@@ -1,4 +1,4 @@
-﻿namespace Annex_Old.Core.Networking.Connections
+﻿namespace Annex.Core.Networking.Connections
 {
     public enum ConnectionState
     {

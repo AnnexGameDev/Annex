@@ -1,7 +1,7 @@
 ﻿#if WINDOWS
 using System.Runtime.InteropServices;
 
-namespace Annex_Old.Core.Input.Platforms
+namespace Annex.Core.Input.Platforms
 {
     internal class WindowsKeyboardService : IPlatformKeyboardService
     {

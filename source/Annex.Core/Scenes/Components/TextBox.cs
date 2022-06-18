@@ -1,12 +1,12 @@
-﻿using Annex_Old.Core.Data;
-using Annex_Old.Core.Graphics;
-using Annex_Old.Core.Graphics.Contexts;
-using Annex_Old.Core.Helpers;
-using Annex_Old.Core.Input;
-using Annex_Old.Core.Input.InputEvents;
+﻿using Annex.Core.Data;
+using Annex.Core.Graphics;
+using Annex.Core.Graphics.Contexts;
+using Annex.Core.Helpers;
+using Annex.Core.Input;
+using Annex.Core.Input.InputEvents;
 using Scaffold.Logging;
 
-namespace Annex_Old.Core.Scenes.Components
+namespace Annex.Core.Scenes.Components
 {
     public partial class TextBox : LabeledTextureUIElement, ITextbox
     {

@@ -1,4 +1,4 @@
-﻿namespace Annex_Old.Core.Graphics.Windows
+﻿namespace Annex.Core.Graphics.Windows
 {
     public enum WindowStyle
     {

@@ -1,4 +1,4 @@
-﻿namespace Annex_Old.Core.Graphics
+﻿namespace Annex.Core.Graphics
 {
     public enum CameraId
     {

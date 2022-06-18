@@ -1,4 +1,4 @@
-﻿namespace Annex_Old.Core.Networking
+﻿namespace Annex.Core.Networking
 {
     public interface IEndpoint : IDisposable
     {
