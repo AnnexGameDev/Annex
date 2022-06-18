@@ -7,11 +7,11 @@ namespace Annex.Sfml.Collections.Generic
     internal class TextureCache : ITextureCache
     {
         private readonly ICache<string, Texture> _cache = new Cache<string, Texture>();
-        private readonly IAssetService _assetService;
+        private readonly IAssetGroup _textures;
         private readonly Texture _invalidTexture = new Texture(1, 1);
 
         public TextureCache(IAssetService assetService) {
-            this._assetService = assetService;
+            this._textures = assetService.Textures();
         }
 
         public Texture GetTexture(string textureId) {
@@ -19,7 +19,7 @@ namespace Annex.Sfml.Collections.Generic
                 return cachedTexture;
             }
 
-            var asset = this._assetService.Textures.GetAsset(textureId);
+            var asset = this._textures.GetAsset(textureId);
 
             if (asset == null) {
                 return _invalidTexture;

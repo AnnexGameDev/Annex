@@ -21,7 +21,7 @@ namespace SampleProject
             try {
 #endif
             using var game = new Game();
-            game.Run<Level2>();
+            game.Run<Level1>();
 #if !DEBUG
             } catch (Exception e) {
                 Log.Trace(LogSeverity.Error, "Exception in main", exception: e);
@@ -35,8 +35,10 @@ namespace SampleProject
             window.SetResolution(960, 640);
             window.SetSize(960, 640);
 
-            var icon = assetService.Textures.GetAsset("icons/icon.png")!;
-            var cursor = assetService.Textures.GetAsset("cursors/cursor.png")!;
+            var textures = assetService.Textures();
+
+            var icon = textures.GetAsset("icons/icon.png")!;
+            var cursor = textures.GetAsset("cursors/cursor.png")!;
 
             window.SetIcon(100, 100, icon);
             window.SetMouseImage(cursor, 16, 16, 0, 0);
@@ -61,9 +63,12 @@ namespace SampleProject
             string sceneDataRoot = Path.Combine(assetRoot, "scenes");
 
 #if DEBUG
-            assetService.Textures.AddBundle(new PakFileBundle("textures.pak", "*.png", textureRoot));
-            assetService.Fonts.AddBundle(new PakFileBundle("fonts.pak", "*.ttf", fontsRoot));
-            assetService.SceneData.AddBundle(new FileSystemBundle("*.html", sceneDataRoot));
+            var textures = assetService.Textures();
+            var fonts = assetService.Fonts();
+            var sceneData = assetService.SceneData();
+            textures.AddBundle(new PakFileBundle("textures.pak", "*.png", textureRoot));
+            fonts.AddBundle(new PakFileBundle("fonts.pak", "*.ttf", fontsRoot));
+            sceneData.AddBundle(new FileSystemBundle("*.html", sceneDataRoot));
 #else
             assetService.Textures.AddBundle(new PakFileBundle("texture.pak"));
             assetService.Fonts.AddBundle(new PakFileBundle("fonts.pak"));

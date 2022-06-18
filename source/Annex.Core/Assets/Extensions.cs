@@ -1,8 +1,8 @@
 ﻿namespace Annex.Core.Assets
 {
-    internal static class Extensions
+    public static class Extensions
     {
-        public static string ToSafeAssetIdString(this string id) {
+        internal static string ToSafeAssetIdString(this string id) {
             return id.Replace('\\', '/');
         }
 

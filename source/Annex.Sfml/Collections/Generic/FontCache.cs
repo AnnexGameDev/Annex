@@ -7,10 +7,10 @@ namespace Annex.Sfml.Collections.Generic
     internal class FontCache : IFontCache
     {
         private readonly ICache<string, Font> _cache = new Cache<string, Font>();
-        private readonly IAssetService _assetService;
+        private readonly IAssetGroup _fonts;
 
         public FontCache(IAssetService assetService) {
-            this._assetService = assetService;
+            this._fonts = assetService.Fonts();
         }
 
         public Font GetFont(string fontId) {
@@ -19,7 +19,7 @@ namespace Annex.Sfml.Collections.Generic
                 return font;
             }
 
-            var asset = this._assetService.Fonts.GetAsset(fontId);
+            var asset = this._fonts.GetAsset(fontId);
 
             if (asset is not Font newFont) {
                 if (asset.FilepathSupported) {

@@ -51,8 +51,12 @@ public abstract class AnnexApp : ScaffoldApp
         container.RegisterSingleton<ITimeService, StopwatchTimeService>();
         container.RegisterSingleton<ISceneService, SceneService>();
         container.RegisterSingleton<IGraphicsService, GraphicsService>();
+
+        container.RegisterAssetGroup(KnownAssetGroups.TextureGroupId);
+        container.RegisterAssetGroup(KnownAssetGroups.FontGroupId);
+        container.RegisterAssetGroup(KnownAssetGroups.SceneDataGroupId);
         container.RegisterSingleton<IAssetService, AssetService>();
-        container.Register<IAssetGroup, AssetGroup>();
+
         container.Register<IPriorityEventQueue, PriorityEventQueue>();
         container.RegisterBroadcast<RequestStopAppMessage>();
 
