@@ -2,6 +2,8 @@
 using Annex.Core.Data;
 using Annex.Core.Graphics.Contexts;
 using Annex.Core.Scenes.Components;
+using Scaffold.DependencyInjection;
+using Scaffold.Logging;
 using System.Xml.Linq;
 
 namespace Annex.Core.Scenes.Layouts.Html
@@ -9,16 +11,21 @@ namespace Annex.Core.Scenes.Layouts.Html
     internal class HtmlSceneLoader : IHtmlSceneLoader
     {
         public readonly IAssetGroup _sceneDataAssets;
+        private readonly IContainer _container;
 
-        public HtmlSceneLoader(IAssetService assetService) {
+        public HtmlSceneLoader(IAssetService assetService, IContainer container) {
             this._sceneDataAssets = assetService.SceneData();
+            this._container = container;
         }
 
         public void Load(string assetId, IScene sceneInstance) {
             
             var document = this.GetDocumentRoot(assetId);
             var styles = new Styles(document);
-            var scene = this.GetSceneElement(document);
+            if (this.GetSceneElement(document) is not XElement scene) {
+                Log.Trace(LogSeverity.Warning, $"Failed to retrieve scene from asset: '{assetId}'");
+                return;
+            }
 
             // Apply styles to the scene
             this.ProcessElement(sceneInstance, null, scene, styles);
@@ -60,20 +67,23 @@ namespace Annex.Core.Scenes.Layouts.Html
                 return false;
             }
 
-            uiElement = UIElementFactory.CreateInstance(typeToInstantiate);
+            uiElement = UIElementFactory.CreateInstance(typeToInstantiate, this._container);
             return true;
         }
 
-        private XElement GetSceneElement(XElement document) {
+        private XElement? GetSceneElement(XElement document) {
             var sceneNodes = document.Elements("scene");
-            return sceneNodes.Single();
+            return sceneNodes.FirstOrDefault();
         }
 
         private XElement GetDocumentRoot(string assetId) {
-            var sceneDataAsset = this._sceneDataAssets.GetAsset(assetId)!;
-            using var ms = new MemoryStream(sceneDataAsset.ToBytes());
-            using var sr = new StreamReader(ms);
-            string sceneData = sr.ReadToEnd();
+            string sceneData = string.Empty;
+
+            if (this._sceneDataAssets.GetAsset(assetId) is IAsset sceneDataAsset) {
+                using var ms = new MemoryStream(sceneDataAsset.ToBytes());
+                using var sr = new StreamReader(ms);
+                sceneData = sr.ReadToEnd();
+            }
 
             // XDocument requires a root element, so inject one manually for safety.
             string fakeRoot = $"<root>{sceneData}</root>";
