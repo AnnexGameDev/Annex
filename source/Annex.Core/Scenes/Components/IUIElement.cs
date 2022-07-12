@@ -2,25 +2,41 @@
 using Annex.Core.Graphics;
 using Annex.Core.Input.InputEvents;
 
-namespace Annex.Core.Scenes.Components
+namespace Annex.Core.Scenes.Components;
+
+public interface IUIElement : IDrawable
 {
-    public interface IUIElement : IDrawable
-    {
-        string ElementID { get; set; }
-        IVector2<float> Size { get; }
-        IVector2<float> Position { get; }
-        bool Visible { get; set; }
+    string ElementID { get; set; }
+    IVector2<float> Size { get; }
+    IVector2<float> Position { get; }
+    bool Visible { get; set; }
 
-        bool IsInBounds(float x, float y);
+    bool IsInBounds(float x, float y);
 
-        void OnLostFocus();
-        void OnGainedFocus();
-        void OnMouseButtonPressed(MouseButtonPressedEvent mouseButtonPressedEvent);
-        void OnMouseButtonReleased(MouseButtonReleasedEvent mouseButtonReleasedEvent);
-        void OnMouseMoved(MouseMovedEvent mouseMovedEvent);
-        void OnKeyboardKeyPressed(KeyboardKeyPressedEvent keyboardKeyPressedEvent);
-        void OnKeyboardKeyReleased(KeyboardKeyReleasedEvent keyboardKeyReleasedEvent);
-        void OnMouseScrollWheelMoved(MouseScrollWheelMovedEvent mouseScrollWheelMovedEvent);
-        void OnMouseLeft(MouseMovedEvent mouseMovedEvent);
-    }
+    void OnLostFocus();
+    event EventHandler? OnElementLostFocus;
+
+    void OnGainedFocus();
+    event EventHandler? OnElementGainedFocus;
+
+    void OnMouseButtonPressed(MouseButtonPressedEvent mouseButtonPressedEvent);
+    event EventHandler<MouseButtonPressedEvent>? OnElementMouseButtonPressed;
+
+    void OnMouseButtonReleased(MouseButtonReleasedEvent mouseButtonReleasedEvent);
+    event EventHandler<MouseButtonReleasedEvent>? OnElementMouseButtonReleased;
+
+    void OnMouseMoved(MouseMovedEvent mouseMovedEvent);
+    event EventHandler<MouseMovedEvent>? OnElementMouseMoved;
+
+    void OnKeyboardKeyPressed(KeyboardKeyPressedEvent keyboardKeyPressedEvent);
+    event EventHandler<KeyboardKeyPressedEvent>? OnElementKeyboardKeyPressed;
+
+    void OnKeyboardKeyReleased(KeyboardKeyReleasedEvent keyboardKeyReleasedEvent);
+    event EventHandler<KeyboardKeyReleasedEvent>? OnElementKeyboardKeyReleased;
+
+    void OnMouseScrollWheelMoved(MouseScrollWheelMovedEvent mouseScrollWheelMovedEvent);
+    event EventHandler<MouseScrollWheelMovedEvent>? OnElementMouseScrollWheelMoved;
+
+    void OnMouseLeft(MouseMovedEvent mouseMovedEvent);
+    event EventHandler<MouseMovedEvent>? OnElementMouseLeft;
 }

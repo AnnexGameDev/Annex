@@ -1,7 +1,6 @@
-﻿namespace Annex.Core.Scenes.Components
+﻿namespace Annex.Core.Scenes.Components;
+
+public interface IPasswordBox
 {
-    public interface IPasswordBox
-    {
-        char PasswordChar { get; set; }
-    }
+    char PasswordChar { get; set; }
 }
