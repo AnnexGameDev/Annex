@@ -35,5 +35,11 @@
 
             return sum;
         }
+
+        public static IVector2<float> CenterInside(IVector2<float> container, IVector2<float> elementToCenter) {
+            var halfContainerSize = new ScalingVector2f(container, 0.5f, 0.5f);
+            var negativeHalfElementSize = new ScalingVector2f(elementToCenter, -0.5f, 0.5f);
+            return new OffsetVector2f(halfContainerSize, negativeHalfElementSize);
+        }
     }
 }
