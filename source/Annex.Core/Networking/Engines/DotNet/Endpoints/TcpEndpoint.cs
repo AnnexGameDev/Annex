@@ -51,7 +51,6 @@ namespace Annex.Core.Networking.Engines.DotNet.Endpoints
                 connection.Dispose();
             }
 
-            this.Socket.Disconnect(false);
             this.Socket.Dispose();
         }
     }
