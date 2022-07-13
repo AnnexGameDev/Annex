@@ -3,6 +3,7 @@ using Annex.Core.Data;
 using Annex.Core.Graphics.Contexts;
 using Annex.Core.Scenes.Components;
 using Scaffold.DependencyInjection;
+using Scaffold.Extensions;
 using Scaffold.Logging;
 using System.Xml.Linq;
 
@@ -180,6 +181,21 @@ namespace Annex.Core.Scenes.Layouts.Html
         }
 
         private float ComputeVectorValue(string val, float parentVal) {
+
+            val = val.Trim();
+
+            if (val.StartsWith("calc(") && val.EndsWith(")")) {
+
+                val = val[5..^1];
+                var possibleOperators = new[] { '-', '+' };
+                var terms = val.Split(possibleOperators).Select(term => ComputeVectorValue(term, parentVal));
+                var operators = val.FindAll(possibleOperators).ToList();
+                operators.Insert(0, '+'); // to match the length of the terms collection
+
+                float result = terms.Zip(operators, (num, op) => op == '+' ? num : -num).Sum();
+                return result;
+            }
+
             return val.EndsWith("%") ? parentVal * float.Parse(val[..^1]) / 100 : float.Parse(val);
         }
 

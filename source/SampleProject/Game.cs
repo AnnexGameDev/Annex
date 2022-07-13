@@ -21,7 +21,7 @@ namespace SampleProject
             try {
 #endif
             using var game = new Game();
-            game.Run<Level1>();
+            game.Run<Level3>();
 #if !DEBUG
             } catch (Exception e) {
                 Log.Trace(LogSeverity.Error, "Exception in main", exception: e);
