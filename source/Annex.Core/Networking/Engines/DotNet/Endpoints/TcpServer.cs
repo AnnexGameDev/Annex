@@ -7,12 +7,12 @@ namespace Annex.Core.Networking.Engines.DotNet.Endpoints
 {
     internal class TcpServer : TcpEndpoint, IServerEndpoint
     {
-        public IEnumerable<Connection> ClientConnections => this.Connections;
+        public IEnumerable<IConnection> ClientConnections => this.Connections;
 
         public TcpServer(EndpointConfiguration config) : base(config) {
         }
 
-        public void Send(Connection connection, OutgoingPacket packet) {
+        public void Send(IConnection connection, OutgoingPacket packet) {
             if (connection is not TcpConnection tcpConnection) {
                 Log.Trace(LogSeverity.Error, $"Connection is not a {nameof(TcpConnection)}");
                 return;
