@@ -56,6 +56,6 @@ text {
 	white-space: nowrap;
 }
 
-textbox {
+textbox, passwordbox {
 	position: absolute;
 }
