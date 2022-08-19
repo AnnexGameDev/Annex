@@ -3,9 +3,15 @@ using Scaffold.Logging;
 
 namespace Annex.Core.Assets
 {
-    internal class AssetGroup : IAssetGroup
+    public class AssetGroup : IAssetGroup
     {
         private readonly List<IAssetBundle> _bundles = new();
+
+        public string Id { get; }
+
+        public AssetGroup(string id) {
+            this.Id = id;
+        }
 
         public void AddBundle(IAssetBundle bundle) {
             this._bundles.Add(bundle);

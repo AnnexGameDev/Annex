@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Annex.Data.Shared
+namespace Annex_Old.Data.Shared
 {
     [Serializable]
     [DebuggerDisplay("{Value}")]

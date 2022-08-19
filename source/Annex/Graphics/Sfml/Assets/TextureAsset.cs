@@ -1,7 +1,7 @@
-﻿using Annex.Assets;
+﻿using Annex_Old.Assets;
 using SFML.Graphics;
 
-namespace Annex.Graphics.Sfml.Assets
+namespace Annex_Old.Graphics.Sfml.Assets
 {
     public class TextureAsset : Asset
     {

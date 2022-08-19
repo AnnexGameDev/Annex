@@ -1,4 +1,4 @@
-﻿namespace Annex.Assets.Streams.PakFile
+﻿namespace Annex_Old.Assets.Streams.PakFile
 {
     public class PakFileEntry
     {

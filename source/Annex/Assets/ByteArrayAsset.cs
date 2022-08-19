@@ -1,4 +1,4 @@
-﻿namespace Annex.Assets
+﻿namespace Annex_Old.Assets
 {
     public class ByteArrayAsset : Asset
     {

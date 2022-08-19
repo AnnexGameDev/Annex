@@ -10,18 +10,19 @@ namespace Annex.Core.Assets.Bundles
         private readonly IDictionary<string, IAsset> _assets = new ConcurrentDictionary<string, IAsset>();
         private readonly PakFile _pakFile;
 
-        public PakFileBundle(string pakFilePath) {
-            this._pakFile = new PakFile(pakFilePath);
-        }
+        /// <remarks>
+        /// Use the assetroot if you want to copy files from the root (this is usually used for version control), and not for production
+        /// </remarks>
+        public PakFileBundle(string pakFilePath, string fileFilter, string? assetRoot = null) {
 
-#if DEBUG
-        // TODO: The CreateFrom should use [Conditional]
-        public PakFileBundle(string pakFilePath, string fileFilter, string assetRoot) {
+            if (assetRoot is null) {
+                this._pakFile = new PakFile(pakFilePath);
+                return;
+            }
+
             Log.Trace(LogSeverity.Verbose, $"Constructing the pak file {pakFilePath}...");
-
             this._pakFile = PakFile.CreateFrom(pakFilePath, fileFilter, assetRoot)!;
         }
-#endif
 
         public IAsset? GetAsset(string id) {
             id = id.ToSafeAssetIdString();

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Annex.Assets
+namespace Annex_Old.Assets
 {
     public abstract class Asset : IDisposable
     {

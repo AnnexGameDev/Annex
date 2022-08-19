@@ -1,9 +1,9 @@
-﻿using Annex.Data;
-using Annex.Data.Shared;
-using Annex.Graphics;
-using Annex.Graphics.Contexts;
+﻿using Annex_Old.Data;
+using Annex_Old.Data.Shared;
+using Annex_Old.Graphics;
+using Annex_Old.Graphics.Contexts;
 
-namespace Annex.Scenes.Components
+namespace Annex_Old.Scenes.Components
 {
     public class Label : Image
     {

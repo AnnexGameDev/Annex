@@ -1,12 +1,12 @@
-﻿using Annex.Assets.Converters;
-using Annex.Audio.Sfml.Events;
-using Annex.Events;
-using Annex.Services;
+﻿using Annex_Old.Assets.Converters;
+using Annex_Old.Audio.Sfml.Events;
+using Annex_Old.Events;
+using Annex_Old.Services;
 using SFML.Audio;
 using System.Collections.Generic;
-using static Annex.Audio.Sfml.Errors;
+using static Annex_Old.Audio.Sfml.Errors;
 
-namespace Annex.Audio.Sfml
+namespace Annex_Old.Audio.Sfml
 {
     public sealed class SfmlPlayer : IAudioService
     {

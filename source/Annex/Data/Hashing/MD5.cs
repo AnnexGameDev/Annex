@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using static Annex.Data.Errors;
+using static Annex_Old.Data.Errors;
 
-namespace Annex.Data.Hashing
+namespace Annex_Old.Data.Hashing
 {
     public sealed class MD5 : IDisposable
     {

@@ -3,56 +3,54 @@ using Scaffold.Collections.Generic;
 using Scaffold.Logging;
 using System.Net.Sockets;
 
-namespace Annex.Core.Networking.Engines.DotNet.Endpoints
+namespace Annex.Core.Networking.Engines.DotNet.Endpoints;
+
+internal abstract class TcpEndpoint : IEndpoint
 {
-    public abstract class TcpEndpoint : IEndpoint
-    {
-        protected readonly EndpointConfiguration Config;
-        protected readonly Socket Socket;
+    protected readonly EndpointConfiguration Config;
+    protected readonly Socket Socket;
 
-        protected ConcurrentHashSet<TcpConnection> Connections = new();
+    protected ConcurrentHashSet<TcpConnection> Connections = new();
 
-        public TcpEndpoint(EndpointConfiguration config) {
-            this.Config = config;
-            this.Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+    public TcpEndpoint(EndpointConfiguration config) {
+        this.Config = config;
+        this.Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+    }
+
+    protected void HandleNewConnection(TcpConnection connection) {
+
+        if (this.Connections.Contains(connection)) {
+            Log.Trace(LogSeverity.Error, $"Connection {connection} is already registered");
+            return;
         }
 
-        protected void HandleNewConnection(TcpConnection connection) {
+        this.Connections.Add(connection);
+        connection.ListenForIncomingPackets();
+    }
 
-            if (this.Connections.Contains(connection)) {
-                Log.Trace(LogSeverity.Error, $"Connection {connection} is already registered");
-                return;
-            }
-
-            this.Connections.Add(connection);
-            connection.ListenForIncomingPackets();
+    protected void HandleDisconnectedConnection(TcpConnection connection) {
+        if (!this.Connections.Contains(connection)) {
+            Log.Trace(LogSeverity.Error, $"Connection {connection} is not registered");
+            return;
         }
 
-        protected void HandleDisconnectedConnection(TcpConnection connection) {
-            if (!this.Connections.Contains(connection)) {
-                Log.Trace(LogSeverity.Error, $"Connection {connection} is not registered");
-                return;
-            }
+        this.Connections.Remove(connection);
+    }
 
-            this.Connections.Remove(connection);
+    protected void SendTo(TcpConnection connection, OutgoingPacket packet) {
+        if (!this.Connections.Contains(connection)) {
+            Log.Trace(LogSeverity.Error, $"Connection {connection} is not registered");
+            return;
+        }
+        connection.SendOutgoingPacket(packet);
+    }
+
+    public void Dispose() {
+
+        foreach (var connection in this.Connections) {
+            connection.Dispose();
         }
 
-        protected void SendTo(TcpConnection connection, OutgoingPacket packet) {
-            if (!this.Connections.Contains(connection)) {
-                Log.Trace(LogSeverity.Error, $"Connection {connection} is not registered");
-                return;
-            }
-            connection.SendOutgoingPacket(packet);
-        }
-
-        public void Dispose() {
-
-            foreach (var connection in this.Connections) {
-                connection.Dispose();
-            }
-
-            this.Socket.Disconnect(false);
-            this.Socket.Dispose();
-        }
+        this.Socket.Dispose();
     }
 }

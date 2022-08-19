@@ -1,7 +1,7 @@
-﻿using Annex.Events;
+﻿using Annex_Old.Events;
 using Lidgren.Network;
 
-namespace Annex.Networking.Lidgren
+namespace Annex_Old.Networking.Lidgren
 {
     public class LidgrenReceiveMessageEvent : GameEvent
     {

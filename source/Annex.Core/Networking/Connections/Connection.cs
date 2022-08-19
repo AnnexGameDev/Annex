@@ -1,6 +1,8 @@
-﻿namespace Annex.Core.Networking.Connections
+﻿using Scaffold.Logging;
+
+namespace Annex.Core.Networking.Connections
 {
-    public class Connection : IDisposable
+    public abstract class Connection : IConnection
     {
         private bool disposedValue;
         public Guid Id { get; } = Guid.NewGuid();
@@ -22,7 +24,7 @@
         }
 
         public override bool Equals(object? obj) {
-            if (obj is not Connection connection) {
+            if (obj is not IConnection connection) {
                 return false;
             }
             return connection.Id.Equals(this.Id);
@@ -31,7 +33,7 @@
         protected virtual void Dispose(bool disposing) {
             if (!disposedValue) {
                 if (disposing) {
-                    // TODO: dispose managed state (managed objects)
+                    this.Destroy("Disposing");
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override finalizer
@@ -51,6 +53,10 @@
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
+        }
+
+        public virtual void Destroy(string reason, Exception? exception = null) {
+            Log.Trace(LogSeverity.Normal, $"Disconnecting client {this.Id}: {reason}", exception);
         }
     }
 }

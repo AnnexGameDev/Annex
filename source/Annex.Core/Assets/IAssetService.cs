@@ -2,8 +2,6 @@
 {
     public interface IAssetService
     {
-        public IAssetGroup Textures { get; }
-        public IAssetGroup Fonts { get; }
-        public IAssetGroup SceneData { get; }
+        bool TryGetAssetGroup(string id, out IAssetGroup assetGroup);
     }
 }

@@ -1,11 +1,11 @@
-﻿using Annex.Events;
-using Annex.Networking.Configuration;
-using Annex.Networking.Packets;
-using Annex.Services;
+﻿using Annex_Old.Events;
+using Annex_Old.Networking.Configuration;
+using Annex_Old.Networking.Packets;
+using Annex_Old.Services;
 using Lidgren.Network;
 using System;
 
-namespace Annex.Networking.Lidgren
+namespace Annex_Old.Networking.Lidgren
 {
     public class LidgrenServer<T> : ServerEndpoint<T> where T : Connection, new()
     {

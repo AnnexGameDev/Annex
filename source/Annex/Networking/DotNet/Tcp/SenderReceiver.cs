@@ -1,8 +1,8 @@
-﻿using Annex.Networking.Packets;
+﻿using Annex_Old.Networking.Packets;
 using System;
 using System.Net.Sockets;
 
-namespace Annex.Networking.DotNet.Tcp
+namespace Annex_Old.Networking.DotNet.Tcp
 {
     public class SenderReceiver
     {

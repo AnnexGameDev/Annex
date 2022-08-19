@@ -1,10 +1,10 @@
-﻿using Annex.Assets.Services;
-using Annex.Events;
-using Annex.Graphics;
-using Annex.Logging;
-using Annex.Scenes;
+﻿using Annex_Old.Assets.Services;
+using Annex_Old.Events;
+using Annex_Old.Graphics;
+using Annex_Old.Logging;
+using Annex_Old.Scenes;
 
-namespace Annex.Services
+namespace Annex_Old.Services
 {
     internal class ServiceProvider
     {

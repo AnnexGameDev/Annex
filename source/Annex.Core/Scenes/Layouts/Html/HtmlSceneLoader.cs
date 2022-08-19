@@ -2,6 +2,9 @@
 using Annex.Core.Data;
 using Annex.Core.Graphics.Contexts;
 using Annex.Core.Scenes.Components;
+using Scaffold.DependencyInjection;
+using Scaffold.Extensions;
+using Scaffold.Logging;
 using System.Xml.Linq;
 
 namespace Annex.Core.Scenes.Layouts.Html
@@ -9,16 +12,21 @@ namespace Annex.Core.Scenes.Layouts.Html
     internal class HtmlSceneLoader : IHtmlSceneLoader
     {
         public readonly IAssetGroup _sceneDataAssets;
+        private readonly IContainer _container;
 
-        public HtmlSceneLoader(IAssetService assetService) {
-            this._sceneDataAssets = assetService.SceneData;
+        public HtmlSceneLoader(IAssetService assetService, IContainer container) {
+            this._sceneDataAssets = assetService.SceneData();
+            this._container = container;
         }
 
         public void Load(string assetId, IScene sceneInstance) {
             
             var document = this.GetDocumentRoot(assetId);
             var styles = new Styles(document);
-            var scene = this.GetSceneElement(document);
+            if (this.GetSceneElement(document) is not XElement scene) {
+                Log.Trace(LogSeverity.Warning, $"Failed to retrieve scene from asset: '{assetId}'");
+                return;
+            }
 
             // Apply styles to the scene
             this.ProcessElement(sceneInstance, null, scene, styles);
@@ -60,20 +68,23 @@ namespace Annex.Core.Scenes.Layouts.Html
                 return false;
             }
 
-            uiElement = UIElementFactory.CreateInstance(typeToInstantiate);
+            uiElement = UIElementFactory.CreateInstance(typeToInstantiate, this._container);
             return true;
         }
 
-        private XElement GetSceneElement(XElement document) {
+        private XElement? GetSceneElement(XElement document) {
             var sceneNodes = document.Elements("scene");
-            return sceneNodes.Single();
+            return sceneNodes.FirstOrDefault();
         }
 
         private XElement GetDocumentRoot(string assetId) {
-            var sceneDataAsset = this._sceneDataAssets.GetAsset(assetId)!;
-            using var ms = new MemoryStream(sceneDataAsset.ToBytes());
-            using var sr = new StreamReader(ms);
-            string sceneData = sr.ReadToEnd();
+            string sceneData = string.Empty;
+
+            if (this._sceneDataAssets.GetAsset(assetId) is IAsset sceneDataAsset) {
+                using var ms = new MemoryStream(sceneDataAsset.ToBytes());
+                using var sr = new StreamReader(ms);
+                sceneData = sr.ReadToEnd();
+            }
 
             // XDocument requires a root element, so inject one manually for safety.
             string fakeRoot = $"<root>{sceneData}</root>";
@@ -170,6 +181,21 @@ namespace Annex.Core.Scenes.Layouts.Html
         }
 
         private float ComputeVectorValue(string val, float parentVal) {
+
+            val = val.Trim();
+
+            if (val.StartsWith("calc(") && val.EndsWith(")")) {
+
+                val = val[5..^1];
+                var possibleOperators = new[] { '-', '+' };
+                var terms = val.Split(possibleOperators).Select(term => ComputeVectorValue(term, parentVal));
+                var operators = val.FindAll(possibleOperators).ToList();
+                operators.Insert(0, '+'); // to match the length of the terms collection
+
+                float result = terms.Zip(operators, (num, op) => op == '+' ? num : -num).Sum();
+                return result;
+            }
+
             return val.EndsWith("%") ? parentVal * float.Parse(val[..^1]) / 100 : float.Parse(val);
         }
 

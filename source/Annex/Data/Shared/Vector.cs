@@ -2,7 +2,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Annex.Data.Shared
+namespace Annex_Old.Data.Shared
 {
     [DebuggerDisplay("X:{X} Y:{Y}")]
     public abstract class Vector : Shared<float, float>

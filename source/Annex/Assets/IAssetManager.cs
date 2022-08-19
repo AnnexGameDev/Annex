@@ -1,8 +1,8 @@
-﻿using Annex.Assets.Converters;
-using Annex.Assets.Streams;
-using Annex.Services;
+﻿using Annex_Old.Assets.Converters;
+using Annex_Old.Assets.Streams;
+using Annex_Old.Services;
 
-namespace Annex.Assets
+namespace Annex_Old.Assets
 {
     public interface IAssetManager : IService
     {

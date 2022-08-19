@@ -1,4 +1,4 @@
-﻿namespace Annex.Networking.Packets
+﻿namespace Annex_Old.Networking.Packets
 {
     public interface IIncomingPacketHandler<T> where T : Connection
     {

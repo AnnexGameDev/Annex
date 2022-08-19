@@ -1,4 +1,4 @@
-﻿namespace Annex.Data.Shared
+﻿namespace Annex_Old.Data.Shared
 {
     public class String : Shared<string?>
     {

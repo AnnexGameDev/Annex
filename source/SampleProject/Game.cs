@@ -21,7 +21,7 @@ namespace SampleProject
             try {
 #endif
             using var game = new Game();
-            game.Run<Level2>();
+            game.Run<Level3>();
 #if !DEBUG
             } catch (Exception e) {
                 Log.Trace(LogSeverity.Error, "Exception in main", exception: e);
@@ -35,8 +35,10 @@ namespace SampleProject
             window.SetResolution(960, 640);
             window.SetSize(960, 640);
 
-            var icon = assetService.Textures.GetAsset("icons/icon.png")!;
-            var cursor = assetService.Textures.GetAsset("cursors/cursor.png")!;
+            var textures = assetService.Textures();
+
+            var icon = textures.GetAsset("icons/icon.png")!;
+            var cursor = textures.GetAsset("cursors/cursor.png")!;
 
             window.SetIcon(100, 100, icon);
             window.SetMouseImage(cursor, 16, 16, 0, 0);
@@ -56,19 +58,22 @@ namespace SampleProject
 
         protected override void SetupAssetBundles(IAssetService assetService) {
             string assetRoot = GetAssetRoot();
-            string textureRoot = Path.Combine(assetRoot, "textures");
-            string fontsRoot = Path.Combine(assetRoot, "fonts");
-            string sceneDataRoot = Path.Combine(assetRoot, "scenes");
+            var textures = assetService.Textures();
+            var fonts = assetService.Fonts();
+            var sceneData = assetService.SceneData();
 
 #if DEBUG
-            assetService.Textures.AddBundle(new PakFileBundle("textures.pak", "*.png", textureRoot));
-            assetService.Fonts.AddBundle(new PakFileBundle("fonts.pak", "*.ttf", fontsRoot));
-            assetService.SceneData.AddBundle(new FileSystemBundle("*.html", sceneDataRoot));
+            string? textureRoot = Path.Combine(assetRoot, "textures");
+            string? fontsRoot = Path.Combine(assetRoot, "fonts");
+            string? sceneDataRoot = Path.Combine(assetRoot, "scenes");
 #else
-            assetService.Textures.AddBundle(new PakFileBundle("texture.pak"));
-            assetService.Fonts.AddBundle(new PakFileBundle("fonts.pak"));
+            string? textureRoot = null;
+            string? fontsRoot = null;
+            string? sceneDataRoot = null;
 #endif
-
+            textures.AddBundle(new PakFileBundle("textures.pak", "*.png", textureRoot));
+            fonts.AddBundle(new PakFileBundle("fonts.pak", "*.ttf", fontsRoot));
+            sceneData.AddBundle(new FileSystemBundle("*.html", sceneDataRoot));
         }
 
         private string GetAssetRoot() {

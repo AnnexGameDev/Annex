@@ -1,7 +1,7 @@
-﻿using Annex.Scenes;
-using Annex.Scenes.Components;
+﻿using Annex_Old.Scenes;
+using Annex_Old.Scenes.Components;
 
-namespace Annex.Graphics.Events
+namespace Annex_Old.Graphics.Events
 {
     public class MouseButtonEvent : HardwareEvent
     {

@@ -1,4 +1,4 @@
-﻿namespace Annex.Logging
+﻿namespace Annex_Old.Logging
 {
     public interface ILogable
     {

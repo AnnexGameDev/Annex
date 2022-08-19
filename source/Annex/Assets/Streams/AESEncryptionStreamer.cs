@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Annex.Assets.Streams
+namespace Annex_Old.Assets.Streams
 {
     public class AESEncryptionStreamer : IDataStreamer
     {

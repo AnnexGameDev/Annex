@@ -46,7 +46,7 @@ namespace SampleProject.Scenes.Level2
     [PacketHandler(PacketId.SimpleMessage)]
     public class SimpleMessagePacketHandler : IPacketHandler
     {
-        public void Handle(Connection connection, IncomingPacket packet) {
+        public void Handle(IConnection connection, IncomingPacket packet) {
             Console.WriteLine(packet.ReadString("msg"));
         }
     }

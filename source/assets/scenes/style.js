@@ -28,22 +28,47 @@ function Get(e, style, property) {
     return undefined;
 }
 
+function ProcessNumberValue(value) {
+
+    if (value == undefined) {
+        return undefined;
+    }
+
+    value = value.trim();
+
+    if (value.startsWith("calc(") && value.endsWith(")")) {
+
+        value = value.slice(5, value.length - 1);
+
+        var possibleOperatorsRegex = /[-+]/g;
+        var values = value.split(possibleOperatorsRegex);
+        var operators = [...value.matchAll(possibleOperatorsRegex)];
+
+        // Rejoin them
+        var result = "";
+        for (var i = 0; i < operators.length; i++) {
+            result = result + ProcessNumberValue(values[i]) + " " + operators[i] + " ";
+        }
+        result = result + ProcessNumberValue(values[operators.length]);
+        
+        return "calc(" + result + ")";
+    }
+
+    if (value.slice(-1) != "%") {
+        value = value + "px";
+    }
+
+    return value;
+}
+
 function GetXY(e, style, propertyName) {
     var propertyValue = Get(e, style, propertyName);
     if (propertyValue == undefined)
         return undefined;
 
     var values = propertyValue.split(',');
-    var x = values[0].trim();
-    var y = values[1].trim();
-
-    if (x.slice(-1) != "%") {
-        x = x + "px";
-    }
-
-    if (y.slice(-1) != "%") {
-        y = y + "px";
-    }
+    var x = ProcessNumberValue(values[0]);
+    var y = ProcessNumberValue(values[1]);
 
     return [x, y];
 }

@@ -5,8 +5,8 @@ namespace Annex.Core.Networking
 {
     public interface IClientEndpoint : IEndpoint
     {
-        Connection Connection { get; }
+        IConnection Connection { get; }
         void Send(OutgoingPacket packet);
-        Connection Start(long timeout = 5000);
+        IConnection Start(long timeout = 5000);
     }
 }

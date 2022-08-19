@@ -1,4 +1,7 @@
-﻿namespace Annex.Core
+﻿using Annex.Core.Assets;
+using Scaffold.DependencyInjection;
+
+namespace Annex.Core
 {
     public static class Extensions
     {
@@ -28,6 +31,10 @@
 
         public static string ToCamelCaseWord(this string str) {
             return $"{char.ToUpper(str[0])}{str[1..].ToLower()}";
+        }
+
+        public static void RegisterAssetGroup(this IContainer container, string groupId) {
+            container.RegisterAggregate<IAssetGroup>(() => new AssetGroup(groupId));
         }
     }
 }

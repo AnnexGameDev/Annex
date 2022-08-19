@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Annex.Scenes.Layouts.Html
+namespace Annex_Old.Scenes.Layouts.Html
 {
     public class UIElementTypeResolver
     {

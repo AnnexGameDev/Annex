@@ -1,4 +1,4 @@
-﻿namespace Annex.Assets.Streams
+﻿namespace Annex_Old.Assets.Streams
 {
     public interface IDataStreamer
     {

@@ -1,4 +1,5 @@
 ﻿using Annex.Core.Scenes.Components;
+using Scaffold.DependencyInjection;
 using System.Reflection;
 
 namespace Annex.Core.Scenes.Layouts
@@ -22,12 +23,10 @@ namespace Annex.Core.Scenes.Layouts
             return assembly.GetTypes().Where(type => type.IsAssignableTo(typeof(IUIElement)) && !type.IsAbstract && type.IsClass);
         }
 
-        public static IUIElement CreateInstance(string name) {
+        public static IUIElement CreateInstance(string name, IContainer container) {
             var type = _uiElementTypes[name.ToLower()];
 
-            var constructor = type.GetConstructors().First(c => c.GetParameters().All(p => p.IsOptional));
-            var args = constructor.GetParameters().Select(c => c.RawDefaultValue).ToArray();
-            return (IUIElement)constructor.Invoke(args);
+            return (IUIElement)container.Resolve(type);
         }
     }
 }

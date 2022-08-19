@@ -1,4 +1,4 @@
-﻿namespace Annex.Graphics.Events
+﻿namespace Annex_Old.Graphics.Events
 {
     public class WindowResizedEvent
     {

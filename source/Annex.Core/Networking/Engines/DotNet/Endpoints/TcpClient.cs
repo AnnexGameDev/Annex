@@ -8,7 +8,7 @@ namespace Annex.Core.Networking.Engines.DotNet.Endpoints
     internal class TcpClient : TcpEndpoint, IClientEndpoint
     {
         private TcpClientConnection _connection;
-        public Connection Connection => _connection;
+        public IConnection Connection => _connection;
 
         public TcpClient(EndpointConfiguration config) : base(config) {
             this._connection = new TcpClientConnection(this.Socket);
@@ -34,7 +34,7 @@ namespace Annex.Core.Networking.Engines.DotNet.Endpoints
             this.SendTo(this._connection, packet);
         }
 
-        public Connection Start(long timeout) {
+        public IConnection Start(long timeout) {
             this._connection.ConnectTo(this.Config.IP, this.Config.Port);
             this.WaitForResponse(timeout);
             return this.Connection;
@@ -44,7 +44,7 @@ namespace Annex.Core.Networking.Engines.DotNet.Endpoints
             long startConnectTime = GameTimeHelper.Now();
 
             while (true) {
-                if (GameTimeHelper.ElapsedTimeSince(startConnectTime) < timeout)
+                if (GameTimeHelper.ElapsedTimeSince(startConnectTime) >= timeout)
                     break;
 
                 if (this.Connection.State == ConnectionState.Connected)

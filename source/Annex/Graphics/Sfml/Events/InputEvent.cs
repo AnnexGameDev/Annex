@@ -1,8 +1,8 @@
-﻿using Annex.Events;
+﻿using Annex_Old.Events;
 using System;
-using static Annex.Graphics.EventIDs;
+using static Annex_Old.Graphics.EventIDs;
 
-namespace Annex.Graphics.Sfml.Events
+namespace Annex_Old.Graphics.Sfml.Events
 {
     public class InputEvent : GameEvent
     {
@@ -12,7 +12,7 @@ namespace Annex.Graphics.Sfml.Events
             this._processInput = processInput;
         }
 
-        protected override void Run(Annex.Events.EventArgs gameEventArgs) {
+        protected override void Run(Annex_Old.Events.EventArgs gameEventArgs) {
             this._processInput.Invoke();
         }
     }

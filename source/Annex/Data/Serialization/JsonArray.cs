@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
-namespace Annex.Data.Serialization
+namespace Annex_Old.Data.Serialization
 {
     public class JsonArray : IEnumerable<JsonElement>
     {

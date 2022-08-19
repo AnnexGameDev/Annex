@@ -1,6 +1,5 @@
-﻿namespace Annex.Core.Scenes.Components
+﻿namespace Annex.Core.Scenes.Components;
+
+public interface IButton : IUIElement, ILabel, IImage
 {
-    public interface IButton : IUIElement, ILabel, IImage
-    {
-    }
 }

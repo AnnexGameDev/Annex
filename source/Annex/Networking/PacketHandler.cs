@@ -1,8 +1,8 @@
-﻿using Annex.Networking.Packets;
-using Annex.Services;
+﻿using Annex_Old.Networking.Packets;
+using Annex_Old.Services;
 using System.Collections.Generic;
 
-namespace Annex.Networking
+namespace Annex_Old.Networking
 {
     public class PacketHandler<T> where T : Connection
     {

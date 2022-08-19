@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Annex.Core\Annex.Core.csproj" />
   </ItemGroup>
 
+  <Target Name="NugetPackAutoVersioning" AfterTargets="Build">
+    <Exec Command="dotnet pack -p:PackageVersion=$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd.HHmmss&quot;)) --no-build --configuration $(Configuration) --output &quot;$(SolutionDir)nuget&quot;" />
+  </Target>
+
 </Project>

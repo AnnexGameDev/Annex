@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Annex.Logging.Decorator
+namespace Annex_Old.Logging.Decorator
 {
     public class ConsoleLog : DecoratableLog
     {
