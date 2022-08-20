@@ -1,7 +1,7 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Graphics.Contexts;
 
-namespace Annex.Core.Scenes.Components;
+namespace Annex.Core.Scenes.Elements;
 
 public interface ILabel : IUIElement
 {

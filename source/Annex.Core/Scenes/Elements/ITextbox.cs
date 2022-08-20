@@ -1,7 +1,8 @@
-﻿namespace Annex.Core.Scenes.Components;
+﻿namespace Annex.Core.Scenes.Elements;
 
 public interface ITextbox
 {
+    string Text { get; set; }
     int CursorIndex { get; }
 
     string SelectedText { get; }

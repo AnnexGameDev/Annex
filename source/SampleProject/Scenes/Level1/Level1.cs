@@ -7,7 +7,7 @@ using Annex.Core.Events.Core;
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
 using Annex.Core.Graphics.Windows;
-using Annex.Core.Scenes.Components;
+using Annex.Core.Scenes.Elements;
 using SampleProject.Models;
 using SampleProject.Scenes.Level1.Events;
 using System.Linq;

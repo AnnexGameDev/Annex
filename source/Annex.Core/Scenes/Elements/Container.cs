@@ -2,7 +2,7 @@
 using Annex.Core.Graphics;
 using Scaffold.Collections.Generic;
 
-namespace Annex.Core.Scenes.Components;
+namespace Annex.Core.Scenes.Elements;
 
 public class Container : UIElement, IParentElement
 {

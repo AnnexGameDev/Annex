@@ -6,9 +6,9 @@ using Annex.Core.Input;
 using Annex.Core.Input.InputEvents;
 using Scaffold.Logging;
 
-namespace Annex.Core.Scenes.Components;
+namespace Annex.Core.Scenes.Elements;
 
-public partial class TextBox : LabeledTextureUIElement, ITextbox
+public partial class Textbox : LabeledTextureUIElement, ITextbox
 {
     private const long ToggleFrequency = 500;
     private long _nextToggleCursorVisiblity = 0;
@@ -28,7 +28,7 @@ public partial class TextBox : LabeledTextureUIElement, ITextbox
     public int SelectionStart { get; private set; }
     public int SelectionLength { get; private set; }
 
-    public TextBox(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size) {
+    public Textbox(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size) {
     }
 
     protected override void DrawInternal(ICanvas canvas) {

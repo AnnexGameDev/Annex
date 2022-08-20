@@ -1,5 +1,5 @@
 ﻿using Annex.Core.Scenes;
-using Annex.Core.Scenes.Components;
+using Annex.Core.Scenes.Elements;
 using FluentAssertions;
 using Moq;
 using Scaffold.DependencyInjection;

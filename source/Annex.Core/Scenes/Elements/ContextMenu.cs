@@ -4,7 +4,7 @@ using Annex.Core.Graphics.Contexts;
 using Annex.Core.Helpers;
 using Annex.Core.Input.InputEvents;
 
-namespace Annex.Core.Scenes.Components;
+namespace Annex.Core.Scenes.Elements;
 
 public class ContextMenu : Container, IParentElement
 {

@@ -5,7 +5,7 @@ using Annex.Core.Graphics.Windows;
 using Annex.Core.Networking;
 using Annex.Core.Networking.Connections;
 using Annex.Core.Networking.Packets;
-using Annex.Core.Scenes.Components;
+using Annex.Core.Scenes.Elements;
 using SampleProject.Scenes.Level2.Events;
 using System;
 
