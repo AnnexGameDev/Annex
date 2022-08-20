@@ -113,6 +113,16 @@ function ApplyText(e, style) {
 
     if (text == undefined)
         return;
+	
+	if (e.tagName.toLowerCase() == "passwordbox") {
+		var passwordChar = Get(e, style, "password-char");
+		
+		if (passwordChar == undefined) {
+			passwordChar = "*";
+		}
+		
+		text = passwordChar.repeat(text.length);
+	}
 
     var font = Get(e, style, "font");
     if (font != undefined) {

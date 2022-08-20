@@ -31,6 +31,7 @@ public abstract class AnnexApp : ScaffoldApp
             this.Container.Resolve<GameTimeHelper>();
             this.Container.Resolve<KeyboardHelper>();
             this.Container.Resolve<HtmlSceneLoaderHelper>();
+            this.Container.Resolve<SceneServiceHelper>();
 
             this.SetupAssetBundles(assetService);
             this.CreateWindow(graphicsService, assetService);

@@ -68,6 +68,30 @@ public class Container : UIElement, IParentElement
         return this;
     }
 
+    public void RemoveChild(string elementId) {
+        for (int i = 0; i < this._children.Count; i++) {
+            if (this._children[i].ElementID == elementId) {
+                this.RemoveChild(i);
+                break;
+            }
+        }
+    }
+
+    public void RemoveChild(IUIElement child) {
+        for (int i = 0; i < this._children.Count; i++) {
+            if (this._children[i] == child) {
+                this.RemoveChild(i);
+                break;
+            }
+        }
+    }
+
+    private void RemoveChild(int i) {
+        var child = this._children[i];
+        child.Dispose();
+        this._children.RemoveAt(i);
+    }
+
     protected override void DrawInternal(ICanvas canvas) {
         foreach (var child in this._children) {
             child.Draw(canvas);
