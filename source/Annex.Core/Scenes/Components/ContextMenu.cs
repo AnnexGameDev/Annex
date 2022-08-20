@@ -1,6 +1,7 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
+using Annex.Core.Helpers;
 using Annex.Core.Input.InputEvents;
 
 namespace Annex.Core.Scenes.Components;
@@ -38,6 +39,14 @@ public class ContextMenu : Container, IParentElement
             canvas.Draw(this._background);
             base.DrawInternal(canvas);
         }
+    }
+
+    public void AddToCurrentScene() {
+        SceneServiceHelper.CurrentScene.AddChild(this);
+    }
+
+    public void RemoveFromCurrentScene() {
+        SceneServiceHelper.CurrentScene.RemoveChild(this);
     }
 
     public class Item : Label

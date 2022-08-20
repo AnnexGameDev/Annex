@@ -20,15 +20,15 @@ public abstract class UIElement : IUIElement
     }
     private bool disposedValue = false;
 
-    public event EventHandler OnElementLostFocus;
-    public event EventHandler OnElementGainedFocus;
-    public event EventHandler<MouseButtonPressedEvent> OnElementMouseButtonPressed;
-    public event EventHandler<MouseButtonReleasedEvent> OnElementMouseButtonReleased;
-    public event EventHandler<MouseMovedEvent> OnElementMouseMoved;
-    public event EventHandler<KeyboardKeyPressedEvent> OnElementKeyboardKeyPressed;
-    public event EventHandler<KeyboardKeyReleasedEvent> OnElementKeyboardKeyReleased;
-    public event EventHandler<MouseScrollWheelMovedEvent> OnElementMouseScrollWheelMoved;
-    public event EventHandler<MouseMovedEvent> OnElementMouseLeft;
+    public event EventHandler? OnElementLostFocus;
+    public event EventHandler? OnElementGainedFocus;
+    public event EventHandler<MouseButtonPressedEvent>? OnElementMouseButtonPressed;
+    public event EventHandler<MouseButtonReleasedEvent>? OnElementMouseButtonReleased;
+    public event EventHandler<MouseMovedEvent>? OnElementMouseMoved;
+    public event EventHandler<KeyboardKeyPressedEvent>? OnElementKeyboardKeyPressed;
+    public event EventHandler<KeyboardKeyReleasedEvent>? OnElementKeyboardKeyReleased;
+    public event EventHandler<MouseScrollWheelMovedEvent>? OnElementMouseScrollWheelMoved;
+    public event EventHandler<MouseMovedEvent>? OnElementMouseLeft;
 
     public void Draw(ICanvas canvas) {
         if (this.Visible)

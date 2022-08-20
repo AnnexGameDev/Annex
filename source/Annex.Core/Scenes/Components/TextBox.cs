@@ -10,8 +10,6 @@ namespace Annex.Core.Scenes.Components;
 
 public partial class TextBox : LabeledTextureUIElement, ITextbox
 {
-    private ContextMenu? _rightClickContextMenu;
-
     private const long ToggleFrequency = 500;
     private long _nextToggleCursorVisiblity = 0;
     private bool _cursorVisible = false;
@@ -22,6 +20,8 @@ public partial class TextBox : LabeledTextureUIElement, ITextbox
     private bool _isSelecting;
     private int _startSelectMouseX;
     private int _endSelectMouseX;
+    private ContextMenu? _rightClickContextMenu;
+
     private bool _hasSelection => this._isSelecting || this.SelectionLength > 0;
 
     public string SelectedText => this.Text.Substring(this.SelectionStart, this.SelectionLength);
@@ -45,8 +45,6 @@ public partial class TextBox : LabeledTextureUIElement, ITextbox
                 canvas.Draw(this._textCursor!);
             }
         }
-
-        this._rightClickContextMenu?.Draw(canvas);
     }
 
     private void UpdateCursor() {
@@ -116,12 +114,16 @@ public partial class TextBox : LabeledTextureUIElement, ITextbox
         base.OnMouseButtonReleased(mouseButtonReleasedEvent);
 
         if (mouseButtonReleasedEvent.Button == MouseButton.Right) {
-            this._rightClickContextMenu ??= new ContextMenu(
+
+            this._rightClickContextMenu?.RemoveFromCurrentScene();
+
+            this._rightClickContextMenu = new ContextMenu(
                 new Vector2f(mouseButtonReleasedEvent.WindowX, mouseButtonReleasedEvent.WindowY),
                 new ContextMenu.Item("Cut", CutSelectedText),
                 new ContextMenu.Item("Copy", CopySelectedText),
                 new ContextMenu.Item("Paste", PasteText)
             );
+            this._rightClickContextMenu.AddToCurrentScene();
         }
 
         if (mouseButtonReleasedEvent.Button == MouseButton.Left) {
@@ -146,7 +148,7 @@ public partial class TextBox : LabeledTextureUIElement, ITextbox
         }
 
         if (mouseButtonPressedEvent.Button == MouseButton.Left || mouseButtonPressedEvent.Button == MouseButton.Right) {
-            this.CloseContextMenu();
+            this.TryCloseContextMenu();
         }
     }
 
@@ -161,7 +163,7 @@ public partial class TextBox : LabeledTextureUIElement, ITextbox
 
     public override void OnLostFocus() {
         base.OnLostFocus();
-        this.CloseContextMenu();
+        this.TryCloseContextMenu();
         this.ClearSelectText();
     }
 
@@ -279,9 +281,8 @@ public partial class TextBox : LabeledTextureUIElement, ITextbox
         this.CursorIndex += text.Length;
     }
 
-    private void CloseContextMenu() {
-        this._rightClickContextMenu?.Dispose();
-        this._rightClickContextMenu = null;
+    private void TryCloseContextMenu() {
+        this._rightClickContextMenu?.RemoveFromCurrentScene();
     }
 
     #region Clipboard actions
@@ -298,37 +299,4 @@ public partial class TextBox : LabeledTextureUIElement, ITextbox
         this.Text = this.Text.Remove(this.SelectionStart, this.SelectionLength);
     }
     #endregion
-}
-
-public partial class TextBox : IParentElement
-{
-    public IEnumerable<IUIElement> Children => GetChildren();
-
-    private IEnumerable<IUIElement> GetChildren() {
-        if (this._rightClickContextMenu != null) {
-            yield return this._rightClickContextMenu;
-        }
-    }
-
-    public void AddChild(IUIElement child) {
-        throw new NotSupportedException($"Unable to add children to a textbox");
-    }
-
-    public IUIElement? GetElementById(string id) {
-        if (id == this.ElementID)
-            return this;
-        return this._rightClickContextMenu?.GetElementById(id);
-    }
-
-    public IUIElement? GetFirstVisibleElement(float x, float y) {
-        if (this._rightClickContextMenu?.GetFirstVisibleElement(x, y) is IUIElement child) {
-            return child;
-        }
-
-        if (this.IsInBounds(x, y)) {
-            return this;
-        }
-
-        return null;
-    }
 }
