@@ -3,9 +3,9 @@ using Annex.Core.Graphics;
 using Annex.Core.Helpers;
 using Annex.Core.Input.InputEvents;
 
-namespace Annex.Core.Scenes.Components;
+namespace Annex.Core.Scenes.Elements;
 
-public class PasswordBox : TextBox, IPasswordBox
+public class PasswordBox : Textbox, IPasswordBox
 {
     public char PasswordChar { get; set; } = '*';
 

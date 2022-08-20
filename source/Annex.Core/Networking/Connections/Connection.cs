@@ -57,6 +57,7 @@ namespace Annex.Core.Networking.Connections
 
         public virtual void Destroy(string reason, Exception? exception = null) {
             Log.Trace(LogSeverity.Normal, $"Disconnecting client {this.Id}: {reason}", exception);
+            this.State = ConnectionState.Disconnected;
         }
     }
 }

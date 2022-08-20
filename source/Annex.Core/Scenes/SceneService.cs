@@ -1,4 +1,4 @@
-﻿using Annex.Core.Scenes.Components;
+﻿using Annex.Core.Scenes.Elements;
 using Scaffold.DependencyInjection;
 using Scaffold.Logging;
 
@@ -27,6 +27,19 @@ namespace Annex.Core.Scenes
                 Log.Trace(LogSeverity.Error, $"Unable to resolve scene {typeof(T).Name}.");
                 return;
             }
+
+            var leavingSceneArgs = new OnSceneLeaveEventArgs(newScene);
+            var enteringSceneArgs = new OnSceneEnterEventArgs(oldScene);
+
+            this._currentScene?.OnLeave(leavingSceneArgs);
+            this._currentScene = newScene;
+            this.CurrentScene.OnEnter(enteringSceneArgs);
+        }
+
+        public void LoadScene(IScene sceneInstance) {
+            Log.Trace(LogSeverity.Verbose, $"Loading scene instance {sceneInstance.GetType().Name}");
+            var newScene = sceneInstance;
+            var oldScene = this._currentScene;
 
             var leavingSceneArgs = new OnSceneLeaveEventArgs(newScene);
             var enteringSceneArgs = new OnSceneEnterEventArgs(oldScene);

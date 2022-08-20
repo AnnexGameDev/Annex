@@ -3,7 +3,7 @@ using Annex.Core.Events;
 using Annex.Core.Graphics.Windows;
 using Annex.Core.Input.InputEvents;
 
-namespace Annex.Core.Scenes.Components;
+namespace Annex.Core.Scenes.Elements;
 
 public class Scene : Container, IScene
 {

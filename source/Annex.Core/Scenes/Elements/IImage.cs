@@ -1,4 +1,4 @@
-﻿namespace Annex.Core.Scenes.Components;
+﻿namespace Annex.Core.Scenes.Elements;
 
 public interface IImage : IUIElement
 {

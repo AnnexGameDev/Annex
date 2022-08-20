@@ -16,6 +16,7 @@
         Teal =      0x008080ff,
         Blue =      0x0000ffff,
         Navy =      0x000080ff,
+        Orange =    0xffa500ff,
         Fushia =    0xff00ffff,
         Purple =    0x800080ff,
         Transparent = 0x00000000,

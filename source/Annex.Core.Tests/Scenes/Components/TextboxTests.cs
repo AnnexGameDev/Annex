@@ -1,12 +1,9 @@
 ﻿using Annex.Core.Graphics;
 using Annex.Core.Helpers;
-using Annex.Core.Scenes.Components;
-using FluentAssertions;
+using Annex.Core.Scenes.Elements;
 using Moq;
 using Scaffold.Platform;
 using Scaffold.Tests.Core.Fixture;
-using System;
-using Xunit;
 
 namespace Annex.Core.Tests.Scenes.Components
 {
@@ -17,22 +14,10 @@ namespace Annex.Core.Tests.Scenes.Components
         private readonly Mock<IGraphicsEngine> _graphicsEngineMock = new();
 
         public TextboxTests() {
-            this._fixture.Register(_fixture.Create<TextBox>);
+            this._fixture.Register(_fixture.Create<Textbox>);
 
             new ClipboardHelper(_clipboardServiceMock.Object);
             new GraphicsEngineHelper(_graphicsEngineMock.Object);
-        }
-
-        [Fact]
-        public void GivenATextbox_WhenAddingAChild_ThenThrowsNotSupportedException() {
-            // Arrange
-            var theTextbox = _fixture.Create<TextBox>();
-
-            // Act
-            Action theAddChildAction = () => theTextbox.AddChild(It.IsAny<IUIElement>());
-
-            // Assert
-            theAddChildAction.Should().Throw<NotSupportedException>();
         }
     }
 }

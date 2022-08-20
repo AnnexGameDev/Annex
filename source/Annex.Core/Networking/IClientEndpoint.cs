@@ -7,6 +7,6 @@ namespace Annex.Core.Networking
     {
         IConnection Connection { get; }
         void Send(OutgoingPacket packet);
-        IConnection Start(long timeout = 5000);
+        IConnection Start(long timeout = 5000, CancellationToken? cancellationToken = null);
     }
 }

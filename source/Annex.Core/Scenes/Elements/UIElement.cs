@@ -2,7 +2,7 @@
 using Annex.Core.Graphics;
 using Annex.Core.Input.InputEvents;
 
-namespace Annex.Core.Scenes.Components;
+namespace Annex.Core.Scenes.Elements;
 
 public abstract class UIElement : IUIElement
 {

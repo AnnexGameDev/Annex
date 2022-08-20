@@ -2,7 +2,7 @@
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
 
-namespace Annex.Core.Scenes.Components;
+namespace Annex.Core.Scenes.Elements;
 
 public class Label : UIElement, ILabel
 {

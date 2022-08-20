@@ -1,7 +1,7 @@
 ﻿using Annex.Core.Assets;
 using Annex.Core.Data;
 using Annex.Core.Graphics.Contexts;
-using Annex.Core.Scenes.Components;
+using Annex.Core.Scenes.Elements;
 using Scaffold.DependencyInjection;
 using Scaffold.Extensions;
 using Scaffold.Logging;
@@ -99,6 +99,8 @@ namespace Annex.Core.Scenes.Layouts.Html
             this.SetPosition(instance, parent, element, styles);
             this.SetSize(instance, parent, element, styles);
 
+            this.SetElementId(instance, element, styles);
+
             if (instance is IImage img) {
                 this.SetTexture(img, element, styles);
             }
@@ -109,6 +111,12 @@ namespace Annex.Core.Scenes.Layouts.Html
 
             if (instance is IPasswordBox pb) {
                 this.SetPasswordBox(pb, element, styles);
+            }
+        }
+
+        private void SetElementId(IUIElement instance, XElement element, Styles styles) {
+            if (GetStringAttribute("id", element, styles) is string elementId) {
+                instance.ElementID = elementId;
             }
         }
 
