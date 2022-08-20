@@ -3,61 +3,60 @@ using Annex.Core.Networking.Connections;
 using Annex.Core.Networking.Packets;
 using Scaffold.Logging;
 
-namespace Annex.Core.Networking.Engines.DotNet.Endpoints
+namespace Annex.Core.Networking.Engines.DotNet.Endpoints;
+
+internal class TcpClient : TcpEndpoint, IClientEndpoint
 {
-    internal class TcpClient : TcpEndpoint, IClientEndpoint
-    {
-        private TcpClientConnection _connection;
-        public IConnection Connection => _connection;
+    private TcpClientConnection _connection;
+    public IConnection Connection => _connection;
 
-        public TcpClient(EndpointConfiguration config) : base(config) {
-            this._connection = new TcpClientConnection(this.Socket);
+    public TcpClient(EndpointConfiguration config) : base(config) {
+        this._connection = new TcpClientConnection(this.Socket);
 
-            this.Connection.OnConnectionStateChanged += Connection_OnConnectionStateChanged;
+        this.Connection.OnConnectionStateChanged += Connection_OnConnectionStateChanged;
+    }
+
+    private void Connection_OnConnectionStateChanged(object? sender, ConnectionState state) {
+
+        Log.Trace(LogSeverity.Normal, $"Connection {this.Connection} state changed to: {state}");
+
+        switch (state) {
+            case ConnectionState.Connected:
+                this.HandleNewConnection(this._connection);
+                break;
+            case ConnectionState.Disconnected:
+                this.HandleDisconnectedConnection(this._connection);
+                break;
         }
+    }
 
-        private void Connection_OnConnectionStateChanged(object? sender, ConnectionState state) {
+    public void Send(OutgoingPacket packet) {
+        this.SendTo(this._connection, packet);
+    }
 
-            Log.Trace(LogSeverity.Normal, $"Connection {this.Connection} state changed to: {state}");
+    public IConnection Start(long timeout, CancellationToken? cancellationToken) {
+        this._connection.ConnectTo(this.Config.IP, this.Config.Port);
+        this.WaitForResponse(timeout, cancellationToken);
+        return this.Connection;
+    }
 
-            switch (state) {
-                case ConnectionState.Connected:
-                    this.HandleNewConnection(this._connection);
-                    break;
-                case ConnectionState.Disconnected:
-                    this.HandleDisconnectedConnection(this._connection);
-                    break;
-            }
-        }
+    private void WaitForResponse(long timeout, CancellationToken? cancellationToken) {
+        long startConnectTime = GameTimeHelper.Now();
 
-        public void Send(OutgoingPacket packet) {
-            this.SendTo(this._connection, packet);
-        }
+        while (true) {
+            if (cancellationToken?.IsCancellationRequested == true)
+                break;
 
-        public IConnection Start(long timeout, CancellationToken? cancellationToken) {
-            this._connection.ConnectTo(this.Config.IP, this.Config.Port);
-            this.WaitForResponse(timeout, cancellationToken);
-            return this.Connection;
-        }
+            if (GameTimeHelper.ElapsedTimeSince(startConnectTime) >= timeout)
+                break;
 
-        private void WaitForResponse(long timeout, CancellationToken? cancellationToken) {
-            long startConnectTime = GameTimeHelper.Now();
+            if (this.Connection.State == ConnectionState.Connected)
+                break;
 
-            while (true) {
-                if (cancellationToken?.IsCancellationRequested == true)
-                    break;
+            if (this.Connection.State == ConnectionState.Disconnected)
+                break;
 
-                if (GameTimeHelper.ElapsedTimeSince(startConnectTime) >= timeout)
-                    break;
-
-                if (this.Connection.State == ConnectionState.Connected)
-                    break;
-
-                if (this.Connection.State == ConnectionState.Disconnected)
-                    break;
-
-                Thread.Yield();
-            }
+            Thread.Yield();
         }
     }
 }

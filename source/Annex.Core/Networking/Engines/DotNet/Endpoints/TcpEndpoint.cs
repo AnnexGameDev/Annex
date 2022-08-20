@@ -17,24 +17,35 @@ internal abstract class TcpEndpoint : IEndpoint
         this.Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
     }
 
-    protected void HandleNewConnection(TcpConnection connection) {
+    protected virtual void HandleNewConnection(TcpConnection connection) {
 
         if (this.Connections.Contains(connection)) {
             Log.Trace(LogSeverity.Error, $"Connection {connection} is already registered");
             return;
         }
 
+        connection.OnConnectionStateChanged += Connection_OnConnectionStateChanged;
+
         this.Connections.Add(connection);
         connection.ListenForIncomingPackets();
     }
 
-    protected void HandleDisconnectedConnection(TcpConnection connection) {
+    private void Connection_OnConnectionStateChanged(object? sender, Connections.ConnectionState connectionState) {
+        var connection = (TcpConnection)sender!;
+        if (connectionState == Networking.Connections.ConnectionState.Disconnected) {
+            HandleDisconnectedConnection(connection);
+        }
+    }
+
+    protected virtual void HandleDisconnectedConnection(TcpConnection connection) {
         if (!this.Connections.Contains(connection)) {
             Log.Trace(LogSeverity.Error, $"Connection {connection} is not registered");
             return;
         }
 
+        connection.OnConnectionStateChanged -= Connection_OnConnectionStateChanged;
         this.Connections.Remove(connection);
+        connection.Dispose();
     }
 
     protected void SendTo(TcpConnection connection, OutgoingPacket packet) {
@@ -48,7 +59,7 @@ internal abstract class TcpEndpoint : IEndpoint
     public void Dispose() {
 
         foreach (var connection in this.Connections) {
-            connection.Dispose();
+            this.HandleDisconnectedConnection(connection);
         }
 
         this.Socket.Dispose();

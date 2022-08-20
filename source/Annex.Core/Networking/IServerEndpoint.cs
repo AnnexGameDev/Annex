@@ -5,6 +5,9 @@ namespace Annex.Core.Networking
 {
     public interface IServerEndpoint : IEndpoint
     {
+        event EventHandler<IConnection>? OnClientConnected;
+        event EventHandler<IConnection>? OnClientDisconnected;
+
         IEnumerable<IConnection> ClientConnections { get; }
         void Send(IConnection connection, OutgoingPacket packet);
         void Start();
