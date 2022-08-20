@@ -102,4 +102,11 @@ internal class TcpConnection : Connection
         base.Destroy(reason, exception);
         this.Socket.Dispose();
     }
+
+    public override string ToString() {
+        if (this.Disposed) {
+            return string.Empty;
+        }
+        return this.Socket.RemoteEndPoint?.ToString() ?? string.Empty;
+    }
 }
