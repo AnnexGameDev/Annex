@@ -13,14 +13,14 @@ namespace Annex.Core.Networking.Engines.DotNet.Endpoints
         public TcpClient(EndpointConfiguration config) : base(config) {
             this._connection = new TcpClientConnection(this.Socket);
 
-            this.Connection.ConnectionStateChanged += Connection_ConnectionStateChanged;
+            this.Connection.OnConnectionStateChanged += Connection_OnConnectionStateChanged;
         }
 
-        private void Connection_ConnectionStateChanged(object? sender, EventArgs e) {
+        private void Connection_OnConnectionStateChanged(object? sender, ConnectionState state) {
 
-            Log.Trace(LogSeverity.Normal, $"Connection {this.Connection} state changed to: {this.Connection.State}");
+            Log.Trace(LogSeverity.Normal, $"Connection {this.Connection} state changed to: {state}");
 
-            switch (this.Connection.State) {
+            switch (state) {
                 case ConnectionState.Connected:
                     this.HandleNewConnection(this._connection);
                     break;

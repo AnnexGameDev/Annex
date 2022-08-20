@@ -7,7 +7,7 @@ namespace Annex.Core.Networking.Connections
         private bool disposedValue;
         public Guid Id { get; } = Guid.NewGuid();
 
-        public event EventHandler? ConnectionStateChanged;
+        public event EventHandler<ConnectionState>? OnConnectionStateChanged;
         private ConnectionState _state = ConnectionState.Unknown;
         public ConnectionState State
         {
@@ -15,7 +15,7 @@ namespace Annex.Core.Networking.Connections
             protected set
             {
                 this._state = value;
-                this.ConnectionStateChanged?.Invoke(this, EventArgs.Empty);
+                this.OnConnectionStateChanged?.Invoke(this, value);
             }
         }
 
