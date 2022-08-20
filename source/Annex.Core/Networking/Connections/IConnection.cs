@@ -2,7 +2,7 @@
 
 public interface IConnection : IDisposable
 {
-    event EventHandler? ConnectionStateChanged;
+    event EventHandler<ConnectionState>? OnConnectionStateChanged;
 
     Guid Id { get; }
     ConnectionState State { get; }
