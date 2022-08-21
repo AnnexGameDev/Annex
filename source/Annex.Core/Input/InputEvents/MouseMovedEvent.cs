@@ -2,10 +2,10 @@
 {
     public class MouseMovedEvent : MouseEvent
     {
-        public int WindowX { get; }
-        public int WindowY { get; }
+        public float WindowX { get; }
+        public float WindowY { get; }
 
-        public MouseMovedEvent(int x, int y) {
+        public MouseMovedEvent(float x, float y) {
             this.WindowX = x;
             this.WindowY = y;
         }

@@ -39,8 +39,8 @@ internal class TcpServer : TcpEndpoint, IServerEndpoint
         var connection = new TcpConnection(client);
         this.HandleNewConnection(connection);
 
-        this.Socket.BeginAccept(OnAcceptCallback, null);
         this.Socket.Listen(5);
+        this.Socket.BeginAccept(OnAcceptCallback, null);
     }
 
     protected override void HandleDisconnectedConnection(TcpConnection connection) {

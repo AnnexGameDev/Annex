@@ -1,4 +1,5 @@
-﻿using Annex.Core.Graphics.Windows;
+﻿using Annex.Core.Data;
+using Annex.Core.Graphics.Windows;
 using Annex.Core.Input.InputEvents;
 using Annex.Core.Input.Platforms;
 using Annex.Core.Scenes;
@@ -57,25 +58,25 @@ namespace Annex.Core.Input
             this._currentScene.OnWindowClosed(window);
         }
 
-        public void HandleMouseButtonPressed(IWindow window, MouseButton button, int windowX, int windowY) {
+        public void HandleMouseButtonPressed(IWindow window, MouseButton button, IVector2<float> position) {
             // TODO: Track drag / dbl click
-            Log.Trace(LogSeverity.Verbose, $"MouseButton Pressed: {button}  x:{windowX}  y:{windowY}");
-            var mouseButtonPressedEvent = new MouseButtonPressedEvent(button, windowX, windowY);
+            Log.Trace(LogSeverity.Verbose, $"MouseButton Pressed: {button}  x:{position.X}  y:{position.Y}");
+            var mouseButtonPressedEvent = new MouseButtonPressedEvent(button, position.X, position.Y);
             this._mouseButtonStates[(int)button] = true;
             this._currentScene.OnMouseButtonPressed(window, mouseButtonPressedEvent);
         }
 
-        public void HandleMouseButtonReleased(IWindow window, MouseButton button, int windowX, int windowY) {
+        public void HandleMouseButtonReleased(IWindow window, MouseButton button, IVector2<float> position) {
             // TODO: Track drag / dbl click
-            Log.Trace(LogSeverity.Verbose, $"MouseButton Released: {button}  x:{windowX}  y:{windowY}");
-            var mouseButtonReleasedEvent = new MouseButtonReleasedEvent(button, windowX, windowY);
+            Log.Trace(LogSeverity.Verbose, $"MouseButton Released: {button}  x:{position.X}  y:{position.Y}");
+            var mouseButtonReleasedEvent = new MouseButtonReleasedEvent(button, position.X, position.Y);
             this._mouseButtonStates[(int)button] = false;
             this._currentScene.OnMouseButtonReleased(window, mouseButtonReleasedEvent);
         }
 
-        public void HandleMouseMoved(IWindow window, int windowX, int windowY) {
-            Log.Trace(LogSeverity.Verbose, $"Mouse Moved: x:{windowX}  y:{windowY}");
-            var mouseMovedEvent = new MouseMovedEvent(windowX, windowY);
+        public void HandleMouseMoved(IWindow window, IVector2<float> position) {
+            Log.Trace(LogSeverity.Verbose, $"Mouse Moved: x:{position.X}  y:{position.Y}");
+            var mouseMovedEvent = new MouseMovedEvent(position.X, position.Y);
             this._currentScene.OnMouseMoved(window, mouseMovedEvent);
         }
 

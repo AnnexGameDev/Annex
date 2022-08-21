@@ -46,6 +46,8 @@ namespace Annex.Core.Helpers
                 Log.Trace(LogSeverity.Error, $"The type {handlerType.Name} can't be casted to {nameof(IPacketHandler)}");
                 return;
             }
+
+            Log.Trace(LogSeverity.Verbose, $"Packet received for {connection}");
             handler!.Handle(connection, packet);
         }
     }

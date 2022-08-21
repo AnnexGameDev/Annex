@@ -7,7 +7,7 @@ namespace Annex.Core.Networking.Engines.DotNet
     public class DotNetNetworkingEngine : INetworkingEngine
     {
         public DotNetNetworkingEngine(IContainer container) {
-            container.Resolve<PacketHandlerHelper>();
+            container.Resolve<PacketHandlerHelper>(false);
         }
 
         public IClientEndpoint CreateClient(EndpointConfiguration config) {

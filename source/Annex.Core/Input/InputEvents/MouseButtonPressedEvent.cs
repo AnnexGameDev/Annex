@@ -2,10 +2,10 @@
 {
     public class MouseButtonPressedEvent : MouseButtonEvent
     {
-        public int WindowX { get; }
-        public int WindowY { get; }
+        public float WindowX { get; }
+        public float WindowY { get; }
 
-        public MouseButtonPressedEvent(MouseButton button, int x, int y) : base(button) {
+        public MouseButtonPressedEvent(MouseButton button, float x, float y) : base(button) {
             this.WindowX = x;
             this.WindowY = y;
         }

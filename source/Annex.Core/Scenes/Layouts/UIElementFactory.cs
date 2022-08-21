@@ -26,7 +26,7 @@ namespace Annex.Core.Scenes.Layouts
         public static IUIElement CreateInstance(string name, IContainer container) {
             var type = _uiElementTypes[name.ToLower()];
 
-            return (IUIElement)container.Resolve(type);
+            return (IUIElement)container.Resolve(type, false);
         }
     }
 }

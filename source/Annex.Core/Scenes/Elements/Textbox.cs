@@ -142,8 +142,8 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
 
         if (mouseButtonPressedEvent.Button == MouseButton.Left) {
             this._isSelecting = true;
-            this._startSelectMouseX = mouseButtonPressedEvent.WindowX;
-            this._endSelectMouseX = mouseButtonPressedEvent.WindowX;
+            this._startSelectMouseX = (int)mouseButtonPressedEvent.WindowX;
+            this._endSelectMouseX = (int)mouseButtonPressedEvent.WindowX;
             this.UpdateTextSelection_FromMouseEvent();
         }
 
@@ -156,7 +156,7 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
         base.OnMouseMoved(mouseMovedEvent);
 
         if (this._isSelecting) {
-            this._endSelectMouseX = mouseMovedEvent.WindowX;
+            this._endSelectMouseX = (int)mouseMovedEvent.WindowX;
             this.UpdateTextSelection_FromMouseEvent();
         }
     }

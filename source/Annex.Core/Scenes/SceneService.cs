@@ -17,9 +17,9 @@ namespace Annex.Core.Scenes
             this._container = container;
         }
 
-        public void LoadScene<T>() where T : IScene {
+        public void LoadScene<T>(params object[] parameters ) where T : IScene {
             Log.Trace(LogSeverity.Verbose, $"Loading scene {typeof(T).Name}");
-            var newScene = this._container.Resolve<T>();
+            var newScene = this._container.Resolve<T>(false);
             var oldScene = this._currentScene;
 
             // If the new scene can't be resolved, don't switch.
@@ -28,14 +28,14 @@ namespace Annex.Core.Scenes
                 return;
             }
 
-            this.SwitchTo(newScene);
+            this.SwitchTo(newScene, parameters);
         }
 
-        private void SwitchTo<T>(T newScene) where T : IScene {
+        private void SwitchTo<T>(T newScene, object[] parameters) where T : IScene {
             var oldScene = this._currentScene;
 
             var leavingSceneArgs = new OnSceneLeaveEventArgs(newScene);
-            var enteringSceneArgs = new OnSceneEnterEventArgs(oldScene);
+            var enteringSceneArgs = new OnSceneEnterEventArgs(oldScene, parameters);
 
             this._currentScene?.OnLeave(leavingSceneArgs);
             this._currentScene = newScene;
@@ -44,9 +44,9 @@ namespace Annex.Core.Scenes
             oldScene?.Dispose();
         }
 
-        public void LoadScene(IScene sceneInstance) {
+        public void LoadScene(IScene sceneInstance, params object[] parameters) {
             Log.Trace(LogSeverity.Verbose, $"Loading scene instance {sceneInstance.GetType().Name}");
-            this.SwitchTo(sceneInstance);
+            this.SwitchTo(sceneInstance, parameters);
         }
     }
 }

@@ -140,10 +140,10 @@ namespace Annex.Sfml.Graphics.Windows
         private void OnKeyboardKeyReleased(object? sender, KeyEventArgs e) => this._inputHandlerService?.HandleKeyboardKeyReleased(this, e.Code.ToKeyboardKey());
         private void OnWindowClosed(object? sender, EventArgs e) => this._inputHandlerService?.HandleWindowClosed(this);
 
-        private void OnMouseMoved(object? sender, MouseMoveEventArgs e) => this._inputHandlerService?.HandleMouseMoved(this, e.X, e.Y);
+        private void OnMouseMoved(object? sender, MouseMoveEventArgs e) => this._inputHandlerService?.HandleMouseMoved(this, RelatePointTo(e.X, e.Y, CameraId.UI));
         private void OnMouseScrollWheelMoved(object? sender, MouseWheelScrollEventArgs e) => this._inputHandlerService?.HandleMouseScrollWheelMoved(this, e.Delta);
-        private void OnMouseButtonReleased(object? sender, MouseButtonEventArgs e) => this._inputHandlerService?.HandleMouseButtonReleased(this, e.Button.ToMouseButton(), e.X, e.Y);
-        private void OnMouseButtonPressed(object? sender, MouseButtonEventArgs e) => this._inputHandlerService?.HandleMouseButtonPressed(this, e.Button.ToMouseButton(), e.X, e.Y);
+        private void OnMouseButtonReleased(object? sender, MouseButtonEventArgs e) => this._inputHandlerService?.HandleMouseButtonReleased(this, e.Button.ToMouseButton(), RelatePointTo(e.X, e.Y, CameraId.UI));
+        private void OnMouseButtonPressed(object? sender, MouseButtonEventArgs e) => this._inputHandlerService?.HandleMouseButtonPressed(this, e.Button.ToMouseButton(), RelatePointTo(e.X, e.Y, CameraId.UI));
 
         public bool IsKeyDown(KeyboardKey key) {
             if (this._renderWindow?.HasFocus() != true)
@@ -191,15 +191,19 @@ namespace Annex.Sfml.Graphics.Windows
         public IVector2<float> GetMousePos(CameraId cameraId = CameraId.UI) {
             var mousePos = Mouse.GetPosition(this._renderWindow);
             var camera = this.CameraCache.GetCamera(cameraId);
+            return RelatePointTo(mousePos.X, mousePos.Y, cameraId);
+        }
+
+        private IVector2<float> RelatePointTo(int x, int y, CameraId cameraId) {
+            var camera = this.CameraCache.GetCamera(cameraId);
 
             if (camera == null)
                 throw new NullReferenceException($"The camera {cameraId} couldn't be found");
 
             if (this._renderWindow == null)
-                throw new NullReferenceException($"{nameof(_renderWindow)} is null when performing {nameof(GetMousePos)}");
+                throw new NullReferenceException($"{nameof(_renderWindow)} is null when performing {nameof(RelatePointTo)}");
 
-            var viewPos = this._renderWindow.MapPixelToCoords(mousePos, camera.View);
-
+            var viewPos = this._renderWindow.MapPixelToCoords(new SFML.System.Vector2i(x, y), camera.View);
             return new Vector2f(viewPos.X, viewPos.Y);
         }
 

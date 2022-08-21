@@ -26,12 +26,12 @@ public abstract class AnnexApp : ScaffoldApp
             var graphicsService = this.Container.Resolve<IGraphicsService>();
             var assetService = this.Container.Resolve<IAssetService>();
 
-            this.Container.Resolve<ClipboardHelper>();
-            this.Container.Resolve<GraphicsEngineHelper>();
-            this.Container.Resolve<GameTimeHelper>();
-            this.Container.Resolve<KeyboardHelper>();
-            this.Container.Resolve<HtmlSceneLoaderHelper>();
-            this.Container.Resolve<SceneServiceHelper>();
+            this.Container.Resolve<ClipboardHelper>(false);
+            this.Container.Resolve<GraphicsEngineHelper>(false);
+            this.Container.Resolve<GameTimeHelper>(false);
+            this.Container.Resolve<KeyboardHelper>(false);
+            this.Container.Resolve<HtmlSceneLoaderHelper>(false);
+            this.Container.Resolve<SceneServiceHelper>(false);
 
             this.SetupAssetBundles(assetService);
             this.CreateWindow(graphicsService, assetService);

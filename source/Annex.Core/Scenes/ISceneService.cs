@@ -6,8 +6,8 @@ namespace Annex.Core.Scenes
     {
         IScene CurrentScene { get; }
 
-        void LoadScene(IScene sceneInstance);
-        void LoadScene<T>() where T : IScene;
+        void LoadScene(IScene sceneInstance, params object[] parameters);
+        void LoadScene<T>(params object[] parameters) where T : IScene;
         bool IsCurrentScene<T>() where T : IScene;
     }
 }
