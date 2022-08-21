@@ -25,6 +25,10 @@ internal class TcpConnection : Connection
     }
 
     private void OnReceiveCallback(IAsyncResult ar) {
+        if (this.Disposed) {
+            return;
+        }
+
         int lengthOfIncomingData = 0;
 
         try {

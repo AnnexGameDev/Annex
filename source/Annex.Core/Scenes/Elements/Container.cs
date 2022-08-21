@@ -58,7 +58,7 @@ public class Container : UIElement, IParentElement
                     return hitChild;
                 }
             } else {
-                if (child.IsInBounds(x,y)) {
+                if (child.IsInBounds(x, y)) {
                     return child;
                 }
             }
@@ -95,6 +95,17 @@ public class Container : UIElement, IParentElement
     protected override void DrawInternal(ICanvas canvas) {
         foreach (var child in this._children) {
             child.Draw(canvas);
+        }
+    }
+
+    protected override void Dispose(bool disposing) {
+        base.Dispose(disposing);
+
+        if (disposing) {
+            for (int i = 0; i < this._children.Count; i++) {
+                var child = this._children[i];
+                child.Dispose();
+            }
         }
     }
 }

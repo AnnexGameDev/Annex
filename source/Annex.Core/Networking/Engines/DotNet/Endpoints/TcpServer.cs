@@ -30,12 +30,17 @@ internal class TcpServer : TcpEndpoint, IServerEndpoint
     }
 
     private void OnAcceptCallback(IAsyncResult ar) {
-        this.Socket.Listen(5);
-        this.Socket.BeginAccept(OnAcceptCallback, null);
+        if (this.Disposed) {
+            return;
+        }
 
         var client = this.Socket.EndAccept(ar);
+
         var connection = new TcpConnection(client);
         this.HandleNewConnection(connection);
+
+        this.Socket.BeginAccept(OnAcceptCallback, null);
+        this.Socket.Listen(5);
     }
 
     protected override void HandleDisconnectedConnection(TcpConnection connection) {

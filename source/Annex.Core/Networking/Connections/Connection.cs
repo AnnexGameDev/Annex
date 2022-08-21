@@ -14,6 +14,8 @@ namespace Annex.Core.Networking.Connections
             get => this._state;
             protected set
             {
+                if (this._state == value)
+                    return;
                 this._state = value;
                 this.OnConnectionStateChanged?.Invoke(this, value);
             }

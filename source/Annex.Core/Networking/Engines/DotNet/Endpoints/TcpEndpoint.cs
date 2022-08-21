@@ -11,6 +11,7 @@ internal abstract class TcpEndpoint : IEndpoint
     protected readonly Socket Socket;
 
     protected ConcurrentHashSet<TcpConnection> Connections = new();
+    protected bool Disposed { get; private set; }
 
     public TcpEndpoint(EndpointConfiguration config) {
         this.Config = config;
@@ -56,12 +57,32 @@ internal abstract class TcpEndpoint : IEndpoint
         connection.SendOutgoingPacket(packet);
     }
 
-    public void Dispose() {
+    protected virtual void Dispose(bool disposing) {
+        if (!Disposed) {
+            if (disposing) {
+                foreach (var connection in this.Connections) {
+                    this.HandleDisconnectedConnection(connection);
+                }
 
-        foreach (var connection in this.Connections) {
-            this.HandleDisconnectedConnection(connection);
+                this.Socket.Dispose();
+            }
+
+            // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+            // TODO: set large fields to null
+            Disposed = true;
         }
+    }
 
-        this.Socket.Dispose();
+    // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+    // ~TcpEndpoint()
+    // {
+    //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+    //     Dispose(disposing: false);
+    // }
+
+    public void Dispose() {
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }
