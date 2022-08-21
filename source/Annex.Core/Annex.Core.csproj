@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Scaffold" Version="2022.8.19.220929" />
+    <PackageReference Include="Scaffold" Version="2022.8.20.155709" />
   </ItemGroup>
 
   <Target Name="NugetPackAutoVersioning" AfterTargets="Build">

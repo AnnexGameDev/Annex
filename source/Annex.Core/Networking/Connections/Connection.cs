@@ -4,7 +4,7 @@ namespace Annex.Core.Networking.Connections
 {
     public abstract class Connection : IConnection
     {
-        private bool disposedValue;
+        protected bool Disposed { get; private set; }
         public Guid Id { get; } = Guid.NewGuid();
 
         public event EventHandler<ConnectionState>? OnConnectionStateChanged;
@@ -31,14 +31,14 @@ namespace Annex.Core.Networking.Connections
         }
 
         protected virtual void Dispose(bool disposing) {
-            if (!disposedValue) {
+            if (!Disposed) {
                 if (disposing) {
                     this.Destroy("Disposing");
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override finalizer
                 // TODO: set large fields to null
-                disposedValue = true;
+                Disposed = true;
             }
         }
 
