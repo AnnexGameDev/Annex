@@ -28,17 +28,10 @@ namespace Annex.Core.Scenes
                 return;
             }
 
-            var leavingSceneArgs = new OnSceneLeaveEventArgs(newScene);
-            var enteringSceneArgs = new OnSceneEnterEventArgs(oldScene);
-
-            this._currentScene?.OnLeave(leavingSceneArgs);
-            this._currentScene = newScene;
-            this.CurrentScene.OnEnter(enteringSceneArgs);
+            this.SwitchTo(newScene);
         }
 
-        public void LoadScene(IScene sceneInstance) {
-            Log.Trace(LogSeverity.Verbose, $"Loading scene instance {sceneInstance.GetType().Name}");
-            var newScene = sceneInstance;
+        private void SwitchTo<T>(T newScene) where T : IScene {
             var oldScene = this._currentScene;
 
             var leavingSceneArgs = new OnSceneLeaveEventArgs(newScene);
@@ -47,6 +40,13 @@ namespace Annex.Core.Scenes
             this._currentScene?.OnLeave(leavingSceneArgs);
             this._currentScene = newScene;
             this.CurrentScene.OnEnter(enteringSceneArgs);
+
+            oldScene?.Dispose();
+        }
+
+        public void LoadScene(IScene sceneInstance) {
+            Log.Trace(LogSeverity.Verbose, $"Loading scene instance {sceneInstance.GetType().Name}");
+            this.SwitchTo(sceneInstance);
         }
     }
 }

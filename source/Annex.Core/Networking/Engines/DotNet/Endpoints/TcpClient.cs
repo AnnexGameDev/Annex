@@ -34,20 +34,17 @@ internal class TcpClient : TcpEndpoint, IClientEndpoint
         this.SendTo(this._connection, packet);
     }
 
-    public IConnection Start(long timeout, CancellationToken? cancellationToken) {
+    public IConnection Start(CancellationToken? cancellationToken) {
         this._connection.ConnectTo(this.Config.IP, this.Config.Port);
-        this.WaitForResponse(timeout, cancellationToken);
+        this.WaitForResponse(cancellationToken);
         return this.Connection;
     }
 
-    private void WaitForResponse(long timeout, CancellationToken? cancellationToken) {
+    private void WaitForResponse(CancellationToken? cancellationToken) {
         long startConnectTime = GameTimeHelper.Now();
 
         while (true) {
             if (cancellationToken?.IsCancellationRequested == true)
-                break;
-
-            if (GameTimeHelper.ElapsedTimeSince(startConnectTime) >= timeout)
                 break;
 
             if (this.Connection.State == ConnectionState.Connected)

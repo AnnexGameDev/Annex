@@ -4,7 +4,7 @@ namespace Annex.Core.Networking.Connections
 {
     public abstract class Connection : IConnection
     {
-        protected bool Disposed;
+        protected bool Disposed { get; private set; }
         public Guid Id { get; } = Guid.NewGuid();
 
         public event EventHandler<ConnectionState>? OnConnectionStateChanged;
