@@ -45,6 +45,11 @@ namespace Annex.Core.Networking.Packets
             return this._memoryStream.ToArray();
         }
 
+        public void Write(bool data) {
+            this._writer.Write(data);
+            this.TraceWrite(data);
+        }
+
         public void Write(byte[] data) {
             this._writer.Write(data.Length);
             this._writer.Write(data);

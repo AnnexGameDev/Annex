@@ -112,6 +112,12 @@ namespace Annex.Core.Networking.Packets
             return value;
         }
 
+        public bool ReadBool() {
+            var value = this._reader.ReadBoolean();
+            this.TraceRead(value);
+            return value;
+        }
+
         public byte Write() {
             var value = this._reader.ReadByte();
             this.TraceRead(value);
@@ -206,6 +212,12 @@ namespace Annex.Core.Networking.Packets
         public byte Write(string id) {
             var value = this._reader.ReadByte();
             this.TraceRead(id + ": " + value);
+            return value;
+        }
+
+        public bool ReadBool(string id) {
+            var value = this._reader.ReadBoolean();
+            this.TraceRead(id + ":" + value);
             return value;
         }
 #endif
