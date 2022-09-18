@@ -2,11 +2,11 @@
 {
     public interface IAsset : IDisposable
     {
-        IDisposable? Target { get; }
+        object? Target { get; }
         bool FilepathSupported { get; }
         string FilePath { get; }
 
-        void SetTarget(IDisposable? target);
+        void SetTarget(object? target);
         byte[] ToBytes();
     }
 }

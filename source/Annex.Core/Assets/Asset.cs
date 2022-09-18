@@ -3,7 +3,7 @@
     // TODO: Tests?
     internal abstract class Asset : IAsset
     {
-        public IDisposable? Target { get; private set; }
+        public object? Target { get; private set; }
 
         public abstract bool FilepathSupported { get; }
         public abstract string FilePath { get; }
@@ -13,8 +13,10 @@
             this.SetTarget(null);
         }
 
-        public void SetTarget(IDisposable? target) {
-            this.Target?.Dispose();
+        public void SetTarget(object? target) {
+            if (this.Target is IDisposable disposable) {
+                disposable.Dispose();
+            }
             this.Target = target;
         }
     }
