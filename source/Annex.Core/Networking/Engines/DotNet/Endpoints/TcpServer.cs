@@ -23,6 +23,13 @@ internal class TcpServer : TcpEndpoint, IServerEndpoint
         this.SendTo(tcpConnection, packet);
     }
 
+    public void SendToAll(OutgoingPacket packet) {
+        // TODO: Find a less memory intense way to do this. This is potentiall expensive.
+        foreach (var connection in this.Connections.ToArray()) {
+            Send(connection, packet);
+        }
+    }
+
     public void Start() {
         this.Socket.Bind(new IPEndPoint(IPAddress.Loopback, this.Config.Port));
         this.Socket.Listen(5);

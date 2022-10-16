@@ -10,6 +10,7 @@ namespace Annex.Core.Networking
 
         IEnumerable<IConnection> ClientConnections { get; }
         void Send(IConnection connection, OutgoingPacket packet);
+        void SendToAll(OutgoingPacket packet);
         void Start();
     }
 }

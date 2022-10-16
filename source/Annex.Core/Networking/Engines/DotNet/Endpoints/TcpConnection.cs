@@ -68,9 +68,10 @@ internal class TcpConnection : Connection
             int packetId = BitConverter.ToInt32(this._unprocessedData, 4);
             var packetData = new byte[packetSize];
             Array.Copy(this._unprocessedData, 8, packetData, 0, packetSize);
-            var packet = new IncomingPacket(packetData);
 
-            PacketHandlerHelper.HandlePacket(this, packetId, packet);
+            using (var packet = new IncomingPacket(packetData)) {
+                PacketHandlerHelper.HandlePacket(this, packetId, packet);
+            }
 
             int newUnprocessedDataSize = this._unprocessedData.Length - incomingDataSize;
             var newUnprocessedData = new byte[newUnprocessedDataSize];
