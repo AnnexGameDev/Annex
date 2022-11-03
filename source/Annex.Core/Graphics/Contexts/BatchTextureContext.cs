@@ -35,6 +35,11 @@ namespace Annex.Core.Graphics.Contexts
         public (float x, float y)? GetSize(int index) {
             if (this.RenderSizes == null)
                 return null;
+
+            if (this.RenderSizes.Length == 1) {
+                index = 0;
+            }
+
             return this.RenderSizes[index];
         }
 
@@ -45,24 +50,44 @@ namespace Annex.Core.Graphics.Contexts
         public (float x, float y)? GetOffset(int index) {
             if (this.RenderOffsets == null)
                 return null;
+
+            if (this.RenderOffsets.Length == 1) {
+                index = 0;
+            }
+
             return this.RenderOffsets[index];
         }
 
         public (int top, int left, int width, int height)? GetSourceTextureRect(int index) {
             if (this.SourceTextureRects == null)
                 return null;
+
+            if (this.SourceTextureRects.Length == 1) {
+                index = 0;
+            }
+
             return this.SourceTextureRects[index];
         }
 
         public RGBA? GetColor(int index) {
             if (this.RenderColors == null)
                 return null;
+
+            if (this.RenderColors.Length == 1) {
+                index = 0;
+            }
+
             return this.RenderColors[index];
         }
 
         public float? GetRotation(int index) {
             if (this.Rotations == null)
                 return null;
+
+            if (this.Rotations.Length == 1) {
+                index = 0;
+            }
+
             return this.Rotations[index];
         }
     }
