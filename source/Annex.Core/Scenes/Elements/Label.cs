@@ -44,6 +44,16 @@ public class Label : UIElement, ILabel
         get => RenderText.PositionOffset!;
         set => RenderText.PositionOffset!.Set(value);
     }
+    public float TextBorderThickness
+    {
+        get => this.RenderText.BorderThickness?.Value ?? 0;
+        set => this.RenderText.BorderThickness?.Set(value);
+    }
+    public RGBA TextBorderColor
+    {
+        get => this.RenderText.BorderColor ?? KnownColor.Transparent;
+        set => this.RenderText.BorderColor?.Set(value);
+    }
 
     public Label(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size) {
         this.RenderText = new TextContext(string.Empty, "default.ttf") {
@@ -51,7 +61,9 @@ public class Label : UIElement, ILabel
             PositionOffset = new Vector2f(),
             Camera = CameraId.UI.ToString(),
             FontSize = new Shared<uint>(11),
-            Color = KnownColor.Black
+            Color = KnownColor.Black,
+            BorderThickness = new Shared<float>(0),
+            BorderColor = KnownColor.Transparent
         };
     }
 

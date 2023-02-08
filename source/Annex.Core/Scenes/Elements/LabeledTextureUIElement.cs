@@ -49,6 +49,16 @@ public abstract class LabeledTextureUIElement : UIElement, IButton, ILabel
         get => this.Label.TextPositionOffset;
         set => this.Label.TextPositionOffset = value;
     }
+    public float TextBorderThickness
+    {
+        get => this.Label.TextBorderThickness;
+        set => this.Label.TextBorderThickness = value;
+    }
+    public RGBA TextBorderColor
+    {
+        get => this.Label.TextBorderColor;
+        set => this.Label.TextBorderColor = value;
+    }
 
     public LabeledTextureUIElement(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size) {
 
