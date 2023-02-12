@@ -19,4 +19,6 @@ public interface IScene : IUIElement, IParentElement
     void OnMouseButtonReleased(IWindow window, MouseButtonReleasedEvent mouseButtonReleasedEvent);
     void OnMouseMoved(IWindow window, MouseMovedEvent mouseMovedEvent);
     void OnMouseScrollWheelMoved(IWindow window, MouseScrollWheelMovedEvent mouseScrollWheelMovedEvent);
+    void OnWindowGainedFocus();
+    void OnWindowLostFocus();
 }

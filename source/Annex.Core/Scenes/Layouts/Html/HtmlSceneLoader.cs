@@ -20,7 +20,7 @@ namespace Annex.Core.Scenes.Layouts.Html
         }
 
         public void Load(string assetId, IScene sceneInstance) {
-            
+
             var document = this.GetDocumentRoot(assetId);
             var styles = new Styles(document);
             if (this.GetSceneElement(document) is not XElement scene) {

@@ -17,5 +17,8 @@ namespace Annex.Core.Input
         void HandleMouseButtonReleased(IWindow window, MouseButton button, IVector2<float> position);
         void HandleMouseMoved(IWindow window, IVector2<float> position);
         void HandleMouseScrollWheelMoved(IWindow window, double delta);
+
+        void HandleWindowGainedFocus();
+        void HandleWindowLostFocus();
     }
 }

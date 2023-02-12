@@ -89,4 +89,7 @@ public class Scene : Container, IScene
             this.Events.Dispose();
         }
     }
+
+    public virtual void OnWindowGainedFocus() { }
+    public virtual void OnWindowLostFocus() { }
 }
