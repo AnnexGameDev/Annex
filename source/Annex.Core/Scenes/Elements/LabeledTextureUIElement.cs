@@ -9,6 +9,11 @@ public abstract class LabeledTextureUIElement : UIElement, IButton, ILabel
     protected readonly Image Image;
     protected readonly Label Label;
 
+    public string? HoverBackgroundTextureId
+    {
+        get => this.Image.HoverBackgroundTextureId;
+        set => this.Image.HoverBackgroundTextureId = value;
+    }
     public string BackgroundTextureId
     {
         get => this.Image.BackgroundTextureId;

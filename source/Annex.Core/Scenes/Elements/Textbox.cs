@@ -35,25 +35,30 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
         base.DrawInternal(canvas);
 
         this.UpdateTextSelection();
-        if (this.SelectionLength > 0 && this._selectionHighlight != null) {
+        if (this.SelectionLength > 0 && this._selectionHighlight != null)
+        {
             canvas.Draw(this._selectionHighlight);
         }
 
-        if (!this._hasSelection && this.IsFocused) {
+        if (!this._hasSelection && this.IsFocused)
+        {
             this.UpdateCursor();
-            if (this._cursorVisible) {
+            if (this._cursorVisible)
+            {
                 canvas.Draw(this._textCursor!);
             }
         }
     }
 
     private void UpdateCursor() {
-        if (GameTimeHelper.ElapsedTimeSince(this._nextToggleCursorVisiblity) > ToggleFrequency) {
+        if (GameTimeHelper.ElapsedTimeSince(this._nextToggleCursorVisiblity) > ToggleFrequency)
+        {
             this._cursorVisible = !this._cursorVisible;
             this._nextToggleCursorVisiblity = GameTimeHelper.Now();
         }
 
-        this._textCursor ??= new SolidRectangleContext(KnownColor.Black, new Vector2f(), new Vector2f()) {
+        this._textCursor ??= new SolidRectangleContext(KnownColor.Black, new Vector2f(), new Vector2f())
+        {
             Camera = CameraId.UI.ToString()
         };
 
@@ -73,13 +78,16 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
         int startSelectIndex = 0;
         int endSelectIndex = 0;
 
-        for (int i = 0; i <= this.Text.Length; i++) {
+        for (int i = 0; i <= this.Text.Length; i++)
+        {
             float x = GraphicsEngineHelper.GetCharacterX(ctx, i, forceContextUpdate: false);
 
-            if (startMouseX >= x) {
+            if (startMouseX >= x)
+            {
                 startSelectIndex = i;
             }
-            if (endMouseX >= x) {
+            if (endMouseX >= x)
+            {
                 endSelectIndex = i;
             }
         }
@@ -90,15 +98,18 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
 
     // Updates the selection context from the indices
     private void UpdateTextSelection() {
-        if (this.SelectionStart < 0) {
+        if (this.SelectionStart < 0)
+        {
             this.SelectionStart = 0;
         }
         int maxPossibleSelection = this.Text.Length - this.SelectionStart;
-        if (this.SelectionLength > maxPossibleSelection) {
+        if (this.SelectionLength > maxPossibleSelection)
+        {
             this.SelectionLength = maxPossibleSelection;
         }
 
-        this._selectionHighlight ??= new SolidRectangleContext(new RGBA(0, 0, 255, 100), new Vector2f(), new Vector2f()) {
+        this._selectionHighlight ??= new SolidRectangleContext(new RGBA(0, 0, 255, 100), new Vector2f(), new Vector2f())
+        {
             Camera = CameraId.UI.ToString()
         };
 
@@ -113,7 +124,8 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
     public override void OnMouseButtonReleased(MouseButtonReleasedEvent mouseButtonReleasedEvent) {
         base.OnMouseButtonReleased(mouseButtonReleasedEvent);
 
-        if (mouseButtonReleasedEvent.Button == MouseButton.Right) {
+        if (mouseButtonReleasedEvent.Button == MouseButton.Right)
+        {
 
             this._rightClickContextMenu?.RemoveFromCurrentScene();
 
@@ -126,7 +138,8 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
             this._rightClickContextMenu.AddToCurrentScene();
         }
 
-        if (mouseButtonReleasedEvent.Button == MouseButton.Left) {
+        if (mouseButtonReleasedEvent.Button == MouseButton.Left)
+        {
             this._isSelecting = false;
             this.UpdateTextSelection_FromMouseEvent();
 
@@ -140,14 +153,16 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
     public override void OnMouseButtonPressed(MouseButtonPressedEvent mouseButtonPressedEvent) {
         base.OnMouseButtonPressed(mouseButtonPressedEvent);
 
-        if (mouseButtonPressedEvent.Button == MouseButton.Left) {
+        if (mouseButtonPressedEvent.Button == MouseButton.Left)
+        {
             this._isSelecting = true;
             this._startSelectMouseX = (int)mouseButtonPressedEvent.WindowX;
             this._endSelectMouseX = (int)mouseButtonPressedEvent.WindowX;
             this.UpdateTextSelection_FromMouseEvent();
         }
 
-        if (mouseButtonPressedEvent.Button == MouseButton.Left || mouseButtonPressedEvent.Button == MouseButton.Right) {
+        if (mouseButtonPressedEvent.Button == MouseButton.Left || mouseButtonPressedEvent.Button == MouseButton.Right)
+        {
             this.TryCloseContextMenu();
         }
     }
@@ -155,7 +170,8 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
     public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent) {
         base.OnMouseMoved(mouseMovedEvent);
 
-        if (this._isSelecting) {
+        if (this._isSelecting)
+        {
             this._endSelectMouseX = (int)mouseMovedEvent.WindowX;
             this.UpdateTextSelection_FromMouseEvent();
         }
@@ -183,29 +199,37 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
     public override void OnKeyboardKeyPressed(KeyboardKeyPressedEvent keyboardKeyPressedEvent) {
         base.OnKeyboardKeyPressed(keyboardKeyPressedEvent);
 
-        if (keyboardKeyPressedEvent.Key == KeyboardKey.X) {
-            if (KeyboardHelper.IsControlPressed()) {
+        if (keyboardKeyPressedEvent.Key == KeyboardKey.X)
+        {
+            if (KeyboardHelper.IsControlPressed())
+            {
                 this.CutSelectedText();
                 return;
             }
         }
 
-        if (keyboardKeyPressedEvent.Key == KeyboardKey.C) {
-            if (KeyboardHelper.IsControlPressed()) {
+        if (keyboardKeyPressedEvent.Key == KeyboardKey.C)
+        {
+            if (KeyboardHelper.IsControlPressed())
+            {
                 this.CopySelectedText();
                 return;
             }
         }
 
-        if (keyboardKeyPressedEvent.Key == KeyboardKey.V) {
-            if (KeyboardHelper.IsControlPressed()) {
+        if (keyboardKeyPressedEvent.Key == KeyboardKey.V)
+        {
+            if (KeyboardHelper.IsControlPressed())
+            {
                 this.PasteText();
                 return;
             }
         }
 
-        if (keyboardKeyPressedEvent.Key == KeyboardKey.A) {
-            if (KeyboardHelper.IsControlPressed()) {
+        if (keyboardKeyPressedEvent.Key == KeyboardKey.A)
+        {
+            if (KeyboardHelper.IsControlPressed())
+            {
                 this.CursorIndex = 0;
                 this.SelectionStart = 0;
                 this.SelectionLength = this.Text.Length;
@@ -214,12 +238,14 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
         }
 
         // TODO: What happens if shift is pressed
-        if (keyboardKeyPressedEvent.Key == KeyboardKey.Left) {
+        if (keyboardKeyPressedEvent.Key == KeyboardKey.Left)
+        {
             this._cursorVisible = true;
             this.CursorIndex = Math.Max(0, this.CursorIndex - 1);
             return;
         }
-        if (keyboardKeyPressedEvent.Key == KeyboardKey.Right) {
+        if (keyboardKeyPressedEvent.Key == KeyboardKey.Right)
+        {
             this._cursorVisible = true;
             this.CursorIndex = Math.Min(this.Text.Length, this.CursorIndex + 1);
             return;
@@ -228,12 +254,15 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
         var content = keyboardKeyPressedEvent.LiteralContent;
 
         // If there's no selection, we need to handle backspace and delete differently.
-        if (!this._hasSelection) {
-            if (keyboardKeyPressedEvent.Key == KeyboardKey.BackSpace) {
+        if (!this._hasSelection)
+        {
+            if (keyboardKeyPressedEvent.Key == KeyboardKey.BackSpace)
+            {
 
                 // Nothing to backspace?
-                if (this.CursorIndex == 0) {
-                    return; 
+                if (this.CursorIndex == 0)
+                {
+                    return;
                 }
 
                 this.Text = this.Text.Remove(this.CursorIndex - 1, 1);
@@ -241,9 +270,11 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
                 return;
             }
 
-            if (keyboardKeyPressedEvent.Key == KeyboardKey.Delete) {
+            if (keyboardKeyPressedEvent.Key == KeyboardKey.Delete)
+            {
                 // Nothing to delete?
-                if (this.CursorIndex == this.Text.Length) {
+                if (this.CursorIndex == this.Text.Length)
+                {
                     return;
                 }
                 this.Text = this.Text.Remove(this.CursorIndex, 1);
@@ -252,8 +283,10 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
         }
 
         // Should we add content if it's empty?
-        if (content.Length == 0) {
-            if (keyboardKeyPressedEvent.Key != KeyboardKey.Backspace && keyboardKeyPressedEvent.Key != KeyboardKey.Delete) {
+        if (content.Length == 0)
+        {
+            if (keyboardKeyPressedEvent.Key != KeyboardKey.Backspace && keyboardKeyPressedEvent.Key != KeyboardKey.Delete)
+            {
                 return;
             }
         }
@@ -264,12 +297,14 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
     private void AddTextAtCursorOrSelection(string text) {
         this._cursorVisible = true;
 
-        if (this.CursorIndex < 0 || this.CursorIndex > this.Text.Length) {
+        if (this.CursorIndex < 0 || this.CursorIndex > this.Text.Length)
+        {
             Log.Trace(LogSeverity.Error, $"{nameof(this.CursorIndex)} for Textbox with content {this.Text} is out of range: {this.CursorIndex}");
             return;
         }
 
-        if (this._hasSelection) {
+        if (this._hasSelection)
+        {
 
             this.Text = this.Text.Remove(this.SelectionStart, this.SelectionLength);
             this.CursorIndex = this.SelectionStart;

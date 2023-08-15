@@ -198,6 +198,11 @@ namespace Annex.Core.Scenes.Layouts.Html
             {
                 img.BackgroundTextureId = textureId;
             }
+
+            if (GetStringAttribute("hover-texture", element, styles) is string hoverTextureId)
+            {
+                img.HoverBackgroundTextureId = hoverTextureId;
+            }
         }
 
         private void SetSize(IUIElement instance, IUIElement? parent, XElement element, Styles styles) {

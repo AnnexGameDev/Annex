@@ -1,6 +1,7 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
+using Annex.Core.Input.InputEvents;
 
 namespace Annex.Core.Scenes.Elements;
 
@@ -8,6 +9,12 @@ public class Button : UIElement, IButton
 {
     private readonly Image _background;
     private readonly Label _label;
+
+    public string? HoverBackgroundTextureId
+    {
+        get => _background.HoverBackgroundTextureId;
+        set => _background.HoverBackgroundTextureId = value;
+    }
 
     public string BackgroundTextureId
     {
@@ -69,5 +76,15 @@ public class Button : UIElement, IButton
     protected override void DrawInternal(ICanvas canvas) {
         this._background.Draw(canvas);
         this._label.Draw(canvas);
+    }
+
+    public override void OnMouseLeft(MouseMovedEvent mouseMovedEvent) {
+        base.OnMouseLeft(mouseMovedEvent);
+        _background.OnMouseLeft(mouseMovedEvent);
+    }
+
+    public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent) {
+        base.OnMouseMoved(mouseMovedEvent);
+        _background.OnMouseMoved(mouseMovedEvent);
     }
 }
