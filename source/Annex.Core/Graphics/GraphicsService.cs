@@ -14,7 +14,7 @@ namespace Annex.Core.Graphics
         }
 
         public GraphicsService(IGraphicsEngine graphicsEngine) {
-            Debug.Assert(graphicsEngine != null, "Graphics engine must be registered");
+            Debug.Assert(graphicsEngine != null, "A singleton graphics engine must be registered");
             this._graphicsEngine = graphicsEngine;
         }
 
