@@ -1,14 +1,14 @@
-﻿using Annex.Data;
-using Annex.Data.Shared;
-using Annex.Graphics;
-using Annex.Graphics.Contexts;
-using Annex.Graphics.Events;
+﻿using Annex_Old.Data;
+using Annex_Old.Graphics;
+using Annex_Old.Graphics.Contexts;
+using Annex_Old.Graphics.Events;
+using Annex_Old.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Annex.Scenes.Components
+namespace Annex_Old.Scenes.Components
 {
     internal class DebugOverlay : UIElement
     {

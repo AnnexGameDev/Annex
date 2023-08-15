@@ -1,14 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace Annex.Networking
+namespace Annex_Old.Networking
 {
     public class ConnectionList<T> where T : Connection, new()
     {
-        private readonly List<T> _connections;
+        private readonly List<T?> _connections;
         private readonly Dictionary<object, int> _connectionMap;
 
+        public int Size => this._connections.Count;
+
         public ConnectionList() {
-            this._connections = new List<T>();
+            this._connections = new List<T?>();
             this._connectionMap = new Dictionary<object, int>();
         }
 
@@ -36,7 +40,24 @@ namespace Annex.Networking
             this._connectionMap[connection.BaseConnection] = (int)connection.ID;
         }
 
+        internal void RemoveAt(int id) {
+            var pair = this._connectionMap.Where(entry => entry.Value == id).First();
+            this._connectionMap.Remove(pair.Key);
+
+            this._connections[id] = null;
+        }
+
+        public void Clear() {
+            this._connectionMap.Clear();
+            this._connections.Clear();
+        }
+
+        public IEnumerable<T> Where(Func<T, bool> cmp) {
+            return (IEnumerable<T>)this._connections.Where(v => v != null && cmp(v));
+        }
+
         public T CreateIfNotExistsAndGet(object baseConnection, SocketEndpoint<T> endpoint) {
+            Debug.ErrorIf(baseConnection == null, "Base connection cannot be null");
             if (!this.Exists(baseConnection)) {
                 var connection = new T();
                 connection.SetBaseConnection(baseConnection);
@@ -44,16 +65,15 @@ namespace Annex.Networking
                 connection.SetEndpoint(endpoint);
                 this.Add(connection);
             }
-            return this.Get(baseConnection);
+            return this.Get(baseConnection)!;
         }
 
-        public T Get(int index) {
+        public T? Get(int index) {
             Debug.Assert(index >= 0 && index < this._connections.Count, $"Connection index {index} is out of bounds [{0}-{this._connections.Count}]");
-
             return this._connections[index];
         }
 
-        public T Get(object baseConnection) {
+        public T? Get(object baseConnection) {
             Debug.Assert(Exists(baseConnection), $"Connection does not exist");
             return this.Get(this._connectionMap[baseConnection]);
         }

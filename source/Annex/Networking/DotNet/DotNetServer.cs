@@ -1,9 +1,8 @@
-﻿using Annex.Events;
-using Annex.Networking.Configuration;
-using Annex.Networking.Packets;
+﻿using Annex_Old.Networking.Configuration;
+using Annex_Old.Networking.Packets;
 using System;
 
-namespace Annex.Networking.DotNet
+namespace Annex_Old.Networking.DotNet
 {
     public class DotNetServer<T> : ServerEndpoint<T>, IServer where T : Connection, new()
     {
@@ -26,10 +25,15 @@ namespace Annex.Networking.DotNet
             this._server.Destroy();
         }
 
+        public override void DisconnectClient(int id) {
+            throw new NotImplementedException();
+        }
+
         public override void Start() {
             Console.WriteLine($"Creating server: {this.Configuration}");
             this._server.Start();
-            ServiceProvider.EventService.AddEvent(PriorityType.NETWORK, this._messageQueue.ProcessQueue, 0, 0, "server-core-process-queue");
+            // TODO: To be redone by networking rework
+            // ServiceProvider.EventService.AddEvent(PriorityType.NETWORK, this._messageQueue.ProcessQueue, 0, 0, "server-core-process-queue");
         }
 
         private protected override void SendPacket(T client, int packetID, OutgoingPacket packet) {

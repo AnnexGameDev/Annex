@@ -1,7 +1,7 @@
-﻿using Annex.Data;
-using Annex.Data.Shared;
+﻿using Annex_Old.Data;
+using Annex_Old.Data.Shared;
 
-namespace Annex.Graphics.Contexts
+namespace Annex_Old.Graphics.Contexts
 {
     public class TextureContext : DrawingContext
     {
@@ -12,6 +12,8 @@ namespace Annex.Graphics.Contexts
         public RGBA? RenderColor { get; set; }
         public float Rotation { get; set; }
         public Vector RelativeRotationOrigin { get; set; }
+
+        internal ITexturePlatformTarget? Target;
 
         public TextureContext(String textureName) {
             this.SourceTextureName = textureName;

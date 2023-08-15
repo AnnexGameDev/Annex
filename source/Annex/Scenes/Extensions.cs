@@ -1,4 +1,6 @@
-﻿namespace Annex.Scenes
+﻿using System;
+
+namespace Annex_Old.Scenes
 {
     public static class Extensions
     {
@@ -66,6 +68,13 @@
                 default:
                     return string.Empty;
             }
+        }
+    
+        public static KeyboardKey ToKeyboardKey(this string value) {
+            if (Enum.Parse(typeof(KeyboardKey), value) is KeyboardKey key) {
+                return key;
+            }
+            return KeyboardKey.Unknown;
         }
     }
 }

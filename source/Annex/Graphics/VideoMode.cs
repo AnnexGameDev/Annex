@@ -1,4 +1,4 @@
-﻿namespace Annex.Graphics
+﻿namespace Annex_Old.Graphics
 {
     public enum VideoMode
     {

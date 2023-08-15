@@ -1,12 +1,11 @@
-﻿using Annex.Assets;
-using Annex.Scenes.Components;
+﻿using Annex_Old.Scenes.Components;
+using Annex_Old.Services;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace Annex.Scenes
+namespace Annex_Old.Scenes
 {
-    public class SceneService : IService
+    public class SceneService : ISceneService
     {
         private readonly Dictionary<Type, Scene> _scenes;
 
@@ -15,41 +14,43 @@ namespace Annex.Scenes
 
         public SceneService() {
             this._scenes = new Dictionary<Type, Scene>();
-            this.LoadScene<Unknown>();
+            this._currentSceneType = typeof(Unknown);
+            this._scenes.Add(typeof(Unknown), new Unknown());
         }
 
-        public T LoadNewScene<T>() where T : Scene, new() {
-            if (_scenes.ContainsKey(typeof(T))) {
-                ServiceProvider.Log.WriteLineTrace(this, $"Removing previous instance of scene {typeof(T).Name}");
-                _scenes.Remove(typeof(T));
+        public T LoadScene<T>(bool createNewInstance = false) where T : Scene, new() {
+            var previousScene = this.CurrentScene;
+
+            if (createNewInstance && _scenes.ContainsKey(typeof(T))) {
+                UnloadScene<T>();
             }
-            return LoadScene<T>();
-        }
 
-        public T LoadScene<T>() where T : Scene, new() {
             if (!this._scenes.ContainsKey(typeof(T))) {
-                ServiceProvider.Log.WriteLineTrace(this, $"Creating new instance of scene {typeof(T).Name}");
+                ServiceProvider.LogService?.WriteLineTrace(this, $"Creating new instance of scene {typeof(T).Name}");
                 this._scenes[typeof(T)] = new T();
             }
-            ServiceProvider.Log.WriteLineTrace(this, $"Loading scene {typeof(T).Name}");
+
+            ServiceProvider.LogService?.WriteLineTrace(this, $"Loading scene {typeof(T).Name}");
             this._currentSceneType = typeof(T);
+
+            previousScene.OnLeave(new OnSceneLeaveEvent(this.CurrentScene));
+            this.CurrentScene.OnEnter(new OnSceneEnterEvent(previousScene));
+
             return (T)this.CurrentScene;
         }
 
-        public bool IsCurrentScene<T>() {
-            return typeof(T) == this.CurrentScene.GetType();
+        public void UnloadScene<T>() where T : Scene {
+            Debug.Assert(this._scenes.ContainsKey(typeof(T)), $"Tried to unload a scene {typeof(T).Name} that doesn't exist");
+            ServiceProvider.LogService?.WriteLineTrace(this, $"Unloading instance of scene {typeof(T).Name}");
+            _scenes.Remove(typeof(T));
         }
 
-        public void LoadGameClosingScene() {
-            this.LoadScene<GameClosing>();
+        public bool IsCurrentScene<T>() where T : Scene {
+            return typeof(T) == this.CurrentScene.GetType();
         }
 
         public void Destroy() {
 
-        }
-
-        public IEnumerable<IAssetManager> GetAssetManagers() {
-            return Enumerable.Empty<IAssetManager>();
         }
     }
 }

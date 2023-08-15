@@ -1,4 +1,4 @@
-﻿namespace Annex.Networking
+﻿namespace Annex_Old.Networking
 {
     public abstract class Connection
     {
@@ -28,6 +28,13 @@
         public void SetEndpoint(object endpoint) {
             Debug.Assert(this.Endpoint == null, "Endpoint has already been set");
             this.Endpoint = endpoint;
+        }
+
+        public virtual void Destroy() {
+            this.ID = null;
+            this.Endpoint = null;
+            this.BaseConnection = null;
+            this.SetState(ConnectionState.Unknown);
         }
     }
 }

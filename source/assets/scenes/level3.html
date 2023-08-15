@@ -1,0 +1,65 @@
+<style  id="background" 
+        size="100%, 100%" 
+        texture="ui/background/splash.png">
+</style>
+<style  id="menu-button"
+        font-size="18"
+        font="default"
+        size="30%, 100%"
+        text-alignment="center, middle"
+        text-offset="50%, 50%"
+        texture="ui/buttons/orangefade.png">
+</style>
+
+<scene  size="960, 640">
+        <picture style-id="background"></picture>
+
+        <label  text="The Lesser Key"
+                font-size="76"
+                font="default"
+                font-color="white"
+                text-alignment="center, middle"
+                position="50%, 25%">
+        </label>
+
+        <container      position="25%, 50%" 
+                        size="50%, 50">
+                <button style-id="menu-button" 
+                        text="Join Server"
+                        position="0, 0">
+                </button>
+                
+                <button style-id="menu-button"
+                        position="35%, 0"
+                        text="Host Server">
+                </button>
+
+                <button style-id="menu-button"
+                        position="70%, 0"
+                        text="Leave">
+                </button>
+        </container>
+
+        <textbox        position="25%, 75%"
+                        size="50%, 50"
+                        texture="ui/buttons/whitebox.png"
+                        text="test"
+                        text-alignment="left, middle"
+                        text-offset="0, 50%"
+                        font-size="50"
+                        font="default"
+                        password-char="*">
+        </textbox>
+
+        <passwordbox    position="25%, 90%"
+                        size="50%, 50"
+                        texture="ui/buttons/whitebox.png"
+                        text="test"
+                        text-alignment="left, middle"
+                        text-offset="0, 50%"
+                        font-size="50"
+                        font="default"
+                        password-char="*">
+        </passwordbox>
+</scene>
+<script src="style.js"></script>

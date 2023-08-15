@@ -1,6 +1,7 @@
-﻿using Annex.Graphics.Events;
+﻿using Annex_Old.Graphics.Events;
+using Annex_Old.Scenes.Components;
 
-namespace Annex.Scenes.Controllers
+namespace Annex_Old.Scenes.Controllers
 {
     public abstract class InputController
     {
@@ -44,8 +45,16 @@ namespace Annex.Scenes.Controllers
 
         }
 
-        internal virtual bool HandleSceneFocusMouseDown(int x, int y) {
-            return false;
+        public virtual void HandleMouseMoved(MouseMovedEvent e) {
+
+        }
+
+        public virtual void HandleMouseWheelMoved(MouseWheelMovedEvent e) {
+
+        }
+
+        public virtual UIElement? GetFirstVisibleChildElementAt(int x, int y) {
+            return null;
         }
     }
 }

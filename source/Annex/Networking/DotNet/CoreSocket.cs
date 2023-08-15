@@ -1,7 +1,7 @@
-﻿using Annex.Networking.Configuration;
-using Annex.Networking.Packets;
+﻿using Annex_Old.Networking.Configuration;
+using Annex_Old.Networking.Packets;
 
-namespace Annex.Networking.DotNet
+namespace Annex_Old.Networking.DotNet
 {
     public abstract class CoreSocket
     {

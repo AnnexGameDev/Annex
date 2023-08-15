@@ -1,7 +1,8 @@
-﻿using Annex.Graphics;
+﻿using Annex_Old.Graphics;
+using Annex_Old.Graphics.Events;
 using System.Collections.Generic;
 
-namespace Annex.Scenes.Components
+namespace Annex_Old.Scenes.Components
 {
     public class Container : Image
     {
@@ -25,14 +26,19 @@ namespace Annex.Scenes.Components
             this._children.Add(child);
         }
 
-        internal override bool HandleSceneFocusMouseDown(int x, int y) {
+        public override UIElement? GetFirstVisibleChildElementAt(int x, int y) {
             // z-index from last to first.
             for (int i = this._children.Count - 1; i >= 0; i--) {
-                if (this._children[i].HandleSceneFocusMouseDown(x, y)) {
-                    return true;
+                var child = this._children[i];
+
+                if (!child.Visible) {
+                    continue;
+                }
+                if (child.GetFirstVisibleChildElementAt(x, y) is UIElement visibleChild) {
+                    return visibleChild;
                 }
             }
-            return false;
+            return base.GetFirstVisibleChildElementAt(x, y);
         }
 
         public override UIElement GetElementById(string id) {
@@ -71,6 +77,41 @@ namespace Annex.Scenes.Components
             }
 
             return RemoveState.KeepSearching;
+        }
+
+        public override void HandleMouseMoved(MouseMovedEvent e) {
+
+            for (int i = 0; i < this._children.Count; i++) {
+                var child = this._children[i];
+                var x = e.MouseX;
+                var y = e.MouseY;
+
+                if (x >= child.Position.X && x <= child.Position.X + child.Size.X) {
+                    if (y >= child.Position.Y && y <= child.Position.Y + child.Size.Y) {
+                        if (!child.WasPreviouslyHoveredOver) {
+                            child.OnMouseEntered();
+                        }
+                        child.HandleMouseMoved(e);
+                        continue;
+                    }
+                }
+
+                if (child.WasPreviouslyHoveredOver) {
+                    child.OnMouseLeft();
+                }
+            }
+        }
+
+        public override void OnMouseLeft() {
+            base.OnMouseLeft();
+
+            for (int i = 0; i< this._children.Count; i++) {
+                var child = this._children[i];
+
+                if (child.WasPreviouslyHoveredOver) {
+                    child.OnMouseLeft();
+                }
+            }
         }
     }
 }

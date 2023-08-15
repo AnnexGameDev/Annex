@@ -1,9 +1,14 @@
-﻿namespace Annex.Assets
+﻿using Annex_Old.Assets.Converters;
+using Annex_Old.Assets.Streams;
+using Annex_Old.Services;
+
+namespace Annex_Old.Assets
 {
-    public interface IAssetManager
+    public interface IAssetManager : IService
     {
-        AssetType AssetType { get; set; }
-        bool GetAsset(AssetInitializerArgs args, out object? asset);
-        void PackageAssetsToBinaryFrom(string path);
+        IDataStreamer DataStreamer { get; }
+        bool GetAsset(AssetConverterArgs args, out Asset asset);
+        Asset[] GetCachedAssets();
+        void UnloadCachedAsset(string id);
     }
 }

@@ -1,18 +1,21 @@
-﻿using Annex.Assets;
-using Annex.Data.Shared;
-using Annex.Events;
-using Annex.Graphics.Cameras;
-using Annex.Graphics.Contexts;
-using Annex.Scenes;
+﻿using Annex_Old.Assets.Converters;
+using Annex_Old.Data.Shared;
+using Annex_Old.Events;
+using Annex_Old.Graphics.Cameras;
+using Annex_Old.Graphics.Contexts;
+using Annex_Old.Graphics.Events;
+using Annex_Old.Graphics.Sfml.Assets;
+using Annex_Old.Graphics.Sfml.Events;
+using Annex_Old.Graphics.Sfml.Targets;
+using Annex_Old.Scenes;
+using Annex_Old.Services;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
-using System.Collections.Generic;
 using System.Threading;
-using static Annex.Graphics.EventIDs;
-using static Annex.Graphics.Sfml.Errors;
+using static Annex_Old.Graphics.Sfml.Errors;
 
-namespace Annex.Graphics.Sfml
+namespace Annex_Old.Graphics.Sfml
 {
     public class SfmlCanvas : ICanvas
     {
@@ -29,50 +32,51 @@ namespace Annex.Graphics.Sfml
         private string _title { get; set; }
         private Styles _style { get; set; }
 
-        public readonly AssetManager FontManager;
-        public readonly AssetManager TextureManager;
-        public readonly AssetManager IconManager;
+        private readonly TextureConverter _textureConverter;
+        private readonly FontConverter _fontConverter;
+        private readonly IconConverter _iconConverter;
 
         private readonly InputHandler _inputHandler;
 
-        public SfmlCanvas(AssetManager textureManager, AssetManager fontManager, AssetManager iconManager) {
-            this.TextureManager = textureManager;
-            this.FontManager = fontManager;
-            this.IconManager = iconManager;
+        public event System.EventHandler<WindowResizedEvent>? OnWindowResized;
 
+        public SfmlCanvas(WindowMode mode) {
             int resolutionWidth = 960;
             int resolutionHeight = 640;
+
+            this._textureConverter = new TextureConverter();
+            this._fontConverter = new FontConverter();
+            this._iconConverter = new IconConverter();
 
             this._bufferAccess = new Mutex();
             this._resolution = Vector.Create(resolutionWidth, resolutionHeight);
             this._camera = new Camera(this._resolution);
             this._uiView = new View(new Vector2f(this._resolution.X / 2, this._resolution.Y / 2), new Vector2f(this._resolution.X, this._resolution.Y));
             this._gameContentView = new View();
-            this._buffer = new RenderWindow(new SFML.Window.VideoMode((uint)this._resolution.X, (uint)this._resolution.Y), "", Styles.Default);
+            this._buffer = new RenderWindow(new SFML.Window.VideoMode((uint)this._resolution.X, (uint)this._resolution.Y), "", (Styles)mode);
             this._style = Styles.Default;
             this.SetTitle("Window");
 
             this._inputHandler = new SfmlInputHandler(this._buffer);
 
+            // Has to be handled differently
+            this._buffer.Resized += (sender, e) => {
+                this.OnWindowResized?.Invoke(this, new WindowResizedEvent(e.Width, e.Height));
+            };
+
             var events = ServiceProvider.EventService;
-            events.AddEvent(PriorityType.GRAPHICS, (e) => {
-                this.BeginDrawing();
-                ServiceProvider.SceneService.CurrentScene.Draw(this);
-                this.EndDrawing();
-            }, 16, 0, DrawGameEventID);
-            events.AddEvent(PriorityType.INPUT, (e) => {
-                this.ProcessEvents();
-            }, 16, 0, ProcessUserInputGameEventID);
+            events.AddEvent(PriorityType.GRAPHICS, new GraphicsEvent(this, this.BeginDrawing, this.EndDrawing)); ;
+            events.AddEvent(PriorityType.INPUT, new InputEvent(this.ProcessEvents));
         }
 
         public void SetWindowIcon(string iconPath) {
-            var args = new AssetInitializerArgs(iconPath);
-            IconManager.GetAsset(args, out var resource);
-            var icon = (Image)resource;
+            var args = new AssetConverterArgs(iconPath, this._iconConverter);
+            ServiceProvider.IconManager.GetAsset(args, out var resource);
+            var icon = (Image)resource.GetTarget();
             this._buffer.SetIcon(icon.Size.X, icon.Size.Y, icon.Pixels);
         }
 
-        private void SetTitle(string title) {
+        public void SetTitle(string title) {
             this._buffer.SetTitle(title);
             this._title = title;
         }
@@ -107,9 +111,9 @@ namespace Annex.Graphics.Sfml
             // We need to update the camera.
             this.UpdateView(ctx);
 
-            var args = new AssetInitializerArgs(ctx.FontName.Value);
-            this.FontManager.GetAsset(args, out var asset);
-            var font = (Font)asset;
+            var args = new AssetConverterArgs(ctx.FontName.Value, this._fontConverter);
+            ServiceProvider.FontManager.GetAsset(args, out var asset);
+            var font = (Font)asset.GetTarget();
             var text = new Text(ctx.RenderText, font) {
                 CharacterSize = (uint)(int)ctx.FontSize,
                 FillColor = ctx.FontColor,
@@ -147,26 +151,87 @@ namespace Annex.Graphics.Sfml
             this._buffer.Draw(text);
         }
 
+        public void Draw(BatchTextureContext batch) {
+            if (string.IsNullOrEmpty(batch.SourceTextureName)) {
+                return;
+            }
+
+            // We need to update the camera.
+            this.UpdateView(batch);
+            if (batch.vertex_cache as DrawableVertexArray is null) {
+                var args = new AssetConverterArgs(batch.SourceTextureName, this._textureConverter);
+                bool loadSuccess = ServiceProvider.TextureManager.GetAsset(args, out var asset);
+                Debug.Assert(loadSuccess, TEXTURE_FAILED_TO_LOAD.Format(batch.SourceTextureName));
+
+                var texture = (Texture)asset.GetTarget();
+                int batchSize = batch.RenderPositions.Length;
+                var vertices = new VertexArray(PrimitiveType.Quads, (uint)batchSize * 4);
+
+                for (uint i = 0; i < batchSize; i++) {
+                    uint quad_num = i * 4;
+
+                    var size = batch.RenderSizes[i];
+                    var pos = batch.RenderPositions[i];
+
+                    float rect_top = 0;
+                    float rect_left = 0;
+                    float rect_right = texture.Size.X;
+                    float rect_bottom = texture.Size.Y;
+                    if (batch.SourceTextureRects != null) {
+                        var rect = batch.SourceTextureRects[i];
+                        rect_top = rect.top;
+                        rect_left = rect.left;
+                        rect_right = rect.left + rect.width;
+                        rect_bottom = rect.top + rect.height;
+                    }
+
+                    var color = Color.White;
+                    if (batch.RenderColors != null) {
+                        color = batch.RenderColors[i];
+                    }
+
+                    vertices[quad_num] = new Vertex(new Vector2f(pos.x, pos.y), color, new Vector2f(rect_left, rect_top));
+                    vertices[quad_num + 1] = new Vertex(new Vector2f(pos.x + size.x, pos.y), color, new Vector2f(rect_right, rect_top));
+                    vertices[quad_num + 2] = new Vertex(new Vector2f(pos.x + size.x, pos.y + size.y), color, new Vector2f(rect_right, rect_bottom));
+                    vertices[quad_num + 3] = new Vertex(new Vector2f(pos.x, pos.y + size.y), color, new Vector2f(rect_left, rect_bottom));
+                }
+
+                batch.vertex_cache = new DrawableVertexArray(vertices, texture);
+            }
+
+            this._buffer.Draw(batch.vertex_cache as DrawableVertexArray);
+        }
+
         public void Draw(SpriteSheetContext sheet) {
 
             if (System.String.IsNullOrEmpty(sheet.SourceTextureName)) {
                 return;
             }
 
-            var rect = sheet.SourceTextureRect;
-            if (rect.Width == SpriteSheetContext.DETERMINE_SIZE_FROM_IMAGE && rect.Height == SpriteSheetContext.DETERMINE_SIZE_FROM_IMAGE) {
-                object? asset = null;
-                var args = new AssetInitializerArgs(sheet.SourceTextureName.Value);
-                bool loadSuccess = this.TextureManager.GetAsset(args, out asset);
-                Debug.Assert(loadSuccess, TEXTURE_FAILED_TO_LOAD.Format(sheet.SourceTextureName.Value));
-                using var sprite = new Sprite((Texture)asset);
-                var size = sprite.Texture.Size;
+            if (sheet.Target is not SheetPlatformTarget) {
+                sheet.Target?.Dispose();
+                sheet.Target = new SheetPlatformTarget();
+            }
+            var target = (SheetPlatformTarget)sheet.Target;
 
-                int width = (int)(size.X / sheet.NumColumns);
-                int height = (int)(size.Y / sheet.NumRows);
 
-                rect.Height.Set(width);
-                rect.Width.Set(height);
+            if (target.TextureId != sheet.SourceTextureName.Value) {
+                target.TextureId = sheet.SourceTextureName.Value;
+
+                var rect = sheet.SourceTextureRect;
+                if (rect.Width == SpriteSheetContext.DETERMINE_SIZE_FROM_IMAGE && rect.Height == SpriteSheetContext.DETERMINE_SIZE_FROM_IMAGE) {
+                    var args = new AssetConverterArgs(sheet.SourceTextureName.Value, this._textureConverter);
+                    bool loadSuccess = ServiceProvider.TextureManager.GetAsset(args, out var asset);
+                    Debug.Assert(loadSuccess, TEXTURE_FAILED_TO_LOAD.Format(sheet.SourceTextureName.Value));
+                    using var sprite = new Sprite((Texture)asset.GetTarget());
+                    var size = sprite.Texture.Size;
+
+                    int width = (int)(size.X / sheet.NumColumns);
+                    int height = (int)(size.Y / sheet.NumRows);
+
+                    rect.Height.Set(height);
+                    rect.Width.Set(width);
+                }
             }
 
             this.Draw(sheet._internalTexture);
@@ -174,45 +239,67 @@ namespace Annex.Graphics.Sfml
 
         public void Draw(TextureContext ctx) {
 
-            if (System.String.IsNullOrEmpty(ctx.SourceTextureName)) {
+            if (string.IsNullOrEmpty(ctx.SourceTextureName)) {
                 return;
             }
 
             // We need to update the camera.
             this.UpdateView(ctx);
 
-            var args = new AssetInitializerArgs(ctx.SourceTextureName.Value);
-            bool loadSuccess = this.TextureManager.GetAsset(args, out var asset);
-            Debug.Assert(loadSuccess, TEXTURE_FAILED_TO_LOAD.Format(ctx.SourceTextureName.Value));
+            if (ctx.Target is not TexturePlatformTarget) {
+                ctx.Target?.Dispose();
+                ctx.Target = new TexturePlatformTarget();
+            }
+            var target = (TexturePlatformTarget)ctx.Target;
+            var sprite = target.Sprite;
 
-            using var sprite = new Sprite((Texture)asset) {
-                Position = ctx.RenderPosition
-            };
+            if (target.TextureName != ctx.SourceTextureName.Value) {
+                var args = new AssetConverterArgs(ctx.SourceTextureName.Value!, this._textureConverter);
+                bool loadSuccess = ServiceProvider.TextureManager.GetAsset(args, out var asset);
+                Debug.Assert(loadSuccess, TEXTURE_FAILED_TO_LOAD.Format(ctx.SourceTextureName.Value!));
 
-            Vector2f renderSize;
+                sprite.Texture = (Texture)asset.GetTarget();
+                target.TextureName = ctx.SourceTextureName.Value;
+            }
+
+            target.RenderPosition.X = ctx.RenderPosition.X;
+            target.RenderPosition.Y = ctx.RenderPosition.Y;
+            sprite.Position = target.RenderPosition;
+
+            var renderSize = target.RenderSize;
             if (ctx.RenderSize == null) {
                 if (ctx.SourceTextureRect == null) {
-                    renderSize = new Vector2f(sprite.Texture.Size.X, sprite.Texture.Size.Y);
+                    renderSize.X = sprite.Texture.Size.X;
+                    renderSize.Y = sprite.Texture.Size.Y;
                 } else {
-                    renderSize = new Vector2f(ctx.SourceTextureRect.Width, ctx.SourceTextureRect.Height);
+                    renderSize.X = ctx.SourceTextureRect.Width;
+                    renderSize.Y = ctx.SourceTextureRect.Height;
                 }
             } else {
-                renderSize = ctx.RenderSize;
+                renderSize.X = ctx.RenderSize.X;
+                renderSize.Y = ctx.RenderSize.Y;
             }
 
             if (ctx.SourceTextureRect != null) {
                 sprite.TextureRect = ctx.SourceTextureRect;
-                sprite.Scale = new Vector2f(renderSize.X / ctx.SourceTextureRect.Width, renderSize.Y / ctx.SourceTextureRect.Height);
+                target.Scale.X = renderSize.X / ctx.SourceTextureRect.Width;
+                target.Scale.Y = renderSize.Y / ctx.SourceTextureRect.Height;
             } else {
-                sprite.Scale = new Vector2f(renderSize.X / sprite.Texture.Size.X, renderSize.Y / sprite.Texture.Size.Y);
+                target.Scale.X = renderSize.X / sprite.Texture.Size.X;
+                target.Scale.Y = renderSize.Y / sprite.Texture.Size.Y;
             }
+            sprite.Scale = target.Scale;
 
             if (ctx.RenderColor != null) {
                 sprite.Color = ctx.RenderColor;
             }
 
             if (ctx.Rotation % 360 != 0) {
-                sprite.Origin = ctx.RelativeRotationOrigin;
+
+                target.Origin.X = ctx.RelativeRotationOrigin.X;
+                target.Origin.Y = ctx.RelativeRotationOrigin.Y;
+
+                sprite.Origin = target.Origin;
                 sprite.Rotation = ctx.Rotation;
                 sprite.Position += new Vector2f(ctx.RelativeRotationOrigin.X, ctx.RelativeRotationOrigin.Y);
             }
@@ -367,12 +454,6 @@ namespace Annex.Graphics.Sfml
 
         public Vector GetResolution() {
             return this._resolution;
-        }
-
-        public IEnumerable<IAssetManager> GetAssetManagers() {
-            yield return this.FontManager;
-            yield return this.TextureManager;
-            yield return this.IconManager;
         }
     }
 }

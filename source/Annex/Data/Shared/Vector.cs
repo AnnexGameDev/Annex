@@ -1,7 +1,8 @@
 ﻿using SFML.System;
+using System;
 using System.Diagnostics;
 
-namespace Annex.Data.Shared
+namespace Annex_Old.Data.Shared
 {
     [DebuggerDisplay("X:{X} Y:{Y}")]
     public abstract class Vector : Shared<float, float>
@@ -16,12 +17,17 @@ namespace Annex.Data.Shared
             this.Y += instance.Y;
         }
 
+
         public static implicit operator Vector2f(Vector instance) {
             return new Vector2f(instance.X, instance.Y);
         }
 
         public static Vector Create() {
             return new Vector_Val_Val();
+        }
+
+        public float Norm() {
+            return Math.Abs(this.X) + Math.Abs(this.Y);
         }
 
         public static Vector Create(float x, float y) {
@@ -65,6 +71,12 @@ namespace Annex.Data.Shared
                 this._x = x;
                 this.Y = y;
             }
+        }
+
+        public float DistanceTo(Vector position) {
+            var dx = this.X - position.X;
+            var dy = this.Y - position.Y;
+            return (float)Math.Sqrt(dx * dx + dy * dy);
         }
 
         private class Vector_Val_Ref : Vector

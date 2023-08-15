@@ -1,10 +1,11 @@
-﻿using Annex.Graphics.Events;
-using Annex.Scenes;
+﻿using Annex_Old.Graphics.Events;
+using Annex_Old.Scenes;
+using Annex_Old.Services;
 using SFML.Graphics;
 using SFML.Window;
 using System;
 
-namespace Annex.Graphics.Sfml
+namespace Annex_Old.Graphics.Sfml
 {
     public class SfmlInputHandler : InputHandler
     {
@@ -12,13 +13,22 @@ namespace Annex.Graphics.Sfml
             renderWindow.Closed += this.RenderWindow_Closed;
             renderWindow.KeyPressed += this.RenderWindow_KeyPressed;
             renderWindow.KeyReleased += this.RenderWindow_KeyReleased;
+            renderWindow.MouseMoved += this.RenderWindow_MouseMoved;
             renderWindow.MouseButtonPressed += this.RenderWindow_MouseButtonPressed;
+            renderWindow.MouseWheelScrolled += RenderWindow_MouseWheelScrolled;
             renderWindow.MouseButtonReleased += this.RenderWindow_MouseButtonReleased;
             renderWindow.JoystickButtonPressed += this.RenderWindow_JoystickButtonPressed;
             renderWindow.JoystickButtonReleased += this.RenderWindow_JoystickButtonReleased;
             renderWindow.JoystickConnected += this.RenderWindow_JoystickConnected;
             renderWindow.JoystickDisconnected += this.RenderWindow_JoystickDisconnected;
             renderWindow.JoystickMoved += this.RenderWindow_JoystickMoved;
+        }
+
+        private void RenderWindow_MouseWheelScrolled(object? sender, MouseWheelScrollEventArgs e) {
+            this.MouseWheelMoved(new MouseWheelMovedEvent()
+            {
+                Delta = e.Delta
+            });
         }
 
         private void RenderWindow_JoystickMoved(object? sender, JoystickMoveEventArgs e) {
@@ -83,18 +93,25 @@ namespace Annex.Graphics.Sfml
             });
         }
 
-        private void RenderWindow_KeyReleased(object? sender, KeyEventArgs e) {
-            this.KeyReleased(new KeyboardKeyReleasedEvent() {
-                Key = e.Code.ToNonSFML(),
-                ShiftDown = e.Shift
+        private void RenderWindow_MouseMoved(object? sender, MouseMoveEventArgs e) {
+            var canvas = ServiceProvider.Canvas;
+            var mousePos = canvas.GetRealMousePos();
+            var gamePos = canvas.GetGameWorldMousePos();
+            this.MouseMoved(new MouseMovedEvent()
+            {
+                MouseX = (int)mousePos.X,
+                MouseY = (int)mousePos.Y,
+                WorldX = gamePos.X,
+                WorldY = gamePos.Y
             });
         }
 
+        private void RenderWindow_KeyReleased(object? sender, KeyEventArgs e) {
+            this.KeyReleased(new KeyboardKeyReleasedEvent(e.Code.ToNonSFML(), e.Shift));
+        }
+
         private void RenderWindow_KeyPressed(object? sender, KeyEventArgs e) {
-            this.KeyPressed(new KeyboardKeyPressedEvent() {
-                Key = e.Code.ToNonSFML(),
-                ShiftDown = e.Shift
-            });
+            this.KeyPressed(new KeyboardKeyPressedEvent(e.Code.ToNonSFML(), e.Shift));
         }
 
         private void RenderWindow_Closed(object? sender, EventArgs e) {

@@ -1,17 +1,18 @@
-﻿using Annex.Events;
-using Annex.Networking.Configuration;
-using Annex.Networking.Packets;
-using Annex.Scenes;
+﻿using Annex_Old.Events;
+using Annex_Old.Networking.Configuration;
+using Annex_Old.Networking.Packets;
+using Annex_Old.Services;
 using Lidgren.Network;
 using System;
 
-namespace Annex.Networking.Lidgren
+namespace Annex_Old.Networking.Lidgren
 {
     public class LidgrenClient<T> : ClientEndpoint<T> where T : Connection, new()
     {
-        private NetPeerConfiguration _lidgrenConfig;
-        private NetClient _lidgrenClient;
-        private NetDeliveryMethod _method;
+        private readonly NetPeerConfiguration _lidgrenConfig;
+        private readonly NetDeliveryMethod _method;
+        private NetClient? _lidgrenClient;
+        private LidgrenReceiveMessageEvent? _receiveEvent;
 
         public LidgrenClient(ClientConfiguration config) : base(config) {
             this._lidgrenConfig = config;
@@ -19,42 +20,34 @@ namespace Annex.Networking.Lidgren
         }
 
         public override void Start() {
-            Console.WriteLine($"Creating client: {this.Configuration}");
+            ServiceProvider.LogService?.WriteLineTrace(this, $"Creating client: {this.Configuration}");
             this._lidgrenClient = new NetClient(this._lidgrenConfig);
+
+            this._receiveEvent = new LidgrenReceiveMessageEvent(this._lidgrenClient);
+            this._receiveEvent.OnServerReceive += this.ProcessMessage;
+            ServiceProvider.EventService.AddEvent(PriorityType.NETWORK, this._receiveEvent);
+
             this._lidgrenClient.Start();
-
             this._lidgrenClient.Connect(this.Configuration.IP, this.Configuration.Port);
-
-            ServiceProvider.EventService.AddEvent(PriorityType.NETWORK, this.OnReceive, 0, 0, NetworkEventID);
-        }
-
-        private void OnReceive(GameEventArgs args) {
-            if (ServiceProvider.SceneService.IsCurrentScene<GameClosing>()) {
-                this.Destroy();
-                args.RemoveFromQueue = true;
-                return;
-            }
-
-            NetIncomingMessage message;
-            while ((message = this._lidgrenClient.ReadMessage()) != null) {
-                this.ProcessMessage(message);
-            }
         }
 
         private void ProcessMessage(NetIncomingMessage message) {
-            this.Connections.CreateIfNotExistsAndGet(message.SenderConnection, this);
+
+            if (this.Connection == null) {
+                this.CreateConnectionIfNotExistsAndGet(message.SenderConnection);
+                Debug.ErrorIf(this.Connection == null, "Null connection");
+            }
+            var connection = this.Connection!;
 
             switch (message.MessageType) {
                 case NetIncomingMessageType.StatusChanged: {
                     var state = (NetConnectionStatus)message.ReadByte();
-                    var connection = this.Connections.Get(message.SenderConnection);
                     connection.SetState(state.ToConnectionState());
                     break;
                 }
                 case NetIncomingMessageType.Data: {
                     using var packet = new IncomingPacket(message.Data);
-                    var connection = this.Connections.Get(message.SenderConnection);
-                    this.PacketHandler.HandlePacket(connection, packet);
+                    this.HandlePacket(connection, packet);
                     break;
                 }
                 case NetIncomingMessageType.WarningMessage:
@@ -67,10 +60,24 @@ namespace Annex.Networking.Lidgren
         }
 
         public override void Destroy() {
-            this._lidgrenClient.Disconnect("shutdown");
+            base.Destroy();
+            if (this._receiveEvent != null) {
+                this._receiveEvent.OnServerReceive -= this.ProcessMessage;
+                this._receiveEvent.MarkForRemoval();
+                this._receiveEvent = null;
+            }
+
+            this._lidgrenClient?.Disconnect("shutdown");
+            this._lidgrenClient = null;
         }
 
         public override void SendPacket(int packetID, OutgoingPacket packet) {
+
+            if (this._lidgrenClient == null) {
+                ServiceProvider.LogService?.WriteLineWarning($"Canceling sending packet #{packetID} due to null client");
+                return;
+            }
+
             var message = this._lidgrenClient.CreateMessage();
             message.Write(packetID);
             message.Write(packet.GetBytes());

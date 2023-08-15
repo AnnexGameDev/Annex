@@ -1,0 +1,61 @@
+@font-face {
+	font-family: "scene default";
+	src: url("../fonts/default.ttf") format("truetype");
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+}
+
+scene {
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 5px solid black;
+    position: relative;
+    margin: 0px auto;
+    display: block;
+    width: 960px;
+    height: 640px;
+}
+
+container {
+	position: absolute;
+	display: inline-block;
+}
+
+label {
+	position: relative;
+	background-size: 100% 100%;
+	display: block;
+}
+
+picture {
+	position: absolute;
+	border: none;
+}
+
+button {
+	position: absolute;
+	border: none;
+	background-size: 100% 100%;
+}
+
+button.active {
+	border: none;
+}
+
+text {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	white-space: nowrap;
+}
+
+textbox, passwordbox {
+	position: absolute;
+}

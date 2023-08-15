@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
     <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
 
@@ -23,7 +23,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Annex\Annex.csproj" />
+    <ProjectReference Include="..\Annex.Core\Annex.Core.csproj" />
+    <ProjectReference Include="..\Annex.Sfml\Annex.Sfml.csproj" />
   </ItemGroup>
 
 </Project>

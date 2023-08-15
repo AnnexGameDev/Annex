@@ -1,7 +1,7 @@
-﻿using Annex.Scenes;
+﻿using Annex_Old.Scenes;
 using SFML.Window;
 
-namespace Annex.Graphics.Sfml
+namespace Annex_Old.Graphics.Sfml
 {
     public static class Extensions
     {

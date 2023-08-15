@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Annex
+namespace Annex_Old
 {
     public class AssertionFailedException : Exception
     {

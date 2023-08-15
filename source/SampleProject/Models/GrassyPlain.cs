@@ -1,14 +1,20 @@
-﻿using Annex.Graphics;
-using Annex.Graphics.Contexts;
+﻿using Annex.Core.Data;
+using Annex.Core.Graphics;
+using Annex.Core.Graphics.Contexts;
 
 namespace SampleProject.Models
 {
-    public class GrassyPlain : IDrawableObject
+    public sealed class GrassyPlain : IDrawable
     {
         private readonly TextureContext _plainTexture;
 
         public GrassyPlain() {
-            this._plainTexture = new TextureContext("plain.png");
+            this._plainTexture = new TextureContext("plain.png") {
+            };
+        }
+
+        public void Dispose() {
+            this._plainTexture.Dispose();
         }
 
         public void Draw(ICanvas canvas) {

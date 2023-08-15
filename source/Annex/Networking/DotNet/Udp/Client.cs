@@ -1,8 +1,8 @@
-﻿using Annex.Networking.Configuration;
-using Annex.Networking.Packets;
+﻿using Annex_Old.Networking.Configuration;
+using Annex_Old.Networking.Packets;
 using System.Net;
 
-namespace Annex.Networking.DotNet.Udp
+namespace Annex_Old.Networking.DotNet.Udp
 {
     public class Client : UdpSocket
     {

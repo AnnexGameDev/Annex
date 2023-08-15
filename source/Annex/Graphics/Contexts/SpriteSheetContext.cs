@@ -1,11 +1,13 @@
-﻿using Annex.Data;
-using Annex.Data.Shared;
+﻿using Annex_Old.Data;
+using Annex_Old.Data.Shared;
 
-namespace Annex.Graphics.Contexts
+namespace Annex_Old.Graphics.Contexts
 {
     public class SpriteSheetContext : DrawingContext
     {
         internal const int DETERMINE_SIZE_FROM_IMAGE = -1;
+
+        internal ISheetPlatformTarget? Target;
 
         public String SourceTextureName {
             get {

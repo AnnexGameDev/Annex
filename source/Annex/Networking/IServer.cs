@@ -1,6 +1,6 @@
-﻿using Annex.Networking.Packets;
+﻿using Annex_Old.Networking.Packets;
 
-namespace Annex.Networking
+namespace Annex_Old.Networking
 {
     public interface IServer
     {

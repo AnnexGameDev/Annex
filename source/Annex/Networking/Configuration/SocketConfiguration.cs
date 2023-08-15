@@ -1,4 +1,4 @@
-﻿namespace Annex.Networking.Configuration
+﻿namespace Annex_Old.Networking.Configuration
 {
     public class SocketConfiguration
     {

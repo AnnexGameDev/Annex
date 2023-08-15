@@ -1,8 +1,8 @@
-﻿using Annex.Networking.Packets;
+﻿using Annex_Old.Networking.Packets;
 using System;
 using System.Net.Sockets;
 
-namespace Annex.Networking.DotNet.Tcp
+namespace Annex_Old.Networking.DotNet.Tcp
 {
     public class SenderReceiver
     {
@@ -66,7 +66,7 @@ namespace Annex.Networking.DotNet.Tcp
 
         private void MergeBuffers(int lengthOfIncomingData) {
             var newProcessingBuffer = new byte[this._receiveBuffer.Length + lengthOfIncomingData];
-            Array.Copy(this._receiveBuffer, 0, newProcessingBuffer, 0, this._receiveBuffer.Length);
+            Array.Copy(this._receiveBuffer, 0, newProcessingBuffer, 0, this._receiveBuffer.Length); // WRONG
             Array.Copy(this._receiveBuffer, 0, newProcessingBuffer, this._processingBuffer.Length, lengthOfIncomingData);
             this._receiveBuffer = new byte[this._socket.ReceiveBufferSize];
             this._processingBuffer = newProcessingBuffer;

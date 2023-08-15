@@ -1,24 +1,25 @@
-﻿using Annex.Events;
-using Annex.Graphics;
-using Annex.Graphics.Events;
+﻿using Annex_Old.Events;
+using Annex_Old.Graphics;
+using Annex_Old.Graphics.Events;
+using Annex_Old.Services;
 
-namespace Annex.Scenes.Components
+namespace Annex_Old.Scenes.Components
 {
     public class Scene : Container
     {
-        public readonly EventQueue Events;
-        public UIElement? FocusObject { get; internal set; }
+        public readonly EventQueue EventQueue;
+        public UIElement? FocusObject { get; private set; }
 
         public Scene(int width, int height) {
             this.FocusObject = null;
-            this.Events = new EventQueue();
+            this.EventQueue = new EventQueue();
             this.Position.Set(0, 0);
             this.Size.Set(width, height);
         }
 
         public Scene() {
             this.FocusObject = null;
-            this.Events = new EventQueue();
+            this.EventQueue = new EventQueue();
             this.Position.Set(0, 0);
             this.Size.Set(ServiceProvider.Canvas.GetResolution());
         }
@@ -30,30 +31,56 @@ namespace Annex.Scenes.Components
             base.Draw(canvas);
         }
 
-        internal override bool HandleSceneFocusMouseDown(int x, int y) {
-            if (this.FocusObject != null) {
-                this.FocusObject.IsFocus = false;
+        public override void HandleKeyboardKeyReleased(KeyboardKeyReleasedEvent e) {
+            if (e.Handled) {
+                if (this.FocusObject == this) {
+                    base.HandleKeyboardKeyReleased(e);
+                } else {
+                    this.FocusObject?.HandleKeyboardKeyReleased(e);
+                }
             }
-            this.FocusObject = null;
-            return base.HandleSceneFocusMouseDown(x, y);
         }
 
         public override void HandleKeyboardKeyPressed(KeyboardKeyPressedEvent e) {
             if (!e.Handled) {
-                this.FocusObject?.HandleKeyboardKeyPressed(e);
+                if (this.FocusObject == this) {
+                    base.HandleKeyboardKeyPressed(e);
+                } else {
+                    this.FocusObject?.HandleKeyboardKeyPressed(e);
+                }
             }
         }
 
         public override void HandleMouseButtonPressed(MouseButtonPressedEvent e) {
             if (!e.Handled) {
-                this.FocusObject?.HandleMouseButtonPressed(e);
+                if (this.FocusObject == this) {
+                    base.HandleMouseButtonPressed(e);
+                } else {
+                    this.FocusObject?.HandleMouseButtonPressed(e);
+                }
             }
         }
 
         public override void HandleMouseButtonReleased(MouseButtonReleasedEvent e) {
             if (!e.Handled) {
-                this.FocusObject?.HandleMouseButtonReleased(e);
+                if (this.FocusObject == this) {
+                    base.HandleMouseButtonReleased(e);
+                } else {
+                    this.FocusObject?.HandleMouseButtonReleased(e);
+                }
             }
+        }
+
+        public void ChangeFocusObject(UIElement? uielement) {
+            this.FocusObject?.LostFocus();
+            this.FocusObject = uielement;
+            this.FocusObject?.GainedFocus();
+        }
+
+        public virtual void OnEnter(OnSceneEnterEvent e) {
+        }
+
+        public virtual void OnLeave(OnSceneLeaveEvent e) {
         }
     }
 }

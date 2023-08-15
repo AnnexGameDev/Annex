@@ -1,17 +1,18 @@
-﻿using Annex.Events;
-using Annex.Networking.Configuration;
-using Annex.Networking.Packets;
-using Annex.Scenes;
+﻿using Annex_Old.Events;
+using Annex_Old.Networking.Configuration;
+using Annex_Old.Networking.Packets;
+using Annex_Old.Services;
 using Lidgren.Network;
 using System;
 
-namespace Annex.Networking.Lidgren
+namespace Annex_Old.Networking.Lidgren
 {
     public class LidgrenServer<T> : ServerEndpoint<T> where T : Connection, new()
     {
-        private NetPeerConfiguration _lidgrenConfig;
-        private NetServer _lidgrenServer;
-        private NetDeliveryMethod _method;
+        private readonly NetPeerConfiguration _lidgrenConfig;
+        private readonly NetDeliveryMethod _method;
+        private NetServer? _lidgrenServer;
+        private LidgrenReceiveMessageEvent? _receiveEvent;
 
         public LidgrenServer(ServerConfiguration config) : base(config) {
             this._lidgrenConfig = config;
@@ -20,51 +21,48 @@ namespace Annex.Networking.Lidgren
         }
 
         public override void Destroy() {
-            this._lidgrenServer.Shutdown("shutdown");
+            if (this._receiveEvent != null) {
+                this._receiveEvent.OnServerReceive -= this.ProcessMessage;
+                this._receiveEvent.MarkForRemoval();
+                this._receiveEvent = null;
+            }
+
+            this._lidgrenServer!.Shutdown("shutdown");
+            this._lidgrenServer = null;
         }
 
         public override void Start() {
-            Console.WriteLine($"Creating server: {this.Configuration}");
+            ServiceProvider.LogService?.WriteLineTrace(this, $"Creating server: {this.Configuration}");
             this._lidgrenServer = new NetServer(this._lidgrenConfig);
+
+            this._receiveEvent = new LidgrenReceiveMessageEvent(this._lidgrenServer);
+            this._receiveEvent.OnServerReceive += this.ProcessMessage;
+            ServiceProvider.EventService.AddEvent(PriorityType.NETWORK, this._receiveEvent);
+
             this._lidgrenServer.Start();
-
-            ServiceProvider.EventService.AddEvent(PriorityType.NETWORK, this.OnReceive, 0, 0, NetworkEventID);
-        }
-
-        private void OnReceive(GameEventArgs args) {
-
-            if (ServiceProvider.SceneService.IsCurrentScene<GameClosing>()) {
-                this.Destroy();
-                args.RemoveFromQueue = true;
-                return;
-            }
-
-            NetIncomingMessage message;
-            while ((message = this._lidgrenServer.ReadMessage()) != null) {
-                this.ProcessMessage(message);
-            }
         }
 
         private void ProcessMessage(NetIncomingMessage message) {
-            this.Connections.CreateIfNotExistsAndGet(message.SenderConnection, this);
+
+            if (message.SenderConnection == null) {
+                if (message.MessageType == NetIncomingMessageType.WarningMessage) {
+                    ServiceProvider.LogService?.WriteLineWarning(message.ReadString());
+                }
+                 return;
+            }
+
+            this.CreateConnectionIfNotExistsAndGet(message.SenderConnection);
 
             switch (message.MessageType) {
-                case NetIncomingMessageType.StatusChanged: {
-                    var state = (NetConnectionStatus)message.ReadByte();
-                    var connection = this.Connections.Get(message.SenderConnection);
-                    connection.SetState(state.ToConnectionState());
+                case NetIncomingMessageType.StatusChanged:
+                    this.HandleStatusChangedMessage(message);
                     break;
-                }
-                case NetIncomingMessageType.ConnectionApproval: {
-                    message.SenderConnection.Approve(this._lidgrenServer.CreateMessage("Approve"));
+                case NetIncomingMessageType.ConnectionApproval:
+                    this.HandleConnectionApprovalMessage(message);
                     break;
-                }
-                case NetIncomingMessageType.Data: {
-                    using var packet = new IncomingPacket(message.Data);
-                    var connection = this.Connections.Get(message.SenderConnection);
-                    this.PacketHandler.HandlePacket(connection, packet);
+                case NetIncomingMessageType.Data:
+                    this.HandleDataMessage(message);
                     break;
-                }
                 case NetIncomingMessageType.WarningMessage:
                     Console.WriteLine($"Warning Message: {message.ReadString()}");
                     break;
@@ -74,14 +72,38 @@ namespace Annex.Networking.Lidgren
             }
         }
 
+        private void HandleDataMessage(NetIncomingMessage message) {
+            using var packet = new IncomingPacket(message.Data);
+            var connection = this.GetConnection(message.SenderConnection);
+            this.HandlePacket(connection, packet);
+        }
+
+        private void HandleConnectionApprovalMessage(NetIncomingMessage message) {
+            message.SenderConnection.Approve(this._lidgrenServer!.CreateMessage("Approve"));
+        }
+
+        private void HandleStatusChangedMessage(NetIncomingMessage message) {
+            var state = (NetConnectionStatus)message.ReadByte();
+            var connection = this.GetConnection(message.SenderConnection);
+            connection.SetState(state.ToConnectionState());
+        }
+
         private protected override void SendPacket(T client, int packetID, OutgoingPacket packet) {
             var connection = client.BaseConnection as NetConnection;
             Debug.Assert(connection != null, $"Client was null");
 
-            var message = this._lidgrenServer.CreateMessage();
+            var message = this._lidgrenServer!.CreateMessage();
             message.Write(packetID);
             message.Write(packet.GetBytes());
             this._lidgrenServer.SendMessage(message, connection, this._method);
+        }
+
+        public override void DisconnectClient(int id) {
+            var clientConnection = this.GetConnection(id);
+            this.RemoveClient(id);
+            var baseConnection = clientConnection.BaseConnection as NetConnection;
+            baseConnection!.Disconnect("Disconnect");
+            clientConnection.Destroy();
         }
     }
 }

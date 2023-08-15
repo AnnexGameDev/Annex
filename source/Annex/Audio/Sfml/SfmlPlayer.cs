@@ -1,34 +1,23 @@
-﻿using Annex.Assets;
-using Annex.Events;
+﻿using Annex_Old.Assets.Converters;
+using Annex_Old.Audio.Sfml.Events;
+using Annex_Old.Events;
+using Annex_Old.Services;
+using SFML.Audio;
 using System.Collections.Generic;
-using static Annex.Audio.Sfml.Errors;
+using static Annex_Old.Audio.Sfml.Errors;
 
-namespace Annex.Audio.Sfml
+namespace Annex_Old.Audio.Sfml
 {
     public sealed class SfmlPlayer : IAudioService
     {
-        public const string GameEventID = "sfml-audio-player-gc";
         private readonly List<SfmlPlayingAudio> _playingAudio;
         private readonly object _lock = new object();
 
-        public readonly IAssetManager AudioAssetManager;
+        private readonly IAssetConverter _converter = new ByteArrayConverter();
 
-        public SfmlPlayer(IAssetManager audioManager) {
+        public SfmlPlayer() {
             this._playingAudio = new List<SfmlPlayingAudio>();
-            this.AudioAssetManager = audioManager;
-
-            ServiceProvider.EventService.AddEvent(PriorityType.SOUNDS, (e) => {
-                lock (this._lock) {
-                    for (int i = 0; i < this._playingAudio.Count; i++) {
-                        var audio = this._playingAudio[i];
-                        if (audio.IsStopped) {
-                            audio.Stop();
-                            audio.Dispose();
-                            this._playingAudio.RemoveAt(i--);
-                        }
-                    }
-                }
-            }, 5000, eventID: GameEventID);
+            ServiceProvider.EventService.AddEvent(PriorityType.SOUNDS, new SoundGCEvent(this._lock, this._playingAudio));
         }
 
         public void StopPlayingAudio(string? id = null) {
@@ -55,12 +44,20 @@ namespace Annex.Audio.Sfml
 
         public IPlayingAudio PlayAudio(string audioFilePath, AudioContext context) {
             lock (this._lock) {
-                var args = new SfmlAudioInitializerArgs(audioFilePath, context.BufferMode);
-                if (!this.AudioAssetManager.GetAsset(args, out var asset)) {
+                var args = new AssetConverterArgs(audioFilePath, this._converter);
+                if (!ServiceProvider.AudioManager.GetAsset(args, out var asset)) {
                     Debug.Error(ASSET_LOAD_FAILED.Format(audioFilePath));
                 }
+
+                object target;
+                if (context.BufferMode == BufferMode.Buffered) {
+                    target = new Music((byte[])asset.GetTarget());
+                } else {
+                    target = new Sound(new SoundBuffer((byte[])asset.GetTarget()));
+                }
+
                 // TODO: Wait for https://github.com/SFML/SFML/pull/1185 support in C#
-                var playingAudio = new SfmlPlayingAudio(context.ID, asset);
+                var playingAudio = new SfmlPlayingAudio(context.ID, target);
                 playingAudio.Volume = context.Volume;
                 playingAudio.Loop = context.Loop;
                 playingAudio.Play();
@@ -79,10 +76,6 @@ namespace Annex.Audio.Sfml
                     yield return playingAudio;
                 }
             }
-        }
-
-        public IEnumerable<IAssetManager> GetAssetManagers() {
-            yield return AudioAssetManager;
         }
     }
 }
