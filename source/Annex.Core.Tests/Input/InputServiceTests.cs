@@ -1,4 +1,5 @@
-﻿using Annex.Core.Graphics.Windows;
+﻿using Annex.Core.Data;
+using Annex.Core.Graphics.Windows;
 using Annex.Core.Input;
 using Annex.Core.Input.InputEvents;
 using Annex.Core.Scenes;
@@ -66,7 +67,7 @@ namespace Annex.Core.Tests.Input
             var theInputService = this._fixture.Create<IInputService>();
 
             // Act
-            theInputService.HandleMouseButtonPressed(aGivenWindow, aGivenMouseButton, aGivenWindowX, aGivenWindowY);
+            theInputService.HandleMouseButtonPressed(aGivenWindow, aGivenMouseButton, new Vector2f(aGivenWindowX, aGivenWindowY));
 
             // Assert
             this._theCurrentSceneMock.Verify(theCurrentScene => theCurrentScene.OnMouseButtonPressed(aGivenWindow, It.Is<MouseButtonPressedEvent>(e => e.Button == aGivenMouseButton && e.WindowX == aGivenWindowX && e.WindowY == aGivenWindowY)), Times.Once);
@@ -78,7 +79,7 @@ namespace Annex.Core.Tests.Input
             var theInputService = this._fixture.Create<IInputService>();
 
             // Act
-            theInputService.HandleMouseButtonReleased(aGivenWindow, aGivenMouseButton, aGivenWindowX, aGivenWindowY);
+            theInputService.HandleMouseButtonReleased(aGivenWindow, aGivenMouseButton, new Vector2f(aGivenWindowX, aGivenWindowY));
 
             // Assert
             this._theCurrentSceneMock.Verify(theCurrentScene => theCurrentScene.OnMouseButtonReleased(aGivenWindow, It.Is<MouseButtonReleasedEvent>(e => e.Button == aGivenMouseButton && e.WindowX == aGivenWindowX && e.WindowY == aGivenWindowY)), Times.Once);
@@ -90,7 +91,7 @@ namespace Annex.Core.Tests.Input
             var theInputService = this._fixture.Create<IInputService>();
 
             // Act
-            theInputService.HandleMouseMoved(aGivenWindow, aGivenWindowX, aGivenWindowY);
+            theInputService.HandleMouseMoved(aGivenWindow, new Vector2f(aGivenWindowX, aGivenWindowY));
 
             // Assert
             this._theCurrentSceneMock.Verify(theCurrentScene => theCurrentScene.OnMouseMoved(aGivenWindow, It.Is<MouseMovedEvent>(e => e.WindowX == aGivenWindowX && e.WindowY == aGivenWindowY)), Times.Once);

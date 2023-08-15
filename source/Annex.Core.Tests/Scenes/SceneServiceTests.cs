@@ -23,7 +23,7 @@ namespace Annex.Core.Tests.Scenes
 
         private Mock<T> RegisterScene<T>() where T : class, IScene {
             var sceneMock = new Mock<T>();
-            this._containerMock.Setup(container => container.Resolve<T>()).Returns(sceneMock.Object);
+            this._containerMock.Setup(container => container.Resolve<T>(It.IsAny<bool>())).Returns(sceneMock.Object);
             return sceneMock;
         }
 
@@ -69,7 +69,7 @@ namespace Annex.Core.Tests.Scenes
         [Fact]
         public void GivenASceneIsLoaded_WhenLoadingANewSceneThatIsntRegistered_ThenCurrentSceneShouldNotChange() {
             // Arrange
-            this._containerMock.Setup(container => container.Resolve<INewScene>()).Returns((INewScene)null);
+            this._containerMock.Setup(container => container.Resolve<INewScene>(It.IsAny<bool>())).Returns((INewScene)null);
 
             var anOldSceneMock = this.RegisterScene<IOldScene>();
             this._sceneService.LoadScene<IOldScene>();

@@ -5,7 +5,6 @@ using Moq;
 using Scaffold.Tests.Core;
 using Scaffold.Tests.Core.Attributes;
 using Scaffold.Tests.Core.Fixture;
-using System;
 using Xunit;
 
 namespace Annex.Core.Tests.Assets
@@ -19,16 +18,15 @@ namespace Annex.Core.Tests.Assets
         }
 
         [Theory, AutoData]
-        public void GivenNoBundleHasAnAssetForAGivenId_WhenGettingAsset_ThenThrowsAggregateException(string aGivenAssetId) {
+        public void GivenNoBundleHasAnAssetForAGivenId_WhenGettingAsset_ThenReturnsNull(string aGivenAssetId) {
             // Arrange
             var theAssetGroup = this._fixture.Create<IAssetGroup>();
 
             // Act
+            var theResolvedAsset = theAssetGroup.GetAsset(aGivenAssetId);
+
             // Assert
-            var theGetAssetTask = new Action(() => {
-                var _ = theAssetGroup.GetAsset(aGivenAssetId);
-            });
-            theGetAssetTask.Should().Throw<AggregateException>();
+            theResolvedAsset.Should().BeNull();
         }
 
         [Theory, AutoData]
@@ -50,7 +48,7 @@ namespace Annex.Core.Tests.Assets
         }
 
         [Theory, AutoData]
-        public void GivenMultipleBundlesHaveAnAssetForAGivenId_WhenGettingAsset_ThenThrowsAggregateException(string aGivenAssetId) {
+        public void GivenMultipleBundlesHaveAnAssetForAGivenId_WhenGettingAsset_ThenReturnsNull(string aGivenAssetId) {
             // Arrange
             var theAssetBundleMocks = this._fixture.CreateMany<Mock<IAssetBundle>>();
             var theAssetGroup = this._fixture.Create<IAssetGroup>();
@@ -64,11 +62,10 @@ namespace Annex.Core.Tests.Assets
                 theAssetGroup.AddBundle(bundleMock.Object);
 
             // Act
+            var theResolvedAsset = theAssetGroup.GetAsset(aGivenAssetId);
+
             // Assert
-            var theGetAssetTask = new Action(() => {
-                var _ = theAssetGroup.GetAsset(aGivenAssetId);
-            });
-            theGetAssetTask.Should().Throw<AggregateException>();
+            theResolvedAsset.Should().BeNull();
         }
     }
 }
