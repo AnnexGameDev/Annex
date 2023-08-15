@@ -20,7 +20,7 @@ namespace Annex.Core.Scenes.Layouts.Html
         }
 
         public void Load(string assetId, IScene sceneInstance) {
-            
+
             var document = this.GetDocumentRoot(assetId);
             var styles = new Styles(document);
             if (this.GetSceneElement(document) is not XElement scene) {
@@ -159,6 +159,14 @@ namespace Annex.Core.Scenes.Layouts.Html
 
             if (GetStringAttribute("font-color", element, styles) is string fontColor) {
                 label.FontColor = RGBA.Parse(fontColor);
+            }
+
+            if (GetStringAttribute("border-color", element, styles) is string borderColor) {
+                label.TextBorderColor = RGBA.Parse(borderColor);
+            }
+
+            if (GetStringAttribute("border-thickness", element, styles) is string borderThickness) {
+                label.TextBorderThickness = float.Parse(borderThickness);
             }
         }
 

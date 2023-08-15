@@ -66,7 +66,7 @@ namespace Annex.Sfml.Graphics.Windows
             : base(platformTargetFactory, cameraCache) {
             this._inputHandlerService = inputHandlerService;
             this.CreateWindow();
-            
+
             coreEventService.Add(CoreEventPriority.Graphics, new DrawGameEvent(this, sceneService));
             coreEventService.Add(CoreEventPriority.UserInput, new DoEvents(this));
 
@@ -74,7 +74,7 @@ namespace Annex.Sfml.Graphics.Windows
                 Region = new Core.Data.FloatRect(0, 0, 1, 1),
                 Size = this.WindowResolution,
                 Center = new ScalingVector2f(this.WindowResolution, 0.5f, 0.5f),
-            };  
+            };
             this.AddCamera(defaultCamera);
 
             var uiCamera = new Camera(CameraId.UI) {
@@ -121,6 +121,8 @@ namespace Annex.Sfml.Graphics.Windows
                 this._renderWindow.MouseButtonReleased += OnMouseButtonReleased;
                 this._renderWindow.MouseWheelScrolled += OnMouseScrollWheelMoved;
                 this._renderWindow.MouseMoved += OnMouseMoved;
+                this._renderWindow.GainedFocus += OnGainedFocus;
+                this._renderWindow.LostFocus += OnLostFocus;
             }
         }
 
@@ -133,9 +135,13 @@ namespace Annex.Sfml.Graphics.Windows
                 this._renderWindow.MouseButtonReleased -= OnMouseButtonReleased;
                 this._renderWindow.MouseWheelScrolled -= OnMouseScrollWheelMoved;
                 this._renderWindow.MouseMoved -= OnMouseMoved;
+                this._renderWindow.GainedFocus -= OnGainedFocus;
+                this._renderWindow.LostFocus += OnLostFocus;
             }
         }
 
+        private void OnLostFocus(object? sender, EventArgs e) => this._inputHandlerService?.HandleWindowLostFocus();
+        private void OnGainedFocus(object? sender, EventArgs e) => this._inputHandlerService?.HandleWindowGainedFocus();
         private void OnKeyboardKeyPressed(object? sender, KeyEventArgs e) => this._inputHandlerService?.HandleKeyboardKeyPressed(this, e.Code.ToKeyboardKey());
         private void OnKeyboardKeyReleased(object? sender, KeyEventArgs e) => this._inputHandlerService?.HandleKeyboardKeyReleased(this, e.Code.ToKeyboardKey());
         private void OnWindowClosed(object? sender, EventArgs e) => this._inputHandlerService?.HandleWindowClosed(this);

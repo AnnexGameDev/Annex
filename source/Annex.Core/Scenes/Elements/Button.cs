@@ -49,6 +49,16 @@ public class Button : UIElement, IButton
         get => this._label.TextPositionOffset;
         set => this._label.TextPositionOffset = value;
     }
+    public float TextBorderThickness
+    {
+        get => this._label.TextBorderThickness;
+        set => this._label.TextBorderThickness = value;
+    }
+    public RGBA TextBorderColor
+    {
+        get => this._label.TextBorderColor;
+        set => this._label.TextBorderColor = value;
+    }
 
     public Button(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size) {
 

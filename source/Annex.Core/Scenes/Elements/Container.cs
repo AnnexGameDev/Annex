@@ -41,6 +41,10 @@ public class Container : UIElement, IParentElement
         return null;
     }
 
+    public T? GetElementById<T>(string id) where T : class, IUIElement {
+        return GetElementById(id) as T;
+    }
+
     public IUIElement? GetFirstVisibleElement(float x, float y) {
 
         if (!this.IsInBounds(x, y))
