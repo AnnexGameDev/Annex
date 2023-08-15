@@ -17,11 +17,11 @@
             this.ScaleVector = scaleVector;
         }
 
-        public void Set(IVector2<float> vector) {
+        public virtual void Set(IVector2<float> vector) {
             throw new NotImplementedException($"{nameof(ScalingVector2f)} doesn't support {nameof(Set)}");
         }
 
-        public void Set(float x, float y) {
+        public virtual void Set(float x, float y) {
             throw new NotImplementedException($"{nameof(ScalingVector2f)} doesn't support {nameof(Set)}");
         }
     }
