@@ -13,34 +13,28 @@ using Annex.Core.Scenes.Layouts.Html;
 using Annex.Core.Time;
 using Scaffold;
 using Scaffold.DependencyInjection;
-using Scaffold.Logging;
 
 namespace Annex.Core;
 
 public abstract class AnnexApp : ScaffoldApp
 {
-    public void Run<TStartingScene>() where TStartingScene : IScene  {
-        try {
-            var sceneService = this.Container.Resolve<ISceneService>();
-            var eventService = this.Container.Resolve<ICoreEventService>();
-            var graphicsService = this.Container.Resolve<IGraphicsService>();
-            var assetService = this.Container.Resolve<IAssetService>();
+    public void Run<TStartingScene>() where TStartingScene : IScene {
+        var sceneService = this.Container.Resolve<ISceneService>();
+        var eventService = this.Container.Resolve<ICoreEventService>();
+        var graphicsService = this.Container.Resolve<IGraphicsService>();
+        var assetService = this.Container.Resolve<IAssetService>();
 
-            this.Container.Resolve<ClipboardHelper>(false);
-            this.Container.Resolve<GraphicsEngineHelper>(false);
-            this.Container.Resolve<GameTimeHelper>(false);
-            this.Container.Resolve<KeyboardHelper>(false);
-            this.Container.Resolve<HtmlSceneLoaderHelper>(false);
-            this.Container.Resolve<SceneServiceHelper>(false);
+        this.Container.Resolve<ClipboardHelper>(false);
+        this.Container.Resolve<GraphicsEngineHelper>(false);
+        this.Container.Resolve<GameTimeHelper>(false);
+        this.Container.Resolve<KeyboardHelper>(false);
+        this.Container.Resolve<HtmlSceneLoaderHelper>(false);
+        this.Container.Resolve<SceneServiceHelper>(false);
 
-            this.SetupAssetBundles(assetService);
-            this.CreateWindow(graphicsService, assetService);
-            sceneService.LoadScene<TStartingScene>();
-            eventService.Run();
-        }
-        catch (Exception ex) {
-            Log.Trace(LogSeverity.Error, "Exception in main gameloop", ex);
-        }
+        this.SetupAssetBundles(assetService);
+        this.CreateWindow(graphicsService, assetService);
+        sceneService.LoadScene<TStartingScene>();
+        eventService.Run();
     }
 
     protected override void RegisterTypes(IContainer container) {
