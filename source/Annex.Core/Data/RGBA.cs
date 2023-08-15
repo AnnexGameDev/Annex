@@ -33,19 +33,22 @@
 
         public static RGBA Parse(string arg) {
             // Maybe it's a name
-            if (Enum.TryParse<KnownColor>(arg.ToCamelCaseWord(), out var color)) {
+            if (Enum.TryParse<KnownColor>(arg.ToCamelCaseWord(), out var color))
+            {
                 return new RGBA((uint)color);
             }
 
             // Maybe it's RGB?
             var colorData = arg.Split(",").Select(val => val.Trim());
 
-            if (colorData.Count() == 3) {
+            if (colorData.Count() == 3)
+            {
                 var byteColorData = colorData.Select(val => byte.Parse(val)).ToArray();
                 return new RGBA(byteColorData[0], byteColorData[1], byteColorData[2]);
             }
 
-            if (colorData.Count() == 4) {
+            if (colorData.Count() == 4)
+            {
                 var byteColorData = colorData.Select(val => byte.Parse(val)).ToArray();
                 return new RGBA(byteColorData[0], byteColorData[1], byteColorData[2], byteColorData[3]);
             }
