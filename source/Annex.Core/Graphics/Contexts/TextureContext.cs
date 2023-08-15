@@ -9,7 +9,7 @@ namespace Annex.Core.Graphics.Contexts
         public IVector2<float>? RenderOffset { get; init; }
         public IVector2<float>? RenderSize { get; init; }
         public IntRect? SourceTextureRect { get; init; }
-        public RGBA? RenderColor { get; init; }
+        public RGBA RenderColor { get; init; }
         public Shared<float>? Rotation { get; init; }
 
         public TextureContext(Shared<string> textureId) : this(textureId, new Vector2f()) {
@@ -22,7 +22,7 @@ namespace Annex.Core.Graphics.Contexts
             this.RenderOffset = null;
             this.RenderSize = null;
             this.SourceTextureRect = null;
-            this.RenderColor = null;
+            this.RenderColor = KnownColor.White;
             this.Rotation = null;
         }
     }

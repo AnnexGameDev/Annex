@@ -53,7 +53,7 @@
             throw new ArgumentException($"Unable to convert to color: {arg}");
         }
 
-        internal void Set(RGBA value) {
+        public void Set(RGBA value) {
             this.R = value.R;
             this.G = value.G;
             this.B = value.B;
