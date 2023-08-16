@@ -4,10 +4,10 @@ namespace Annex.Core.Graphics.Contexts
 {
     public class SpritesheetContext : DrawContext
     {
-        public Shared<string> TextureId { get; }
+        public IShared<string> TextureId { get; }
         public IVector2<float> Position { get; }
         public RGBA? RenderColor { get; init; }
-        public Shared<float>? Rotation { get; init; }
+        public IShared<float>? Rotation { get; init; }
         public IVector2<float>? RenderOffset { get; init; }
         public IVector2<float>? RenderSize { get; init; }
 
@@ -16,7 +16,7 @@ namespace Annex.Core.Graphics.Contexts
         public int NumRows { get; }
         public int NumColumns { get; }
 
-        public SpritesheetContext(Shared<string> textureId, IVector2<float> position, uint numRows, uint numColumns) {
+        public SpritesheetContext(IShared<string> textureId, IVector2<float> position, uint numRows, uint numColumns) {
             this.TextureId = textureId;
             this.Position = position;
             this.RenderColor = null;

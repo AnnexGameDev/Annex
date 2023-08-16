@@ -18,23 +18,23 @@ namespace Annex.Core.Graphics.Contexts
 
     public class TextContext : DrawContext
     {
-        public Shared<string> Text { get; }
-        public Shared<string> Font { get; }
+        public IShared<string> Text { get; }
+        public IShared<string> Font { get; }
 
         public IVector2<float>? Position { get; init; }
         public IVector2<float>? PositionOffset { get; init; }
 
-        public Shared<uint>? FontSize { get; set; }
+        public IShared<uint>? FontSize { get; set; }
         public RGBA? Color { get; init; }
 
-        public Shared<float>? BorderThickness { get; init; }
+        public IShared<float>? BorderThickness { get; init; }
         public RGBA? BorderColor { get; init; }
 
-        public Shared<float>? Rotation { get; init; }
+        public IShared<float>? Rotation { get; init; }
         public HorizontalAlignment HorizontalAlignment { get; set; }
         public VerticalAlignment VerticalAlignment { get; set; }
 
-        public TextContext(Shared<string> text, Shared<string> font) {
+        public TextContext(IShared<string> text, IShared<string> font) {
             this.Text = text;
             this.Font = font;
 

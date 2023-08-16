@@ -11,9 +11,10 @@ public class ContextMenu : Container, IParentElement
     private readonly SolidRectangleContext _background;
 
     public ContextMenu(IVector2<float> position, params Item[] contextMenuItems) : base(position: position) {
-        this._background = new SolidRectangleContext(KnownColor.White, this.Position, this.Size) {
+        this._background = new SolidRectangleContext(KnownColor.White, this.Position, this.Size)
+        {
             BorderColor = KnownColor.Black,
-            BorderThickness = 1,
+            BorderThickness = 1.0f.ToShared(),
             Camera = CameraId.UI.ToString()
         };
 
@@ -23,7 +24,8 @@ public class ContextMenu : Container, IParentElement
         this.Size.Set(maxWidth, totalHeight);
 
         float heightSoFar = 0;
-        for (int i = 0; i < contextMenuItems.Length; i++) {
+        for (int i = 0; i < contextMenuItems.Length; i++)
+        {
             var child = contextMenuItems[i];
 
             // Manually set the position
@@ -35,7 +37,8 @@ public class ContextMenu : Container, IParentElement
     }
 
     protected override void DrawInternal(ICanvas canvas) {
-        if (this.Visible) {
+        if (this.Visible)
+        {
             canvas.Draw(this._background);
             base.DrawInternal(canvas);
         }
@@ -61,7 +64,8 @@ public class ContextMenu : Container, IParentElement
             this.FontSize = 18;
             this.TextPositionOffset = new Vector2f(5, this.Size.Y / 2);
 
-            this._hoveredBackground = new SolidRectangleContext(KnownColor.Teal, this.Position, this.Size) {
+            this._hoveredBackground = new SolidRectangleContext(KnownColor.Teal, this.Position, this.Size)
+            {
                 Camera = CameraId.UI.ToString()
             };
 
@@ -82,7 +86,8 @@ public class ContextMenu : Container, IParentElement
         }
 
         protected override void DrawInternal(ICanvas canvas) {
-            if (this.IsHovered) {
+            if (this.IsHovered)
+            {
                 canvas.Draw(this._hoveredBackground);
             }
             base.DrawInternal(canvas);

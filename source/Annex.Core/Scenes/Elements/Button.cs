@@ -67,10 +67,10 @@ public class Button : UIElement, IButton
         set => this._label.TextBorderColor = value;
     }
 
-    public Button(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size) {
+    public Button(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null, IShared<string>? text = null) : base(elementId, position, size) {
 
         this._background = new Image($"{elementId}.background", this.Position, this.Size);
-        this._label = new Label($"{elementId}.label", this.Position, this.Size);
+        this._label = new Label($"{elementId}.label", this.Position, this.Size, text);
     }
 
     protected override void DrawInternal(ICanvas canvas) {

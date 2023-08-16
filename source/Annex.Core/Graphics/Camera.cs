@@ -8,7 +8,7 @@ namespace Annex.Core.Graphics
         public FloatRect Region { get; set; } = new(0, 0, 1, 1);
         public IVector2<float> Size { get; set; } = new Vector2f();
         public IVector2<float> Center { get; set; } = new Vector2f();
-        public Shared<float> Rotation { get; set; } = 0;
+        public IShared<float> Rotation { get; set; } = 0.0f.ToShared();
 
         public Camera(CameraId id) : this(id.ToString()) {
 

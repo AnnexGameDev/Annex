@@ -8,9 +8,9 @@ namespace Annex.Core.Graphics.Contexts
         public IVector2<float> Position { get; }
         public IVector2<float> Size { get; }
         public IVector2<float>? RenderOffset { get; init; }
-        public Shared<float>? Rotation { get; init; }
+        public IShared<float>? Rotation { get; init; }
         public RGBA? BorderColor { get; init; }
-        public Shared<float>? BorderThickness { get; init; }
+        public IShared<float>? BorderThickness { get; init; }
 
         public SolidRectangleContext(RGBA color, IVector2<float> position, IVector2<float> size) {
             this.FillColor = color;

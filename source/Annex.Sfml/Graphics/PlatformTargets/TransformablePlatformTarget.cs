@@ -8,9 +8,10 @@ namespace Annex.Sfml.Graphics.PlatformTargets
     {
         protected abstract Transformable Transformable { get; }
 
-        protected float UpdateRotation(Shared<float>? rotation) {
+        protected float UpdateRotation(IShared<float>? rotation) {
             float trueRotation = rotation?.Value ?? 0;
-            if (this.Transformable.Rotation != trueRotation) {
+            if (this.Transformable.Rotation != trueRotation)
+            {
                 this.Transformable.Rotation = trueRotation;
             }
             return this.Transformable.Rotation;
@@ -18,7 +19,8 @@ namespace Annex.Sfml.Graphics.PlatformTargets
 
         protected Vector2f UpdateScale(float scaleX, float scaleY) {
             var scale = new Vector2f(scaleX, scaleY);
-            if (this.Transformable.Scale != scale) {
+            if (this.Transformable.Scale != scale)
+            {
                 this.Transformable.Scale = scale;
             }
             return this.Transformable.Scale;
@@ -26,7 +28,8 @@ namespace Annex.Sfml.Graphics.PlatformTargets
 
         protected Vector2f UpdatePosition(float x, float y) {
             var position = new Vector2f(x, y);
-            if (this.Transformable.Position != position) {
+            if (this.Transformable.Position != position)
+            {
                 this.Transformable.Position = position;
             }
             return this.Transformable.Position;
@@ -34,7 +37,8 @@ namespace Annex.Sfml.Graphics.PlatformTargets
 
         protected Vector2f UpdateOrigin(float x, float y) {
             var origin = new Vector2f(x, y);
-            if (this.Transformable.Origin != origin) {
+            if (this.Transformable.Origin != origin)
+            {
                 this.Transformable.Origin = origin;
             }
             return this.Transformable.Origin;

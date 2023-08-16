@@ -48,7 +48,7 @@ namespace Annex.Sfml.Graphics.PlatformTargets
             var rotation = UpdateRotation(this._textContext.Rotation);
         }
 
-        private float UpdateRotation(Shared<float>? rotation) {
+        private float UpdateRotation(IShared<float>? rotation) {
             const float DefaultRotation = 0;
             var finalRotation = rotation?.Value ?? DefaultRotation;
             if (this._text.Rotation != finalRotation) {
@@ -89,7 +89,7 @@ namespace Annex.Sfml.Graphics.PlatformTargets
             return this._text.OutlineColor;
         }
 
-        private float UpdateBorderThickness(Shared<float>? borderThickness) {
+        private float UpdateBorderThickness(IShared<float>? borderThickness) {
             const float DefaultBorderThickness = 0;
             float finalBorderThickness = borderThickness?.Value ?? DefaultBorderThickness;
             if (this._text.OutlineThickness != finalBorderThickness) {
@@ -105,7 +105,7 @@ namespace Annex.Sfml.Graphics.PlatformTargets
             return this._text.FillColor;
         }
 
-        private uint UpdateFontSize(Shared<uint>? fontSize) {
+        private uint UpdateFontSize(IShared<uint>? fontSize) {
             const uint DefaultFontSize = 12;
             uint finalFontSize = fontSize?.Value ?? DefaultFontSize;
             if (this._text.CharacterSize != finalFontSize) {

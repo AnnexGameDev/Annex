@@ -24,7 +24,7 @@ public class Image : UIElement, IImage
     }
 
     public Image(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size) {
-        this.BackgroundContext = new TextureContext(string.Empty, this.Position)
+        this.BackgroundContext = new TextureContext(string.Empty.ToShared(), this.Position)
         {
             RenderSize = this.Size,
             Camera = CameraId.UI.ToString()
