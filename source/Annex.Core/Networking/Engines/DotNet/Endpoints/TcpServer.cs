@@ -7,16 +7,20 @@ namespace Annex.Core.Networking.Engines.DotNet.Endpoints;
 
 internal class TcpServer : TcpEndpoint, IServerEndpoint
 {
+    private readonly IPacketHandlerService _packetHandlerService;
+
     public event EventHandler<IConnection>? OnClientConnected;
     public event EventHandler<IConnection>? OnClientDisconnected;
 
     public IEnumerable<IConnection> ClientConnections => this.Connections;
 
-    public TcpServer(EndpointConfiguration config) : base(config) {
+    public TcpServer(EndpointConfiguration config, IPacketHandlerService packetHandlerService) : base(config) {
+        _packetHandlerService = packetHandlerService;
     }
 
     public void Send(IConnection connection, OutgoingPacket packet) {
-        if (connection is not TcpConnection tcpConnection) {
+        if (connection is not TcpConnection tcpConnection)
+        {
             Log.Trace(LogSeverity.Error, $"Connection is not a {nameof(TcpConnection)}");
             return;
         }
@@ -25,7 +29,8 @@ internal class TcpServer : TcpEndpoint, IServerEndpoint
 
     public void SendToAll(OutgoingPacket packet) {
         // TODO: Find a less memory intense way to do this. This is potentiall expensive.
-        foreach (var connection in this.Connections.ToArray()) {
+        foreach (var connection in this.Connections.ToArray())
+        {
             Send(connection, packet);
         }
     }
@@ -37,17 +42,22 @@ internal class TcpServer : TcpEndpoint, IServerEndpoint
     }
 
     private void OnAcceptCallback(IAsyncResult ar) {
-        if (this.Disposed) {
+        if (this.Disposed)
+        {
             return;
         }
 
         var client = this.Socket.EndAccept(ar);
 
-        var connection = new TcpConnection(client);
+        var connection = new TcpConnection(client, HandlePacket);
         this.HandleNewConnection(connection);
 
         this.Socket.Listen(5);
         this.Socket.BeginAccept(OnAcceptCallback, null);
+    }
+
+    private void HandlePacket(IConnection connection, int packetId, IncomingPacket packet) {
+        _packetHandlerService.HandlePacket(connection, packetId, packet);
     }
 
     protected override void HandleDisconnectedConnection(TcpConnection connection) {

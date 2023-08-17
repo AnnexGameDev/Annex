@@ -7,7 +7,7 @@ namespace Annex.Core.Networking.Engines.DotNet.Endpoints;
 
 internal class TcpClientConnection : TcpConnection
 {
-    public TcpClientConnection(Socket socket) : base(socket) {
+    public TcpClientConnection(Socket socket, IPacketHandlerService packetHandlerService) : base(socket, packetHandlerService.HandlePacket) {
     }
 
     internal void ConnectTo(string iP, int port) {
@@ -16,16 +16,20 @@ internal class TcpClientConnection : TcpConnection
     }
 
     private void OnConnectCallback(IAsyncResult ar) {
-        try {
+        try
+        {
             this.Socket.EndConnect(ar);
 
-            if (this.Socket.Connected) {
+            if (this.Socket.Connected)
+            {
                 this.State = ConnectionState.Connected;
-            } else {
+            } else
+            {
                 this.State = ConnectionState.Disconnected;
             }
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Log.Trace(LogSeverity.Error, $"An exception was thrown while calling {nameof(OnConnectCallback)}", e);
             this.State = ConnectionState.Unknown;
         }

@@ -1,5 +1,4 @@
-﻿using Annex.Core.Helpers;
-using Annex.Core.Networking.Connections;
+﻿using Annex.Core.Networking.Connections;
 using Annex.Core.Networking.Packets;
 using Scaffold.Logging;
 
@@ -8,10 +7,11 @@ namespace Annex.Core.Networking.Engines.DotNet.Endpoints;
 internal class TcpClient : TcpEndpoint, IClientEndpoint
 {
     private TcpClientConnection _connection;
+
     public IConnection Connection => _connection;
 
-    public TcpClient(EndpointConfiguration config) : base(config) {
-        this._connection = new TcpClientConnection(this.Socket);
+    public TcpClient(EndpointConfiguration config, IPacketHandlerService packetHandlerService) : base(config) {
+        this._connection = new TcpClientConnection(this.Socket, packetHandlerService);
 
         this.Connection.OnConnectionStateChanged += Connection_OnConnectionStateChanged;
     }
@@ -20,7 +20,8 @@ internal class TcpClient : TcpEndpoint, IClientEndpoint
 
         Log.Trace(LogSeverity.Normal, $"Connection {this.Connection} state changed to: {state}");
 
-        switch (state) {
+        switch (state)
+        {
             case ConnectionState.Connected:
                 this.HandleNewConnection(this._connection);
                 break;
@@ -41,9 +42,8 @@ internal class TcpClient : TcpEndpoint, IClientEndpoint
     }
 
     private void WaitForResponse(CancellationToken? cancellationToken) {
-        long startConnectTime = GameTimeHelper.Now();
-
-        while (true) {
+        while (true)
+        {
             if (cancellationToken?.IsCancellationRequested == true)
                 break;
 

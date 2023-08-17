@@ -1,7 +1,7 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Graphics;
-using Annex.Core.Helpers;
 using Annex.Core.Input.InputEvents;
+using Scaffold.DependencyInjection;
 
 namespace Annex.Core.Scenes.Elements;
 
@@ -9,7 +9,7 @@ public class PasswordBox : Textbox, IPasswordBox
 {
     public char PasswordChar { get; set; } = '*';
 
-    public PasswordBox(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size) {
+    public PasswordBox(IContainer container, string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(container, elementId, position, size) {
     }
 
     protected override void DrawInternal(ICanvas canvas) {
@@ -24,7 +24,8 @@ public class PasswordBox : Textbox, IPasswordBox
     public override void OnMouseButtonReleased(MouseButtonReleasedEvent mouseButtonReleasedEvent) {
 
         // Prevent copying/pasting
-        if (mouseButtonReleasedEvent.Button == Input.MouseButton.Right) {
+        if (mouseButtonReleasedEvent.Button == Input.MouseButton.Right)
+        {
             return;
         }
 
@@ -34,8 +35,9 @@ public class PasswordBox : Textbox, IPasswordBox
     public override void OnKeyboardKeyPressed(KeyboardKeyPressedEvent keyboardKeyPressedEvent) {
 
         // Prevent copying/pasting
-        if (KeyboardHelper.IsControlPressed() && 
-            (keyboardKeyPressedEvent.Key == Input.KeyboardKey.C || keyboardKeyPressedEvent.Key == Input.KeyboardKey.X)) {
+        if (PlatformKeyboardService.IsControlPressed() &&
+            (keyboardKeyPressedEvent.Key == Input.KeyboardKey.C || keyboardKeyPressedEvent.Key == Input.KeyboardKey.X))
+        {
             return;
         }
 

@@ -1,16 +1,18 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
-using Annex.Core.Helpers;
 using Annex.Core.Input.InputEvents;
 
 namespace Annex.Core.Scenes.Elements;
 
 public class ContextMenu : Container, IParentElement
 {
+    private readonly ISceneService _sceneService;
     private readonly SolidRectangleContext _background;
 
-    public ContextMenu(IVector2<float> position, params Item[] contextMenuItems) : base(position: position) {
+    public ContextMenu(ISceneService sceneService, IVector2<float> position, params Item[] contextMenuItems) : base(position: position) {
+        _sceneService = sceneService;
+
         this._background = new SolidRectangleContext(KnownColor.White, this.Position, this.Size)
         {
             BorderColor = KnownColor.Black,
@@ -45,11 +47,11 @@ public class ContextMenu : Container, IParentElement
     }
 
     public void AddToCurrentScene() {
-        SceneServiceHelper.CurrentScene.AddChild(this);
+        _sceneService.CurrentScene.AddChild(this);
     }
 
     public void RemoveFromCurrentScene() {
-        SceneServiceHelper.CurrentScene.RemoveChild(this);
+        _sceneService.CurrentScene.RemoveChild(this);
     }
 
     public class Item : Label

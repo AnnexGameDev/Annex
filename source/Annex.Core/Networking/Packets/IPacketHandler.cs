@@ -4,6 +4,7 @@ namespace Annex.Core.Networking.Packets
 {
     public interface IPacketHandler
     {
+        int PacketId { get; }
         void Handle(IConnection connection, IncomingPacket packet);
     }
 }

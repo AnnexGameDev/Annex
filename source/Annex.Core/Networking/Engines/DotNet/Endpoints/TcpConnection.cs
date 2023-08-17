@@ -1,5 +1,4 @@
-﻿using Annex.Core.Helpers;
-using Annex.Core.Networking.Connections;
+﻿using Annex.Core.Networking.Connections;
 using Annex.Core.Networking.Packets;
 using System.Net;
 using System.Net.Sockets;
@@ -8,13 +7,17 @@ namespace Annex.Core.Networking.Engines.DotNet.Endpoints;
 
 internal class TcpConnection : Connection
 {
+    public delegate void ProcessPacketHandler(IConnection connection, int packetId, IncomingPacket packet);
+
     protected readonly Socket Socket;
+    private readonly ProcessPacketHandler _processPacketHandler;
     private byte[] _incomingData;
     private byte[] _unprocessedData;
     private EndPoint? _remoteEndpoint;
 
-    public TcpConnection(Socket socket) {
+    public TcpConnection(Socket socket, ProcessPacketHandler processPacketHandler) {
         Socket = socket;
+        _processPacketHandler = processPacketHandler;
 
         this._incomingData = new byte[this.Socket.ReceiveBufferSize];
         this._unprocessedData = Array.Empty<byte>();
@@ -25,20 +28,25 @@ internal class TcpConnection : Connection
     }
 
     private void OnReceiveCallback(IAsyncResult ar) {
-        if (this.Disposed) {
+        if (this.Disposed)
+        {
             return;
         }
 
         int lengthOfIncomingData = 0;
 
-        try {
+        try
+        {
             lengthOfIncomingData = this.Socket.EndReceive(ar);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             this.Destroy("Exception thrown when calling EndReceive", e);
             return;
         }
 
-        if (lengthOfIncomingData == 0) {
+        if (lengthOfIncomingData == 0)
+        {
             this.Destroy("Incoming data is of length 0");
             return;
         }
@@ -46,13 +54,15 @@ internal class TcpConnection : Connection
         this._remoteEndpoint ??= this.Socket.RemoteEndPoint;
 
         this.QueueDataForProcessing(this._incomingData, 0, lengthOfIncomingData);
-        while (this.ProcessNextIncomingPacketData()) ;
+        while (this.ProcessNextIncomingPacketData())
+            ;
 
         this.Socket.BeginReceive(this._incomingData, 0, this._incomingData.Length, SocketFlags.None, OnReceiveCallback, null);
     }
 
     private bool ProcessNextIncomingPacketData() {
-        if (this._unprocessedData.Length < 4) {
+        if (this._unprocessedData.Length < 4)
+        {
             return false;
         }
 
@@ -64,13 +74,15 @@ internal class TcpConnection : Connection
         int incomingDataSize = messageSize + 4;
         int packetSize = messageSize - 4;
 
-        if (this._unprocessedData.Length >= incomingDataSize) {
+        if (this._unprocessedData.Length >= incomingDataSize)
+        {
             int packetId = BitConverter.ToInt32(this._unprocessedData, 4);
             var packetData = new byte[packetSize];
             Array.Copy(this._unprocessedData, 8, packetData, 0, packetSize);
 
-            using (var packet = new IncomingPacket(packetData)) {
-                PacketHandlerHelper.HandlePacket(this, packetId, packet);
+            using (var packet = new IncomingPacket(packetData))
+            {
+                _processPacketHandler.Invoke(this, packetId, packet);
             }
 
             int newUnprocessedDataSize = this._unprocessedData.Length - incomingDataSize;

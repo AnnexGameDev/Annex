@@ -4,7 +4,6 @@ using Annex.Core.Broadcasts.Messages;
 using Annex.Core.Events;
 using Annex.Core.Events.Core;
 using Annex.Core.Graphics;
-using Annex.Core.Helpers;
 using Annex.Core.Input;
 using Annex.Core.Input.Platforms;
 using Annex.Core.Scenes;
@@ -23,13 +22,6 @@ public abstract class AnnexApp : ScaffoldApp
         var eventService = this.Container.Resolve<ICoreEventService>();
         var graphicsService = this.Container.Resolve<IGraphicsService>();
         var assetService = this.Container.Resolve<IAssetService>();
-
-        this.Container.Resolve<ClipboardHelper>(false);
-        this.Container.Resolve<GraphicsEngineHelper>(false);
-        this.Container.Resolve<GameTimeHelper>(false);
-        this.Container.Resolve<KeyboardHelper>(false);
-        this.Container.Resolve<HtmlSceneLoaderHelper>(false);
-        this.Container.Resolve<SceneServiceHelper>(false);
 
         this.SetupAssetBundles(assetService);
         this.CreateWindow(graphicsService, assetService);
