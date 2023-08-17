@@ -13,26 +13,35 @@ namespace Annex.Core.Scenes.Layouts.Html
     {
         public readonly IAssetGroup _sceneDataAssets;
         private readonly IContainer _container;
+        private readonly IUIElementTypeResolverService _uiElementTypeResolverService;
 
-        public HtmlSceneLoader(IAssetService assetService, IContainer container) {
+        public HtmlSceneLoader(IAssetService assetService, IContainer container, IUIElementTypeResolverService uIElementTypeResolverService) {
             this._sceneDataAssets = assetService.SceneData();
             this._container = container;
+            _uiElementTypeResolverService = uIElementTypeResolverService;
         }
 
         public void Load(string assetId, IScene sceneInstance) {
 
-            var document = this.GetDocumentRoot(assetId);
-            var styles = new Styles(document);
-            if (this.GetSceneElement(document) is not XElement scene)
+            try
             {
-                Log.Trace(LogSeverity.Warning, $"Failed to retrieve scene from asset: '{assetId}'");
-                return;
+                var document = this.GetDocumentRoot(assetId);
+                var styles = new Styles(document);
+                if (this.GetSceneElement(document) is not XElement scene)
+                {
+                    Log.Trace(LogSeverity.Warning, $"Failed to retrieve scene from asset: '{assetId}'");
+                    return;
+                }
+
+                // Apply styles to the scene
+                this.ProcessElement(sceneInstance, null, scene, styles);
+
+                ProcessChildren(sceneInstance, scene, styles);
             }
-
-            // Apply styles to the scene
-            this.ProcessElement(sceneInstance, null, scene, styles);
-
-            ProcessChildren(sceneInstance, scene, styles);
+            catch (Exception ex)
+            {
+                Log.Trace(LogSeverity.Error, $"An exception was thrown while loading {assetId}", ex);
+            }
         }
 
         private void ProcessChildren(IParentElement parentInstance, XElement parentElement, Styles styles) {
@@ -56,27 +65,32 @@ namespace Annex.Core.Scenes.Layouts.Html
 
         private bool TryCreateInstance(XElement element, Styles styles, out IUIElement uiElement) {
 
-            string? typeToInstantiate = element.Name.ToString();
-            typeToInstantiate = typeToInstantiate switch
+            string? typeNameToInstantiate = element.Name.ToString();
+            typeNameToInstantiate = typeNameToInstantiate switch
             {
                 "picture" => "image",
                 "script" => null,
-                _ => typeToInstantiate
+                _ => typeNameToInstantiate
             };
 
             if (GetStringAttribute("class", element, styles) is string className)
             {
-                typeToInstantiate = className;
+                typeNameToInstantiate = className;
             }
 
-            if (typeToInstantiate == null)
+            if (typeNameToInstantiate == null)
             {
                 uiElement = default;
                 return false;
             }
 
-            uiElement = UIElementFactory.CreateInstance(typeToInstantiate, this._container);
-            return true;
+            if (_uiElementTypeResolverService.ResolveType(typeNameToInstantiate) is Type type)
+            {
+                uiElement = _container.Resolve(type, false) as IUIElement;
+                return true;
+            }
+            uiElement = default;
+            return false;
         }
 
         private XElement? GetSceneElement(XElement document) {

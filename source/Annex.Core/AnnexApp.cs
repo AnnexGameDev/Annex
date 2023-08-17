@@ -9,6 +9,7 @@ using Annex.Core.Input.Platforms;
 using Annex.Core.Networking;
 using Annex.Core.Scenes;
 using Annex.Core.Scenes.Elements;
+using Annex.Core.Scenes.Layouts;
 using Annex.Core.Scenes.Layouts.Html;
 using Annex.Core.Time;
 using Scaffold;
@@ -33,6 +34,8 @@ public abstract class AnnexApp : ScaffoldApp
     protected override void RegisterTypes(IContainer container) {
         base.RegisterTypes(container);
 
+        container.RegisterAggregate<IUIElementTypeResolver, AnnexUIElementTypeResolver>();
+        container.RegisterSingleton<IUIElementTypeResolverService, UIElementTypeResolverService>();
         container.Register<IHtmlSceneLoader, HtmlSceneLoader>();
         container.RegisterSingleton<ICoreEventService, CoreEventService>();
         container.Register<IInputService, InputService>();
@@ -48,6 +51,7 @@ public abstract class AnnexApp : ScaffoldApp
 
         container.Register<IPriorityEventQueue, PriorityEventQueue>();
         container.RegisterBroadcast<RequestStopAppMessage>();
+
 
 #if WINDOWS
         container.Register<IPlatformKeyboardService, WindowsKeyboardService>();
