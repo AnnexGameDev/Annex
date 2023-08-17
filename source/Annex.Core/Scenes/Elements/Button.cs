@@ -10,6 +10,12 @@ public class Button : UIElement, IButton
     private readonly Image _background;
     private readonly Label _label;
 
+    public string? FocusedBackgroundTextureId
+    {
+        get => _background.FocusedBackgroundTextureId;
+        set => _background.FocusedBackgroundTextureId = value;
+    }
+
     public string? HoverBackgroundTextureId
     {
         get => _background.HoverBackgroundTextureId;

@@ -8,10 +8,15 @@ namespace Annex.Core.Scenes.Elements;
 public class Image : UIElement, IImage
 {
     protected readonly TextureContext BackgroundContext;
-
-    private string? _renderBackgroundTextureId;
+    private bool _hasMouse;
 
     public string? HoverBackgroundTextureId
+    {
+        get;
+        set;
+    }
+
+    public string? FocusedBackgroundTextureId
     {
         get;
         set;
@@ -32,17 +37,28 @@ public class Image : UIElement, IImage
     }
 
     protected override void DrawInternal(ICanvas canvas) {
-        BackgroundContext.TextureId.Value = _renderBackgroundTextureId ?? BackgroundTextureId;
+
+        string textureToRender = BackgroundTextureId;
+
+        if (_hasMouse && HoverBackgroundTextureId is not null)
+        {
+            textureToRender = HoverBackgroundTextureId;
+        } else if (IsFocused && FocusedBackgroundTextureId is not null)
+        {
+            textureToRender = FocusedBackgroundTextureId;
+        }
+
+        BackgroundContext.TextureId.Set(textureToRender);
         canvas.Draw(this.BackgroundContext);
     }
 
     public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent) {
         base.OnMouseMoved(mouseMovedEvent);
-        _renderBackgroundTextureId = HoverBackgroundTextureId;
+        _hasMouse = true;
     }
 
     public override void OnMouseLeft(MouseMovedEvent mouseMovedEvent) {
         base.OnMouseLeft(mouseMovedEvent);
-        _renderBackgroundTextureId = BackgroundTextureId;
+        _hasMouse = false;
     }
 }

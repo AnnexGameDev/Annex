@@ -217,6 +217,11 @@ namespace Annex.Core.Scenes.Layouts.Html
             {
                 img.HoverBackgroundTextureId = hoverTextureId;
             }
+
+            if (GetStringAttribute("focused-texture", element, styles) is string focusedTextureId)
+            {
+                img.FocusedBackgroundTextureId = focusedTextureId;
+            }
         }
 
         private void SetSize(IUIElement instance, IUIElement? parent, XElement element, Styles styles) {

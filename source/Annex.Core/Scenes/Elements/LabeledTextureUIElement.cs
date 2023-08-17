@@ -1,6 +1,7 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
+using Annex.Core.Input.InputEvents;
 
 namespace Annex.Core.Scenes.Elements;
 
@@ -9,6 +10,11 @@ public abstract class LabeledTextureUIElement : UIElement, IButton, ILabel
     protected readonly Image Image;
     protected readonly Label Label;
 
+    public string? FocusedBackgroundTextureId
+    {
+        get => this.Image.FocusedBackgroundTextureId;
+        set => this.Image.FocusedBackgroundTextureId = value;
+    }
     public string? HoverBackgroundTextureId
     {
         get => this.Image.HoverBackgroundTextureId;
@@ -74,5 +80,29 @@ public abstract class LabeledTextureUIElement : UIElement, IButton, ILabel
     protected override void DrawInternal(ICanvas canvas) {
         this.Image.Draw(canvas);
         this.Label.Draw(canvas);
+    }
+
+    public override void OnLostFocus() {
+        base.OnLostFocus();
+        Label.OnLostFocus();
+        Image.OnLostFocus();
+    }
+
+    public override void OnGainedFocus() {
+        base.OnGainedFocus();
+        Label.OnGainedFocus();
+        Image.OnGainedFocus();
+    }
+
+    public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent) {
+        base.OnMouseMoved(mouseMovedEvent);
+        Label.OnMouseMoved(mouseMovedEvent);
+        Image.OnMouseMoved(mouseMovedEvent);
+    }
+
+    public override void OnMouseLeft(MouseMovedEvent mouseMovedEvent) {
+        base.OnMouseLeft(mouseMovedEvent);
+        Label.OnMouseLeft(mouseMovedEvent);
+        Image.OnMouseLeft(mouseMovedEvent);
     }
 }
