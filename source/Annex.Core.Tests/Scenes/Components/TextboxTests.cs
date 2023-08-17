@@ -1,5 +1,4 @@
 ﻿using Annex.Core.Graphics;
-using Annex.Core.Helpers;
 using Annex.Core.Scenes.Elements;
 using Moq;
 using Scaffold.Platform;
@@ -15,9 +14,6 @@ namespace Annex.Core.Tests.Scenes.Components
 
         public TextboxTests() {
             this._fixture.Register(_fixture.Create<Textbox>);
-
-            new ClipboardHelper(_clipboardServiceMock.Object);
-            new GraphicsEngineHelper(_graphicsEngineMock.Object);
         }
     }
 }

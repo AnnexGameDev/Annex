@@ -9,7 +9,7 @@ namespace Annex.Core.Scenes
         private IScene? _currentScene;
         private readonly IContainer _container;
 
-        public IScene CurrentScene => this._currentScene ?? throw new NullReferenceException("Current scene is null");
+        public IScene CurrentScene => this._currentScene ?? new NullScene();
 
         public bool IsCurrentScene<T>() where T : IScene => this._currentScene is T;
 
@@ -17,13 +17,14 @@ namespace Annex.Core.Scenes
             this._container = container;
         }
 
-        public void LoadScene<T>(params object[] parameters ) where T : IScene {
+        public void LoadScene<T>(params object[] parameters) where T : IScene {
             Log.Trace(LogSeverity.Verbose, $"Loading scene {typeof(T).Name}");
             var newScene = this._container.Resolve<T>(false);
             var oldScene = this._currentScene;
 
             // If the new scene can't be resolved, don't switch.
-            if (newScene == null) {
+            if (newScene == null)
+            {
                 Log.Trace(LogSeverity.Error, $"Unable to resolve scene {typeof(T).Name}.");
                 return;
             }
@@ -47,6 +48,11 @@ namespace Annex.Core.Scenes
         public void LoadScene(IScene sceneInstance, params object[] parameters) {
             Log.Trace(LogSeverity.Verbose, $"Loading scene instance {sceneInstance.GetType().Name}");
             this.SwitchTo(sceneInstance, parameters);
+        }
+
+        private class NullScene : Scene
+        {
+
         }
     }
 }

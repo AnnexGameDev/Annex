@@ -9,7 +9,8 @@ namespace SampleProject.Models
         private readonly TextureContext _plainTexture;
 
         public GrassyPlain() {
-            this._plainTexture = new TextureContext("plain.png") {
+            this._plainTexture = new TextureContext("plain.png".ToShared())
+            {
             };
         }
 

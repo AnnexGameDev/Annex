@@ -1,12 +1,12 @@
-﻿using Annex.Core.Helpers;
-using Annex.Core.Scenes.Elements;
+﻿using Annex.Core.Scenes.Elements;
+using Annex.Core.Scenes.Layouts.Html;
 
 namespace SampleProject.Scenes.Level3
 {
     internal class Level3 : Scene
     {
-        public Level3() {
-            HtmlSceneLoaderHelper.Load("level3.html", this);
+        public Level3(IHtmlSceneLoader htmlSceneLoader) {
+            htmlSceneLoader.Load("level3.html", this);
         }
     }
 }

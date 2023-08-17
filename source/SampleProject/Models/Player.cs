@@ -19,22 +19,24 @@ namespace SampleProject.Models
             this.Position = new Vector2f(960 / 2, 640 / 2);
             this.Name = "Player Name";
 
-            this._sprite = new SpritesheetContext("sprites/player.png", this.Position, 4, 4) {
+            this._sprite = new SpritesheetContext("sprites/player.png".ToShared(), this.Position, 4, 4)
+            {
                 RenderColor = KnownColor.Red,
                 RenderSize = this.Size,
                 Rotation = this.Rotation,
                 RenderOffset = new ScalingVector2f(this.Size, new Vector2f(-0.5f, -1f)),
             };
 
-            this._hoverText = new TextContext(this.Name, "lato.ttf") {
+            this._hoverText = new TextContext(this.Name, "lato.ttf".ToShared())
+            {
                 Position = this.Position,
                 PositionOffset = new ScalingVector2f(this.Size, new Vector2f(0, -1f)),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Bottom,
                 Color = KnownColor.White,
                 BorderColor = KnownColor.Black,
-                BorderThickness = 3,
-                FontSize = 48,
+                BorderThickness = 3.0f.ToShared(),
+                FontSize = ((uint)48).ToShared(),
                 Rotation = this.Rotation,
             };
         }

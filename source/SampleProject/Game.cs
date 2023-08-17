@@ -4,6 +4,7 @@ using Annex.Core.Assets.Bundles;
 using Annex.Core.Graphics;
 using Annex.Core.Networking;
 using Annex.Core.Networking.Engines.DotNet;
+using Annex.Core.Networking.Packets;
 using Annex.Sfml.Graphics;
 using SampleProject.Scenes.Level1;
 using SampleProject.Scenes.Level2;
@@ -54,6 +55,8 @@ namespace SampleProject
             container.Register<Level1>();
             container.Register<Level2>();
             container.Register<Level3>();
+
+            container.RegisterAggregate<IPacketHandler, SimpleMessagePacketHandler>();
         }
 
         protected override void SetupAssetBundles(IAssetService assetService) {

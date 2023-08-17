@@ -36,9 +36,10 @@ namespace SampleProject.Scenes.Level1
             camera.Center = this._player.Position;
             camera.Rotation = this._player.Rotation;
 
-            this.UIElement = new SolidRectangleContext(KnownColor.Purple, new Vector2f(0, 0), new Vector2f(300, 200)) {
+            this.UIElement = new SolidRectangleContext(KnownColor.Purple, new Vector2f(0, 0), new Vector2f(300, 200))
+            {
                 Camera = CameraId.UI.ToString(),
-                BorderThickness = 5,
+                BorderThickness = 5.0f.ToShared(),
                 BorderColor = KnownColor.Blue,
             };
 
@@ -48,7 +49,8 @@ namespace SampleProject.Scenes.Level1
             var rects = Collection.Create<object>(4).Indicies(i => i * 96);
             var allRects = Collection.Permute(rects, rects, (a, b) => (a, b, 96, 96));
 
-            this.Batch = new BatchTextureContext("sprites/player.png", allPossiblePositions.ToArray(), Updatability.NeverUpdates) {
+            this.Batch = new BatchTextureContext("sprites/player.png", allPossiblePositions.ToArray(), Updatability.NeverUpdates)
+            {
                 RenderSizes = Collection.Create<(float, float)>(16, (50, 50)).ToArray(),
                 RenderOffsets = Collection.Create<(float, float)>(16, (-25, -25)).ToArray(),
                 Camera = CameraId.Default.ToString(),

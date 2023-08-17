@@ -45,8 +45,20 @@ namespace Annex.Sfml.Graphics.Windows
             get => this._isVisible;
             set
             {
+                bool valChanged = value != _isVisible;
                 this._isVisible = value;
                 this._renderWindow?.SetVisible(this.IsVisible);
+
+                if (valChanged)
+                {
+                    if (value)
+                    {
+                        OnGainedFocus(this, new EventArgs());
+                    } else
+                    {
+                        OnLostFocus(this, new EventArgs());
+                    }
+                }
             }
         }
 
@@ -70,14 +82,16 @@ namespace Annex.Sfml.Graphics.Windows
             coreEventService.Add(CoreEventPriority.Graphics, new DrawGameEvent(this, sceneService));
             coreEventService.Add(CoreEventPriority.UserInput, new DoEvents(this));
 
-            var defaultCamera = new Camera(CameraId.Default) {
+            var defaultCamera = new Camera(CameraId.Default)
+            {
                 Region = new Core.Data.FloatRect(0, 0, 1, 1),
                 Size = this.WindowResolution,
                 Center = new ScalingVector2f(this.WindowResolution, 0.5f, 0.5f),
             };
             this.AddCamera(defaultCamera);
 
-            var uiCamera = new Camera(CameraId.UI) {
+            var uiCamera = new Camera(CameraId.UI)
+            {
                 Region = new Core.Data.FloatRect(0, 0, 1, 1),
                 Size = this.WindowResolution,
                 Center = new ScalingVector2f(this.WindowResolution, 0.5f, 0.5f),
@@ -113,7 +127,8 @@ namespace Annex.Sfml.Graphics.Windows
 
         #region Input
         private void AttachInputHandlers() {
-            if (this._renderWindow != null) {
+            if (this._renderWindow != null)
+            {
                 this._renderWindow.KeyPressed += OnKeyboardKeyPressed;
                 this._renderWindow.KeyReleased += OnKeyboardKeyReleased;
                 this._renderWindow.Closed += OnWindowClosed;
@@ -127,7 +142,8 @@ namespace Annex.Sfml.Graphics.Windows
         }
 
         private void RemoveInputHandlers() {
-            if (this._renderWindow != null) {
+            if (this._renderWindow != null)
+            {
                 this._renderWindow.KeyPressed -= OnKeyboardKeyPressed;
                 this._renderWindow.KeyReleased -= OnKeyboardKeyReleased;
                 this._renderWindow.Closed -= OnWindowClosed;
@@ -240,7 +256,8 @@ namespace Annex.Sfml.Graphics.Windows
             }
 
             protected override void Run() {
-                if (this._sfmlWindow._renderWindow is RenderWindow buffer) {
+                if (this._sfmlWindow._renderWindow is RenderWindow buffer)
+                {
                     buffer.Clear();
                     this._sceneService.CurrentScene?.Draw(this._sfmlWindow);
                     buffer.Display();
@@ -257,7 +274,8 @@ namespace Annex.Sfml.Graphics.Windows
             }
 
             protected override void Run() {
-                if (this._sfmlWindow._renderWindow is RenderWindow buffer) {
+                if (this._sfmlWindow._renderWindow is RenderWindow buffer)
+                {
                     buffer.DispatchEvents();
                     Joystick.Update();
                 }

@@ -27,7 +27,8 @@ namespace SampleProject.Scenes.Level2
         protected override void Dispose(bool disposing) {
             base.Dispose(disposing);
 
-            if (disposing) {
+            if (disposing)
+            {
                 this._server.Dispose();
             }
         }
@@ -43,9 +44,10 @@ namespace SampleProject.Scenes.Level2
         SimpleMessage
     }
 
-    [PacketHandler(PacketId.SimpleMessage)]
     public class SimpleMessagePacketHandler : IPacketHandler
     {
+        public int Id { get; } = (int)PacketId.SimpleMessage;
+
         public void Handle(IConnection connection, IncomingPacket packet) {
             Console.WriteLine(packet.ReadString("msg"));
         }

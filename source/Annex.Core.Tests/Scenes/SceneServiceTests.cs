@@ -4,7 +4,6 @@ using FluentAssertions;
 using Moq;
 using Scaffold.DependencyInjection;
 using Scaffold.Tests.Core.Fixture;
-using System;
 using Xunit;
 
 namespace Annex.Core.Tests.Scenes
@@ -25,16 +24,6 @@ namespace Annex.Core.Tests.Scenes
             var sceneMock = new Mock<T>();
             this._containerMock.Setup(container => container.Resolve<T>(It.IsAny<bool>())).Returns(sceneMock.Object);
             return sceneMock;
-        }
-
-        [Fact]
-        public void GivenNoSceneLoaded_WhenGettingCurrentScene_ThenThrowsNullReferenceException() {
-            // Arrange
-            // Act
-            // Assert
-            Assert.Throws<NullReferenceException>(() => {
-                var _ = this._sceneService.CurrentScene;
-            });
         }
 
         [Fact]

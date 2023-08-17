@@ -26,9 +26,10 @@ namespace Annex.Core.Tests.Input
         }
 
         [Theory, AutoMoqData]
-        public void GivenAKeyPressed_WhenHandlingTheKeyboardKeyPressed_ThenTheCurrentSceneHandlesTheEvent(IWindow aGivenWindow, KeyboardKey aGivenPressedKey) {
+        public void GivenAKeyPressedOnAFocusedWindow_WhenHandlingTheKeyboardKeyPressed_ThenTheCurrentSceneHandlesTheEvent(IWindow aGivenWindow, KeyboardKey aGivenPressedKey) {
             // Arrange
             var theInputService = this._fixture.Create<IInputService>();
+            theInputService.HandleWindowGainedFocus();
 
             // Act
             theInputService.HandleKeyboardKeyPressed(aGivenWindow, aGivenPressedKey);
@@ -38,9 +39,10 @@ namespace Annex.Core.Tests.Input
         }
 
         [Theory, AutoMoqData]
-        public void GivenAKeyPressed_WhenHandlingTheKeyboardKeyReleased_ThenTheCurrentSceneHandlesTheEvent(IWindow aGivenWindow, KeyboardKey aGivenReleasedKey) {
+        public void GivenAKeyPressedOnAFocusedWindow_WhenHandlingTheKeyboardKeyReleased_ThenTheCurrentSceneHandlesTheEvent(IWindow aGivenWindow, KeyboardKey aGivenReleasedKey) {
             // Arrange
             var theInputService = this._fixture.Create<IInputService>();
+            theInputService.HandleWindowGainedFocus();
 
             // Act
             theInputService.HandleKeyboardKeyReleased(aGivenWindow, aGivenReleasedKey);
@@ -62,9 +64,10 @@ namespace Annex.Core.Tests.Input
         }
 
         [Theory, AutoMoqData]
-        public void GivenTheMousePressesAGivenButtonAtAGivenWindowLocation_WhenHandlingTheMouseButtonPressed_ThenTheCurrentSceneHandlesTheEvent(IWindow aGivenWindow, MouseButton aGivenMouseButton, int aGivenWindowX, int aGivenWindowY) {
+        public void GivenTheMousePressesAGivenButtonAtAGivenWindowLocationOnAFocusedWindow_WhenHandlingTheMouseButtonPressed_ThenTheCurrentSceneHandlesTheEvent(IWindow aGivenWindow, MouseButton aGivenMouseButton, int aGivenWindowX, int aGivenWindowY) {
             // Arrange
             var theInputService = this._fixture.Create<IInputService>();
+            theInputService.HandleWindowGainedFocus();
 
             // Act
             theInputService.HandleMouseButtonPressed(aGivenWindow, aGivenMouseButton, new Vector2f(aGivenWindowX, aGivenWindowY));
@@ -74,9 +77,10 @@ namespace Annex.Core.Tests.Input
         }
 
         [Theory, AutoMoqData]
-        public void GivenTheMouseReleasesAGivenButtonAtAGivenWindowLocation_WhenHandlingTheMouseButtonReleased_ThenTheCurrentSceneHandlesTheEvent(IWindow aGivenWindow, MouseButton aGivenMouseButton, int aGivenWindowX, int aGivenWindowY) {
+        public void GivenTheMouseReleasesAGivenButtonAtAGivenWindowLocationOnAFocusedWindow_WhenHandlingTheMouseButtonReleased_ThenTheCurrentSceneHandlesTheEvent(IWindow aGivenWindow, MouseButton aGivenMouseButton, int aGivenWindowX, int aGivenWindowY) {
             // Arrange
             var theInputService = this._fixture.Create<IInputService>();
+            theInputService.HandleWindowGainedFocus();
 
             // Act
             theInputService.HandleMouseButtonReleased(aGivenWindow, aGivenMouseButton, new Vector2f(aGivenWindowX, aGivenWindowY));
@@ -86,9 +90,10 @@ namespace Annex.Core.Tests.Input
         }
 
         [Theory, AutoMoqData]
-        public void GivenTheMouseMovesAtAGivenWindowLocation_WhenHandlingTheMouseMoved_ThenTheCurrentSceneHandlesTheEvent(IWindow aGivenWindow, int aGivenWindowX, int aGivenWindowY) {
+        public void GivenTheMouseMovesAtAGivenWindowLocationOnAFocusedWindow_WhenHandlingTheMouseMoved_ThenTheCurrentSceneHandlesTheEvent(IWindow aGivenWindow, int aGivenWindowX, int aGivenWindowY) {
             // Arrange
             var theInputService = this._fixture.Create<IInputService>();
+            theInputService.HandleWindowGainedFocus();
 
             // Act
             theInputService.HandleMouseMoved(aGivenWindow, new Vector2f(aGivenWindowX, aGivenWindowY));
@@ -98,9 +103,10 @@ namespace Annex.Core.Tests.Input
         }
 
         [Theory, AutoMoqData]
-        public void GivenTheMouseScrollWheelMovedAGivenDelta_WhenHandlingTheMouseScrollWheelMoved_ThenTheCurrentSceneHandlesTheEvent(IWindow aGivenWindow, double aGivenDelta) {
+        public void GivenTheMouseScrollWheelMovedAGivenDeltaOnAFocusedWindow_WhenHandlingTheMouseScrollWheelMoved_ThenTheCurrentSceneHandlesTheEvent(IWindow aGivenWindow, double aGivenDelta) {
             // Arrange
             var theInputService = this._fixture.Create<IInputService>();
+            theInputService.HandleWindowGainedFocus();
 
             // Act
             theInputService.HandleMouseScrollWheelMoved(aGivenWindow, aGivenDelta);

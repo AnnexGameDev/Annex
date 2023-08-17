@@ -6,6 +6,7 @@ using Annex.Core.Events.Core;
 using Annex.Core.Graphics;
 using Annex.Core.Input;
 using Annex.Core.Input.Platforms;
+using Annex.Core.Networking;
 using Annex.Core.Scenes;
 using Annex.Core.Scenes.Elements;
 using Annex.Core.Scenes.Layouts.Html;
@@ -38,6 +39,7 @@ public abstract class AnnexApp : ScaffoldApp
         container.RegisterSingleton<ITimeService, StopwatchTimeService>();
         container.RegisterSingleton<ISceneService, SceneService>();
         container.RegisterSingleton<IGraphicsService, GraphicsService>();
+        container.RegisterSingleton<IPacketHandlerService, PacketHandlerService>();
 
         container.RegisterAssetGroup(KnownAssetGroups.TextureGroupId);
         container.RegisterAssetGroup(KnownAssetGroups.FontGroupId);
