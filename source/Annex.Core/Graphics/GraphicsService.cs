@@ -23,5 +23,12 @@ namespace Annex.Core.Graphics
             this._windows.Add(id, window);
             return window;
         }
+
+        public void Dispose() {
+            foreach (var window in Windows)
+            {
+                window.Dispose();
+            }
+        }
     }
 }

@@ -4,7 +4,7 @@ using Annex.Core.Input;
 
 namespace Annex.Core.Graphics.Windows
 {
-    public interface IWindow
+    public interface IWindow : IDisposable
     {
         IVector2<float> WindowResolution { get; }
         IVector2<float> WindowSize { get; }

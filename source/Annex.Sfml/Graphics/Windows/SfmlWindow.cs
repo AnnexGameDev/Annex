@@ -13,7 +13,7 @@ using SFML.Window;
 
 namespace Annex.Sfml.Graphics.Windows
 {
-    internal class SfmlWindow : SfmlCanvas, IWindow, IDisposable
+    internal class SfmlWindow : SfmlCanvas, IWindow
     {
         private readonly IInputService _inputHandlerService;
         private RenderWindow? _renderWindow;

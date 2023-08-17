@@ -2,7 +2,7 @@
 
 namespace Annex.Core.Graphics
 {
-    public interface IGraphicsService
+    public interface IGraphicsService : IDisposable
     {
         IEnumerable<IWindow> Windows { get; }
 
