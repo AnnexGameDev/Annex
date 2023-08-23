@@ -43,6 +43,7 @@ public abstract class AnnexApp : ScaffoldApp
         container.RegisterSingleton<ISceneService, SceneService>();
         container.RegisterSingleton<IGraphicsService, GraphicsService>();
         container.RegisterSingleton<IPacketHandlerService, PacketHandlerService>();
+        container.RegisterSingleton<IThreadService, ThreadService>();
 
         container.RegisterAssetGroup(KnownAssetGroups.TextureGroupId);
         container.RegisterAssetGroup(KnownAssetGroups.FontGroupId);

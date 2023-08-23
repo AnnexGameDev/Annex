@@ -7,6 +7,6 @@ namespace Annex.Core.Networking
     {
         IConnection Connection { get; }
         void Send(OutgoingPacket packet);
-        IConnection Start(CancellationToken? cancellationToken = null);
+        void Start(CancellationToken? cancellationToken = null);
     }
 }

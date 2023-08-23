@@ -35,10 +35,9 @@ internal class TcpClient : TcpEndpoint, IClientEndpoint
         this.SendTo(this._connection, packet);
     }
 
-    public IConnection Start(CancellationToken? cancellationToken) {
+    public void Start(CancellationToken? cancellationToken) {
         this._connection.ConnectTo(this.Config.IP, this.Config.Port);
         this.WaitForResponse(cancellationToken);
-        return this.Connection;
     }
 
     private void WaitForResponse(CancellationToken? cancellationToken) {
