@@ -19,20 +19,25 @@ public class Container : UIElement, IParentElement
 
     public IUIElement? GetElementById(string id) {
 
-        if (this.ElementID == id) {
+        if (this.ElementID == id)
+        {
             return this;
         }
 
-        for (int i = 0; i < this._children.Count; i++) {
+        for (int i = 0; i < this._children.Count; i++)
+        {
             var child = this._children[i];
-            if (child.ElementID == id) {
+            if (child.ElementID == id)
+            {
                 return child;
             }
 
             // Look in the child if the child has sub-elements
-            if (child is IParentElement childParent) {
+            if (child is IParentElement childParent)
+            {
                 var foundElement = childParent.GetElementById(id);
-                if (foundElement != null) {
+                if (foundElement != null)
+                {
                     return foundElement;
                 }
             }
@@ -50,19 +55,25 @@ public class Container : UIElement, IParentElement
         if (!this.IsInBounds(x, y))
             return null;
 
-        for (int i = this._children.Count - 1; i >= 0; i--) {
+        for (int i = this._children.Count - 1; i >= 0; i--)
+        {
             var child = this._children[i];
 
-            if (!child.Visible) {
+            if (!child.Visible)
+            {
                 continue;
             }
             // Do we hit a sub-child element?
-            if (child is IParentElement childParent) {
-                if (childParent.GetFirstVisibleElement(x, y) is IUIElement hitChild) {
+            if (child is IParentElement childParent)
+            {
+                if (childParent.GetFirstVisibleElement(x, y) is IUIElement hitChild)
+                {
                     return hitChild;
                 }
-            } else {
-                if (child.IsInBounds(x, y)) {
+            } else
+            {
+                if (child.IsInBounds(x, y))
+                {
                     return child;
                 }
             }
@@ -73,8 +84,10 @@ public class Container : UIElement, IParentElement
     }
 
     public void RemoveChild(string elementId) {
-        for (int i = 0; i < this._children.Count; i++) {
-            if (this._children[i].ElementID == elementId) {
+        for (int i = 0; i < this._children.Count; i++)
+        {
+            if (this._children[i].ElementID == elementId)
+            {
                 this.RemoveChild(i);
                 break;
             }
@@ -82,8 +95,10 @@ public class Container : UIElement, IParentElement
     }
 
     public void RemoveChild(IUIElement child) {
-        for (int i = 0; i < this._children.Count; i++) {
-            if (this._children[i] == child) {
+        for (int i = 0; i < this._children.Count; i++)
+        {
+            if (this._children[i] == child)
+            {
                 this.RemoveChild(i);
                 break;
             }
@@ -97,7 +112,8 @@ public class Container : UIElement, IParentElement
     }
 
     protected override void DrawInternal(ICanvas canvas) {
-        foreach (var child in this._children) {
+        foreach (var child in this._children)
+        {
             child.Draw(canvas);
         }
     }
@@ -105,8 +121,10 @@ public class Container : UIElement, IParentElement
     protected override void Dispose(bool disposing) {
         base.Dispose(disposing);
 
-        if (disposing) {
-            for (int i = 0; i < this._children.Count; i++) {
+        if (disposing)
+        {
+            for (int i = 0; i < this._children.Count; i++)
+            {
                 var child = this._children[i];
                 child.Dispose();
             }
