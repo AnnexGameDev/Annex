@@ -7,6 +7,7 @@ using Annex.Core.Graphics;
 using Annex.Core.Input;
 using Annex.Core.Input.Platforms;
 using Annex.Core.Networking;
+using Annex.Core.Networking.Packets;
 using Annex.Core.Scenes;
 using Annex.Core.Scenes.Elements;
 using Annex.Core.Scenes.Layouts;
@@ -24,6 +25,7 @@ public abstract class AnnexApp : ScaffoldApp
         var eventService = this.Container.Resolve<ICoreEventService>();
         var graphicsService = this.Container.Resolve<IGraphicsService>();
         var assetService = this.Container.Resolve<IAssetService>();
+        this.Container.Resolve<IPacketHandlerService>().Init(this.Container.Resolve<IEnumerable<IPacketHandler>>());
 
         this.SetupAssetBundles(assetService);
         this.CreateWindow(graphicsService, assetService);
@@ -52,7 +54,6 @@ public abstract class AnnexApp : ScaffoldApp
 
         container.Register<IPriorityEventQueue, PriorityEventQueue>();
         container.RegisterBroadcast<RequestStopAppMessage>();
-
 
 #if WINDOWS
         container.Register<IPlatformKeyboardService, WindowsKeyboardService>();
