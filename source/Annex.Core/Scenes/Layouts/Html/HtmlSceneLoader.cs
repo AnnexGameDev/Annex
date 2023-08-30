@@ -36,7 +36,7 @@ namespace Annex.Core.Scenes.Layouts.Html
                 // Apply styles to the scene
                 this.ProcessElement(sceneInstance, null, scene, styles);
 
-                ProcessChildren(sceneInstance, scene, styles);
+                ProcessChildren(sceneInstance, scene, styles, sceneInstance.GetType());
             }
             catch (Exception ex)
             {
@@ -44,11 +44,11 @@ namespace Annex.Core.Scenes.Layouts.Html
             }
         }
 
-        private void ProcessChildren(IParentElement parentInstance, XElement parentElement, Styles styles) {
+        private void ProcessChildren(IParentElement parentInstance, XElement parentElement, Styles styles, Type sceneType) {
             foreach (var childElement in parentElement.Elements())
             {
 
-                if (!this.TryCreateInstance(childElement, styles, out var childInstance))
+                if (!this.TryCreateInstance(childElement, styles, sceneType, out var childInstance))
                 {
                     continue;
                 }
@@ -58,12 +58,12 @@ namespace Annex.Core.Scenes.Layouts.Html
 
                 if (childInstance is IParentElement subParentInstance)
                 {
-                    ProcessChildren(subParentInstance, childElement, styles);
+                    ProcessChildren(subParentInstance, childElement, styles, sceneType);
                 }
             }
         }
 
-        private bool TryCreateInstance(XElement element, Styles styles, out IUIElement uiElement) {
+        private bool TryCreateInstance(XElement element, Styles styles, Type sceneType, out IUIElement uiElement) {
 
             string? typeNameToInstantiate = element.Name.ToString();
             typeNameToInstantiate = typeNameToInstantiate switch
@@ -84,7 +84,7 @@ namespace Annex.Core.Scenes.Layouts.Html
                 return false;
             }
 
-            if (_uiElementTypeResolverService.ResolveType(typeNameToInstantiate) is Type type)
+            if (_uiElementTypeResolverService.ResolveType(typeNameToInstantiate, sceneType) is Type type)
             {
                 uiElement = _container.Resolve(type, false) as IUIElement;
                 return true;
