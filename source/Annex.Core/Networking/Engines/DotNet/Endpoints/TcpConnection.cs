@@ -1,6 +1,5 @@
 ﻿using Annex.Core.Networking.Connections;
 using Annex.Core.Networking.Packets;
-using System.Net;
 using System.Net.Sockets;
 
 namespace Annex.Core.Networking.Engines.DotNet.Endpoints;
@@ -13,7 +12,6 @@ internal class TcpConnection : Connection
     private readonly ProcessPacketHandler _processPacketHandler;
     private byte[] _incomingData;
     private byte[] _unprocessedData;
-    private EndPoint? _remoteEndpoint;
 
     public TcpConnection(Socket socket, ProcessPacketHandler processPacketHandler) {
         Socket = socket;
@@ -50,8 +48,6 @@ internal class TcpConnection : Connection
             this.Destroy("Incoming data is of length 0");
             return;
         }
-
-        this._remoteEndpoint ??= this.Socket.RemoteEndPoint;
 
         this.QueueDataForProcessing(this._incomingData, 0, lengthOfIncomingData);
         while (this.ProcessNextIncomingPacketData())
@@ -125,6 +121,6 @@ internal class TcpConnection : Connection
     }
 
     public override string ToString() {
-        return this._remoteEndpoint?.ToString() ?? string.Empty;
+        return this.Socket?.RemoteEndPoint?.ToString() ?? string.Empty;
     }
 }
