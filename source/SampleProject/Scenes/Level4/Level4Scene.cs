@@ -24,10 +24,18 @@ namespace SampleProject.Scenes.Level4
             {
                 int val = i;
                 Task.Run(async () => {
-                    using var request = CreateDataRequestPacket(val);
-                    Console.WriteLine($"[Client] {val} -> {request.RequestId}");
-                    using var response = await _client.SendAsync(request);
-                    Console.WriteLine($"[Client] Got {response.ReadInt()} -> {response.OriginalRequestId}");
+                    try
+                    {
+                        using var request = CreateDataRequestPacket(val);
+                        Console.WriteLine($"[Client] {val} -> {request.RequestId}");
+                        using var response = await _client.SendAsync(request);
+                        await Task.Delay(1000);
+                        Console.WriteLine($"[Client] Got {response.ReadInt()} -> {response.OriginalRequestId}");
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
                 });
             }
         }
@@ -45,12 +53,12 @@ namespace SampleProject.Scenes.Level4
 
         public int Id { get; } = PacketId;
 
-        public async void Handle(IConnection connection, IncomingPacket packet) {
+        public async Task HandleAsync(IConnection connection, IncomingPacket packet) {
             var id = packet.ReadInt();
 
             Console.WriteLine($"[Server] {id} -> {packet.OriginalRequestId}");
 
-            await Task.Delay(5000);
+            await Task.Delay(1000);
             using var response = new OutgoingPacket(packet);
             response.Write(id);
 

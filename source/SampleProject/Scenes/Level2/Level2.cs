@@ -8,6 +8,7 @@ using Annex.Core.Networking.Packets;
 using Annex.Core.Scenes.Elements;
 using SampleProject.Scenes.Level2.Events;
 using System;
+using System.Threading.Tasks;
 
 namespace SampleProject.Scenes.Level2
 {
@@ -48,8 +49,9 @@ namespace SampleProject.Scenes.Level2
     {
         public int Id { get; } = (int)PacketId.SimpleMessage;
 
-        public void Handle(IConnection connection, IncomingPacket packet) {
+        public Task HandleAsync(IConnection connection, IncomingPacket packet) {
             Console.WriteLine(packet.ReadString("msg"));
+            return Task.CompletedTask;
         }
     }
 }

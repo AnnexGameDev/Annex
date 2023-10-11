@@ -5,6 +5,6 @@ namespace Annex.Core.Networking.Packets
     public interface IPacketHandler
     {
         int Id { get; }
-        void Handle(IConnection connection, IncomingPacket packet);
+        Task HandleAsync(IConnection connection, IncomingPacket packet);
     }
 }

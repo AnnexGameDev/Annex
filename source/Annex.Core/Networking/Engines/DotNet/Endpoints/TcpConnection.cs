@@ -76,10 +76,8 @@ internal class TcpConnection : Connection
             var packetData = new byte[packetSize];
             Array.Copy(this._unprocessedData, 8, packetData, 0, packetSize);
 
-            using (var packet = new IncomingPacket(packetData))
-            {
-                _processPacketHandler.Invoke(this, packetId, packet);
-            }
+            var packet = new IncomingPacket(packetData);
+            _processPacketHandler.Invoke(this, packetId, packet);
 
             int newUnprocessedDataSize = this._unprocessedData.Length - incomingDataSize;
             var newUnprocessedData = new byte[newUnprocessedDataSize];
