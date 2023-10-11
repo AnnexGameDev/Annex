@@ -1,19 +1,31 @@
 ﻿using Annex.Core.Networking.Connections;
 using Annex.Core.Networking.Packets;
 using Scaffold.Logging;
+using System.Collections.Concurrent;
 
 namespace Annex.Core.Networking.Engines.DotNet.Endpoints;
 
 internal class TcpClient : TcpEndpoint, IClientEndpoint
 {
     private TcpClientConnection _connection;
-
     public IConnection Connection => _connection;
+
+    private readonly IDictionary<string, TaskCompletionSource<IncomingPacket>> _responseListeners = new ConcurrentDictionary<string, TaskCompletionSource<IncomingPacket>>();
 
     public TcpClient(EndpointConfiguration config, IPacketHandlerService packetHandlerService) : base(config) {
         this._connection = new TcpClientConnection(this.Socket, packetHandlerService);
 
         this.Connection.OnConnectionStateChanged += Connection_OnConnectionStateChanged;
+        packetHandlerService.OnResponseReceived += PacketHandlerService_OnResponseReceived;
+    }
+
+    private void PacketHandlerService_OnResponseReceived(object? sender, IncomingPacket packet) {
+        if (!_responseListeners.ContainsKey(packet.OriginalRequestId))
+        {
+            Log.Trace(LogSeverity.Error, $"No response handler was registered for {packet.OriginalRequestId}");
+            return;
+        }
+        _responseListeners[packet.OriginalRequestId].TrySetResult(packet);
     }
 
     private void Connection_OnConnectionStateChanged(object? sender, ConnectionState state) {
@@ -33,6 +45,13 @@ internal class TcpClient : TcpEndpoint, IClientEndpoint
 
     public void Send(OutgoingPacket packet) {
         this.SendTo(this._connection, packet);
+    }
+
+    public Task<IncomingPacket> SendAsync(OutgoingPacket packet) {
+        var listener = new TaskCompletionSource<IncomingPacket>();
+        _responseListeners.Add(packet.RequestId, listener);
+        Send(packet);
+        return listener.Task;
     }
 
     public void Start(CancellationToken? cancellationToken) {

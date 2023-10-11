@@ -20,7 +20,8 @@ internal abstract class TcpEndpoint : IEndpoint
 
     protected virtual void HandleNewConnection(TcpConnection connection) {
 
-        if (this.Connections.Contains(connection)) {
+        if (this.Connections.Contains(connection))
+        {
             Log.Trace(LogSeverity.Error, $"Connection {connection} is already registered");
             return;
         }
@@ -33,13 +34,15 @@ internal abstract class TcpEndpoint : IEndpoint
 
     private void Connection_OnConnectionStateChanged(object? sender, Connections.ConnectionState connectionState) {
         var connection = (TcpConnection)sender!;
-        if (connectionState == Networking.Connections.ConnectionState.Disconnected) {
+        if (connectionState == Networking.Connections.ConnectionState.Disconnected)
+        {
             HandleDisconnectedConnection(connection);
         }
     }
 
     protected virtual void HandleDisconnectedConnection(TcpConnection connection) {
-        if (!this.Connections.Contains(connection)) {
+        if (!this.Connections.Contains(connection))
+        {
             Log.Trace(LogSeverity.Error, $"Connection {connection} is not registered");
             return;
         }
@@ -50,17 +53,21 @@ internal abstract class TcpEndpoint : IEndpoint
     }
 
     protected void SendTo(TcpConnection connection, OutgoingPacket packet) {
-        if (!this.Connections.Contains(connection)) {
+        if (!this.Connections.Contains(connection))
+        {
             Log.Trace(LogSeverity.Error, $"Connection {connection} is not registered");
             return;
         }
-        connection.SendOutgoingPacket(packet);
+        connection.Send(packet);
     }
 
     protected virtual void Dispose(bool disposing) {
-        if (!Disposed) {
-            if (disposing) {
-                foreach (var connection in this.Connections) {
+        if (!Disposed)
+        {
+            if (disposing)
+            {
+                foreach (var connection in this.Connections)
+                {
                     this.HandleDisconnectedConnection(connection);
                 }
 

@@ -1,4 +1,5 @@
-﻿using Scaffold.Logging;
+﻿using Annex.Core.Networking.Packets;
+using Scaffold.Logging;
 
 namespace Annex.Core.Networking.Connections
 {
@@ -26,15 +27,18 @@ namespace Annex.Core.Networking.Connections
         }
 
         public override bool Equals(object? obj) {
-            if (obj is not IConnection connection) {
+            if (obj is not IConnection connection)
+            {
                 return false;
             }
             return connection.Id.Equals(this.Id);
         }
 
         protected virtual void Dispose(bool disposing) {
-            if (!Disposed) {
-                if (disposing) {
+            if (!Disposed)
+            {
+                if (disposing)
+                {
                     this.Destroy("Disposing");
                 }
 
@@ -61,5 +65,7 @@ namespace Annex.Core.Networking.Connections
             Log.Trace(LogSeverity.Normal, $"Disconnecting client {this.Id}: {reason}", exception);
             this.State = ConnectionState.Disconnected;
         }
+
+        public abstract void Send(OutgoingPacket packet);
     }
 }

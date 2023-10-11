@@ -6,6 +6,7 @@ namespace Annex.Core.Networking;
 
 public interface IPacketHandlerService
 {
+    event EventHandler<IncomingPacket> OnResponseReceived;
     void HandlePacket(IConnection connection, int packetId, IncomingPacket packet);
     void Init(IEnumerable<IPacketHandler> enumerable);
 }
@@ -13,8 +14,17 @@ public interface IPacketHandlerService
 internal class PacketHandlerService : IPacketHandlerService
 {
     private readonly Dictionary<int, IPacketHandler> _packetHandlers = new();
+    public event EventHandler<IncomingPacket>? OnResponseReceived;
 
     public void HandlePacket(IConnection connection, int packetId, IncomingPacket packet) {
+
+        if (packetId == IPacket.ResponsePacketId)
+        {
+            Log.Trace(LogSeverity.Verbose, $"Response packet received");
+            OnResponseReceived?.Invoke(connection, packet);
+            return;
+        }
+
         if (_packetHandlers?.TryGetValue(packetId, out var handler) != true)
         {
             Log.Trace(LogSeverity.Error, $"No packet handler exists for the packet id {packetId}");

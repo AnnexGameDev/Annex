@@ -1,4 +1,6 @@
-﻿namespace Annex.Core.Networking.Connections;
+﻿using Annex.Core.Networking.Packets;
+
+namespace Annex.Core.Networking.Connections;
 
 public interface IConnection : IDisposable
 {
@@ -6,6 +8,8 @@ public interface IConnection : IDisposable
 
     Guid Id { get; }
     ConnectionState State { get; }
+
+    void Send(OutgoingPacket packet);
 
     void Destroy(string reason, Exception? exception = null);
 }

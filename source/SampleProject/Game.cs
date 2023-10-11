@@ -9,6 +9,7 @@ using Annex.Sfml.Graphics;
 using SampleProject.Scenes.Level1;
 using SampleProject.Scenes.Level2;
 using SampleProject.Scenes.Level3;
+using SampleProject.Scenes.Level4;
 using Scaffold.DependencyInjection;
 using Scaffold.Logging;
 using System.IO;
@@ -22,7 +23,7 @@ namespace SampleProject
             try {
 #endif
             using var game = new Game();
-            game.Run<Level2>();
+            game.Run<Level4Scene>();
 #if !DEBUG
             } catch (Exception e) {
                 Log.Trace(LogSeverity.Error, "Exception in main", exception: e);
@@ -55,8 +56,10 @@ namespace SampleProject
             container.Register<Level1>();
             container.Register<Level2>();
             container.Register<Level3>();
+            container.Register<Level4Scene>();
 
             container.RegisterAggregate<IPacketHandler, SimpleMessagePacketHandler>();
+            container.RegisterAggregate<IPacketHandler, SimpleRequestPacketHandler>();
         }
 
         protected override void SetupAssetBundles(IAssetService assetService) {

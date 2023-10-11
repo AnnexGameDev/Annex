@@ -98,7 +98,7 @@ internal class TcpConnection : Connection
         this._unprocessedData = newUnprocessData;
     }
 
-    internal void SendOutgoingPacket(OutgoingPacket packet) {
+    public override void Send(OutgoingPacket packet) {
         var packetData = packet.Data();
         var packetIdData = BitConverter.GetBytes(packet.PacketId);
         var messageSizeData = BitConverter.GetBytes(packetIdData.Length + packetData.Length);

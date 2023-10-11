@@ -25,7 +25,7 @@ namespace SampleProject.Scenes.Level2.Events
             packet.Write(data);
 
             Console.WriteLine($"Sending: {data}");
-            this._client.Send(packet);
+            this._client.SendAsync(packet);
         }
     }
 }

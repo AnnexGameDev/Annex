@@ -7,6 +7,8 @@ namespace Annex.Core.Networking.Packets
         private readonly MemoryStream _memoryStream;
         private readonly BinaryReader _reader;
 
+        public string OriginalRequestId { get; }
+
         private string? _traceId;
 
         [Conditional("DEBUG")]
@@ -23,7 +25,8 @@ namespace Annex.Core.Networking.Packets
 
         [Conditional("DEBUG")]
         public void TraceRead(dynamic value) {
-            if (this._traceId != null) {
+            if (this._traceId != null)
+            {
                 Console.WriteLine(value);
             }
         }
@@ -31,6 +34,7 @@ namespace Annex.Core.Networking.Packets
         public IncomingPacket(byte[] data) {
             this._memoryStream = new MemoryStream(data);
             this._reader = new BinaryReader(this._memoryStream);
+            this.OriginalRequestId = ReadString();
         }
 
         public byte[] ReadBytes() {
