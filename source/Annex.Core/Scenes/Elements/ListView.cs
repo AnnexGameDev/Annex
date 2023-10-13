@@ -1,6 +1,7 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
+using Annex.Core.Input.InputEvents;
 
 namespace Annex.Core.Scenes.Elements;
 
@@ -8,6 +9,8 @@ public class ListView : Image, IParentElement
 {
     public IEnumerable<IUIElement> Children => _children;
     private readonly List<ListViewItem> _children = new();
+
+    private readonly TextureContext _selectionTexture;
 
     public int LineHeight
     {
@@ -21,14 +24,31 @@ public class ListView : Image, IParentElement
         set;
     }
 
-    public RGBA FontColor
+    public RGBA? FontColor
     {
         get;
         set;
     }
 
+    public string? SelectedTextureId
+    {
+        get => _selectionTexture.TextureId.Value;
+        set => _selectionTexture.TextureId.Set(value ?? string.Empty);
+    }
+    public int SelectedIndex
+    {
+        get;
+        set;
+    }
+
+    public bool HasItemSelected => SelectedIndex >= 0 && SelectedIndex < _children.Count;
+
     public ListView(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null)
         : base(elementId, position, size) {
+        _selectionTexture = new TextureContext(string.Empty.ToShared())
+        {
+            RenderSize = new Vector2f()
+        };
     }
 
     public IUIElement? GetElementById(string id) {
@@ -98,6 +118,11 @@ public class ListView : Image, IParentElement
     protected override void DrawInternal(ICanvas canvas) {
         base.DrawInternal(canvas);
 
+        if (HasItemSelected)
+        {
+            canvas.Draw(_selectionTexture);
+        }
+
         for (int i = 0; i < this._children.Count; i++)
         {
             var child = _children[i];
@@ -111,15 +136,39 @@ public class ListView : Image, IParentElement
     }
 
     private ListViewItem CreateItem(IShared<string> text) {
-        var item = new ListViewItem(this, new Vector2f(this.Size.X, this.LineHeight), text);
+        var item = new ListViewItem(this, new Vector2f(this.Size.X, this.LineHeight), text)
+        {
+            OnClicked = OnListViewItemClicked
+        };
         item.SetIndex(this._children.Count);
         return item;
     }
 
+    private void OnListViewItemClicked(ListViewItem item) {
+        SelectItem(item.Index);
+    }
+
+    private void SelectItem(int index) {
+        if (index < 0 || index >= _children.Count)
+        {
+            ClearSelection();
+            return;
+        }
+
+        _selectionTexture.Position.Set(_children[index].Position);
+        _selectionTexture.RenderSize!.Set(Size.X, LineHeight);
+    }
+
+    private void ClearSelection() {
+        SelectedIndex = -1;
+    }
+
     private class ListViewItem : Label
     {
-        private int _index;
+        public int Index { get; private set; }
         private ListView _parent;
+
+        public Action<ListViewItem>? OnClicked { get; set; }
 
         public ListViewItem(ListView parent, IVector2<float> itemSize, IShared<string> text)
             : base(
@@ -135,19 +184,24 @@ public class ListView : Image, IParentElement
         }
 
         internal void SetIndex(int index) {
-            _index = index;
+            Index = index;
             RefreshView();
         }
 
         private void RefreshView() {
             RefreshPosition();
-            FontColor = _parent.FontColor;
+            FontColor = _parent.FontColor ?? KnownColor.Black;
         }
 
         private void RefreshPosition() {
             var position = (OffsetVector2f)Position;
             var scale = (ScalingVector2f)position.OffsetVector;
-            scale.ScaleVector.Set(0, _index);
+            scale.ScaleVector.Set(0, Index);
+        }
+
+        public override void OnMouseButtonPressed(MouseButtonPressedEvent mouseButtonPressedEvent) {
+            base.OnMouseButtonPressed(mouseButtonPressedEvent);
+            OnClicked?.Invoke(this);
         }
     }
 }
