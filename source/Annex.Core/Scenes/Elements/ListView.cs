@@ -12,33 +12,17 @@ public class ListView : Image, IParentElement
 
     private readonly TextureContext _selectionTexture;
 
-    public int LineHeight
-    {
-        get;
-        set;
-    }
-
-    public uint FontSize
-    {
-        get;
-        set;
-    }
-
-    public RGBA? FontColor
-    {
-        get;
-        set;
-    }
+    public int LineHeight { get; set; }
+    public int SelectedIndex { get; set; }
+    public uint FontSize { get; set; }
+    public RGBA? SelectedFontColor { get; set; }
+    public RGBA? FontColor { get; set; }
+    public bool IsSelectable { get; set; }
 
     public string? SelectedTextureId
     {
         get => _selectionTexture.TextureId.Value;
         set => _selectionTexture.TextureId.Set(value ?? string.Empty);
-    }
-    public int SelectedIndex
-    {
-        get;
-        set;
     }
 
     public bool HasItemSelected => SelectedIndex >= 0 && SelectedIndex < _children.Count;
@@ -145,7 +129,10 @@ public class ListView : Image, IParentElement
     }
 
     private void OnListViewItemClicked(ListViewItem item) {
-        SelectItem(item.Index);
+        if (IsSelectable)
+        {
+            SelectItem(item.Index);
+        }
     }
 
     private void SelectItem(int index) {
@@ -155,20 +142,41 @@ public class ListView : Image, IParentElement
             return;
         }
 
+        // Unselect the old item
+        UnselectItem(SelectedIndex);
+
+        // Select the new item
+        SelectedIndex = index;
+        var selectedItem = this._children[SelectedIndex];
+        selectedItem.Select();
+
+        // Update the selection background
         _selectionTexture.Position.Set(_children[index].Position);
         _selectionTexture.RenderSize!.Set(Size.X, LineHeight);
     }
 
-    private void ClearSelection() {
+    private void UnselectItem(int index) {
+        if (index < 0 || index >= _children.Count)
+        {
+            return;
+        }
+        var selectedItem = _children[index];
+        selectedItem.Unselect();
         SelectedIndex = -1;
+    }
+
+    private void ClearSelection() {
+        UnselectItem(SelectedIndex);
     }
 
     private class ListViewItem : Label
     {
         public int Index { get; private set; }
-        private ListView _parent;
+        public bool IsSelected { get; private set; }
 
         public Action<ListViewItem>? OnClicked { get; set; }
+
+        private ListView _parent;
 
         public ListViewItem(ListView parent, IVector2<float> itemSize, IShared<string> text)
             : base(
@@ -190,7 +198,7 @@ public class ListView : Image, IParentElement
 
         private void RefreshView() {
             RefreshPosition();
-            FontColor = _parent.FontColor ?? KnownColor.Black;
+            FontColor = (IsSelected ? _parent.SelectedFontColor : _parent.FontColor) ?? KnownColor.Black;
         }
 
         private void RefreshPosition() {
@@ -202,6 +210,16 @@ public class ListView : Image, IParentElement
         public override void OnMouseButtonPressed(MouseButtonPressedEvent mouseButtonPressedEvent) {
             base.OnMouseButtonPressed(mouseButtonPressedEvent);
             OnClicked?.Invoke(this);
+        }
+
+        internal void Unselect() {
+            IsSelected = false;
+            RefreshView();
+        }
+
+        internal void Select() {
+            IsSelected = true;
+            RefreshView();
         }
     }
 }

@@ -13,8 +13,8 @@ internal class ListViewExampleScene : Scene
             FontSize = 30,
             FontColor = KnownColor.Red,
             SelectedTextureId = "ui/buttons/orangefade.png",
-            //SelectedFontColor = KnownColor.White,
-            //IsSelectable = true,
+            SelectedFontColor = KnownColor.White,
+            IsSelectable = true,
             //MaxItems = ListView.Unlimited,
             //CanScroll = true
         };
