@@ -27,6 +27,8 @@ public class ListView : Image, IParentElement
         set => _selectionTexture.TextureId.Set(value ?? string.Empty);
     }
 
+    private IVector2<float> _renderOffset = new Vector2f();
+
     private int _topVisibleIndex;
     private int _bottomVisibleIndex => _topVisibleIndex + _maxVisibleItemsCount - 1;
     private int _maxVisibleItemsCount => Math.Min((int)(Size.Y / LineHeight), _children.Count);
@@ -176,10 +178,9 @@ public class ListView : Image, IParentElement
         selectedItem.Select();
 
         // Update the selection background
+        RefreshView();
         _selectionTexture.Position.Set(_children[index].Position);
         _selectionTexture.RenderSize!.Set(Size.X, LineHeight);
-
-        RefreshView();
     }
 
     private void RefreshView() {
@@ -191,6 +192,8 @@ public class ListView : Image, IParentElement
         {
             _topVisibleIndex = SelectedIndex;
         }
+
+        _renderOffset.Set(0, -_topVisibleIndex * LineHeight);
     }
 
     private void UnselectItem(int index) {
@@ -219,7 +222,7 @@ public class ListView : Image, IParentElement
 
         public ListViewItem(ListView parent, IVector2<float> itemSize, PrefixedString text)
             : base(
-                  position: new OffsetVector2f(parent.Position, new ScalingVector2f(itemSize, 0, 0)),
+                  position: new OffsetVector2f(new OffsetVector2f(parent.Position, parent._renderOffset), new ScalingVector2f(itemSize, 0, 0)),
                   size: itemSize,
                   textOffset: new ScalingVector2f(itemSize, 0, 0.5f),
                   text: text
