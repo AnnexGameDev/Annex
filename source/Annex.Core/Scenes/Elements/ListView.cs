@@ -27,7 +27,8 @@ public class ListView : Image, IParentElement
     }
 
     private int _topVisibleIndex;
-    private int _bottomVisibleIndex => _topVisibleIndex + (int)(Size.Y / LineHeight) - 1;
+    private int _bottomVisibleIndex => _topVisibleIndex + _maxVisibleItemsCount - 1;
+    private int _maxVisibleItemsCount => Math.Min((int)(Size.Y / LineHeight), _children.Count);
 
     public bool HasItemSelected => SelectedIndex >= 0 && SelectedIndex < _children.Count;
 
@@ -118,6 +119,11 @@ public class ListView : Image, IParentElement
         }
     }
 
+    public override void OnKeyboardKeyPressed(KeyboardKeyPressedEvent keyboardKeyPressedEvent) {
+        base.OnKeyboardKeyPressed(keyboardKeyPressedEvent);
+        OnKeyPressed(keyboardKeyPressedEvent.Key);
+    }
+
     public void AddItem(IShared<string> text) {
         var item = CreateItem(text);
         this._children.Add(item);
@@ -127,13 +133,13 @@ public class ListView : Image, IParentElement
         var item = new ListViewItem(this, new Vector2f(this.Size.X, this.LineHeight), text)
         {
             TrySelectItem = OnItemRequestedTrySelectItem,
-            KeyPressed = OnItemKeyPressed,
+            KeyPressed = OnKeyPressed,
         };
         item.SetIndex(this._children.Count);
         return item;
     }
 
-    private void OnItemKeyPressed(KeyboardKey key) {
+    private void OnKeyPressed(KeyboardKey key) {
         int offset = key switch
         {
             KeyboardKey.Up => -1,
@@ -171,6 +177,19 @@ public class ListView : Image, IParentElement
         // Update the selection background
         _selectionTexture.Position.Set(_children[index].Position);
         _selectionTexture.RenderSize!.Set(Size.X, LineHeight);
+
+        RefreshView();
+    }
+
+    private void RefreshView() {
+        if (SelectedIndex > _bottomVisibleIndex)
+        {
+            _topVisibleIndex = SelectedIndex - (_maxVisibleItemsCount - 1);
+        }
+        if (SelectedIndex < _topVisibleIndex)
+        {
+            _topVisibleIndex = SelectedIndex;
+        }
     }
 
     private void UnselectItem(int index) {
