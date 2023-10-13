@@ -1,6 +1,7 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
+using Annex.Core.Input;
 using Annex.Core.Input.InputEvents;
 
 namespace Annex.Core.Scenes.Elements;
@@ -125,23 +126,37 @@ public class ListView : Image, IParentElement
     private ListViewItem CreateItem(IShared<string> text) {
         var item = new ListViewItem(this, new Vector2f(this.Size.X, this.LineHeight), text)
         {
-            OnClicked = OnListViewItemClicked
+            TrySelectItem = OnItemRequestedTrySelectItem,
+            KeyPressed = OnItemKeyPressed,
         };
         item.SetIndex(this._children.Count);
         return item;
     }
 
-    private void OnListViewItemClicked(ListViewItem item) {
+    private void OnItemKeyPressed(KeyboardKey key) {
+        int offset = key switch
+        {
+            KeyboardKey.Up => -1,
+            KeyboardKey.Down => 1,
+            _ => 0
+        };
+
+        if (offset != 0)
+        {
+            SelectItem(SelectedIndex + offset);
+        }
+    }
+
+    private void OnItemRequestedTrySelectItem(int requestedSelectionIndex) {
         if (IsSelectable)
         {
-            SelectItem(item.Index);
+            SelectItem(requestedSelectionIndex);
         }
     }
 
     private void SelectItem(int index) {
         if (index < 0 || index >= _children.Count)
         {
-            ClearSelection();
             return;
         }
 
@@ -177,7 +192,8 @@ public class ListView : Image, IParentElement
         public int Index { get; private set; }
         public bool IsSelected { get; private set; }
 
-        public Action<ListViewItem>? OnClicked { get; set; }
+        public Action<int>? TrySelectItem { get; set; }
+        public Action<Input.KeyboardKey>? KeyPressed { get; set; }
 
         private ListView _parent;
 
@@ -212,7 +228,12 @@ public class ListView : Image, IParentElement
 
         public override void OnMouseButtonPressed(MouseButtonPressedEvent mouseButtonPressedEvent) {
             base.OnMouseButtonPressed(mouseButtonPressedEvent);
-            OnClicked?.Invoke(this);
+            TrySelectItem?.Invoke(Index);
+        }
+
+        public override void OnKeyboardKeyPressed(KeyboardKeyPressedEvent keyboardKeyPressedEvent) {
+            base.OnKeyboardKeyPressed(keyboardKeyPressedEvent);
+            KeyPressed?.Invoke(keyboardKeyPressedEvent.Key);
         }
 
         internal void Unselect() {
