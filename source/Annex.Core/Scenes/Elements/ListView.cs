@@ -25,6 +25,9 @@ public class ListView : Image, IParentElement
         set => _selectionTexture.TextureId.Set(value ?? string.Empty);
     }
 
+    private int _topVisibleIndex;
+    private int _bottomVisibleIndex => _topVisibleIndex + (int)(Size.Y / LineHeight) - 1;
+
     public bool HasItemSelected => SelectedIndex >= 0 && SelectedIndex < _children.Count;
 
     public ListView(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null)
@@ -107,7 +110,7 @@ public class ListView : Image, IParentElement
             canvas.Draw(_selectionTexture);
         }
 
-        for (int i = 0; i < this._children.Count; i++)
+        for (int i = _topVisibleIndex; i <= _bottomVisibleIndex; i++)
         {
             var child = _children[i];
             child.Draw(canvas);

@@ -6,7 +6,7 @@ namespace SampleProject.Scenes.ListViewExample;
 internal class ListViewExampleScene : Scene
 {
     public ListViewExampleScene() : base(size: new Vector2f(960, 640)) {
-        var listView = new ListView(position: this.Position, size: this.Size)
+        var listView = new ListView(position: this.Position, size: new Vector2f(100, 200))
         {
             BackgroundTextureId = "ui/buttons/whitebox.png",
             LineHeight = 50,
@@ -21,6 +21,11 @@ internal class ListViewExampleScene : Scene
 
         listView.AddItem("Hello".ToShared());
         listView.AddItem("World".ToShared());
+
+        for (int i = 0; i < 100; i++)
+        {
+            listView.AddItem($"{i}".ToShared());
+        }
 
         this.AddChild(listView);
     }
