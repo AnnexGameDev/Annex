@@ -10,6 +10,7 @@ using SampleProject.Scenes.Level1;
 using SampleProject.Scenes.Level2;
 using SampleProject.Scenes.Level3;
 using SampleProject.Scenes.Level4;
+using SampleProject.Scenes.ListViewExample;
 using Scaffold.DependencyInjection;
 using Scaffold.Logging;
 using System.IO;
@@ -23,7 +24,7 @@ namespace SampleProject
             try {
 #endif
             using var game = new Game();
-            game.Run<Level4Scene>();
+            game.Run<ListViewExampleScene>();
 #if !DEBUG
             } catch (Exception e) {
                 Log.Trace(LogSeverity.Error, "Exception in main", exception: e);
@@ -57,6 +58,7 @@ namespace SampleProject
             container.Register<Level2>();
             container.Register<Level3>();
             container.Register<Level4Scene>();
+            container.Register<ListViewExampleScene>();
 
             container.RegisterAggregate<IPacketHandler, SimpleMessagePacketHandler>();
             container.RegisterAggregate<IPacketHandler, SimpleRequestPacketHandler>();

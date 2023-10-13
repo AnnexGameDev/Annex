@@ -4,7 +4,7 @@ using Scaffold.Collections.Generic;
 
 namespace Annex.Core.Scenes.Elements;
 
-public class Container : UIElement, IParentElement
+public class Container : UIElement, IAddableParentElement
 {
     private ConcurrentList<IUIElement> _children = new();
 

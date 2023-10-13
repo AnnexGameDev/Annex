@@ -55,11 +55,12 @@ public class Label : UIElement, ILabel
         set => this.RenderText.BorderColor?.Set(value);
     }
 
-    public Label(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null, IShared<string>? text = null) : base(elementId, position, size) {
+    public Label(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null, IVector2<float>? textOffset = null, IShared<string>? text = null)
+        : base(elementId, position, size) {
         this.RenderText = new TextContext(text ?? string.Empty.ToShared(), "default.ttf".ToShared())
         {
             Position = this.Position,
-            PositionOffset = new Vector2f(),
+            PositionOffset = textOffset ?? new Vector2f(),
             Camera = CameraId.UI.ToString(),
             FontSize = new Shared<uint>(11),
             Color = KnownColor.Black,

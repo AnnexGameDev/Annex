@@ -44,7 +44,7 @@ namespace Annex.Core.Scenes.Layouts.Html
             }
         }
 
-        private void ProcessChildren(IParentElement parentInstance, XElement parentElement, Styles styles, Type sceneType) {
+        private void ProcessChildren(IAddableParentElement parentInstance, XElement parentElement, Styles styles, Type sceneType) {
             foreach (var childElement in parentElement.Elements())
             {
 
@@ -56,7 +56,7 @@ namespace Annex.Core.Scenes.Layouts.Html
                 parentInstance.AddChild(childInstance);
                 this.ProcessElement(childInstance, parentInstance, childElement, styles);
 
-                if (childInstance is IParentElement subParentInstance)
+                if (childInstance is IAddableParentElement subParentInstance)
                 {
                     ProcessChildren(subParentInstance, childElement, styles, sceneType);
                 }

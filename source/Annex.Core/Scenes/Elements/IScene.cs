@@ -4,7 +4,7 @@ using Annex.Core.Input.InputEvents;
 
 namespace Annex.Core.Scenes.Elements;
 
-public interface IScene : IUIElement, IParentElement
+public interface IScene : IUIElement, IAddableParentElement
 {
     IPriorityEventQueue Events { get; }
 
