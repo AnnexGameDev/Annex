@@ -19,6 +19,7 @@ public class ListView : Image, IParentElement
     public RGBA? SelectedFontColor { get; set; }
     public RGBA? FontColor { get; set; }
     public bool IsSelectable { get; set; }
+    public bool ShowIndexPrefix { get; set; }
 
     public string? SelectedTextureId
     {
@@ -130,7 +131,7 @@ public class ListView : Image, IParentElement
     }
 
     private ListViewItem CreateItem(IShared<string> text) {
-        var item = new ListViewItem(this, new Vector2f(this.Size.X, this.LineHeight), text)
+        var item = new ListViewItem(this, new Vector2f(this.Size.X, this.LineHeight), new PrefixedString("", text))
         {
             TrySelectItem = OnItemRequestedTrySelectItem,
             KeyPressed = OnKeyPressed,
@@ -212,11 +213,11 @@ public class ListView : Image, IParentElement
         public bool IsSelected { get; private set; }
 
         public Action<int>? TrySelectItem { get; set; }
-        public Action<Input.KeyboardKey>? KeyPressed { get; set; }
-
+        public Action<KeyboardKey>? KeyPressed { get; set; }
         private ListView _parent;
+        private readonly PrefixedString _text;
 
-        public ListViewItem(ListView parent, IVector2<float> itemSize, IShared<string> text)
+        public ListViewItem(ListView parent, IVector2<float> itemSize, PrefixedString text)
             : base(
                   position: new OffsetVector2f(parent.Position, new ScalingVector2f(itemSize, 0, 0)),
                   size: itemSize,
@@ -227,6 +228,7 @@ public class ListView : Image, IParentElement
             VerticalTextAlignment = VerticalAlignment.Middle;
             FontSize = parent.FontSize;
             _parent = parent;
+            _text = text;
         }
 
         internal void SetIndex(int index) {
@@ -237,6 +239,8 @@ public class ListView : Image, IParentElement
         private void RefreshView() {
             RefreshPosition();
             FontColor = (IsSelected ? _parent.SelectedFontColor : _parent.FontColor) ?? KnownColor.Black;
+
+            _text.Prefix = _parent.ShowIndexPrefix ? $"{Index}: " : string.Empty;
         }
 
         private void RefreshPosition() {
@@ -263,6 +267,28 @@ public class ListView : Image, IParentElement
         internal void Select() {
             IsSelected = true;
             RefreshView();
+        }
+
+    }
+
+    private class PrefixedString : IShared<string>
+    {
+        private IShared<string> _originalValue;
+        public string Prefix { get; set; }
+
+        public string Value
+        {
+            get => Prefix + _originalValue.Value;
+            set => Set(value);
+        }
+
+        public PrefixedString(string prefix, IShared<string> value) {
+            Prefix = prefix;
+            _originalValue = value;
+        }
+
+        public void Set(string value) {
+            _originalValue.Set(value);
         }
     }
 }
