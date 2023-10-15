@@ -6,12 +6,19 @@ using Annex.Core.Input.InputEvents;
 
 namespace Annex.Core.Scenes.Elements;
 
+public sealed record SelectIndexChangedEventArgs(int NewIndex, int OldIndex);
+
 public class ListView : Image, IParentElement
 {
     public IEnumerable<IUIElement> Children => _children;
     private readonly List<ListViewItem> _children = new();
 
     private readonly TextureContext _selectionTexture;
+    private readonly TextureContext _hoverTexture;
+    private IVector2<float> _renderOffset = new Vector2f();
+
+    private int _topVisibleIndex;
+    private bool _isHoveringAnItem;
 
     public int LineHeight { get; set; }
     public int SelectedIndex { get; set; }
@@ -27,17 +34,26 @@ public class ListView : Image, IParentElement
         set => _selectionTexture.TextureId.Set(value ?? string.Empty);
     }
 
-    private IVector2<float> _renderOffset = new Vector2f();
+    public string HoverTextureId
+    {
+        get => _hoverTexture.TextureId.Value;
+        set => _hoverTexture.TextureId.Set(value);
+    }
 
-    private int _topVisibleIndex;
     private int _bottomVisibleIndex => _topVisibleIndex + _maxVisibleItemsCount - 1;
     private int _maxVisibleItemsCount => Math.Min((int)(Size.Y / LineHeight), _children.Count);
 
     public bool HasItemSelected => SelectedIndex >= 0 && SelectedIndex < _children.Count;
 
+    public EventHandler<SelectIndexChangedEventArgs>? OnSelectedIndexChanged { get; set; }
+
     public ListView(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null)
         : base(elementId, position, size) {
         _selectionTexture = new TextureContext(string.Empty.ToShared())
+        {
+            RenderSize = new Vector2f()
+        };
+        _hoverTexture = new TextureContext(string.Empty.ToShared())
         {
             RenderSize = new Vector2f()
         };
@@ -115,6 +131,11 @@ public class ListView : Image, IParentElement
             canvas.Draw(_selectionTexture);
         }
 
+        if (_isHoveringAnItem)
+        {
+            canvas.Draw(_hoverTexture);
+        }
+
         for (int i = _topVisibleIndex; i <= _bottomVisibleIndex; i++)
         {
             var child = _children[i];
@@ -125,6 +146,22 @@ public class ListView : Image, IParentElement
     public override void OnKeyboardKeyPressed(KeyboardKeyPressedEvent keyboardKeyPressedEvent) {
         base.OnKeyboardKeyPressed(keyboardKeyPressedEvent);
         OnKeyPressed(keyboardKeyPressedEvent.Key);
+    }
+
+    public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent) {
+        base.OnMouseMoved(mouseMovedEvent);
+
+        _isHoveringAnItem = true;
+
+        float y = mouseMovedEvent.WindowY - this.Position.Y;
+        int hoveredIndex = _topVisibleIndex + (int)(y / LineHeight);
+        _hoverTexture.Position.Set(Position.X, hoveredIndex * LineHeight);
+        _hoverTexture.RenderSize!.Set(Size.X, LineHeight);
+    }
+
+    public override void OnMouseLeft(MouseMovedEvent mouseMovedEvent) {
+        base.OnMouseLeft(mouseMovedEvent);
+        _isHoveringAnItem = false;
     }
 
     public void AddItem(IShared<string> text) {
@@ -170,7 +207,8 @@ public class ListView : Image, IParentElement
         }
 
         // Unselect the old item
-        UnselectItem(SelectedIndex);
+        int oldIndex = SelectedIndex;
+        UnselectItem(oldIndex);
 
         // Select the new item
         SelectedIndex = index;
@@ -181,6 +219,9 @@ public class ListView : Image, IParentElement
         RefreshView();
         _selectionTexture.Position.Set(_children[index].Position);
         _selectionTexture.RenderSize!.Set(Size.X, LineHeight);
+
+        var args = new SelectIndexChangedEventArgs(SelectedIndex, oldIndex);
+        OnSelectedIndexChanged?.Invoke(this, args);
     }
 
     private void RefreshView() {
@@ -272,6 +313,11 @@ public class ListView : Image, IParentElement
             RefreshView();
         }
 
+        public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent) {
+            base.OnMouseMoved(mouseMovedEvent);
+
+            _parent.OnMouseMoved(mouseMovedEvent);
+        }
     }
 
     private class PrefixedString : IShared<string>

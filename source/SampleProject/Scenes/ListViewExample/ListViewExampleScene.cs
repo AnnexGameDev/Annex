@@ -9,13 +9,14 @@ internal class ListViewExampleScene : Scene
         var listView = new ListView(position: this.Position, size: Size)
         {
             BackgroundTextureId = "ui/buttons/whitebox.png",
+            HoverTextureId = "ui/buttons/whitebox.png",
             LineHeight = 50,
             FontSize = 30,
             FontColor = KnownColor.Red,
             SelectedTextureId = "ui/buttons/orangefade.png",
             SelectedFontColor = KnownColor.White,
             IsSelectable = true,
-            ShowIndexPrefix = true,
+            ShowIndexPrefix = false,
         };
 
         listView.AddItem("Hello".ToShared());
