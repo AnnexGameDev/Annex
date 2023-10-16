@@ -150,15 +150,23 @@ public class ListView : Image, IParentElement
         OnKeyPressed(keyboardKeyPressedEvent.Key);
     }
 
+    private void OnItemHovered(MouseMovedEvent mouseMovedEvent) {
+        float y = mouseMovedEvent.WindowY - this.Position.Y;
+        int hoveredIndex = _topVisibleIndex + (int)(y / LineHeight);
+
+        if (hoveredIndex >= 0 && hoveredIndex < _children.Count)
+        {
+            _isHoveringAnItem = true;
+            _hoverItemTexture.Position.Set(Position.X, hoveredIndex * LineHeight);
+            _hoverItemTexture.RenderSize!.Set(Size.X, LineHeight);
+        }
+    }
+
     public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent) {
         base.OnMouseMoved(mouseMovedEvent);
 
-        _isHoveringAnItem = true;
-
-        float y = mouseMovedEvent.WindowY - this.Position.Y;
-        int hoveredIndex = _topVisibleIndex + (int)(y / LineHeight);
-        _hoverItemTexture.Position.Set(Position.X, hoveredIndex * LineHeight);
-        _hoverItemTexture.RenderSize!.Set(Size.X, LineHeight);
+        // If this UI element is hovered, then we're not hovering an item.
+        _isHoveringAnItem = false;
     }
 
     public override void OnMouseLeft(MouseMovedEvent mouseMovedEvent) {
@@ -323,7 +331,7 @@ public class ListView : Image, IParentElement
         public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent) {
             base.OnMouseMoved(mouseMovedEvent);
 
-            _parent.OnMouseMoved(mouseMovedEvent);
+            _parent.OnItemHovered(mouseMovedEvent);
         }
     }
 
