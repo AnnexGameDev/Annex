@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Lidgren.Network.Core2" Version="1.0.0" />
+    <PackageReference Include="Scaffold" Version="2023.10.15.230804" />
   </ItemGroup>
 
   <ItemGroup>

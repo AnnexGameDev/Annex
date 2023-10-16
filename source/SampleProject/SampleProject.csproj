@@ -23,6 +23,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Scaffold" Version="2023.10.15.230804" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Annex.Core\Annex.Core.csproj" />
     <ProjectReference Include="..\Annex.Sfml\Annex.Sfml.csproj" />
   </ItemGroup>
