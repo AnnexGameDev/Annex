@@ -45,7 +45,7 @@ public class ListView : Image, IParentElement
 
     public bool HasItemSelected => SelectedIndex >= 0 && SelectedIndex < _children.Count;
 
-    public EventHandler<SelectIndexChangedEventArgs>? OnSelectedIndexChanged { get; set; }
+    public event EventHandler<SelectIndexChangedEventArgs>? OnSelectedIndexChanged;
 
     public ListView(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null)
         : base(elementId, position, size) {
