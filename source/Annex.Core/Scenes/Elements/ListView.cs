@@ -157,7 +157,7 @@ public class ListView : Image, IParentElement
         if (hoveredIndex >= 0 && hoveredIndex < _children.Count)
         {
             _isHoveringAnItem = true;
-            _hoverItemTexture.Position.Set(Position.X, hoveredIndex * LineHeight);
+            _hoverItemTexture.Position.Set(Position.X, Position.Y + hoveredIndex * LineHeight);
             _hoverItemTexture.RenderSize!.Set(Size.X, LineHeight);
         }
     }
