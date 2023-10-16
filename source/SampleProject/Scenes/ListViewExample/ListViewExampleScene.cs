@@ -1,23 +1,15 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Scenes.Elements;
+using Annex.Core.Scenes.Layouts.Html;
 
 namespace SampleProject.Scenes.ListViewExample;
 
 internal class ListViewExampleScene : Scene
 {
-    public ListViewExampleScene() : base(size: new Vector2f(960, 640)) {
-        var listView = new ListView(position: this.Position, size: Size)
-        {
-            BackgroundTextureId = "ui/buttons/whitebox.png",
-            HoverTextureId = "ui/buttons/whitebox.png",
-            LineHeight = 50,
-            FontSize = 30,
-            FontColor = KnownColor.Red,
-            SelectedTextureId = "ui/buttons/orangefade.png",
-            SelectedFontColor = KnownColor.White,
-            IsSelectable = true,
-            ShowIndexPrefix = false,
-        };
+    public ListViewExampleScene(IHtmlSceneLoader htmlSceneLoader) {
+        htmlSceneLoader.Load("listviewdemo.html", this);
+
+        var listView = GetElementById<ListView>("lst");
 
         listView.AddItem("Hello".ToShared());
         listView.AddItem("World".ToShared());

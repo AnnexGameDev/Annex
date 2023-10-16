@@ -137,12 +137,60 @@ namespace Annex.Core.Scenes.Layouts.Html
             {
                 this.SetPasswordBox(pb, element, styles);
             }
+
+            if (instance is ListView lv)
+            {
+                this.SetListView(lv, element, styles);
+            }
         }
 
         private void SetElementId(IUIElement instance, XElement element, Styles styles) {
             if (GetStringAttribute("id", element, styles) is string elementId)
             {
                 instance.ElementID = elementId;
+            }
+        }
+
+        private void SetListView(ListView listview, XElement element, Styles styles) {
+
+            if (GetIntAttribute("line-height", element, styles) is int lineHeight)
+            {
+                listview.LineHeight = lineHeight;
+            }
+
+            if (GetStringAttribute("hover-item-texture", element, styles) is string hoverItemTexture)
+            {
+                listview.HoverItemTextureId = hoverItemTexture;
+            }
+
+            if (GetStringAttribute("selected-item-texture", element, styles) is string selectedItemTexture)
+            {
+                listview.SelectedItemTextureId = selectedItemTexture;
+            }
+
+            if (GetStringAttribute("font-color", element, styles) is string fontColor)
+            {
+                listview.FontColor = RGBA.Parse(fontColor);
+            }
+
+            if (GetStringAttribute("selected-font-color", element, styles) is string selectedFontColor)
+            {
+                listview.SelectedFontColor = RGBA.Parse(selectedFontColor);
+            }
+
+            if (GetStringAttribute("font-size", element, styles) is string fontSize)
+            {
+                listview.FontSize = uint.Parse(fontSize);
+            }
+
+            if (GetBoolAttribute("selectable", element, styles) is bool selectable)
+            {
+                listview.IsSelectable = selectable;
+            }
+
+            if (GetBoolAttribute("show-index-prefix", element, styles) is bool showIndexPrefix)
+            {
+                listview.ShowIndexPrefix = showIndexPrefix;
             }
         }
 
@@ -245,6 +293,36 @@ namespace Annex.Core.Scenes.Layouts.Html
             var elementValue = element.Attribute(attributeName)?.Value;
             var styleValue = styles.GetStyle(element.Attribute("style-id")?.Value ?? string.Empty, attributeName);
             return elementValue ?? styleValue;
+        }
+
+        private int? GetIntAttribute(string attributeName, XElement element, Styles styles) {
+            if (GetStringAttribute(attributeName, element, styles) is string strAttribute)
+            {
+                if (int.TryParse(strAttribute, out var intAttribute))
+                {
+                    return intAttribute;
+                } else
+                {
+                    Log.Trace(LogSeverity.Warning, $"Error while parsing attribute {attributeName}:{strAttribute} to int");
+                    return null;
+                }
+            }
+            return null;
+        }
+
+        private bool? GetBoolAttribute(string attributeName, XElement element, Styles styles) {
+            if (GetStringAttribute(attributeName, element, styles) is string strAttribute)
+            {
+                if (bool.TryParse(strAttribute, out var boolAttribute))
+                {
+                    return boolAttribute;
+                } else
+                {
+                    Log.Trace(LogSeverity.Warning, $"Error while parsing attribute {attributeName}:{strAttribute} to bool");
+                    return null;
+                }
+            }
+            return null;
         }
 
         private float ComputeVectorValue(string val, float parentVal) {

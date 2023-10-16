@@ -14,7 +14,7 @@ public class ListView : Image, IParentElement
     private readonly List<ListViewItem> _children = new();
 
     private readonly TextureContext _selectionTexture;
-    private readonly TextureContext _hoverTexture;
+    private readonly TextureContext _hoverItemTexture;
     private IVector2<float> _renderOffset = new Vector2f();
 
     private int _topVisibleIndex;
@@ -25,19 +25,19 @@ public class ListView : Image, IParentElement
     public uint FontSize { get; set; }
     public RGBA? SelectedFontColor { get; set; }
     public RGBA? FontColor { get; set; }
-    public bool IsSelectable { get; set; }
+    public bool IsSelectable { get; set; } = true;
     public bool ShowIndexPrefix { get; set; }
 
-    public string? SelectedTextureId
+    public string? SelectedItemTextureId
     {
         get => _selectionTexture.TextureId.Value;
         set => _selectionTexture.TextureId.Set(value ?? string.Empty);
     }
 
-    public string HoverTextureId
+    public string HoverItemTextureId
     {
-        get => _hoverTexture.TextureId.Value;
-        set => _hoverTexture.TextureId.Set(value);
+        get => _hoverItemTexture.TextureId.Value;
+        set => _hoverItemTexture.TextureId.Set(value);
     }
 
     private int _bottomVisibleIndex => _topVisibleIndex + _maxVisibleItemsCount - 1;
@@ -53,7 +53,7 @@ public class ListView : Image, IParentElement
         {
             RenderSize = new Vector2f()
         };
-        _hoverTexture = new TextureContext(string.Empty.ToShared())
+        _hoverItemTexture = new TextureContext(string.Empty.ToShared())
         {
             RenderSize = new Vector2f()
         };
@@ -126,14 +126,16 @@ public class ListView : Image, IParentElement
     protected override void DrawInternal(ICanvas canvas) {
         base.DrawInternal(canvas);
 
+        Debug.Assert(LineHeight != 0, "LineHeight for listview is zero");
+
         if (HasItemSelected)
         {
             canvas.Draw(_selectionTexture);
         }
 
-        if (_isHoveringAnItem)
+        if (_isHoveringAnItem && IsSelectable)
         {
-            canvas.Draw(_hoverTexture);
+            canvas.Draw(_hoverItemTexture);
         }
 
         for (int i = _topVisibleIndex; i <= _bottomVisibleIndex; i++)
@@ -155,8 +157,8 @@ public class ListView : Image, IParentElement
 
         float y = mouseMovedEvent.WindowY - this.Position.Y;
         int hoveredIndex = _topVisibleIndex + (int)(y / LineHeight);
-        _hoverTexture.Position.Set(Position.X, hoveredIndex * LineHeight);
-        _hoverTexture.RenderSize!.Set(Size.X, LineHeight);
+        _hoverItemTexture.Position.Set(Position.X, hoveredIndex * LineHeight);
+        _hoverItemTexture.RenderSize!.Set(Size.X, LineHeight);
     }
 
     public override void OnMouseLeft(MouseMovedEvent mouseMovedEvent) {
@@ -202,6 +204,11 @@ public class ListView : Image, IParentElement
 
     private void SelectItem(int index) {
         if (index < 0 || index >= _children.Count)
+        {
+            return;
+        }
+
+        if (!IsSelectable)
         {
             return;
         }

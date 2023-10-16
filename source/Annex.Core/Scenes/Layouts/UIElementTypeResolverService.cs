@@ -91,5 +91,6 @@ internal class AnnexUIElementTypeResolver : UIElementTypeResolverBase
         RegisterGlobalType<Scene>();
         RegisterGlobalType<Textbox>();
         RegisterGlobalType<Image>();
+        RegisterGlobalType<ListView>();
     }
 }
