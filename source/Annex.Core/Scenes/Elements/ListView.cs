@@ -20,11 +20,11 @@ public class ListView : Image, IParentElement
     private int _topVisibleIndex;
     private bool _isHoveringAnItem;
 
-    public int LineHeight { get; set; }
+    public int LineHeight { get; set; } = 25;
     public int SelectedIndex { get; set; }
-    public uint FontSize { get; set; }
+    public uint FontSize { get; set; } = 11;
     public RGBA? SelectedFontColor { get; set; }
-    public RGBA? FontColor { get; set; }
+    public RGBA? FontColor { get; set; } = KnownColor.Black;
     public bool IsSelectable { get; set; } = true;
     public bool ShowIndexPrefix { get; set; }
 
