@@ -273,15 +273,30 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
         {
             if (keyboardKeyPressedEvent.Key == KeyboardKey.BackSpace)
             {
-
                 // Nothing to backspace?
                 if (this.CursorIndex == 0)
                 {
                     return;
                 }
 
-                this.Text = this.Text.Remove(this.CursorIndex - 1, 1);
-                this.CursorIndex--;
+                int removeStart = this.CursorIndex - 1;
+                int removeLength = 1;
+
+                // Do we delete a chunk?
+                if (keyboardKeyPressedEvent.IsControlPressed)
+                {
+                    for (; removeStart > 0; removeStart--)
+                    {
+                        if (char.IsWhiteSpace(this.Text[removeStart]))
+                        {
+                            break;
+                        }
+                    }
+                    removeLength = this.CursorIndex - removeStart;
+                }
+
+                this.Text = this.Text.Remove(removeStart, removeLength);
+                this.CursorIndex -= removeLength;
                 return;
             }
 

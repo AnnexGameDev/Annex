@@ -3,22 +3,31 @@
     public class KeyboardKeyPressedEvent : KeyboardEvent
     {
         public string LiteralContent { get; }
+        public bool IsShiftPressed { get; }
+        public bool IsCapsLockEnabled { get; }
+        public bool IsControlPressed { get; }
 
-        public KeyboardKeyPressedEvent(KeyboardKey key, bool shiftDown, bool capsLock) : base(key) {
-            if (key >= KeyboardKey.A && key <= KeyboardKey.Z) {
+        public KeyboardKeyPressedEvent(KeyboardKey key, bool shiftDown, bool capsLock, bool isControlPressed) : base(key) {
+            if (key >= KeyboardKey.A && key <= KeyboardKey.Z)
+            {
                 this.LiteralContent = key.ToString();
 
-                if (!shiftDown && !capsLock) {
+                if (!shiftDown && !capsLock)
+                {
                     this.LiteralContent = this.LiteralContent.ToLower();
                 }
                 return;
             }
 
             this.LiteralContent = HandleParticularCase(key, shiftDown);
+            IsShiftPressed = shiftDown;
+            IsCapsLockEnabled = capsLock;
+            IsControlPressed = isControlPressed;
         }
 
         private string HandleParticularCase(KeyboardKey key, bool shiftDown) {
-            return key switch {
+            return key switch
+            {
                 KeyboardKey.Tilde => shiftDown ? "~" : "`",
                 KeyboardKey.Num1 => shiftDown ? "!" : "1",
                 KeyboardKey.Num2 => shiftDown ? "@" : "2",

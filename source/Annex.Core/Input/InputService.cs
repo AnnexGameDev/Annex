@@ -29,32 +29,37 @@ namespace Annex.Core.Input
         }
 
         public void HandleKeyboardKeyPressed(IWindow window, KeyboardKey key) {
-            if (!InputShouldBeProcessed) {
+            if (!InputShouldBeProcessed)
+            {
                 return;
             }
 
             Log.Trace(LogSeverity.Verbose, $"KeyboardKey Pressed: {key}");
 
-            if (key == KeyboardKey.Unknown) {
+            if (key == KeyboardKey.Unknown)
+            {
                 return;
             }
 
             bool shift = this._platformKeyboardService.IsShiftPressed();
             bool capsLock = this._platformKeyboardService.IsCapsLockOn();
-            var keyPressedEvent = new KeyboardKeyPressedEvent(key, shift, capsLock);
+            bool ctrl = this._platformKeyboardService.IsControlPressed();
+            var keyPressedEvent = new KeyboardKeyPressedEvent(key, shift, capsLock, ctrl);
 
             this._keyboardKeyPressed[(int)key] = true;
             this._currentScene.OnKeyboardKeyPressed(window, keyPressedEvent);
         }
 
         public void HandleKeyboardKeyReleased(IWindow window, KeyboardKey key) {
-            if (!InputShouldBeProcessed) {
+            if (!InputShouldBeProcessed)
+            {
                 return;
             }
 
             Log.Trace(LogSeverity.Verbose, $"KeyboardKey Released: {key}");
 
-            if (key == KeyboardKey.Unknown) {
+            if (key == KeyboardKey.Unknown)
+            {
                 return;
             }
 
@@ -69,7 +74,8 @@ namespace Annex.Core.Input
         }
 
         public void HandleMouseButtonPressed(IWindow window, MouseButton button, IVector2<float> position) {
-            if (!InputShouldBeProcessed) {
+            if (!InputShouldBeProcessed)
+            {
                 return;
             }
 
@@ -81,7 +87,8 @@ namespace Annex.Core.Input
         }
 
         public void HandleMouseButtonReleased(IWindow window, MouseButton button, IVector2<float> position) {
-            if (!InputShouldBeProcessed) {
+            if (!InputShouldBeProcessed)
+            {
                 return;
             }
 
@@ -93,7 +100,8 @@ namespace Annex.Core.Input
         }
 
         public void HandleMouseMoved(IWindow window, IVector2<float> position) {
-            if (!InputShouldBeProcessed) {
+            if (!InputShouldBeProcessed)
+            {
                 return;
             }
 
@@ -103,7 +111,8 @@ namespace Annex.Core.Input
         }
 
         public void HandleMouseScrollWheelMoved(IWindow window, double delta) {
-            if (!InputShouldBeProcessed) {
+            if (!InputShouldBeProcessed)
+            {
                 return;
             }
 
@@ -113,7 +122,8 @@ namespace Annex.Core.Input
         }
 
         public bool IsKeyDown(KeyboardKey key) {
-            if (!InputShouldBeProcessed) {
+            if (!InputShouldBeProcessed)
+            {
                 return false;
             }
 
@@ -121,7 +131,8 @@ namespace Annex.Core.Input
         }
 
         public bool IsMouseButtonDown(MouseButton button) {
-            if (!InputShouldBeProcessed) {
+            if (!InputShouldBeProcessed)
+            {
                 return false;
             }
 
