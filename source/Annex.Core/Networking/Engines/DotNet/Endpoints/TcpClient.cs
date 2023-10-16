@@ -53,7 +53,7 @@ internal class TcpClient : TcpEndpoint, IClientEndpoint
             if (cancellationToken?.IsCancellationRequested == true)
                 break;
 
-            if (this.Connection.State == ConnectionState.Connected)
+            if (this.Connection.State == ConnectionState.Connected && this.Connections.Contains(Connection))
                 break;
 
             if (this.Connection.State == ConnectionState.Disconnected)
