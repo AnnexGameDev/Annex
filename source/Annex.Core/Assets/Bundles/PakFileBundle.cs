@@ -1,5 +1,6 @@
 ﻿using Scaffold.Logging;
 using System.Collections.Concurrent;
+using System.Text;
 
 namespace Annex.Core.Assets.Bundles
 {
@@ -15,7 +16,8 @@ namespace Annex.Core.Assets.Bundles
         /// </remarks>
         public PakFileBundle(string pakFilePath, string fileFilter, string? assetRoot = null) {
 
-            if (assetRoot is null) {
+            if (assetRoot is null)
+            {
                 this._pakFile = new PakFile(pakFilePath);
                 return;
             }
@@ -27,11 +29,13 @@ namespace Annex.Core.Assets.Bundles
         public IAsset? GetAsset(string id) {
             id = id.ToSafeAssetIdString();
 
-            if (this._assets.ContainsKey(id)) {
+            if (this._assets.ContainsKey(id))
+            {
                 return this._assets[id];
             }
 
-            if (!this._pakFile.TryGetEntry(id, out var entry)) {
+            if (!this._pakFile.TryGetEntry(id, out var entry))
+            {
                 return null;
             }
 
@@ -57,7 +61,8 @@ namespace Annex.Core.Assets.Bundles
                 this._reader = new BinaryReader(this._bufferedStream);
 
                 int numAssets = this._reader.ReadInt32();
-                for (int i = 0; i < numAssets; i++) {
+                for (int i = 0; i < numAssets; i++)
+                {
                     string assetId = this._reader.ReadString();
                     int assetSize = this._reader.ReadInt32();
                     long assetPosition = this._reader.BaseStream.Position;
@@ -68,7 +73,8 @@ namespace Annex.Core.Assets.Bundles
 
             public static PakFile? CreateFrom(string pakFilePath, string fileFilter, string assetRoot) {
 
-                if (File.Exists(pakFilePath)) {
+                if (File.Exists(pakFilePath))
+                {
                     Log.Trace(LogSeverity.Verbose, $"Deleting old pakFile {pakFilePath}");
                     File.Delete(pakFilePath);
                 }
@@ -79,7 +85,8 @@ namespace Annex.Core.Assets.Bundles
                 var allAssets = Directory.GetFiles(assetRoot, fileFilter, SearchOption.AllDirectories);
                 bw.Write(allAssets.Count());
 
-                foreach (var asset in allAssets) {
+                foreach (var asset in allAssets)
+                {
                     var fi = new FileInfo(asset);
                     string assetId = fi.FullName.Remove(0, assetRoot.Length + 1).ToSafeAssetIdString();
                     var assetData = File.ReadAllBytes(asset);
@@ -108,14 +115,17 @@ namespace Annex.Core.Assets.Bundles
             public bool TryGetEntry(string id, out PakFileEntry entry) {
                 entry = default;
 
-                if (!this._entries.ContainsKey(id)) {
+                if (!this._entries.ContainsKey(id))
+                {
                     Log.Trace(LogSeverity.Error, $"Tried to get pakfileentry {id} which doesn't exist");
                     return false;
                 }
                 entry = this._entries[id];
 
-                if (!entry.HasData) {
-                    lock (this._reader) {
+                if (!entry.HasData)
+                {
+                    lock (this._reader)
+                    {
                         this._reader.BaseStream.Seek(entry.Position, SeekOrigin.Begin);
                         entry.SetData(this._reader.ReadBytes(entry.Size));
                     }
@@ -137,7 +147,8 @@ namespace Annex.Core.Assets.Bundles
                 }
 
                 public void SetData(byte[] data) {
-                    if (HasData) throw new InvalidOperationException("Tried to set data to a pakfileentry with existing data");
+                    if (HasData)
+                        throw new InvalidOperationException("Tried to set data to a pakfileentry with existing data");
                     Data = data;
                 }
             }
@@ -155,6 +166,10 @@ namespace Annex.Core.Assets.Bundles
 
             public override byte[] ToBytes() {
                 return this._data;
+            }
+
+            public override string ToString() {
+                return Encoding.UTF8.GetString(this._data);
             }
         }
     }

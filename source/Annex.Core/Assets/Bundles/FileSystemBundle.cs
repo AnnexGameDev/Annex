@@ -10,7 +10,8 @@ namespace Annex.Core.Assets.Bundles
         private readonly IDictionary<string, IAsset> _assets = new ConcurrentDictionary<string, IAsset>();
 
         public FileSystemBundle(string filter, string rootPath) {
-            foreach (var file in Directory.GetFiles(rootPath, filter, SearchOption.AllDirectories)) {
+            foreach (var file in Directory.GetFiles(rootPath, filter, SearchOption.AllDirectories))
+            {
                 var fi = new FileInfo(file);
                 var assetId = fi.FullName.Remove(0, rootPath.Length + 1).ToSafeAssetIdString();
                 Log.Trace(LogSeverity.Verbose, $"Adding asset {assetId}");
@@ -20,7 +21,8 @@ namespace Annex.Core.Assets.Bundles
 
         public IAsset? GetAsset(string id) {
             id = id.ToSafeAssetIdString();
-            if (!this._assets.ContainsKey(id)) {
+            if (!this._assets.ContainsKey(id))
+            {
                 return null;
             }
 
@@ -38,6 +40,10 @@ namespace Annex.Core.Assets.Bundles
 
             public override byte[] ToBytes() {
                 return File.ReadAllBytes(this.FilePath);
+            }
+
+            public override string ToString() {
+                return File.ReadAllText(this.FilePath);
             }
         }
 
