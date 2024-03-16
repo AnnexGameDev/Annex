@@ -13,15 +13,15 @@ namespace Annex.Core.Events
         private readonly SemaphoreSlim _modifyDictionaryCollectionWhileIteratingSempahore = new(1);
 
         public void Add(long priority, IEvent @event) {
-            this._modifyDictionaryCollectionWhileIteratingSempahore.Wait();
-            _delayInsert.Add((priority, @event));
-            this._modifyDictionaryCollectionWhileIteratingSempahore.Release();
+            Atomic(() => {
+                _delayInsert.Add((priority, @event));
+            });
         }
 
         public void Add(long priority, long interval, long delay, Action timeElapsedDelegate) {
-            this._modifyDictionaryCollectionWhileIteratingSempahore.Wait();
-            _delayInsert.Add((priority, new LambdaEvent(interval, delay, timeElapsedDelegate)));
-            this._modifyDictionaryCollectionWhileIteratingSempahore.Release();
+            Atomic(() => {
+                _delayInsert.Add((priority, new LambdaEvent(interval, delay, timeElapsedDelegate)));
+            });
         }
 
         private EventQueue GetOrCreateQueue(long priority) {
@@ -34,12 +34,12 @@ namespace Annex.Core.Events
         }
 
         public void Remove(Guid eventId) {
-            this._modifyDictionaryCollectionWhileIteratingSempahore.Wait();
-            foreach (var priority in this.Priorities)
-            {
-                this._eventQueues[priority].Remove(eventId);
-            }
-            this._modifyDictionaryCollectionWhileIteratingSempahore.Release();
+            Atomic(() => {
+                foreach (var priority in this.Priorities)
+                {
+                    this._eventQueues[priority].Remove(eventId);
+                }
+            });
         }
 
         private void InsertQueuedItems() {
@@ -51,11 +51,35 @@ namespace Annex.Core.Events
             this._delayInsert.Clear();
         }
 
-        public async Task StepPriorityAsync(long priority) {
+        public Task StepPriorityAsync(long priority) {
+            return AtomicAsync(async () => {
+                InsertQueuedItems();
+                await (this.GetOrCreateQueue(priority)).StepAsync();
+            });
+        }
+
+        private void Atomic(Action action) {
             this._modifyDictionaryCollectionWhileIteratingSempahore.Wait();
-            InsertQueuedItems();
-            await (this.GetOrCreateQueue(priority)).StepAsync();
-            this._modifyDictionaryCollectionWhileIteratingSempahore.Release();
+            try
+            {
+                action();
+            }
+            finally
+            {
+                this._modifyDictionaryCollectionWhileIteratingSempahore.Release();
+            }
+        }
+
+        private async Task AtomicAsync(Func<Task> action) {
+            this._modifyDictionaryCollectionWhileIteratingSempahore.Wait();
+            try
+            {
+                await action();
+            }
+            finally
+            {
+                this._modifyDictionaryCollectionWhileIteratingSempahore.Release();
+            }
         }
 
         public void Dispose() {
@@ -73,7 +97,6 @@ namespace Annex.Core.Events
                 timeElapsedDelegate();
                 return Task.CompletedTask;
             }) {
-
             }
 
             public LambdaEvent(long interval, long delay, Func<Task> timeElapsedDelegate) : base(interval, delay, Guid.NewGuid()) {
