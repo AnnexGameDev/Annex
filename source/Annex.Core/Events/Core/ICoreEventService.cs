@@ -4,6 +4,6 @@
     {
         void Add(long priority, IEvent coreEvent);
         void Remove(Guid eventId);
-        void Run();
+        Task RunAsync();
     }
 }

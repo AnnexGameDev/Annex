@@ -2,7 +2,7 @@
 {
     public interface IEventQueue : IDisposable
     {
-        void Step();
+        Task StepAsync();
 
         void Remove(Guid itemId);
         void Add(params IEvent[] items);

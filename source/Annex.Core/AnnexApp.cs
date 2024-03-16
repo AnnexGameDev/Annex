@@ -20,7 +20,7 @@ namespace Annex.Core;
 
 public abstract class AnnexApp : ScaffoldApp
 {
-    public void Run<TStartingScene>() where TStartingScene : IScene {
+    public Task RunAsync<TStartingScene>() where TStartingScene : IScene {
         var sceneService = this.Container.Resolve<ISceneService>();
         var eventService = this.Container.Resolve<ICoreEventService>();
         var graphicsService = this.Container.Resolve<IGraphicsService>();
@@ -30,7 +30,7 @@ public abstract class AnnexApp : ScaffoldApp
         this.SetupAssetBundles(assetService);
         this.CreateWindow(graphicsService, assetService);
         sceneService.LoadScene<TStartingScene>();
-        eventService.Run();
+        return eventService.RunAsync();
     }
 
     protected override void RegisterTypes(IContainer container) {

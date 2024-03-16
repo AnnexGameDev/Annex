@@ -8,22 +8,26 @@
         public Guid Id { get; } = Guid.NewGuid();
 
         public Event(long interval, long initialDelay, Guid? id = null) {
-            if (id != null) {
+            if (id != null)
+            {
                 this.Id = Id;
             }
             this._nextEventInvocation = initialDelay;
             this._interval = interval;
         }
 
-        public void TimeElapsed(long timeDifference_ms) {
+        public Task TimeElapsedAsync(long timeDifference_ms) {
             this._nextEventInvocation -= timeDifference_ms;
 
-            if (this._nextEventInvocation <= 0) {
+            if (this._nextEventInvocation <= 0)
+            {
                 this._nextEventInvocation += this._interval;
-                this.Run();
+                return this.RunAsync();
             }
+
+            return Task.CompletedTask;
         }
 
-        protected abstract void Run();
+        protected abstract Task RunAsync();
     }
 }

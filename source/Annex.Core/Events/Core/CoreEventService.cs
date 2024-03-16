@@ -30,17 +30,19 @@ namespace Annex.Core.Events.Core
             this._globalEvents.Remove(eventId);
         }
 
-        public void Run() {
-            while (this._keepRunning) {
+        public async Task RunAsync() {
+            while (this._keepRunning)
+            {
                 var sceneEvents = this._sceneService.CurrentScene.Events;
                 var corePriorities = Enum.GetValues<CoreEventPriority>().Cast<long>();
                 var globalPriorities = this._globalEvents.Priorities;
                 var scenePriorities = sceneEvents.Priorities;
                 var allPriorities = scenePriorities.Union(globalPriorities).Union(corePriorities).OrderBy(val => val);
 
-                foreach (var priority in allPriorities) {
-                    this._globalEvents.StepPriority(priority);
-                    sceneEvents.StepPriority(priority);
+                foreach (var priority in allPriorities)
+                {
+                    await this._globalEvents.StepPriorityAsync(priority);
+                    await sceneEvents.StepPriorityAsync(priority);
                 }
             }
         }

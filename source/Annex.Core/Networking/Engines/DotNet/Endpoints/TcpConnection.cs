@@ -119,6 +119,10 @@ internal class TcpConnection : Connection
     }
 
     public override string ToString() {
+        if (this.Disposed)
+        {
+            return string.Empty;
+        }
         return this.Socket?.RemoteEndPoint?.ToString() ?? string.Empty;
     }
 }

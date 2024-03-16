@@ -10,20 +10,18 @@ namespace Annex.Core.Events
 
         public IEnumerable<long> Priorities => this._priorities;
 
-        private object _modifyDictionaryCollectionWhileIteratingLock = new();
+        private readonly SemaphoreSlim _modifyDictionaryCollectionWhileIteratingSempahore = new(1);
 
         public void Add(long priority, IEvent @event) {
-            lock (this._modifyDictionaryCollectionWhileIteratingLock)
-            {
-                _delayInsert.Add((priority, @event));
-            }
+            this._modifyDictionaryCollectionWhileIteratingSempahore.Wait();
+            _delayInsert.Add((priority, @event));
+            this._modifyDictionaryCollectionWhileIteratingSempahore.Release();
         }
 
         public void Add(long priority, long interval, long delay, Action timeElapsedDelegate) {
-            lock (this._modifyDictionaryCollectionWhileIteratingLock)
-            {
-                _delayInsert.Add((priority, new LambdaEvent(interval, delay, timeElapsedDelegate)));
-            }
+            this._modifyDictionaryCollectionWhileIteratingSempahore.Wait();
+            _delayInsert.Add((priority, new LambdaEvent(interval, delay, timeElapsedDelegate)));
+            this._modifyDictionaryCollectionWhileIteratingSempahore.Release();
         }
 
         private EventQueue GetOrCreateQueue(long priority) {
@@ -36,33 +34,28 @@ namespace Annex.Core.Events
         }
 
         public void Remove(Guid eventId) {
-            lock (this._modifyDictionaryCollectionWhileIteratingLock)
+            this._modifyDictionaryCollectionWhileIteratingSempahore.Wait();
+            foreach (var priority in this.Priorities)
             {
-                foreach (var priority in this.Priorities)
-                {
-                    this._eventQueues[priority].Remove(eventId);
-                }
+                this._eventQueues[priority].Remove(eventId);
             }
+            this._modifyDictionaryCollectionWhileIteratingSempahore.Release();
         }
 
         private void InsertQueuedItems() {
-            lock (this._modifyDictionaryCollectionWhileIteratingLock)
+            foreach ((long priority, IEvent @event) in _delayInsert)
             {
-                foreach ((long priority, IEvent @event) in _delayInsert)
-                {
-                    var queue = this.GetOrCreateQueue(priority);
-                    queue.Add(@event);
-                }
-                this._delayInsert.Clear();
+                var queue = this.GetOrCreateQueue(priority);
+                queue.Add(@event);
             }
+            this._delayInsert.Clear();
         }
 
-        public void StepPriority(long priority) {
-            lock (this._modifyDictionaryCollectionWhileIteratingLock)
-            {
-                InsertQueuedItems();
-                this.GetOrCreateQueue(priority).Step();
-            }
+        public async Task StepPriorityAsync(long priority) {
+            this._modifyDictionaryCollectionWhileIteratingSempahore.Wait();
+            InsertQueuedItems();
+            await (this.GetOrCreateQueue(priority)).StepAsync();
+            this._modifyDictionaryCollectionWhileIteratingSempahore.Release();
         }
 
         public void Dispose() {
@@ -74,14 +67,21 @@ namespace Annex.Core.Events
 
         private class LambdaEvent : Event
         {
-            private readonly Action _timeElapsedDelegate;
+            private readonly Func<Task> _timeElapsedDelegate;
 
-            public LambdaEvent(long interval, long delay, Action timeElapsedDelegate) : base(interval, delay, Guid.NewGuid()) {
+            public LambdaEvent(long interval, long delay, Action timeElapsedDelegate) : this(interval, delay, () => {
+                timeElapsedDelegate();
+                return Task.CompletedTask;
+            }) {
+
+            }
+
+            public LambdaEvent(long interval, long delay, Func<Task> timeElapsedDelegate) : base(interval, delay, Guid.NewGuid()) {
                 _timeElapsedDelegate = timeElapsedDelegate;
             }
 
-            protected override void Run() {
-                _timeElapsedDelegate();
+            protected override Task RunAsync() {
+                return _timeElapsedDelegate();
             }
         }
     }

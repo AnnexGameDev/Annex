@@ -255,13 +255,14 @@ namespace Annex.Sfml.Graphics.Windows
                 this._sceneService = sceneService;
             }
 
-            protected override void Run() {
+            protected override Task RunAsync() {
                 if (this._sfmlWindow._renderWindow is RenderWindow buffer)
                 {
                     buffer.Clear();
                     this._sceneService.CurrentScene?.Draw(this._sfmlWindow);
                     buffer.Display();
                 }
+                return Task.CompletedTask;
             }
         }
 
@@ -273,12 +274,13 @@ namespace Annex.Sfml.Graphics.Windows
                 this._sfmlWindow = sfmlWindow;
             }
 
-            protected override void Run() {
+            protected override Task RunAsync() {
                 if (this._sfmlWindow._renderWindow is RenderWindow buffer)
                 {
                     buffer.DispatchEvents();
                     Joystick.Update();
                 }
+                return Task.CompletedTask;
             }
         }
     }

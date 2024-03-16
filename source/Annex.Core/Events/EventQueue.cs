@@ -26,18 +26,21 @@ namespace Annex.Core.Events
             this._queueItems.AddRange(items);
         }
 
-        public void Step() {
+        public async Task StepAsync() {
             long lastStep = this._lastStep ?? this._timeService.Now;
             long step = this._timeService.ElapsedTimeSince(lastStep);
-            foreach (var item in this._queueItems) {
-                item.TimeElapsed(step);
+            foreach (var item in this._queueItems)
+            {
+                await item.TimeElapsedAsync(step);
             }
             this._lastStep = lastStep + step;
         }
 
         public void Dispose() {
-            foreach (var gameEvent in this._queueItems) {
-                if (gameEvent is IDisposable disposable) {
+            foreach (var gameEvent in this._queueItems)
+            {
+                if (gameEvent is IDisposable disposable)
+                {
                     disposable.Dispose();
                 }
             }

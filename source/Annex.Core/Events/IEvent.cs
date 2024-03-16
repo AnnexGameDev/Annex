@@ -4,6 +4,6 @@
     {
         Guid Id { get; }
 
-        void TimeElapsed(long elapsedTime);
+        Task TimeElapsedAsync(long elapsedTime);
     }
 }
