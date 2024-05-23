@@ -14,17 +14,18 @@ using SampleProject.Scenes.ListViewExample;
 using Scaffold.DependencyInjection;
 using Scaffold.Logging;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace SampleProject
 {
     public class Game : AnnexApp
     {
-        private static void Main(string[] args) {
+        private static async Task Main(string[] args) {
 #if !DEBUG
             try {
 #endif
             using var game = new Game();
-            game.Run<ListViewExampleScene>();
+            await game.RunAsync<ListViewExampleScene>();
 #if !DEBUG
             } catch (Exception e) {
                 Log.Trace(LogSeverity.Error, "Exception in main", exception: e);

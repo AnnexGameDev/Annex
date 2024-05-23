@@ -2,6 +2,7 @@
 using Annex.Core.Networking;
 using Annex.Core.Networking.Packets;
 using System;
+using System.Threading.Tasks;
 
 namespace SampleProject.Scenes.Level2.Events
 {
@@ -18,14 +19,15 @@ namespace SampleProject.Scenes.Level2.Events
             this._client.Dispose();
         }
 
-        protected override void Run() {
+
+        protected override Task RunAsync() {
 
             string data = Guid.NewGuid().ToString();
             using var packet = new OutgoingPacket((int)PacketId.SimpleMessage);
             packet.Write(data);
 
             Console.WriteLine($"Sending: {data}");
-            this._client.SendAsync(packet);
+            return this._client.SendAsync(packet);
         }
     }
 }

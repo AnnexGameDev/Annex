@@ -23,7 +23,7 @@ namespace Annex.Core.Tests.Events.Core
             // Arrange
             var theCoreEventService = this._fixture.Create<ICoreEventService>();
             var theStopBroadcastMessage = this._fixture.Create<RequestStopAppMessage>();
-            var theCoreEventServiceRunTask = Task.Run(() => theCoreEventService.Run());
+            var theCoreEventServiceRunTask = Task.Run(theCoreEventService.RunAsync);
 
             // Act
             this._stopBroadcastMessageMock.Raise(requestStopappMessageBroadcast => requestStopappMessageBroadcast.OnBroadcastPublished += null, this, theStopBroadcastMessage);

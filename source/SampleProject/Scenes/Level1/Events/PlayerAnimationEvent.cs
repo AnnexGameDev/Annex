@@ -1,5 +1,6 @@
 ﻿using Annex.Core.Events;
 using SampleProject.Models;
+using System.Threading.Tasks;
 
 namespace SampleProject.Scenes.Level1.Events
 {
@@ -11,8 +12,9 @@ namespace SampleProject.Scenes.Level1.Events
             this._player = player;
         }
 
-        protected override void Run() {
+        protected override Task RunAsync() {
             this._player.Animate();
+            return Task.CompletedTask;
         }
     }
 }

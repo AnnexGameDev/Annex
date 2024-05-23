@@ -2,6 +2,7 @@
 using Annex.Core.Graphics.Windows;
 using Annex.Core.Input;
 using SampleProject.Models;
+using System.Threading.Tasks;
 
 namespace SampleProject.Scenes.Level1.Events
 {
@@ -15,38 +16,48 @@ namespace SampleProject.Scenes.Level1.Events
             this._window = window;
         }
 
-        protected override void Run() {
+        protected override Task RunAsync() {
             var window = this._window;
 
             float speed = 1;
-            if (window.IsKeyDown(KeyboardKey.Up)) {
+            if (window.IsKeyDown(KeyboardKey.Up))
+            {
                 this._player.Position.Y -= speed;
             }
-            if (window.IsKeyDown(KeyboardKey.Down)) {
+            if (window.IsKeyDown(KeyboardKey.Down))
+            {
                 this._player.Position.Y += speed;
             }
-            if (window.IsKeyDown(KeyboardKey.Left)) {
+            if (window.IsKeyDown(KeyboardKey.Left))
+            {
                 this._player.Position.X -= speed;
             }
-            if (window.IsKeyDown(KeyboardKey.Right)) {
+            if (window.IsKeyDown(KeyboardKey.Right))
+            {
                 this._player.Position.X += speed;
             }
 
-            if (window.IsKeyDown(KeyboardKey.E)) {
+            if (window.IsKeyDown(KeyboardKey.E))
+            {
                 this._player.Size.Scale(1.1f);
             }
 
-            if (window.IsKeyDown(KeyboardKey.Q)) {
+            if (window.IsKeyDown(KeyboardKey.Q))
+            {
                 this._player.Size.Scale(0.9f);
             }
 
-            if (window.IsKeyDown(KeyboardKey.W)) {
+            if (window.IsKeyDown(KeyboardKey.W))
+            {
                 this._player.Rotation.Set(this._player.Rotation.Value + 1);
             }
 
-            if (window.IsKeyDown(KeyboardKey.S)) {
+            if (window.IsKeyDown(KeyboardKey.S))
+            {
                 this._player.Rotation.Set(this._player.Rotation.Value - 1);
             }
+
+            return Task.CompletedTask;
         }
     }
 }
