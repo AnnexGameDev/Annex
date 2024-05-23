@@ -23,12 +23,25 @@ namespace Annex.Core.Assets
                 .Select(bundle => bundle.GetAsset(assetId))
                 .Where(asset => asset != null);
 
-            if (bundles.Count() != 1) {
+            if (bundles.Count() != 1)
+            {
                 Log.Trace(LogSeverity.Error, $"Unable to find asset {assetId}");
                 return null;
             }
 
             return bundles.Single()!;
+        }
+
+        public IEnumerable<IAsset> GetAssets() {
+            return _bundles.SelectMany(bundle => bundle.GetAssets());
+        }
+
+        public IEnumerable<IAsset> GetAssets(Predicate<IAsset> predicate) {
+            return _bundles.SelectMany(bundle => bundle.GetAssets(predicate));
+        }
+
+        public IAssetBundle? GetBundle(string id) {
+            return _bundles.SingleOrDefault(bundle => bundle.Id == id);
         }
     }
 }

@@ -2,6 +2,10 @@
 {
     public interface IAssetBundle : IDisposable
     {
-        public IAsset? GetAsset(string id);
+        string Id { get; }
+
+        IAsset? GetAsset(string id);
+        IEnumerable<IAsset> GetAssets();
+        IEnumerable<IAsset> GetAssets(Predicate<IAsset> predicate);
     }
 }

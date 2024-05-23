@@ -7,7 +7,10 @@ namespace Annex.Core.Assets
         string Id { get; }
 
         void AddBundle(IAssetBundle bundle);
+        IAssetBundle? GetBundle(string id);
 
         IAsset? GetAsset(string assetId);
+        IEnumerable<IAsset> GetAssets();
+        IEnumerable<IAsset> GetAssets(Predicate<IAsset> predicate);
     }
 }

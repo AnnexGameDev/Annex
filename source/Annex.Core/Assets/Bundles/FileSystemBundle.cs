@@ -7,15 +7,25 @@ namespace Annex.Core.Assets.Bundles
     // TODO: Clean this up
     public class FileSystemBundle : IAssetBundle
     {
+        public string Id { get; }
+
         private readonly IDictionary<string, IAsset> _assets = new ConcurrentDictionary<string, IAsset>();
 
-        public FileSystemBundle(string filter, string rootPath) {
+        public FileSystemBundle(string filter, string rootPath, string bundleId = "") {
+
+            Id = bundleId;
+
+            if (!string.IsNullOrWhiteSpace(bundleId))
+            {
+                rootPath = bundleId + "/" + rootPath;
+            }
+
             foreach (var file in Directory.GetFiles(rootPath, filter, SearchOption.AllDirectories))
             {
                 var fi = new FileInfo(file);
                 var assetId = fi.FullName.Remove(0, rootPath.Length + 1).ToSafeAssetIdString();
                 Log.Trace(LogSeverity.Verbose, $"Adding asset {assetId}");
-                this._assets.Add(assetId, new FileAsset(fi.FullName));
+                this._assets.Add(assetId, new FileAsset(assetId, fi.FullName));
             }
         }
 
@@ -34,7 +44,7 @@ namespace Annex.Core.Assets.Bundles
             public override bool FilepathSupported => true;
             public override string FilePath { get; }
 
-            public FileAsset(string fullName) {
+            public FileAsset(string id, string fullName) : base(id) {
                 this.FilePath = fullName;
             }
 
@@ -48,6 +58,14 @@ namespace Annex.Core.Assets.Bundles
         }
 
         public void Dispose() {
+        }
+
+        public IEnumerable<IAsset> GetAssets() {
+            return _assets.Values;
+        }
+
+        public IEnumerable<IAsset> GetAssets(Predicate<IAsset> predicate) {
+            return _assets.Values.Where(asset => predicate(asset));
         }
     }
 }

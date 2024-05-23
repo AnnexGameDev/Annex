@@ -11,10 +11,19 @@ namespace Annex.Core.Assets.Bundles
         private readonly IDictionary<string, IAsset> _assets = new ConcurrentDictionary<string, IAsset>();
         private readonly PakFile _pakFile;
 
+        public string Id { get; }
+
         /// <remarks>
         /// Use the assetroot if you want to copy files from the root (this is usually used for version control), and not for production
         /// </remarks>
-        public PakFileBundle(string pakFilePath, string fileFilter, string? assetRoot = null) {
+        public PakFileBundle(string pakFilePath, string fileFilter, string? assetRoot = null, string bundleId = "") {
+
+            Id = bundleId;
+
+            if (!string.IsNullOrWhiteSpace(bundleId))
+            {
+                assetRoot += "\\" + bundleId;
+            }
 
             if (assetRoot is null)
             {
@@ -39,7 +48,7 @@ namespace Annex.Core.Assets.Bundles
                 return null;
             }
 
-            this._assets.Add(id, new PakFileAsset(entry));
+            this._assets.Add(id, new PakFileAsset(id, entry));
             return this._assets[id];
         }
 
@@ -47,9 +56,19 @@ namespace Annex.Core.Assets.Bundles
             this._pakFile.Dispose();
         }
 
+        public IEnumerable<IAsset> GetAssets() {
+            return _pakFile.AssetIds.Select(assetId => GetAsset(assetId));
+        }
+
+        public IEnumerable<IAsset> GetAssets(Predicate<IAsset> predicate) {
+            return GetAssets().Where(asset => predicate(asset));
+        }
+
         private class PakFile : IDisposable
         {
             private readonly Dictionary<string, PakFileEntry> _entries = new();
+
+            public IEnumerable<string> AssetIds => _entries.Keys;
 
             private readonly FileStream _fileStream;
             private readonly BufferedStream _bufferedStream;
@@ -160,7 +179,7 @@ namespace Annex.Core.Assets.Bundles
             public override bool FilepathSupported => false;
             public override string FilePath => throw new NotSupportedException();
 
-            public PakFileAsset(PakFile.PakFileEntry entry) {
+            public PakFileAsset(string id, PakFile.PakFileEntry entry) : base(id) {
                 this._data = entry.Data!;
             }
 
