@@ -39,7 +39,7 @@ internal class TcpConnection : Connection
         }
         catch (Exception e)
         {
-            this.Destroy("Exception thrown when calling EndReceive", e);
+            this.Destroy($"Exception thrown when calling EndReceive, destroying connection: {e.Message}");
             return;
         }
 
