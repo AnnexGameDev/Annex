@@ -50,7 +50,8 @@ public class Scene : Container, IScene
         var newFocusElement = GetFirstVisibleElement(mouseButtonPressedEvent.WindowX, mouseButtonPressedEvent.WindowY);
         newFocusElement?.OnMouseButtonPressed(mouseButtonPressedEvent);
 
-        if (this.FocusElement != newFocusElement) {
+        if (this.FocusElement != newFocusElement)
+        {
             this.FocusElement?.OnLostFocus();
             this.FocusElement = newFocusElement;
             this.FocusElement?.OnGainedFocus();
@@ -59,7 +60,8 @@ public class Scene : Container, IScene
 
     public virtual void OnMouseButtonReleased(IWindow window, MouseButtonReleasedEvent mouseButtonReleasedEvent) {
 
-        if (this.FocusElement?.IsInBounds(mouseButtonReleasedEvent.WindowX, mouseButtonReleasedEvent.WindowY) == true) {
+        if (this.FocusElement?.IsInBounds(mouseButtonReleasedEvent.WindowX, mouseButtonReleasedEvent.WindowY) == true)
+        {
             this.FocusElement?.OnMouseButtonReleased(mouseButtonReleasedEvent);
         }
     }
@@ -68,7 +70,8 @@ public class Scene : Container, IScene
     public virtual void OnMouseMoved(IWindow window, MouseMovedEvent mouseMovedEvent) {
 
         var newLastMovedElement = this.GetFirstVisibleElement(mouseMovedEvent.WindowX, mouseMovedEvent.WindowY);
-        if (this._lastMouseMovedElement != newLastMovedElement) {
+        if (this._lastMouseMovedElement != newLastMovedElement)
+        {
             this._lastMouseMovedElement?.OnMouseLeft(mouseMovedEvent);
         }
         this._lastMouseMovedElement = newLastMovedElement;
@@ -77,7 +80,8 @@ public class Scene : Container, IScene
 
     public virtual void OnMouseScrollWheelMoved(IWindow window, MouseScrollWheelMovedEvent mouseScrollWheelMovedEvent) {
         var mousePosition = window.GetMousePos(Graphics.CameraId.UI);
-        if (this.FocusElement?.IsInBounds(mousePosition.X, mousePosition.Y) == true) {
+        if (this.FocusElement?.IsInBounds(mousePosition.X, mousePosition.Y) == true)
+        {
             this.FocusElement?.OnMouseScrollWheelMoved(mouseScrollWheelMovedEvent);
         }
     }
@@ -85,7 +89,8 @@ public class Scene : Container, IScene
     protected override void Dispose(bool disposing) {
         base.Dispose(disposing);
 
-        if (disposing) {
+        if (disposing)
+        {
             this.Events.Dispose();
         }
     }

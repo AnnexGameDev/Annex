@@ -40,7 +40,7 @@ public abstract class AnnexApp : ScaffoldApp
         container.RegisterSingleton<IUIElementTypeResolverService, UIElementTypeResolverService>();
         container.Register<IHtmlSceneLoader, HtmlSceneLoader>();
         container.RegisterSingleton<ICoreEventService, CoreEventService>();
-        container.Register<IInputService, InputService>();
+        container.RegisterSingleton<IInputService, InputService>();
         container.RegisterSingleton<ITimeService, StopwatchTimeService>();
         container.RegisterSingleton<ISceneService, SceneService>();
         container.RegisterSingleton<IGraphicsService, GraphicsService>();
