@@ -26,25 +26,25 @@ internal class PacketHandlerService : IPacketHandlerService
 
         if (packetId == IPacket.ResponsePacketId)
         {
-            Log.Trace(LogSeverity.Verbose, $"Response packet received: {packet.OriginalRequestId}");
+            Log.Verbose($"Response packet received: {packet.OriginalRequestId}");
             OnResponseReceived(packet);
             return;
         }
 
         if (_packetHandlers?.TryGetValue(packetId, out var handler) != true)
         {
-            Log.Trace(LogSeverity.Error, $"No packet handler exists for the packet id {packetId}");
+            Log.Error($"No packet handler exists for the packet id {packetId}");
             return;
         }
 
-        Log.Trace(LogSeverity.Verbose, $"Packet received for {connection}");
+        Log.Verbose($"Packet received for {connection}");
         try
         {
             await handler!.HandleAsync(connection, packet);
         }
         catch (Exception ex)
         {
-            Log.Trace(LogSeverity.Error, $"Exception thrown while handling packet: {packetId} for {connection}", ex);
+            Log.Error($"Exception thrown while handling packet: {packetId} for {connection}", ex);
         }
         finally
         {
@@ -61,7 +61,7 @@ internal class PacketHandlerService : IPacketHandlerService
             return;
         }
 
-        Log.Trace(LogSeverity.Error, $"No response handler was registered for {packet.OriginalRequestId}");
+        Log.Error($"No response handler was registered for {packet.OriginalRequestId}");
     }
 
     public void Init(IEnumerable<IPacketHandler> packetHandlers) {

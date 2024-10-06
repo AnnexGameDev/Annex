@@ -1,4 +1,4 @@
-﻿using Scaffold.Collections.Generic;
+﻿using Scaffold.Collections;
 
 namespace Annex.Core.Events
 {

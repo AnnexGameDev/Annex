@@ -28,7 +28,7 @@ namespace Annex.Sfml.Graphics.Windows
                     var view = this.CameraCache.GetCamera(context.Camera)?.View;
 
                     if (view == null) {
-                        Log.Trace(LogSeverity.Error, $"Tried to set a view that doesn't exist: {context.Camera}");
+                        Log.Error($"Tried to set a view that doesn't exist: {context.Camera}");
                     } else {
                         this._renderTarget?.SetView(view);
                     }

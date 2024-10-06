@@ -19,7 +19,7 @@ internal class TcpClient : TcpEndpoint, IClientEndpoint
 
     private void Connection_OnConnectionStateChanged(object? sender, ConnectionState state) {
 
-        Log.Trace(LogSeverity.Normal, $"Connection {this.Connection} state changed to: {state}");
+        Log.Normal($"Connection {this.Connection} state changed to: {state}");
 
         switch (state)
         {

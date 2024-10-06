@@ -18,14 +18,15 @@ namespace Annex.Core.Scenes
         }
 
         public void LoadScene<T>(object? parameters = null) where T : IScene {
-            Log.Trace(LogSeverity.Verbose, $"Loading scene {typeof(T).Name}");
-            var newScene = this._container.Resolve<T>(false);
+            Log.Verbose($"Loading scene {typeof(T).Name}");
+
+            var newScene = this._container.Resolve<T>();
             var oldScene = this._currentScene;
 
             // If the new scene can't be resolved, don't switch.
             if (newScene == null)
             {
-                Log.Trace(LogSeverity.Error, $"Unable to resolve scene {typeof(T).Name}.");
+                Log.Error($"Unable to resolve scene {typeof(T).Name}.");
                 return;
             }
 
@@ -46,7 +47,7 @@ namespace Annex.Core.Scenes
         }
 
         public void LoadScene(IScene sceneInstance, object? parameters = null) {
-            Log.Trace(LogSeverity.Verbose, $"Loading scene instance {sceneInstance.GetType().Name}");
+            Log.Verbose($"Loading scene instance {sceneInstance.GetType().Name}");
             this.SwitchTo(sceneInstance, parameters);
         }
 

@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -18,12 +18,12 @@
     <DefineConstants>$(DefineConstants)TRACE;</DefineConstants>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Scaffold" Version="2023.10.15.231414" />
-  </ItemGroup>
-
   <Target Name="NugetPackAutoVersioning" AfterTargets="Build">
 	<Exec Command="dotnet pack -p:PackageVersion=$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd.HHmmss&quot;)) --no-build --configuration $(Configuration) --output &quot;$(SolutionDir)nuget&quot;" />
   </Target>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\scaffold\source\Scaffold\Scaffold.csproj" />
+  </ItemGroup>
 
 </Project>

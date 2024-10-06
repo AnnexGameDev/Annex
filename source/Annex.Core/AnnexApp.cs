@@ -15,6 +15,8 @@ using Annex.Core.Scenes.Layouts.Html;
 using Annex.Core.Time;
 using Scaffold;
 using Scaffold.DependencyInjection;
+using Scaffold.Extensions;
+using System.Runtime.InteropServices;
 
 namespace Annex.Core;
 
@@ -55,9 +57,10 @@ public abstract class AnnexApp : ScaffoldApp
         container.Register<IPriorityEventQueue, PriorityEventQueue>();
         container.RegisterBroadcast<RequestStopAppMessage>();
 
-#if WINDOWS
-        container.Register<IPlatformKeyboardService, WindowsKeyboardService>();
-#endif
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            container.Register<IPlatformKeyboardService, WindowsKeyboardService>();
+        }
     }
 
     protected abstract void CreateWindow(IGraphicsService graphicsService, IAssetService assetService);

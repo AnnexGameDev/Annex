@@ -34,7 +34,7 @@ internal class InputService : IInputService
             return;
         }
 
-        Log.Trace(LogSeverity.Verbose, $"KeyboardKey Pressed: {key}");
+        Log.Verbose($"KeyboardKey Pressed: {key}");
 
         if (key == KeyboardKey.Unknown)
         {
@@ -56,7 +56,7 @@ internal class InputService : IInputService
             return;
         }
 
-        Log.Trace(LogSeverity.Verbose, $"KeyboardKey Released: {key}");
+        Log.Verbose($"KeyboardKey Released: {key}");
 
         if (key == KeyboardKey.Unknown)
         {
@@ -69,7 +69,7 @@ internal class InputService : IInputService
     }
 
     public void HandleWindowClosed(IWindow window) {
-        Log.Trace(LogSeverity.Verbose, $"Window closed: {window.Title}");
+        Log.Verbose($"Window closed: {window.Title}");
         this._currentScene.OnWindowClosed(window);
     }
 
@@ -80,7 +80,7 @@ internal class InputService : IInputService
         }
 
         // TODO: Track drag / dbl click
-        Log.Trace(LogSeverity.Verbose, $"MouseButton Pressed: {button}  x:{position.X}  y:{position.Y}");
+        Log.Verbose($"MouseButton Pressed: {button}  x:{position.X}  y:{position.Y}");
         var mouseButtonPressedEvent = new MouseButtonPressedEvent(button, position.X, position.Y);
         this._mouseButtonStates[(int)button] = true;
         this._currentScene.OnMouseButtonPressed(window, mouseButtonPressedEvent);
@@ -93,7 +93,7 @@ internal class InputService : IInputService
         }
 
         // TODO: Track drag / dbl click
-        Log.Trace(LogSeverity.Verbose, $"MouseButton Released: {button}  x:{position.X}  y:{position.Y}");
+        Log.Verbose($"MouseButton Released: {button}  x:{position.X}  y:{position.Y}");
         var mouseButtonReleasedEvent = new MouseButtonReleasedEvent(button, position.X, position.Y);
         this._mouseButtonStates[(int)button] = false;
         this._currentScene.OnMouseButtonReleased(window, mouseButtonReleasedEvent);
@@ -105,7 +105,7 @@ internal class InputService : IInputService
             return;
         }
 
-        Log.Trace(LogSeverity.Verbose, $"Mouse Moved: x:{position.X}  y:{position.Y}");
+        Log.Verbose($"Mouse Moved: x:{position.X}  y:{position.Y}");
         var mouseMovedEvent = new MouseMovedEvent(position.X, position.Y);
         this._currentScene.OnMouseMoved(window, mouseMovedEvent);
     }
@@ -116,7 +116,7 @@ internal class InputService : IInputService
             return;
         }
 
-        Log.Trace(LogSeverity.Verbose, $"MouseScrollWheel Moved: {delta}");
+        Log.Verbose($"MouseScrollWheel Moved: {delta}");
         var mouseScrollWheelMovedEvent = new MouseScrollWheelMovedEvent(delta);
         this._currentScene.OnMouseScrollWheelMoved(window, mouseScrollWheelMovedEvent);
     }
@@ -140,13 +140,13 @@ internal class InputService : IInputService
     }
 
     public void HandleWindowGainedFocus() {
-        Log.Trace(LogSeverity.Verbose, $"Window gained focus");
+        Log.Verbose($"Window gained focus");
         this.InputShouldBeProcessed = true;
         this._currentScene.OnWindowGainedFocus();
     }
 
     public void HandleWindowLostFocus() {
-        Log.Trace(LogSeverity.Verbose, $"Window lost focus");
+        Log.Verbose($"Window lost focus");
         this.InputShouldBeProcessed = false;
         this._currentScene.OnWindowLostFocus();
     }

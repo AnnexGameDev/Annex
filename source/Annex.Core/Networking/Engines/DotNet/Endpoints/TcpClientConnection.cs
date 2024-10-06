@@ -30,7 +30,7 @@ internal class TcpClientConnection : TcpConnection
         }
         catch (Exception e)
         {
-            Log.Trace(LogSeverity.Error, $"An exception was thrown while calling {nameof(OnConnectCallback)}", e);
+            Log.Error($"An exception was thrown while calling {nameof(OnConnectCallback)}", e);
             this.State = ConnectionState.Unknown;
         }
     }

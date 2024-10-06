@@ -31,7 +31,7 @@ namespace Annex.Core.Assets.Bundles
                 return;
             }
 
-            Log.Trace(LogSeverity.Verbose, $"Constructing the pak file {pakFilePath}...");
+            Log.Verbose($"Constructing the pak file {pakFilePath}...");
             this._pakFile = PakFile.CreateFrom(pakFilePath, fileFilter, assetRoot)!;
         }
 
@@ -94,7 +94,7 @@ namespace Annex.Core.Assets.Bundles
 
                 if (File.Exists(pakFilePath))
                 {
-                    Log.Trace(LogSeverity.Verbose, $"Deleting old pakFile {pakFilePath}");
+                    Log.Verbose($"Deleting old pakFile {pakFilePath}");
                     File.Delete(pakFilePath);
                 }
 
@@ -110,7 +110,7 @@ namespace Annex.Core.Assets.Bundles
                     string assetId = fi.FullName.Remove(0, assetRoot.Length + 1).ToSafeAssetIdString();
                     var assetData = File.ReadAllBytes(asset);
 
-                    Log.Trace(LogSeverity.Verbose, $"Adding '{assetId}' to pakFile");
+                    Log.Verbose($"Adding '{assetId}' to pakFile");
                     bw.Write(assetId);
                     bw.Write(assetData.Length);
                     bw.Write(assetData);
@@ -136,7 +136,7 @@ namespace Annex.Core.Assets.Bundles
 
                 if (!this._entries.ContainsKey(id))
                 {
-                    Log.Trace(LogSeverity.Error, $"Tried to get pakfileentry {id} which doesn't exist");
+                    Log.Error($"Tried to get pakfileentry {id} which doesn't exist");
                     return false;
                 }
                 entry = this._entries[id];

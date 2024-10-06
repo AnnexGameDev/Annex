@@ -29,7 +29,7 @@ namespace Annex.Core.Scenes.Layouts.Html
                 var styles = new Styles(document);
                 if (this.GetSceneElement(document) is not XElement scene)
                 {
-                    Log.Trace(LogSeverity.Warning, $"Failed to retrieve scene from asset: '{assetId}'");
+                    Log.Warning($"Failed to retrieve scene from asset: '{assetId}'");
                     return;
                 }
 
@@ -40,7 +40,7 @@ namespace Annex.Core.Scenes.Layouts.Html
             }
             catch (Exception ex)
             {
-                Log.Trace(LogSeverity.Error, $"An exception was thrown while loading {assetId}", ex);
+                Log.Error($"An exception was thrown while loading {assetId}", ex);
             }
         }
 
@@ -86,7 +86,7 @@ namespace Annex.Core.Scenes.Layouts.Html
 
             if (_uiElementTypeResolverService.ResolveType(typeNameToInstantiate, sceneType) is Type type)
             {
-                uiElement = _container.Resolve(type, false) as IUIElement;
+                uiElement = _container.Resolve(type) as IUIElement;
                 return true;
             }
             uiElement = default;
@@ -303,7 +303,7 @@ namespace Annex.Core.Scenes.Layouts.Html
                     return intAttribute;
                 } else
                 {
-                    Log.Trace(LogSeverity.Warning, $"Error while parsing attribute {attributeName}:{strAttribute} to int");
+                    Log.Warning($"Error while parsing attribute {attributeName}:{strAttribute} to int");
                     return null;
                 }
             }
@@ -318,7 +318,7 @@ namespace Annex.Core.Scenes.Layouts.Html
                     return boolAttribute;
                 } else
                 {
-                    Log.Trace(LogSeverity.Warning, $"Error while parsing attribute {attributeName}:{strAttribute} to bool");
+                    Log.Warning($"Error while parsing attribute {attributeName}:{strAttribute} to bool");
                     return null;
                 }
             }

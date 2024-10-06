@@ -21,7 +21,7 @@ internal class TcpServer : TcpEndpoint, IServerEndpoint
     public void Send(IConnection connection, OutgoingPacket packet) {
         if (connection is not TcpConnection tcpConnection)
         {
-            Log.Trace(LogSeverity.Error, $"Connection is not a {nameof(TcpConnection)}");
+            Log.Error($"Connection is not a {nameof(TcpConnection)}");
             return;
         }
         this.SendTo(tcpConnection, packet);

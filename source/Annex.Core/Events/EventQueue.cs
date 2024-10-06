@@ -1,5 +1,5 @@
 ﻿using Annex.Core.Time;
-using Scaffold.Collections.Generic;
+using Scaffold.Collections;
 
 namespace Annex.Core.Events
 {

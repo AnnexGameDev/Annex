@@ -1,6 +1,6 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Graphics;
-using Scaffold.Collections.Generic;
+using Scaffold.Collections;
 
 namespace Annex.Core.Scenes.Elements;
 

@@ -24,7 +24,7 @@ namespace Annex.Core.Assets.Bundles
             {
                 var fi = new FileInfo(file);
                 var assetId = fi.FullName.Remove(0, rootPath.Length + 1).ToSafeAssetIdString();
-                Log.Trace(LogSeverity.Verbose, $"Adding asset {assetId}");
+                Log.Verbose($"Adding asset {assetId}");
                 this._assets.Add(assetId, new FileAsset(assetId, fi.FullName));
             }
         }

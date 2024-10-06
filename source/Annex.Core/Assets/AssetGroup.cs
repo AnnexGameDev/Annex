@@ -25,7 +25,7 @@ namespace Annex.Core.Assets
 
             if (bundles.Count() != 1)
             {
-                Log.Trace(LogSeverity.Error, $"Unable to find asset {assetId}");
+                Log.Error($"Unable to find asset {assetId}");
                 return null;
             }
 

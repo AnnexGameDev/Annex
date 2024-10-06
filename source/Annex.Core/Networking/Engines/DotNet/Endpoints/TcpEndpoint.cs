@@ -1,5 +1,5 @@
 ﻿using Annex.Core.Networking.Packets;
-using Scaffold.Collections.Generic;
+using Scaffold.Collections;
 using Scaffold.Logging;
 using System.Net.Sockets;
 
@@ -22,7 +22,7 @@ internal abstract class TcpEndpoint : IEndpoint
 
         if (this.Connections.Contains(connection))
         {
-            Log.Trace(LogSeverity.Error, $"Connection {connection} is already registered");
+            Log.Error($"Connection {connection} is already registered");
             return;
         }
 
@@ -43,7 +43,7 @@ internal abstract class TcpEndpoint : IEndpoint
     protected virtual void HandleDisconnectedConnection(TcpConnection connection) {
         if (!this.Connections.Contains(connection))
         {
-            Log.Trace(LogSeverity.Error, $"Connection {connection} is not registered");
+            Log.Error($"Connection {connection} is not registered");
             return;
         }
 
@@ -55,7 +55,7 @@ internal abstract class TcpEndpoint : IEndpoint
     protected void SendTo(TcpConnection connection, OutgoingPacket packet) {
         if (!this.Connections.Contains(connection))
         {
-            Log.Trace(LogSeverity.Error, $"Connection {connection} is not registered");
+            Log.Error($"Connection {connection} is not registered");
             return;
         }
         connection.Send(packet);

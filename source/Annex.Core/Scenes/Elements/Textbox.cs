@@ -329,7 +329,7 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
 
         if (this.CursorIndex < 0 || this.CursorIndex > this.Text.Length)
         {
-            Log.Trace(LogSeverity.Error, $"{nameof(this.CursorIndex)} for Textbox with content {this.Text} is out of range: {this.CursorIndex}");
+            Log.Error($"{nameof(this.CursorIndex)} for Textbox with content {this.Text} is out of range: {this.CursorIndex}");
             return;
         }
 
