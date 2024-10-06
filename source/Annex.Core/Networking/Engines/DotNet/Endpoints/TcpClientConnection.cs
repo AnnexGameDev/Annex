@@ -11,8 +11,8 @@ internal class TcpClientConnection : TcpConnection
     }
 
     internal void ConnectTo(string iP, int port) {
-        this.Socket.BeginConnect(new IPEndPoint(IPAddress.Parse(iP), port), OnConnectCallback, null);
         this.State = ConnectionState.Connecting;
+        this.Socket.BeginConnect(new IPEndPoint(IPAddress.Parse(iP), port), OnConnectCallback, null);
     }
 
     private void OnConnectCallback(IAsyncResult ar) {

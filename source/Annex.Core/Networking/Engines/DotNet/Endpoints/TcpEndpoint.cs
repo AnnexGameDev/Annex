@@ -25,6 +25,7 @@ internal abstract class TcpEndpoint : IEndpoint
             Log.Error($"Connection {connection} is already registered");
             return;
         }
+        Log.Normal($"New connection accepted: {connection}");
 
         connection.OnConnectionStateChanged += Connection_OnConnectionStateChanged;
 
