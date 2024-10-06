@@ -1,6 +1,7 @@
 ﻿using Annex.Core.Broadcasts;
 using Annex.Core.Broadcasts.Messages;
 using Annex.Core.Scenes;
+using Scaffold.Logging;
 
 namespace Annex.Core.Events.Core
 {
@@ -41,8 +42,15 @@ namespace Annex.Core.Events.Core
 
                 foreach (var priority in allPriorities)
                 {
-                    await this._globalEvents.StepPriorityAsync(priority);
-                    await sceneEvents.StepPriorityAsync(priority);
+                    try
+                    {
+                        await this._globalEvents.StepPriorityAsync(priority);
+                        await sceneEvents.StepPriorityAsync(priority);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"Error running events in priority {priority}", exception: ex);
+                    }
                 }
             }
         }
