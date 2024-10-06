@@ -1,12 +1,11 @@
 ﻿using System.Diagnostics;
 
-namespace Annex.Core
+namespace Annex.Core;
+
+public static class Debug
 {
-    public class Debug
-    {
-        [Conditional("DEBUG")]
-        public static void Assert(bool condition, string reason) {
-            System.Diagnostics.Debug.Assert(condition, reason);
-        }
+    [Conditional("DEBUG")]
+    public static void Assert(bool condition, string reason) {
+        System.Diagnostics.Debug.Assert(condition, reason);
     }
 }
