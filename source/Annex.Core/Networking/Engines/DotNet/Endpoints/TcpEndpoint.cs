@@ -71,7 +71,6 @@ internal abstract class TcpEndpoint : IEndpoint
                 {
                     this.HandleDisconnectedConnection(connection);
                 }
-
                 this.Socket.Dispose();
             }
 

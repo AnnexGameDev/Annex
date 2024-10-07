@@ -14,10 +14,10 @@ internal class TcpClient : TcpEndpoint, IClientEndpoint
     public TcpClient(EndpointConfiguration config, IPacketHandlerService packetHandlerService) : base(config) {
         this._connection = new TcpClientConnection(this.Socket, packetHandlerService);
         this._packetHandlerService = packetHandlerService;
-        this.Connection.OnConnectionStateChanged += Connection_OnConnectionStateChanged;
+        this.Connection.OnConnectionStateChanged += OnConnectionStateChanged;
     }
 
-    private void Connection_OnConnectionStateChanged(object? sender, ConnectionState state) {
+    private void OnConnectionStateChanged(object? sender, ConnectionState state) {
 
         Log.Normal($"Connection {this.Connection} state changed to: {state}");
 
@@ -42,24 +42,7 @@ internal class TcpClient : TcpEndpoint, IClientEndpoint
         return responseTask;
     }
 
-    public void Start(CancellationToken? cancellationToken) {
-        this._connection.ConnectTo(this.Config.IP, this.Config.Port);
-        this.WaitForResponse(cancellationToken);
-    }
-
-    private void WaitForResponse(CancellationToken? cancellationToken) {
-        while (true)
-        {
-            if (cancellationToken?.IsCancellationRequested == true)
-                break;
-
-            if (this.Connection.State == ConnectionState.Connected && this.Connections.Contains(Connection))
-                break;
-
-            if (this.Connection.State == ConnectionState.Disconnected)
-                break;
-
-            Thread.Yield();
-        }
+    public Task<bool> StartAsync(CancellationToken? cancellationToken) {
+        return _connection.ConnectToAsync(Config.IP, Config.Port, cancellationToken ?? new());
     }
 }

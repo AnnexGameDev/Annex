@@ -8,6 +8,6 @@ namespace Annex.Core.Networking
         IConnection Connection { get; }
         void Send(OutgoingPacket packet);
         Task<IncomingPacket> SendAsync(OutgoingPacket packet);
-        void Start(CancellationToken? cancellationToken = null);
+        Task<bool> StartAsync(CancellationToken? cancellationToken = null);
     }
 }

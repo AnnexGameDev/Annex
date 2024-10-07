@@ -21,7 +21,9 @@ internal class UIElementTypeResolverService : IUIElementTypeResolverService
     }
 
     public Type? ResolveType(string typeName, Type sceneType) {
-        foreach (var resolver in _uiElementTypeResolvers)
+        // Prioritize the Annex resolver last, in case a project-specific resolver wants to override default behaviour.
+        var resolvers = _uiElementTypeResolvers.OrderBy(resolver => resolver is AnnexUIElementTypeResolver ? 1 : 0).ToArray();
+        foreach (var resolver in resolvers)
         {
             if (resolver.ResolveType(typeName, sceneType) is Type type)
             {
@@ -50,6 +52,7 @@ public abstract class UIElementTypeResolverBase : IUIElementTypeResolver
     }
 
     protected void RegisterSceneType(Type sceneType, Type elementType) {
+
         if (!_knownSceneTypes.ContainsKey(sceneType))
         {
             _knownSceneTypes.Add(sceneType, new Dictionary<string, Type>());
