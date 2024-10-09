@@ -179,6 +179,10 @@ public class ListView : Image, IParentElement
         this._children.Add(item);
     }
 
+    public void Clear() {
+        this._children.Clear();
+    }
+
     private ListViewItem CreateItem(IShared<string> text) {
         var item = new ListViewItem(this, new Vector2f(this.Size.X, this.LineHeight), new PrefixedString("", text))
         {
