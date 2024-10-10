@@ -110,6 +110,12 @@ namespace Annex.Core.Networking.Packets
             return value;
         }
 
+        public byte ReadByte() {
+            var value = this._reader.ReadByte();
+            this.TraceRead(value);
+            return value;
+        }
+
         public sbyte ReadSByte() {
             var value = this._reader.ReadSByte();
             this.TraceRead(value);
