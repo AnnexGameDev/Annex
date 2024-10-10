@@ -15,7 +15,7 @@ internal class TcpClientConnection : TcpConnection
             State = ConnectionState.Connecting;
             await Socket.ConnectAsync(ip, port, cancellationToken);
             State = ConnectionState.Connected;
-            return true;
+            return Socket.Connected;
         }
         catch (Exception ex)
         {
