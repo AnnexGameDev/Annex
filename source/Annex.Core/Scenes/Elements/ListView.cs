@@ -141,7 +141,7 @@ public class ListView : Image, IParentElement
         for (int i = _topVisibleIndex; i <= _bottomVisibleIndex; i++)
         {
             var child = _children[i];
-            child.Draw(canvas);
+            child.DrawOn(canvas);
         }
     }
 

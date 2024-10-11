@@ -80,8 +80,8 @@ public class Button : UIElement, IButton
     }
 
     protected override void DrawInternal(ICanvas canvas) {
-        this._background.Draw(canvas);
-        this._label.Draw(canvas);
+        this._background.DrawOn(canvas);
+        this._label.DrawOn(canvas);
     }
 
     public override void OnMouseLeft(MouseMovedEvent mouseMovedEvent) {

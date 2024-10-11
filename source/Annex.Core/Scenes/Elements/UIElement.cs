@@ -30,7 +30,7 @@ public abstract class UIElement : IUIElement
     public event EventHandler<MouseScrollWheelMovedEvent>? OnElementMouseScrollWheelMoved;
     public event EventHandler<MouseMovedEvent>? OnElementMouseLeft;
 
-    public void Draw(ICanvas canvas) {
+    public void DrawOn(ICanvas canvas) {
         if (this.Visible)
             this.DrawInternal(canvas);
     }

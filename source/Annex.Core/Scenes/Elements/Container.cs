@@ -114,7 +114,7 @@ public class Container : UIElement, IAddableParentElement
     protected override void DrawInternal(ICanvas canvas) {
         foreach (var child in this._children)
         {
-            child.Draw(canvas);
+            child.DrawOn(canvas);
         }
     }
 

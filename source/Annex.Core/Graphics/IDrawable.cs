@@ -2,6 +2,6 @@
 {
     public interface IDrawable : IDisposable
     {
-        void Draw(ICanvas canvas);
+        void DrawOn(ICanvas canvas);
     }
 }

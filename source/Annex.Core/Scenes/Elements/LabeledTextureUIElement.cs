@@ -78,8 +78,8 @@ public abstract class LabeledTextureUIElement : UIElement, IButton, ILabel
     }
 
     protected override void DrawInternal(ICanvas canvas) {
-        this.Image.Draw(canvas);
-        this.Label.Draw(canvas);
+        this.Image.DrawOn(canvas);
+        this.Label.DrawOn(canvas);
     }
 
     public override void OnLostFocus() {

@@ -259,7 +259,7 @@ namespace Annex.Sfml.Graphics.Windows
                 if (this._sfmlWindow._renderWindow is RenderWindow buffer)
                 {
                     buffer.Clear();
-                    this._sceneService.CurrentScene?.Draw(this._sfmlWindow);
+                    this._sceneService.CurrentScene?.DrawOn(this._sfmlWindow);
                     buffer.Display();
                 }
                 return Task.CompletedTask;
