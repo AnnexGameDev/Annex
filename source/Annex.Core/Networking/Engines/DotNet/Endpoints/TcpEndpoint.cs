@@ -1,6 +1,6 @@
 ﻿using Annex.Core.Networking.Packets;
-using Scaffold.Collections;
 using Scaffold.Logging;
+using System.Collections.Concurrent;
 using System.Net.Sockets;
 
 namespace Annex.Core.Networking.Engines.DotNet.Endpoints;
@@ -10,7 +10,7 @@ internal abstract class TcpEndpoint : IEndpoint
     protected readonly EndpointConfiguration Config;
     protected readonly Socket Socket;
 
-    protected ConcurrentHashSet<TcpConnection> Connections = new();
+    protected ConcurrentDictionary<Guid, TcpConnection> Connections = new();
     protected bool Disposed { get; private set; }
 
     public TcpEndpoint(EndpointConfiguration config) {
@@ -20,7 +20,7 @@ internal abstract class TcpEndpoint : IEndpoint
 
     protected virtual void HandleNewConnection(TcpConnection connection) {
 
-        if (this.Connections.Contains(connection))
+        if (this.Connections.ContainsKey(connection.Id))
         {
             Log.Error($"Connection {connection} is already registered");
             return;
@@ -29,7 +29,7 @@ internal abstract class TcpEndpoint : IEndpoint
 
         connection.OnConnectionStateChanged += Connection_OnConnectionStateChanged;
 
-        this.Connections.Add(connection);
+        this.Connections.TryAdd(connection.Id, connection);
         connection.ListenForIncomingPackets();
     }
 
@@ -42,19 +42,19 @@ internal abstract class TcpEndpoint : IEndpoint
     }
 
     protected virtual void HandleDisconnectedConnection(TcpConnection connection) {
-        if (!this.Connections.Contains(connection))
+        if (!this.Connections.ContainsKey(connection.Id))
         {
             Log.Error($"Connection {connection} is not registered");
             return;
         }
 
         connection.OnConnectionStateChanged -= Connection_OnConnectionStateChanged;
-        this.Connections.Remove(connection);
+        this.Connections.TryRemove(connection.Id, out _);
         connection.Dispose();
     }
 
     protected void SendTo(TcpConnection connection, OutgoingPacket packet) {
-        if (!this.Connections.Contains(connection))
+        if (!this.Connections.ContainsKey(connection.Id))
         {
             Log.Error($"Connection {connection} is not registered");
             return;
@@ -67,7 +67,7 @@ internal abstract class TcpEndpoint : IEndpoint
         {
             if (disposing)
             {
-                foreach (var connection in this.Connections)
+                foreach (var connection in this.Connections.Values)
                 {
                     this.HandleDisconnectedConnection(connection);
                 }

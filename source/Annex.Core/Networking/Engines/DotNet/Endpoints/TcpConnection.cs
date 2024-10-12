@@ -123,6 +123,6 @@ internal class TcpConnection : Connection
         {
             return Id.ToString();
         }
-        return $"{Id} [{this.Socket?.RemoteEndPoint?.ToString() ?? string.Empty}]";
+        return $"[{this.Socket?.RemoteEndPoint?.ToString() ?? string.Empty} - Connected: {Socket?.Connected}]";
     }
 }

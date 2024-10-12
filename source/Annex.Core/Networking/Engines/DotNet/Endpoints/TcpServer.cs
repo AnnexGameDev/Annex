@@ -12,7 +12,7 @@ internal class TcpServer : TcpEndpoint, IServerEndpoint
     public event EventHandler<IConnection>? OnClientConnected;
     public event EventHandler<IConnection>? OnClientDisconnected;
 
-    public IEnumerable<IConnection> ClientConnections => this.Connections;
+    public IEnumerable<IConnection> ClientConnections => this.Connections.Values.ToArray();
 
     public TcpServer(EndpointConfiguration config, IPacketHandlerService packetHandlerService) : base(config) {
         _packetHandlerService = packetHandlerService;
@@ -28,8 +28,8 @@ internal class TcpServer : TcpEndpoint, IServerEndpoint
     }
 
     public void SendToAll(OutgoingPacket packet) {
-        // TODO: Find a less memory intense way to do this. This is potentiall expensive.
-        foreach (var connection in this.Connections.ToArray())
+        // TODO: Find a less memory intense way to do this. This is potentially expensive.
+        foreach (var connection in this.ClientConnections)
         {
             Send(connection, packet);
         }
