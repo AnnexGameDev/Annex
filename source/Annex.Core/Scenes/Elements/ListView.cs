@@ -51,11 +51,13 @@ public class ListView : Image, IParentElement
         : base(elementId, position, size) {
         _selectionTexture = new TextureContext(string.Empty.ToShared())
         {
-            RenderSize = new Vector2f()
+            RenderSize = new Vector2f(),
+            Camera = CameraId.UI.ToString()
         };
         _hoverItemTexture = new TextureContext(string.Empty.ToShared())
         {
-            RenderSize = new Vector2f()
+            RenderSize = new Vector2f(),
+            Camera = CameraId.UI.ToString()
         };
     }
 

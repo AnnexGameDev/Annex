@@ -86,7 +86,7 @@ namespace Annex.Sfml.Graphics.Windows
             {
                 Region = new Core.Data.FloatRect(0, 0, 1, 1),
                 Size = this.WindowResolution,
-                Center = new ScalingVector2f(this.WindowResolution, 0.5f, 0.5f),
+                Center = new Vector2f(this.WindowResolution.X * 0.5f, this.WindowResolution.Y * 0.5f),
             };
             this.AddCamera(defaultCamera);
 
