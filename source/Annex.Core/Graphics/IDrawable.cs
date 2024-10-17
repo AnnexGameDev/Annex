@@ -1,7 +1,6 @@
-﻿namespace Annex.Core.Graphics
+﻿namespace Annex.Core.Graphics;
+
+public interface IDrawable : IDisposable
 {
-    public interface IDrawable : IDisposable
-    {
-        void DrawOn(ICanvas canvas);
-    }
+    void DrawOn(ICanvas canvas);
 }
