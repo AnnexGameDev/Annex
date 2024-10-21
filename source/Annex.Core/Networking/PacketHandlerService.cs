@@ -1,5 +1,6 @@
 ﻿using Annex.Core.Networking.Connections;
 using Annex.Core.Networking.Packets;
+using Scaffold.DependencyInjection;
 using Scaffold.Logging;
 using System.Collections.Concurrent;
 
@@ -8,7 +9,6 @@ namespace Annex.Core.Networking;
 public interface IPacketHandlerService
 {
     void HandlePacket(IConnection connection, int packetId, IncomingPacket packet);
-    void Init(IEnumerable<IPacketHandler> enumerable);
     Task<IncomingPacket> WaitForResponseAsync(string requestId);
 }
 
@@ -17,12 +17,25 @@ internal class PacketHandlerService : IPacketHandlerService
     private readonly IDictionary<string, TaskCompletionSource<IncomingPacket>> _responseListeners;
     private readonly Dictionary<int, IPacketHandler> _packetHandlers;
 
-    public PacketHandlerService() {
+    public PacketHandlerService(IAggregation<IPacketHandler> packetHandlers)
+    {
         _responseListeners = new ConcurrentDictionary<string, TaskCompletionSource<IncomingPacket>>();
         _packetHandlers = new Dictionary<int, IPacketHandler>();
+
+        packetHandlers.OnItemAdded += OnPacketHandlerAdded;
+        foreach (var handler in packetHandlers)
+        {
+            _packetHandlers.Add(handler.Id, handler);
+        }
     }
 
-    public async void HandlePacket(IConnection connection, int packetId, IncomingPacket packet) {
+    private void OnPacketHandlerAdded(object? sender, IPacketHandler handler)
+    {
+        _packetHandlers.Add(handler.Id, handler);
+    }
+
+    public async void HandlePacket(IConnection connection, int packetId, IncomingPacket packet)
+    {
 
         if (packetId == IPacket.ResponsePacketId)
         {
@@ -52,7 +65,8 @@ internal class PacketHandlerService : IPacketHandlerService
         }
     }
 
-    private void OnResponseReceived(IncomingPacket packet) {
+    private void OnResponseReceived(IncomingPacket packet)
+    {
 
         if (_responseListeners.TryGetValue(packet.OriginalRequestId, out var listener))
         {
@@ -64,19 +78,8 @@ internal class PacketHandlerService : IPacketHandlerService
         Log.Error($"No response handler was registered for {packet.OriginalRequestId}");
     }
 
-    public void Init(IEnumerable<IPacketHandler> packetHandlers) {
-        if (_packetHandlers.Any())
-        {
-            throw new InvalidOperationException();
-        }
-
-        foreach (var handler in packetHandlers)
-        {
-            _packetHandlers.Add(handler.Id, handler);
-        }
-    }
-
-    public Task<IncomingPacket> WaitForResponseAsync(string requestId) {
+    public Task<IncomingPacket> WaitForResponseAsync(string requestId)
+    {
         var listener = new TaskCompletionSource<IncomingPacket>();
         if (!_responseListeners.TryAdd(requestId, listener))
         {

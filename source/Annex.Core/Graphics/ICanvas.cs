@@ -1,9 +1,10 @@
 ﻿using Annex.Core.Graphics.Contexts;
 
-namespace Annex.Core.Graphics
+namespace Annex.Core.Graphics;
+
+public interface ICanvas
 {
-    public interface ICanvas
-    {
-        void Draw(DrawContext context);
-    }
+    void Draw(DrawContext context);
+    void PostDraw();
+    void PreDraw();
 }

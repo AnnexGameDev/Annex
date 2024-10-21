@@ -21,6 +21,8 @@ namespace Annex.Core.Graphics.Windows
         Camera? GetCamera(string cameraId);
         void AddCamera(Camera camera);
 
+        ICanvas GetCanvas();
+
         void SetIcon(uint sizeX, uint sizeY, IAsset asset);
         void SetMouseImage(IAsset img, uint sizeX, uint sizeY, uint offsetX, uint offsetY);
 
