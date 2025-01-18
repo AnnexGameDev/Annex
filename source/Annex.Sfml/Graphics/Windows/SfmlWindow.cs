@@ -1,6 +1,5 @@
 ﻿using Annex.Core.Assets;
 using Annex.Core.Data;
-using Annex.Core.Events.Core;
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
 using Annex.Core.Graphics.Windows;
@@ -78,7 +77,7 @@ internal class SfmlWindow : IWindow, ICanvas
         }
     }
 
-    public SfmlWindow(ICoreEventService coreEventService, IInputService inputHandlerService, ISceneService sceneService, IPlatformTargetFactory platformTargetFactory, ICameraCache cameraCache)
+    public SfmlWindow(IInputService inputHandlerService, ISceneService sceneService, IPlatformTargetFactory platformTargetFactory, ICameraCache cameraCache)
     {
         _cameraCache = cameraCache;
         _platformTargetFactory = platformTargetFactory;
