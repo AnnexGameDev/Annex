@@ -1,13 +1,11 @@
 ﻿using Annex.Core.Graphics.Windows;
 
-namespace Annex.Core.Graphics
+namespace Annex.Core.Graphics;
+
+public interface IGraphicsService : IDisposable
 {
-    public interface IGraphicsService : IDisposable
-    {
-        IEnumerable<IWindow> Windows { get; }
+    IEnumerable<IWindow> Windows { get; }
 
-        public IWindow GetWindow(string id);
-
-        public IWindow CreateWindow(string id);
-    }
+    public IWindow GetWindow(Guid id);
+    public IWindow CreateWindow(string title, uint width, uint height, WindowStyle style);
 }

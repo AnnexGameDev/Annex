@@ -1,12 +1,11 @@
-﻿namespace Annex.Core.Graphics.Windows
+﻿namespace Annex.Core.Graphics.Windows;
+
+public enum WindowStyle
 {
-    public enum WindowStyle
-    {
-        None,
-        Titlebar,
-        Resize,
-        Close,
-        Fullscreen,
-        Default
-    }
+    None,
+    Titlebar,
+    Resize,
+    Close,
+    Fullscreen,
+    Default
 }

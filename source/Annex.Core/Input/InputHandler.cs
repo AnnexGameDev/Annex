@@ -2,15 +2,12 @@
 using Annex.Core.Graphics.Windows;
 using Annex.Core.Input.InputEvents;
 using Annex.Core.Input.Platforms;
-using Annex.Core.Scenes;
-using Annex.Core.Scenes.Elements;
 using Scaffold.Logging;
 
 namespace Annex.Core.Input;
 
-internal class InputService : IInputService
+internal class InputHandler : IInputHandler
 {
-    private readonly ISceneService _sceneService;
     private readonly IPlatformKeyboardService _platformKeyboardService;
 
     private readonly bool[] _keyboardKeyPressed;
@@ -18,17 +15,16 @@ internal class InputService : IInputService
 
     private bool InputShouldBeProcessed { get; set; }
 
-    private IScene _currentScene => this._sceneService.CurrentScene;
-
-    public InputService(ISceneService sceneService, IPlatformKeyboardService platformKeyboardService) {
-        this._sceneService = sceneService;
+    public InputHandler(IPlatformKeyboardService platformKeyboardService)
+    {
         this._platformKeyboardService = platformKeyboardService;
 
         this._keyboardKeyPressed = new bool[Enum.GetValues<KeyboardKey>().Length];
         this._mouseButtonStates = new bool[Enum.GetValues<MouseButton>().Length];
     }
 
-    public void HandleKeyboardKeyPressed(IWindow window, KeyboardKey key) {
+    public void HandleKeyboardKeyPressed(IWindow window, KeyboardKey key)
+    {
         if (!InputShouldBeProcessed)
         {
             return;
@@ -44,13 +40,14 @@ internal class InputService : IInputService
         bool shift = this._platformKeyboardService.IsShiftPressed();
         bool capsLock = this._platformKeyboardService.IsCapsLockOn();
         bool ctrl = this._platformKeyboardService.IsControlPressed();
-        var keyPressedEvent = new KeyboardKeyPressedEvent(key, shift, capsLock, ctrl);
+        var keyPressedEvent = new KeyboardKeyPressedEvent(window, key, shift, capsLock, ctrl);
 
         this._keyboardKeyPressed[(int)key] = true;
-        this._currentScene.OnKeyboardKeyPressed(window, keyPressedEvent);
+        window.Scene.OnKeyboardKeyPressed(window, keyPressedEvent);
     }
 
-    public void HandleKeyboardKeyReleased(IWindow window, KeyboardKey key) {
+    public void HandleKeyboardKeyReleased(IWindow window, KeyboardKey key)
+    {
         if (!InputShouldBeProcessed)
         {
             return;
@@ -63,17 +60,19 @@ internal class InputService : IInputService
             return;
         }
 
-        var keyReleasedEvent = new KeyboardKeyReleasedEvent(key);
+        var keyReleasedEvent = new KeyboardKeyReleasedEvent(window, key);
         this._keyboardKeyPressed[(int)key] = false;
-        this._currentScene.OnKeyboardKeyReleased(window, keyReleasedEvent);
+        window.Scene.OnKeyboardKeyReleased(window, keyReleasedEvent);
     }
 
-    public void HandleWindowClosed(IWindow window) {
+    public void HandleWindowClosed(IWindow window)
+    {
         Log.Verbose($"Window closed: {window.Title}");
-        this._currentScene.OnWindowClosed(window);
+        window.Scene.OnWindowClosed(window);
     }
 
-    public void HandleMouseButtonPressed(IWindow window, MouseButton button, IVector2<float> position) {
+    public void HandleMouseButtonPressed(IWindow window, MouseButton button, IVector2<float> position)
+    {
         if (!InputShouldBeProcessed)
         {
             return;
@@ -81,12 +80,13 @@ internal class InputService : IInputService
 
         // TODO: Track drag / dbl click
         Log.Verbose($"MouseButton Pressed: {button}  x:{position.X}  y:{position.Y}");
-        var mouseButtonPressedEvent = new MouseButtonPressedEvent(button, position.X, position.Y);
+        var mouseButtonPressedEvent = new MouseButtonPressedEvent(window, button, position.X, position.Y);
         this._mouseButtonStates[(int)button] = true;
-        this._currentScene.OnMouseButtonPressed(window, mouseButtonPressedEvent);
+        window.Scene.OnMouseButtonPressed(window, mouseButtonPressedEvent);
     }
 
-    public void HandleMouseButtonReleased(IWindow window, MouseButton button, IVector2<float> position) {
+    public void HandleMouseButtonReleased(IWindow window, MouseButton button, IVector2<float> position)
+    {
         if (!InputShouldBeProcessed)
         {
             return;
@@ -94,34 +94,37 @@ internal class InputService : IInputService
 
         // TODO: Track drag / dbl click
         Log.Verbose($"MouseButton Released: {button}  x:{position.X}  y:{position.Y}");
-        var mouseButtonReleasedEvent = new MouseButtonReleasedEvent(button, position.X, position.Y);
+        var mouseButtonReleasedEvent = new MouseButtonReleasedEvent(window, button, position.X, position.Y);
         this._mouseButtonStates[(int)button] = false;
-        this._currentScene.OnMouseButtonReleased(window, mouseButtonReleasedEvent);
+        window.Scene.OnMouseButtonReleased(window, mouseButtonReleasedEvent);
     }
 
-    public void HandleMouseMoved(IWindow window, IVector2<float> position) {
+    public void HandleMouseMoved(IWindow window, IVector2<float> position)
+    {
         if (!InputShouldBeProcessed)
         {
             return;
         }
 
         Log.Verbose($"Mouse Moved: x:{position.X}  y:{position.Y}");
-        var mouseMovedEvent = new MouseMovedEvent(position.X, position.Y);
-        this._currentScene.OnMouseMoved(window, mouseMovedEvent);
+        var mouseMovedEvent = new MouseMovedEvent(window, position.X, position.Y);
+        window.Scene.OnMouseMoved(window, mouseMovedEvent);
     }
 
-    public void HandleMouseScrollWheelMoved(IWindow window, double delta) {
+    public void HandleMouseScrollWheelMoved(IWindow window, double delta)
+    {
         if (!InputShouldBeProcessed)
         {
             return;
         }
 
         Log.Verbose($"MouseScrollWheel Moved: {delta}");
-        var mouseScrollWheelMovedEvent = new MouseScrollWheelMovedEvent(delta);
-        this._currentScene.OnMouseScrollWheelMoved(window, mouseScrollWheelMovedEvent);
+        var mouseScrollWheelMovedEvent = new MouseScrollWheelMovedEvent(window, delta);
+        window.Scene.OnMouseScrollWheelMoved(window, mouseScrollWheelMovedEvent);
     }
 
-    public bool IsKeyDown(KeyboardKey key) {
+    public bool IsKeyDown(KeyboardKey key)
+    {
         if (!InputShouldBeProcessed)
         {
             return false;
@@ -130,7 +133,8 @@ internal class InputService : IInputService
         return this._keyboardKeyPressed[(int)key];
     }
 
-    public bool IsMouseButtonDown(MouseButton button) {
+    public bool IsMouseButtonDown(MouseButton button)
+    {
         if (!InputShouldBeProcessed)
         {
             return false;
@@ -139,15 +143,17 @@ internal class InputService : IInputService
         return this._mouseButtonStates[(int)button];
     }
 
-    public void HandleWindowGainedFocus() {
+    public void HandleWindowGainedFocus(IWindow window)
+    {
         Log.Verbose($"Window gained focus");
         this.InputShouldBeProcessed = true;
-        this._currentScene.OnWindowGainedFocus();
+        window.Scene.OnWindowGainedFocus(window);
     }
 
-    public void HandleWindowLostFocus() {
+    public void HandleWindowLostFocus(IWindow window)
+    {
         Log.Verbose($"Window lost focus");
         this.InputShouldBeProcessed = false;
-        this._currentScene.OnWindowLostFocus();
+        window.Scene.OnWindowLostFocus(window);
     }
 }

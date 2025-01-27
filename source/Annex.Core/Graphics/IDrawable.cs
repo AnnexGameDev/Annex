@@ -1,6 +1,8 @@
-﻿namespace Annex.Core.Graphics;
+﻿using Annex.Core.Graphics.Windows;
+
+namespace Annex.Core.Graphics;
 
 public interface IDrawable : IDisposable
 {
-    void DrawOn(ICanvas canvas);
+    void DrawOn(IWindow window);
 }

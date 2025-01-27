@@ -52,13 +52,7 @@ public class Scene : Container, IScene
     {
         var newFocusElement = GetFirstVisibleElement(mouseButtonPressedEvent.WindowX, mouseButtonPressedEvent.WindowY);
         newFocusElement?.OnMouseButtonPressed(mouseButtonPressedEvent);
-
-        if (this.FocusElement != newFocusElement)
-        {
-            this.FocusElement?.OnLostFocus();
-            this.FocusElement = newFocusElement;
-            this.FocusElement?.OnGainedFocus();
-        }
+        SetFocus(newFocusElement);
     }
 
     public virtual void OnMouseButtonReleased(IWindow window, MouseButtonReleasedEvent mouseButtonReleasedEvent)
@@ -91,6 +85,16 @@ public class Scene : Container, IScene
         }
     }
 
-    public virtual void OnWindowGainedFocus() { }
-    public virtual void OnWindowLostFocus() { }
+    public virtual void OnWindowGainedFocus(IWindow window) { }
+    public virtual void OnWindowLostFocus(IWindow window) { }
+
+    public void SetFocus(IUIElement? newFocusElement)
+    {
+        if (this.FocusElement != newFocusElement)
+        {
+            this.FocusElement?.OnLostFocus();
+            this.FocusElement = newFocusElement;
+            this.FocusElement?.OnGainedFocus();
+        }
+    }
 }

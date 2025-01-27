@@ -1,11 +1,7 @@
-﻿namespace Annex.Core.Data
-{
-    public interface IVector2<T>
-    {
-        T X { get; }
-        T Y { get; }
+﻿namespace Annex.Core.Data;
 
-        void Set(IVector2<T> vector);
-        void Set(T x, T y);
-    }
+public interface IVector2<T> : IReadonlyVector2<T>
+{
+    void Set(IVector2<T> vector);
+    void Set(T x, T y);
 }

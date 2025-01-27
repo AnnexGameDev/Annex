@@ -1,57 +1,61 @@
-﻿using Annex.Core.Broadcasts;
-using Annex.Core.Broadcasts.Messages;
-using Annex.Core.Events.Core;
-using Annex.Core.Graphics.Windows;
+﻿using Annex.Core.Graphics.Windows;
 using Annex.Core.Networking;
 using Annex.Core.Networking.Connections;
 using Annex.Core.Networking.Packets;
 using Annex.Core.Scenes.Elements;
-using SampleProject.Scenes.Level2.Events;
+using Annex.Core.Time;
 using System;
 using System.Threading.Tasks;
 
-namespace SampleProject.Scenes.Level2
+namespace SampleProject.Scenes.Level2;
+
+public class Level2 : Scene
 {
-    public class Level2 : Scene
+    private readonly IServerEndpoint _server;
+
+    public Level2(INetworkingEngine networkingEngine, ITimeService timeService)
     {
-        private readonly IServerEndpoint _server;
-        private readonly IBroadcast<RequestStopAppMessage> _requestStopAppMessage;
 
-        public Level2(IBroadcast<RequestStopAppMessage> requestStopAppMessage, INetworkingEngine networkingEngine) {
-            this._requestStopAppMessage = requestStopAppMessage;
-            var config = new EndpointConfiguration();
-            this._server = networkingEngine.CreateServer(config);
-            this._server.Start();
-            this.Events.Add(CoreEventPriority.Networking, new SendDataEvent(networkingEngine));
-        }
+    }
 
-        protected override void Dispose(bool disposing) {
-            base.Dispose(disposing);
+    //public Level2(INetworkingEngine networkingEngine, ITimeService timeService)
+    //{
+    //    var config = new EndpointConfiguration();
+    //    this._server = networkingEngine.CreateServer(config);
+    //    this._server.Start();
 
-            if (disposing)
-            {
-                this._server.Dispose();
-            }
-        }
+    //    Game.Events.Add(new GameEvent(timeService, new SendDataEvent(networkingEngine).RunAsync, 1000));
+    //}
 
-        public override void OnWindowClosed(IWindow window) {
-            base.OnWindowClosed(window);
-            this._requestStopAppMessage.Publish(this, new RequestStopAppMessage());
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+
+        if (disposing)
+        {
+            this._server.Dispose();
         }
     }
 
-    public enum PacketId : int
+    public override void OnWindowClosed(IWindow window)
     {
-        SimpleMessage
+        base.OnWindowClosed(window);
+        Game.Stop();
     }
+}
 
-    public class SimpleMessagePacketHandler : IPacketHandler
+public enum PacketId : int
+{
+    SimpleMessage
+}
+
+public class SimpleMessagePacketHandler : IPacketHandler
+{
+    public int Id { get; } = (int)PacketId.SimpleMessage;
+
+    public Task HandleAsync(IConnection connection, IncomingPacket packet)
     {
-        public int Id { get; } = (int)PacketId.SimpleMessage;
-
-        public Task HandleAsync(IConnection connection, IncomingPacket packet) {
-            Console.WriteLine(packet.ReadString("msg"));
-            return Task.CompletedTask;
-        }
+        Console.WriteLine(packet.ReadString("msg"));
+        return Task.CompletedTask;
     }
 }

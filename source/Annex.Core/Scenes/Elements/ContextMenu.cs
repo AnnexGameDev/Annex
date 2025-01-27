@@ -1,18 +1,18 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
+using Annex.Core.Graphics.Windows;
 using Annex.Core.Input.InputEvents;
 
 namespace Annex.Core.Scenes.Elements;
 
 public class ContextMenu : Container, IParentElement
 {
-    private readonly ISceneService _sceneService;
     private readonly SolidRectangleContext _background;
+    private IScene? _currentScene;
 
-    public ContextMenu(ISceneService sceneService, IVector2<float> position, params Item[] contextMenuItems) : base(position: position) {
-        _sceneService = sceneService;
-
+    public ContextMenu(IVector2<float> position, params Item[] contextMenuItems) : base(position: position)
+    {
         this._background = new SolidRectangleContext(KnownColor.White, this.Position, this.Size)
         {
             BorderColor = KnownColor.Black,
@@ -38,29 +38,36 @@ public class ContextMenu : Container, IParentElement
         }
     }
 
-    protected override void DrawInternal(ICanvas canvas) {
+    protected override void DrawInternal(IWindow window)
+    {
         if (this.Visible)
         {
-            canvas.Draw(this._background);
-            base.DrawInternal(canvas);
+            window.Draw(this._background);
+            base.DrawInternal(window);
         }
     }
 
-    public void AddToCurrentScene() {
-        _sceneService.CurrentScene.AddChild(this);
+    public void AddToScene(IScene scene)
+    {
+        Assert.IsNull(_currentScene);
+        _currentScene = scene;
+        scene.AddChild(this);
     }
 
-    public void RemoveFromCurrentScene() {
-        _sceneService.CurrentScene.RemoveChild(this);
+    public void RemoveFromCurrentScene()
+    {
+        _currentScene!.RemoveChild(this);
+        _currentScene = null;
     }
 
     public class Item : Label
     {
         private bool IsHovered;
         private readonly SolidRectangleContext _hoveredBackground;
-        private readonly Action _selectedAction;
+        private readonly Action<WindowEvent> _selectedAction;
 
-        public Item(string text, Action selectionAction) {
+        public Item(string text, Action<WindowEvent> selectionAction)
+        {
             this.Text = text;
             this.Size.Set(75, 30);
             this.FontSize = 18;
@@ -77,27 +84,31 @@ public class ContextMenu : Container, IParentElement
             this._selectedAction = selectionAction;
         }
 
-        public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent) {
+        public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent)
+        {
             base.OnMouseMoved(mouseMovedEvent);
             this.IsHovered = true;
         }
 
-        public override void OnMouseLeft(MouseMovedEvent mouseMovedEvent) {
+        public override void OnMouseLeft(MouseMovedEvent mouseMovedEvent)
+        {
             base.OnMouseLeft(mouseMovedEvent);
             this.IsHovered = false;
         }
 
-        protected override void DrawInternal(ICanvas canvas) {
+        protected override void DrawInternal(IWindow window)
+        {
             if (this.IsHovered)
             {
-                canvas.Draw(this._hoveredBackground);
+                window.Draw(this._hoveredBackground);
             }
-            base.DrawInternal(canvas);
+            base.DrawInternal(window);
         }
 
-        public override void OnMouseButtonPressed(MouseButtonPressedEvent mouseButtonPressedEvent) {
+        public override void OnMouseButtonPressed(MouseButtonPressedEvent mouseButtonPressedEvent)
+        {
             base.OnMouseButtonPressed(mouseButtonPressedEvent);
-            this._selectedAction.Invoke();
+            this._selectedAction.Invoke(mouseButtonPressedEvent);
         }
     }
 }

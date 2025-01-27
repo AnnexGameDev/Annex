@@ -1,6 +1,10 @@
-﻿namespace Annex.Core.Input.InputEvents
+﻿using Annex.Core.Graphics.Windows;
+
+namespace Annex.Core.Input.InputEvents;
+
+public abstract class MouseEvent : WindowEvent
 {
-    public abstract class MouseEvent
+    public MouseEvent(IWindow window) : base(window)
     {
     }
 }

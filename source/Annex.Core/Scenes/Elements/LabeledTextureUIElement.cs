@@ -1,6 +1,6 @@
 ﻿using Annex.Core.Data;
-using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
+using Annex.Core.Graphics.Windows;
 using Annex.Core.Input.InputEvents;
 
 namespace Annex.Core.Scenes.Elements;
@@ -71,36 +71,42 @@ public abstract class LabeledTextureUIElement : UIElement, IButton, ILabel
         set => this.Label.TextBorderColor = value;
     }
 
-    public LabeledTextureUIElement(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size) {
+    public LabeledTextureUIElement(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size)
+    {
 
         this.Image = new Image($"{elementId}.background", this.Position, this.Size);
         this.Label = new Label($"{elementId}.label", this.Position, this.Size);
     }
 
-    protected override void DrawInternal(ICanvas canvas) {
-        this.Image.DrawOn(canvas);
-        this.Label.DrawOn(canvas);
+    protected override void DrawInternal(IWindow window)
+    {
+        this.Image.DrawOn(window);
+        this.Label.DrawOn(window);
     }
 
-    public override void OnLostFocus() {
+    public override void OnLostFocus()
+    {
         base.OnLostFocus();
         Label.OnLostFocus();
         Image.OnLostFocus();
     }
 
-    public override void OnGainedFocus() {
+    public override void OnGainedFocus()
+    {
         base.OnGainedFocus();
         Label.OnGainedFocus();
         Image.OnGainedFocus();
     }
 
-    public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent) {
+    public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent)
+    {
         base.OnMouseMoved(mouseMovedEvent);
         Label.OnMouseMoved(mouseMovedEvent);
         Image.OnMouseMoved(mouseMovedEvent);
     }
 
-    public override void OnMouseLeft(MouseMovedEvent mouseMovedEvent) {
+    public override void OnMouseLeft(MouseMovedEvent mouseMovedEvent)
+    {
         base.OnMouseLeft(mouseMovedEvent);
         Label.OnMouseLeft(mouseMovedEvent);
         Image.OnMouseLeft(mouseMovedEvent);

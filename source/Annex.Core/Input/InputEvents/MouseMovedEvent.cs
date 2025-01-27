@@ -1,13 +1,15 @@
-﻿namespace Annex.Core.Input.InputEvents
-{
-    public class MouseMovedEvent : MouseEvent
-    {
-        public float WindowX { get; }
-        public float WindowY { get; }
+﻿using Annex.Core.Graphics.Windows;
 
-        public MouseMovedEvent(float x, float y) {
-            this.WindowX = x;
-            this.WindowY = y;
-        }
+namespace Annex.Core.Input.InputEvents;
+
+public class MouseMovedEvent : MouseEvent
+{
+    public float WindowX { get; }
+    public float WindowY { get; }
+
+    public MouseMovedEvent(IWindow window, float x, float y) : base(window)
+    {
+        this.WindowX = x;
+        this.WindowY = y;
     }
 }

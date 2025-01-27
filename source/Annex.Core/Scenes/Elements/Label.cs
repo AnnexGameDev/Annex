@@ -1,6 +1,7 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
+using Annex.Core.Graphics.Windows;
 
 namespace Annex.Core.Scenes.Elements;
 
@@ -56,7 +57,8 @@ public class Label : UIElement, ILabel
     }
 
     public Label(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null, IVector2<float>? textOffset = null, IShared<string>? text = null)
-        : base(elementId, position, size) {
+        : base(elementId, position, size)
+    {
         this.RenderText = new TextContext(text ?? string.Empty.ToShared(), "default.ttf".ToShared())
         {
             Position = this.Position,
@@ -69,7 +71,8 @@ public class Label : UIElement, ILabel
         };
     }
 
-    protected override void DrawInternal(ICanvas canvas) {
-        canvas.Draw(this.RenderText);
+    protected override void DrawInternal(IWindow window)
+    {
+        window.Draw(this.RenderText);
     }
 }

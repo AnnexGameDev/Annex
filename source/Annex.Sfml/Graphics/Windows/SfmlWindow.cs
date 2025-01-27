@@ -4,222 +4,63 @@ using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
 using Annex.Core.Graphics.Windows;
 using Annex.Core.Input;
-using Annex.Core.Scenes;
 using Annex.Sfml.Collections.Generic;
 using Annex.Sfml.Extensions;
 using Annex.Sfml.Graphics.PlatformTargets;
+using Scaffold.DependencyInjection;
 using Scaffold.Logging;
 using SFML.Graphics;
 using SFML.Window;
 
 namespace Annex.Sfml.Graphics.Windows;
 
-internal class SfmlWindow : IWindow, ICanvas
+internal class SfmlWindow : WindowBase, IWindow, IDisposable
 {
-    private readonly IInputService _inputHandlerService;
+    private RenderWindow _renderWindow;
+    private WindowStyle? _newStyle;
     private readonly ICameraCache _cameraCache;
     private readonly IPlatformTargetFactory _platformTargetFactory;
-    private RenderWindow? _renderWindow;
+    private readonly IInputHandler _inputHandler;
 
-    private Vector2f _windowResolution = new();
-    public IVector2<float> WindowResolution => this._windowResolution;
+    public uint Width => _renderWindow.Size.X;
+    public uint Height => _renderWindow.Size.Y;
+    public int Left => _renderWindow.Position.X;
+    public int Top => _renderWindow.Position.Y;
 
-    private Vector2f _windowSize = new();
-    public IVector2<float> WindowSize => this._windowSize;
-
-    private Vector2f _windowPosition = new();
-    public IVector2<float> WindowPosition => this._windowPosition;
-
-    private string _title = string.Empty;
-    public string Title
+    public SfmlWindow(IContainer container, string title, uint width, uint height, WindowStyle windowStyle)
+        : base(container)
     {
-        get => this._title;
-        set
-        {
-            this._title = value;
-            this._renderWindow?.SetTitle(this.Title);
-        }
-    }
+        _cameraCache = container.Resolve<ICameraCache>()!;
+        _platformTargetFactory = container.Resolve<IPlatformTargetFactory>()!;
+        _inputHandler = container.Resolve<IInputHandler>()!;
 
-    private bool _isVisible = false;
-    public bool IsVisible
-    {
-        get => this._isVisible;
-        set
-        {
-            bool valChanged = value != _isVisible;
-            this._isVisible = value;
-            this._renderWindow?.SetVisible(this.IsVisible);
-
-            if (valChanged)
-            {
-                if (value)
-                {
-                    OnGainedFocus(this, new EventArgs());
-                }
-                else
-                {
-                    OnLostFocus(this, new EventArgs());
-                }
-            }
-        }
-    }
-
-    private WindowStyle _windowStyle = WindowStyle.Default;
-
-    public WindowStyle WindowStyle
-    {
-        get => this._windowStyle;
-        set
-        {
-            this._windowStyle = value;
-            this.ReCreateWindow();
-        }
-    }
-
-    public SfmlWindow(IInputService inputHandlerService, ISceneService sceneService, IPlatformTargetFactory platformTargetFactory, ICameraCache cameraCache)
-    {
-        _cameraCache = cameraCache;
-        _platformTargetFactory = platformTargetFactory;
-        this._inputHandlerService = inputHandlerService;
-        this.CreateWindow();
+        _renderWindow = CreateWindow(title, false, width, height, 0, 0, windowStyle);
 
         var defaultCamera = new Camera(CameraId.Default)
         {
             Region = new Core.Data.FloatRect(0, 0, 1, 1),
-            Size = this.WindowResolution,
-            Center = new Vector2f(this.WindowResolution.X * 0.5f, this.WindowResolution.Y * 0.5f),
+            Size = new Vector2f(Width, Height),
+            Center = new Vector2f(Width / 2, Height / 2),
         };
-        this.AddCamera(defaultCamera);
+        AddCamera(defaultCamera);
 
         var uiCamera = new Camera(CameraId.UI)
         {
             Region = new Core.Data.FloatRect(0, 0, 1, 1),
-            Size = this.WindowResolution,
-            Center = new ScalingVector2f(this.WindowResolution, 0.5f, 0.5f),
+            Size = new Vector2f(Width, Height),
+            Center = new Vector2f(Width / 2, Height / 2),
         };
-        this.AddCamera(uiCamera);
-    }
-
-    private void ReCreateWindow()
-    {
-        this.DestroyWindow();
-        this.CreateWindow();
-    }
-
-    private void CreateWindow()
-    {
-        var videoMode = new VideoMode((uint)this.WindowResolution.X, (uint)this.WindowResolution.Y);
-        this._renderWindow = new RenderWindow(videoMode, this.Title, this.WindowStyle.ToSfmlStyle());
-
-        this._renderWindow.Size.Set(this.WindowSize);
-        this._renderWindow.Position.Set(this.WindowPosition);
-        this._renderWindow.SetVisible(this.IsVisible);
-
-        this.AttachInputHandlers();
-    }
-
-    private void DestroyWindow()
-    {
-        this.RemoveInputHandlers();
-        this._renderWindow?.Dispose();
-        this._renderWindow = default;
+        AddCamera(uiCamera);
     }
 
     public void Dispose()
     {
-        this.DestroyWindow();
+        Destroy(_renderWindow);
     }
 
-    public void Draw(DrawContext context)
+    public void SetPosition(int x, int y)
     {
-        var platformTarget = this._platformTargetFactory.GetPlatformTarget(context);
-
-        if (platformTarget != null)
-        {
-
-            // Update the camera if we need to
-            if (context.Camera != null)
-            {
-                var view = this._cameraCache.GetCamera(context.Camera)?.View;
-
-                if (view == null)
-                {
-                    Log.Error($"Tried to set a view that doesn't exist: {context.Camera}");
-                }
-                else
-                {
-                    this._renderWindow?.SetView(view);
-                }
-            }
-
-            platformTarget.TryDraw(this._renderWindow);
-        }
-    }
-
-    #region Input
-    private void AttachInputHandlers()
-    {
-        if (this._renderWindow != null)
-        {
-            this._renderWindow.KeyPressed += OnKeyboardKeyPressed;
-            this._renderWindow.KeyReleased += OnKeyboardKeyReleased;
-            this._renderWindow.Closed += OnWindowClosed;
-            this._renderWindow.MouseButtonPressed += OnMouseButtonPressed;
-            this._renderWindow.MouseButtonReleased += OnMouseButtonReleased;
-            this._renderWindow.MouseWheelScrolled += OnMouseScrollWheelMoved;
-            this._renderWindow.MouseMoved += OnMouseMoved;
-            this._renderWindow.GainedFocus += OnGainedFocus;
-            this._renderWindow.LostFocus += OnLostFocus;
-        }
-    }
-
-    private void RemoveInputHandlers()
-    {
-        if (this._renderWindow != null)
-        {
-            this._renderWindow.KeyPressed -= OnKeyboardKeyPressed;
-            this._renderWindow.KeyReleased -= OnKeyboardKeyReleased;
-            this._renderWindow.Closed -= OnWindowClosed;
-            this._renderWindow.MouseButtonPressed -= OnMouseButtonPressed;
-            this._renderWindow.MouseButtonReleased -= OnMouseButtonReleased;
-            this._renderWindow.MouseWheelScrolled -= OnMouseScrollWheelMoved;
-            this._renderWindow.MouseMoved -= OnMouseMoved;
-            this._renderWindow.GainedFocus -= OnGainedFocus;
-            this._renderWindow.LostFocus += OnLostFocus;
-        }
-    }
-
-    private void OnLostFocus(object? sender, EventArgs e) => this._inputHandlerService?.HandleWindowLostFocus();
-    private void OnGainedFocus(object? sender, EventArgs e) => this._inputHandlerService?.HandleWindowGainedFocus();
-    private void OnKeyboardKeyPressed(object? sender, KeyEventArgs e) => this._inputHandlerService?.HandleKeyboardKeyPressed(this, e.Code.ToKeyboardKey());
-    private void OnKeyboardKeyReleased(object? sender, KeyEventArgs e) => this._inputHandlerService?.HandleKeyboardKeyReleased(this, e.Code.ToKeyboardKey());
-    private void OnWindowClosed(object? sender, EventArgs e) => this._inputHandlerService?.HandleWindowClosed(this);
-
-    private void OnMouseMoved(object? sender, MouseMoveEventArgs e) => this._inputHandlerService?.HandleMouseMoved(this, RelatePointTo(e.X, e.Y, CameraId.UI));
-    private void OnMouseScrollWheelMoved(object? sender, MouseWheelScrollEventArgs e) => this._inputHandlerService?.HandleMouseScrollWheelMoved(this, e.Delta);
-    private void OnMouseButtonReleased(object? sender, MouseButtonEventArgs e) => this._inputHandlerService?.HandleMouseButtonReleased(this, e.Button.ToMouseButton(), RelatePointTo(e.X, e.Y, CameraId.UI));
-    private void OnMouseButtonPressed(object? sender, MouseButtonEventArgs e) => this._inputHandlerService?.HandleMouseButtonPressed(this, e.Button.ToMouseButton(), RelatePointTo(e.X, e.Y, CameraId.UI));
-
-    public bool IsKeyDown(KeyboardKey key)
-    {
-        if (this._renderWindow?.HasFocus() != true)
-            return false;
-
-        return Keyboard.IsKeyPressed(key.ToSfmlKeyboardKey());
-    }
-    #endregion
-
-    public Camera? GetCamera(CameraId cameraId) => GetCamera(cameraId.ToString());
-
-    public Camera? GetCamera(string cameraId)
-    {
-        return this._cameraCache.GetCamera(cameraId)?.Camera;
-    }
-
-    public void AddCamera(Camera camera)
-    {
-        this._cameraCache.AddCamera(camera);
+        _renderWindow.Position.Set(x, y);
     }
 
     public void SetIcon(uint sizeX, uint sizeY, IAsset icon)
@@ -234,22 +75,121 @@ internal class SfmlWindow : IWindow, ICanvas
         this._renderWindow?.SetMouseCursor(new Cursor(image.Pixels, new SFML.System.Vector2u(sizeX, sizeY), new SFML.System.Vector2u(offsetX, offsetY)));
     }
 
-    public void SetResolution(float x, float y)
+    protected override void RaisePropertyChanged(string propertyName)
     {
-        this._windowResolution.Set(x, y);
-        this.ReCreateWindow();
+        if (propertyName == nameof(IsVisible))
+        {
+            _renderWindow!.SetVisible(IsVisible);
+        }
+        else if (propertyName == nameof(Title))
+        {
+            _renderWindow!.SetTitle(Title);
+        }
     }
 
-    public void SetSize(float x, float y)
+    #region RenderWindow management
+    private RenderWindow CreateWindow(string title, bool isVisible, uint resolutionX, uint resolutionY, int positionX, int positionY, WindowStyle style)
     {
-        this._windowSize.Set(x, y);
-        this._renderWindow?.Size.Set(this.WindowSize);
+        var videoMode = new VideoMode(resolutionX, resolutionY);
+        var renderWindow = new RenderWindow(videoMode, title, style.ToSfmlStyle());
+
+        renderWindow.Size.Set(resolutionX, resolutionY);
+        renderWindow.Position.Set(positionX, positionY);
+        renderWindow.SetVisible(isVisible);
+
+        AttachInputHandlers(renderWindow);
+        return renderWindow;
     }
 
-    public void SetPosition(float x, float y)
+    internal void Destroy(RenderWindow renderWindow)
     {
-        this._windowPosition.Set(x, y);
-        this._renderWindow?.Position.Set(this.WindowPosition);
+        DetattachInputHandlers(renderWindow);
+        renderWindow.Dispose();
+    }
+    #endregion
+
+    #region Camera
+    public Camera? GetCamera(CameraId cameraId) => GetCamera(cameraId.ToString());
+    public Camera? GetCamera(string cameraId) => _cameraCache.GetCamera(cameraId)?.Camera;
+    public void AddCamera(Camera camera) => _cameraCache.AddCamera(camera);
+    #endregion
+
+    #region Input Events
+    private void AttachInputHandlers(RenderWindow renderWindow)
+    {
+        renderWindow.KeyPressed += OnKeyboardKeyPressed;
+        renderWindow.KeyReleased += OnKeyboardKeyReleased;
+        renderWindow.Closed += OnWindowClosed;
+        renderWindow.MouseButtonPressed += OnMouseButtonPressed;
+        renderWindow.MouseButtonReleased += OnMouseButtonReleased;
+        renderWindow.MouseWheelScrolled += OnMouseScrollWheelMoved;
+        renderWindow.MouseMoved += OnMouseMoved;
+        renderWindow.GainedFocus += OnGainedFocus;
+        renderWindow.LostFocus += OnLostFocus;
+    }
+
+    private void DetattachInputHandlers(RenderWindow renderWindow)
+    {
+        renderWindow.KeyPressed -= OnKeyboardKeyPressed;
+        renderWindow.KeyReleased -= OnKeyboardKeyReleased;
+        renderWindow.Closed -= OnWindowClosed;
+        renderWindow.MouseButtonPressed -= OnMouseButtonPressed;
+        renderWindow.MouseButtonReleased -= OnMouseButtonReleased;
+        renderWindow.MouseWheelScrolled -= OnMouseScrollWheelMoved;
+        renderWindow.MouseMoved -= OnMouseMoved;
+        renderWindow.GainedFocus -= OnGainedFocus;
+        renderWindow.LostFocus += OnLostFocus;
+    }
+
+    public void OnLostFocus(object? sender, EventArgs e) => _inputHandler.HandleWindowLostFocus(this);
+    public void OnGainedFocus(object? sender, EventArgs e) => _inputHandler.HandleWindowGainedFocus(this);
+    public void OnKeyboardKeyPressed(object? sender, KeyEventArgs e) => _inputHandler.HandleKeyboardKeyPressed(this, e.Code.ToKeyboardKey());
+    public void OnKeyboardKeyReleased(object? sender, KeyEventArgs e) => _inputHandler.HandleKeyboardKeyReleased(this, e.Code.ToKeyboardKey());
+    public void OnWindowClosed(object? sender, EventArgs e) => _inputHandler.HandleWindowClosed(this);
+
+    public void OnMouseMoved(object? sender, MouseMoveEventArgs e) => _inputHandler.HandleMouseMoved(this, RelatePointTo(e.X, e.Y, CameraId.UI));
+    public void OnMouseScrollWheelMoved(object? sender, MouseWheelScrollEventArgs e) => _inputHandler.HandleMouseScrollWheelMoved(this, e.Delta);
+    public void OnMouseButtonReleased(object? sender, MouseButtonEventArgs e) => _inputHandler.HandleMouseButtonReleased(this, e.Button.ToMouseButton(), RelatePointTo(e.X, e.Y, CameraId.UI));
+    public void OnMouseButtonPressed(object? sender, MouseButtonEventArgs e) => _inputHandler.HandleMouseButtonPressed(this, e.Button.ToMouseButton(), RelatePointTo(e.X, e.Y, CameraId.UI));
+    #endregion
+
+    #region Canvas
+    public void Draw(DrawContext context)
+    {
+        var platformTarget = _platformTargetFactory.GetPlatformTarget(context);
+
+        if (platformTarget == null)
+        {
+            return;
+        }
+
+        // Update the camera if we need to
+        if (context.Camera != null)
+        {
+            var view = _cameraCache.GetCamera(context.Camera)?.View;
+
+            if (view == null)
+            {
+                Log.Error($"Tried to set a view that doesn't exist: {context.Camera}");
+            }
+            else
+            {
+                _renderWindow.SetView(view);
+            }
+
+            platformTarget.TryDraw(_renderWindow);
+        }
+    }
+
+    #endregion
+
+    #region Hardware input
+    public bool IsKeyDown(KeyboardKey key)
+    {
+        if (this._renderWindow?.HasFocus() != true)
+            return false;
+
+        return Keyboard.IsKeyPressed(key.ToSfmlKeyboardKey());
     }
 
     public IVector2<float> GetMousePos(CameraId cameraId = CameraId.UI)
@@ -257,20 +197,6 @@ internal class SfmlWindow : IWindow, ICanvas
         var mousePos = Mouse.GetPosition(this._renderWindow);
         var camera = this._cameraCache.GetCamera(cameraId);
         return RelatePointTo(mousePos.X, mousePos.Y, cameraId);
-    }
-
-    private IVector2<float> RelatePointTo(int x, int y, CameraId cameraId)
-    {
-        var camera = this._cameraCache.GetCamera(cameraId);
-
-        if (camera == null)
-            throw new NullReferenceException($"The camera {cameraId} couldn't be found");
-
-        if (this._renderWindow == null)
-            throw new NullReferenceException($"{nameof(_renderWindow)} is null when performing {nameof(RelatePointTo)}");
-
-        var viewPos = this._renderWindow.MapPixelToCoords(new SFML.System.Vector2i(x, y), camera.View);
-        return new Vector2f(viewPos.X, viewPos.Y);
     }
 
     public bool IsMouseButtonDown(MouseButton button)
@@ -292,17 +218,30 @@ internal class SfmlWindow : IWindow, ICanvas
     {
         return Joystick.GetAxisPosition(controllerId, axis.ToSfml());
     }
+    #endregion
 
-    public ICanvas GetCanvas() => this;
-
-    public void PostDraw()
+    private IVector2<float> RelatePointTo(int x, int y, CameraId cameraId)
     {
-        _renderWindow?.Display();
-        _renderWindow?.DispatchEvents();
+        var camera = _cameraCache.GetCamera(cameraId);
+
+        if (camera == null)
+            throw new NullReferenceException($"The camera {cameraId} couldn't be found");
+
+        if (_renderWindow == null)
+            throw new NullReferenceException($"{nameof(_renderWindow)} is null when performing {nameof(RelatePointTo)}");
+
+        var viewPos = _renderWindow.MapPixelToCoords(new SFML.System.Vector2i(x, y), camera.View);
+        return new Vector2f(viewPos.X, viewPos.Y);
     }
 
-    public void PreDraw()
+    public Task DrawCurrentSceneAsync()
     {
-        _renderWindow?.Clear();
+        _renderWindow.Clear();
+
+        Scene.DrawOn(this);
+
+        _renderWindow.Display();
+        _renderWindow.DispatchEvents();
+        return Task.CompletedTask;
     }
 }

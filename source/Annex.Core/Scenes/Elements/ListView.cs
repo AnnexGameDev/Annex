@@ -1,6 +1,7 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
+using Annex.Core.Graphics.Windows;
 using Annex.Core.Input;
 using Annex.Core.Input.InputEvents;
 
@@ -48,7 +49,8 @@ public class ListView : Image, IParentElement
     public event EventHandler<SelectIndexChangedEventArgs>? OnSelectedIndexChanged;
 
     public ListView(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null)
-        : base(elementId, position, size) {
+        : base(elementId, position, size)
+    {
         _selectionTexture = new TextureContext(string.Empty.ToShared())
         {
             RenderSize = new Vector2f(),
@@ -61,7 +63,8 @@ public class ListView : Image, IParentElement
         };
     }
 
-    public IUIElement? GetElementById(string id) {
+    public IUIElement? GetElementById(string id)
+    {
         if (this.ElementID == id)
         {
             return this;
@@ -88,7 +91,8 @@ public class ListView : Image, IParentElement
         return null;
     }
 
-    public IUIElement? GetFirstVisibleElement(float x, float y) {
+    public IUIElement? GetFirstVisibleElement(float x, float y)
+    {
         if (!this.IsInBounds(x, y))
             return null;
 
@@ -108,7 +112,8 @@ public class ListView : Image, IParentElement
                 {
                     return hitChild;
                 }
-            } else
+            }
+            else
             {
                 if (child.IsInBounds(x, y))
                 {
@@ -121,38 +126,42 @@ public class ListView : Image, IParentElement
         return this;
     }
 
-    public T? GetElementById<T>(string id) where T : class, IUIElement {
+    public T? GetElementById<T>(string id) where T : class, IUIElement
+    {
         return GetElementById(id) as T;
     }
 
-    protected override void DrawInternal(ICanvas canvas) {
-        base.DrawInternal(canvas);
+    protected override void DrawInternal(IWindow window)
+    {
+        base.DrawInternal(window);
 
         Debug.Assert(LineHeight != 0, "LineHeight for listview is zero");
 
         if (HasItemSelected)
         {
-            canvas.Draw(_selectionTexture);
+            window.Draw(_selectionTexture);
         }
 
         if (_isHoveringAnItem && IsSelectable)
         {
-            canvas.Draw(_hoverItemTexture);
+            window.Draw(_hoverItemTexture);
         }
 
         for (int i = _topVisibleIndex; i <= _bottomVisibleIndex; i++)
         {
             var child = _children[i];
-            child.DrawOn(canvas);
+            child.DrawOn(window);
         }
     }
 
-    public override void OnKeyboardKeyPressed(KeyboardKeyPressedEvent keyboardKeyPressedEvent) {
+    public override void OnKeyboardKeyPressed(KeyboardKeyPressedEvent keyboardKeyPressedEvent)
+    {
         base.OnKeyboardKeyPressed(keyboardKeyPressedEvent);
         OnKeyPressed(keyboardKeyPressedEvent.Key);
     }
 
-    private void OnItemHovered(MouseMovedEvent mouseMovedEvent) {
+    private void OnItemHovered(MouseMovedEvent mouseMovedEvent)
+    {
         float y = mouseMovedEvent.WindowY - this.Position.Y;
         int hoveredIndex = _topVisibleIndex + (int)(y / LineHeight);
 
@@ -164,28 +173,33 @@ public class ListView : Image, IParentElement
         }
     }
 
-    public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent) {
+    public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent)
+    {
         base.OnMouseMoved(mouseMovedEvent);
 
         // If this UI element is hovered, then we're not hovering an item.
         _isHoveringAnItem = false;
     }
 
-    public override void OnMouseLeft(MouseMovedEvent mouseMovedEvent) {
+    public override void OnMouseLeft(MouseMovedEvent mouseMovedEvent)
+    {
         base.OnMouseLeft(mouseMovedEvent);
         _isHoveringAnItem = false;
     }
 
-    public void AddItem(IShared<string> text) {
+    public void AddItem(IShared<string> text)
+    {
         var item = CreateItem(text);
         this._children.Add(item);
     }
 
-    public void Clear() {
+    public void Clear()
+    {
         this._children.Clear();
     }
 
-    private ListViewItem CreateItem(IShared<string> text) {
+    private ListViewItem CreateItem(IShared<string> text)
+    {
         var item = new ListViewItem(this, new Vector2f(this.Size.X, this.LineHeight), new PrefixedString("", text))
         {
             TrySelectItem = OnItemRequestedTrySelectItem,
@@ -195,7 +209,8 @@ public class ListView : Image, IParentElement
         return item;
     }
 
-    private void OnKeyPressed(KeyboardKey key) {
+    private void OnKeyPressed(KeyboardKey key)
+    {
         int offset = key switch
         {
             KeyboardKey.Up => -1,
@@ -209,14 +224,16 @@ public class ListView : Image, IParentElement
         }
     }
 
-    private void OnItemRequestedTrySelectItem(int requestedSelectionIndex) {
+    private void OnItemRequestedTrySelectItem(int requestedSelectionIndex)
+    {
         if (IsSelectable)
         {
             SelectItem(requestedSelectionIndex);
         }
     }
 
-    private void SelectItem(int index) {
+    private void SelectItem(int index)
+    {
         if (index < 0 || index >= _children.Count)
         {
             return;
@@ -245,7 +262,8 @@ public class ListView : Image, IParentElement
         OnSelectedIndexChanged?.Invoke(this, args);
     }
 
-    private void RefreshView() {
+    private void RefreshView()
+    {
         if (SelectedIndex > _bottomVisibleIndex)
         {
             _topVisibleIndex = SelectedIndex - (_maxVisibleItemsCount - 1);
@@ -258,7 +276,8 @@ public class ListView : Image, IParentElement
         _renderOffset.Set(0, -_topVisibleIndex * LineHeight);
     }
 
-    private void UnselectItem(int index) {
+    private void UnselectItem(int index)
+    {
         if (index < 0 || index >= _children.Count)
         {
             return;
@@ -268,7 +287,8 @@ public class ListView : Image, IParentElement
         SelectedIndex = -1;
     }
 
-    private void ClearSelection() {
+    private void ClearSelection()
+    {
         UnselectItem(SelectedIndex);
     }
 
@@ -288,7 +308,8 @@ public class ListView : Image, IParentElement
                   size: itemSize,
                   textOffset: new ScalingVector2f(itemSize, 0, 0.5f),
                   text: text
-                ) {
+                )
+        {
             HorizontalTextAlignment = HorizontalAlignment.Left;
             VerticalTextAlignment = VerticalAlignment.Middle;
             FontSize = parent.FontSize;
@@ -296,45 +317,53 @@ public class ListView : Image, IParentElement
             _text = text;
         }
 
-        internal void SetIndex(int index) {
+        internal void SetIndex(int index)
+        {
             Index = index;
             RefreshView();
         }
 
-        private void RefreshView() {
+        private void RefreshView()
+        {
             RefreshPosition();
             FontColor = (IsSelected ? _parent.SelectedFontColor : _parent.FontColor) ?? KnownColor.Black;
 
             _text.Prefix = _parent.ShowIndexPrefix ? $"{Index}: " : string.Empty;
         }
 
-        private void RefreshPosition() {
+        private void RefreshPosition()
+        {
             var position = (OffsetVector2f)Position;
             var scale = (ScalingVector2f)position.OffsetVector;
             scale.ScaleVector.Set(0, Index);
         }
 
-        public override void OnMouseButtonPressed(MouseButtonPressedEvent mouseButtonPressedEvent) {
+        public override void OnMouseButtonPressed(MouseButtonPressedEvent mouseButtonPressedEvent)
+        {
             base.OnMouseButtonPressed(mouseButtonPressedEvent);
             TrySelectItem?.Invoke(Index);
         }
 
-        public override void OnKeyboardKeyPressed(KeyboardKeyPressedEvent keyboardKeyPressedEvent) {
+        public override void OnKeyboardKeyPressed(KeyboardKeyPressedEvent keyboardKeyPressedEvent)
+        {
             base.OnKeyboardKeyPressed(keyboardKeyPressedEvent);
             KeyPressed?.Invoke(keyboardKeyPressedEvent.Key);
         }
 
-        internal void Unselect() {
+        internal void Unselect()
+        {
             IsSelected = false;
             RefreshView();
         }
 
-        internal void Select() {
+        internal void Select()
+        {
             IsSelected = true;
             RefreshView();
         }
 
-        public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent) {
+        public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent)
+        {
             base.OnMouseMoved(mouseMovedEvent);
 
             _parent.OnItemHovered(mouseMovedEvent);
@@ -352,12 +381,14 @@ public class ListView : Image, IParentElement
             set => Set(value);
         }
 
-        public PrefixedString(string prefix, IShared<string> value) {
+        public PrefixedString(string prefix, IShared<string> value)
+        {
             Prefix = prefix;
             _originalValue = value;
         }
 
-        public void Set(string value) {
+        public void Set(string value)
+        {
             _originalValue.Set(value);
         }
     }

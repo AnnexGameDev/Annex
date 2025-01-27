@@ -15,9 +15,8 @@ public class SfmlGraphicsEngine : IGraphicsEngine
     private readonly IContainer _container;
     private readonly IPlatformTargetFactory _platformTargetFactory;
 
-    public IWindow CreateWindow() => this._container.Resolve<SfmlWindow>();
-
-    public SfmlGraphicsEngine(IContainer container) {
+    public SfmlGraphicsEngine(IContainer container)
+    {
         this._container = container;
         this._container.Register<IPlatformTargetFactory, PlatformTargetFactory>();
         this._container.RegisterSingleton<ITextureCache, TextureCache>();
@@ -32,7 +31,8 @@ public class SfmlGraphicsEngine : IGraphicsEngine
         this._platformTargetFactory = this._container.Resolve<IPlatformTargetFactory>();
     }
 
-    public FloatRect GetTextBounds(TextContext textContext, bool forceContextUpdate) {
+    public FloatRect GetTextBounds(TextContext textContext, bool forceContextUpdate)
+    {
         if (forceContextUpdate)
         {
             this._platformTargetFactory.GetPlatformTarget(textContext);
@@ -44,7 +44,8 @@ public class SfmlGraphicsEngine : IGraphicsEngine
         throw new InvalidOperationException($"Unable to transform textContext to text platform target");
     }
 
-    public float GetCharacterX(TextContext textContext, int index, bool forceContextUpdate) {
+    public float GetCharacterX(TextContext textContext, int index, bool forceContextUpdate)
+    {
 
         if (forceContextUpdate)
         {
@@ -56,5 +57,10 @@ public class SfmlGraphicsEngine : IGraphicsEngine
             return platformTarget.GetCharacterX(index);
         }
         throw new InvalidOperationException($"Unable to transform textContext to text platform target");
+    }
+
+    public IWindow CreateWindow(string title, uint width, uint height, WindowStyle windowStyle)
+    {
+        return new SfmlWindow(_container, title, width, height, windowStyle);
     }
 }

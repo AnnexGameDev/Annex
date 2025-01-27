@@ -1,11 +1,13 @@
-﻿namespace Annex.Core.Input.InputEvents
-{
-    public abstract class KeyboardEvent : HardwareEvent
-    {
-        public KeyboardKey Key { get; }
+﻿using Annex.Core.Graphics.Windows;
 
-        public KeyboardEvent(KeyboardKey key) {
-            this.Key = key;
-        }
+namespace Annex.Core.Input.InputEvents;
+
+public abstract class KeyboardEvent : WindowEvent
+{
+    public KeyboardKey Key { get; }
+
+    public KeyboardEvent(IWindow window, KeyboardKey key) : base(window)
+    {
+        this.Key = key;
     }
 }

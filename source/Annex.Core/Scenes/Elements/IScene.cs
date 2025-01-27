@@ -16,6 +16,7 @@ public interface IScene : IUIElement, IAddableParentElement
     void OnMouseButtonReleased(IWindow window, MouseButtonReleasedEvent mouseButtonReleasedEvent);
     void OnMouseMoved(IWindow window, MouseMovedEvent mouseMovedEvent);
     void OnMouseScrollWheelMoved(IWindow window, MouseScrollWheelMovedEvent mouseScrollWheelMovedEvent);
-    void OnWindowGainedFocus();
-    void OnWindowLostFocus();
+    void OnWindowGainedFocus(IWindow window);
+    void OnWindowLostFocus(IWindow window);
+    void SetFocus(IUIElement? element);
 }

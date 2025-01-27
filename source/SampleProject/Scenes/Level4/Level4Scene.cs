@@ -1,4 +1,5 @@
-﻿using Annex.Core.Networking;
+﻿using Annex.Core;
+using Annex.Core.Networking;
 using Annex.Core.Networking.Connections;
 using Annex.Core.Networking.Packets;
 using Annex.Core.Scenes.Elements;
@@ -12,18 +13,20 @@ namespace SampleProject.Scenes.Level4
         private readonly IServerEndpoint _server;
         private readonly IClientEndpoint _client;
 
-        public Level4Scene(INetworkingEngine networkingEngine) {
+        public Level4Scene(INetworkingEngine networkingEngine)
+        {
             var config = new EndpointConfiguration();
             _server = networkingEngine.CreateServer(config);
             _server.Start();
 
             _client = networkingEngine.CreateClient(config);
-            _client.Start();
+            _client.StartAsync().FireAndForget();
 
             for (int i = 0; i < 10; i++)
             {
                 int val = i;
-                Task.Run(async () => {
+                Task.Run(async () =>
+                {
                     try
                     {
                         using var request = CreateDataRequestPacket(val);
@@ -40,7 +43,8 @@ namespace SampleProject.Scenes.Level4
             }
         }
 
-        private OutgoingPacket CreateDataRequestPacket(int id) {
+        private OutgoingPacket CreateDataRequestPacket(int id)
+        {
             var outgoingPacket = new OutgoingPacket(SimpleRequestPacketHandler.PacketId);
             outgoingPacket.Write(id);
             return outgoingPacket;
@@ -53,7 +57,8 @@ namespace SampleProject.Scenes.Level4
 
         public int Id { get; } = PacketId;
 
-        public async Task HandleAsync(IConnection connection, IncomingPacket packet) {
+        public async Task HandleAsync(IConnection connection, IncomingPacket packet)
+        {
             var id = packet.ReadInt();
 
             Console.WriteLine($"[Server] {id} -> {packet.OriginalRequestId}");

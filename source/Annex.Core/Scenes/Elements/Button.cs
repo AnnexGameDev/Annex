@@ -1,6 +1,6 @@
 ﻿using Annex.Core.Data;
-using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
+using Annex.Core.Graphics.Windows;
 using Annex.Core.Input.InputEvents;
 
 namespace Annex.Core.Scenes.Elements;
@@ -73,23 +73,27 @@ public class Button : UIElement, IButton
         set => this._label.TextBorderColor = value;
     }
 
-    public Button(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null, IVector2<float>? textOffset = null, IShared<string>? text = null) : base(elementId, position, size) {
+    public Button(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null, IVector2<float>? textOffset = null, IShared<string>? text = null) : base(elementId, position, size)
+    {
 
         this._background = new Image($"{elementId}.background", this.Position, this.Size);
         this._label = new Label($"{elementId}.label", this.Position, this.Size, textOffset, text);
     }
 
-    protected override void DrawInternal(ICanvas canvas) {
-        this._background.DrawOn(canvas);
-        this._label.DrawOn(canvas);
+    protected override void DrawInternal(IWindow window)
+    {
+        this._background.DrawOn(window);
+        this._label.DrawOn(window);
     }
 
-    public override void OnMouseLeft(MouseMovedEvent mouseMovedEvent) {
+    public override void OnMouseLeft(MouseMovedEvent mouseMovedEvent)
+    {
         base.OnMouseLeft(mouseMovedEvent);
         _background.OnMouseLeft(mouseMovedEvent);
     }
 
-    public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent) {
+    public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent)
+    {
         base.OnMouseMoved(mouseMovedEvent);
         _background.OnMouseMoved(mouseMovedEvent);
     }

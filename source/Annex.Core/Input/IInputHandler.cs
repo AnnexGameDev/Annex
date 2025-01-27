@@ -3,7 +3,7 @@ using Annex.Core.Graphics.Windows;
 
 namespace Annex.Core.Input;
 
-public interface IInputService
+public interface IInputHandler
 {
     // TODO: Tests
     bool IsKeyDown(KeyboardKey key);
@@ -18,6 +18,6 @@ public interface IInputService
     void HandleMouseMoved(IWindow window, IVector2<float> position);
     void HandleMouseScrollWheelMoved(IWindow window, double delta);
 
-    void HandleWindowGainedFocus();
-    void HandleWindowLostFocus();
+    void HandleWindowGainedFocus(IWindow window);
+    void HandleWindowLostFocus(IWindow window);
 }

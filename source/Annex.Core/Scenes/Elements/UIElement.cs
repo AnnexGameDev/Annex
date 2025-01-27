@@ -1,5 +1,5 @@
 ﻿using Annex.Core.Data;
-using Annex.Core.Graphics;
+using Annex.Core.Graphics.Windows;
 using Annex.Core.Input.InputEvents;
 
 namespace Annex.Core.Scenes.Elements;
@@ -12,7 +12,8 @@ public abstract class UIElement : IUIElement
     public bool Visible { get; set; }
     protected bool IsFocused { get; private set; }
 
-    public UIElement(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) {
+    public UIElement(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null)
+    {
         this.ElementID = elementId ?? string.Empty;
         this.Position = position ?? new Vector2f();
         this.Size = size ?? new Vector2f();
@@ -30,14 +31,16 @@ public abstract class UIElement : IUIElement
     public event EventHandler<MouseScrollWheelMovedEvent>? OnElementMouseScrollWheelMoved;
     public event EventHandler<MouseMovedEvent>? OnElementMouseLeft;
 
-    public void DrawOn(ICanvas canvas) {
+    public void DrawOn(IWindow window)
+    {
         if (this.Visible)
-            this.DrawInternal(canvas);
+            this.DrawInternal(window);
     }
 
-    protected abstract void DrawInternal(ICanvas canvas);
+    protected abstract void DrawInternal(IWindow canvas);
 
-    protected virtual void Dispose(bool disposing) {
+    protected virtual void Dispose(bool disposing)
+    {
         if (!disposedValue)
         {
             if (disposing)
@@ -58,13 +61,15 @@ public abstract class UIElement : IUIElement
     //     Dispose(disposing: false);
     // }
 
-    public void Dispose() {
+    public void Dispose()
+    {
         // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
 
-    public bool IsInBounds(float x, float y) {
+    public bool IsInBounds(float x, float y)
+    {
         if (x < this.Position.X || x > this.Position.X + this.Size.X)
             return false;
         if (y < this.Position.Y || y > this.Position.Y + this.Size.Y)
@@ -72,41 +77,50 @@ public abstract class UIElement : IUIElement
         return true;
     }
 
-    public virtual void OnLostFocus() {
+    public virtual void OnLostFocus()
+    {
         this.IsFocused = false;
         this.OnElementLostFocus?.Invoke(this, EventArgs.Empty);
     }
 
-    public virtual void OnGainedFocus() {
+    public virtual void OnGainedFocus()
+    {
         this.IsFocused = true;
         this.OnElementGainedFocus?.Invoke(this, EventArgs.Empty);
     }
 
-    public virtual void OnMouseButtonPressed(MouseButtonPressedEvent mouseButtonPressedEvent) {
+    public virtual void OnMouseButtonPressed(MouseButtonPressedEvent mouseButtonPressedEvent)
+    {
         this.OnElementMouseButtonPressed?.Invoke(this, mouseButtonPressedEvent);
     }
 
-    public virtual void OnMouseButtonReleased(MouseButtonReleasedEvent mouseButtonReleasedEvent) {
+    public virtual void OnMouseButtonReleased(MouseButtonReleasedEvent mouseButtonReleasedEvent)
+    {
         this.OnElementMouseButtonReleased?.Invoke(this, mouseButtonReleasedEvent);
     }
 
-    public virtual void OnMouseMoved(MouseMovedEvent mouseMovedEvent) {
+    public virtual void OnMouseMoved(MouseMovedEvent mouseMovedEvent)
+    {
         this.OnElementMouseMoved?.Invoke(this, mouseMovedEvent);
     }
 
-    public virtual void OnKeyboardKeyPressed(KeyboardKeyPressedEvent keyboardKeyPressedEvent) {
+    public virtual void OnKeyboardKeyPressed(KeyboardKeyPressedEvent keyboardKeyPressedEvent)
+    {
         this.OnElementKeyboardKeyPressed?.Invoke(this, keyboardKeyPressedEvent);
     }
 
-    public virtual void OnKeyboardKeyReleased(KeyboardKeyReleasedEvent keyboardKeyReleasedEvent) {
+    public virtual void OnKeyboardKeyReleased(KeyboardKeyReleasedEvent keyboardKeyReleasedEvent)
+    {
         this.OnElementKeyboardKeyReleased?.Invoke(this, keyboardKeyReleasedEvent);
     }
 
-    public virtual void OnMouseScrollWheelMoved(MouseScrollWheelMovedEvent mouseScrollWheelMovedEvent) {
+    public virtual void OnMouseScrollWheelMoved(MouseScrollWheelMovedEvent mouseScrollWheelMovedEvent)
+    {
         this.OnElementMouseScrollWheelMoved?.Invoke(this, mouseScrollWheelMovedEvent);
     }
 
-    public virtual void OnMouseLeft(MouseMovedEvent mouseMovedEvent) {
+    public virtual void OnMouseLeft(MouseMovedEvent mouseMovedEvent)
+    {
         this.OnElementMouseLeft?.Invoke(this, mouseMovedEvent);
     }
 }

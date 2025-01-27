@@ -1,11 +1,13 @@
-﻿namespace Annex.Core.Input.InputEvents
-{
-    public class MouseScrollWheelMovedEvent
-    {
-        public double Delta { get; }
+﻿using Annex.Core.Graphics.Windows;
 
-        public MouseScrollWheelMovedEvent(double delta) {
-            this.Delta = delta;
-        }
+namespace Annex.Core.Input.InputEvents;
+
+public class MouseScrollWheelMovedEvent : WindowEvent
+{
+    public double Delta { get; }
+
+    public MouseScrollWheelMovedEvent(IWindow window, double delta) : base(window)
+    {
+        this.Delta = delta;
     }
 }

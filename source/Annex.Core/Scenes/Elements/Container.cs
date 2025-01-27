@@ -1,5 +1,5 @@
 ﻿using Annex.Core.Data;
-using Annex.Core.Graphics;
+using Annex.Core.Graphics.Windows;
 using Scaffold.Collections;
 
 namespace Annex.Core.Scenes.Elements;
@@ -8,16 +8,19 @@ public class Container : UIElement, IAddableParentElement
 {
     private ConcurrentList<IUIElement> _children = new();
 
-    public Container(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size) {
+    public Container(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size)
+    {
     }
 
     public IEnumerable<IUIElement> Children => _children;
 
-    public void AddChild(IUIElement child) {
+    public void AddChild(IUIElement child)
+    {
         this._children.Add(child);
     }
 
-    public IUIElement? GetElementById(string id) {
+    public IUIElement? GetElementById(string id)
+    {
 
         if (this.ElementID == id)
         {
@@ -46,11 +49,13 @@ public class Container : UIElement, IAddableParentElement
         return null;
     }
 
-    public T? GetElementById<T>(string id) where T : class, IUIElement {
+    public T? GetElementById<T>(string id) where T : class, IUIElement
+    {
         return GetElementById(id) as T;
     }
 
-    public IUIElement? GetFirstVisibleElement(float x, float y) {
+    public IUIElement? GetFirstVisibleElement(float x, float y)
+    {
 
         if (!this.IsInBounds(x, y))
             return null;
@@ -70,7 +75,8 @@ public class Container : UIElement, IAddableParentElement
                 {
                     return hitChild;
                 }
-            } else
+            }
+            else
             {
                 if (child.IsInBounds(x, y))
                 {
@@ -83,7 +89,8 @@ public class Container : UIElement, IAddableParentElement
         return this;
     }
 
-    public void RemoveChild(string elementId) {
+    public void RemoveChild(string elementId)
+    {
         for (int i = 0; i < this._children.Count; i++)
         {
             if (this._children[i].ElementID == elementId)
@@ -94,7 +101,8 @@ public class Container : UIElement, IAddableParentElement
         }
     }
 
-    public void RemoveChild(IUIElement child) {
+    public void RemoveChild(IUIElement child)
+    {
         for (int i = 0; i < this._children.Count; i++)
         {
             if (this._children[i] == child)
@@ -105,20 +113,23 @@ public class Container : UIElement, IAddableParentElement
         }
     }
 
-    private void RemoveChild(int i) {
+    private void RemoveChild(int i)
+    {
         var child = this._children[i];
         child.Dispose();
         this._children.RemoveAt(i);
     }
 
-    protected override void DrawInternal(ICanvas canvas) {
+    protected override void DrawInternal(IWindow window)
+    {
         foreach (var child in this._children)
         {
-            child.DrawOn(canvas);
+            child.DrawOn(window);
         }
     }
 
-    protected override void Dispose(bool disposing) {
+    protected override void Dispose(bool disposing)
+    {
         base.Dispose(disposing);
 
         if (disposing)

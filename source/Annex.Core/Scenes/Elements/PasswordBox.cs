@@ -1,5 +1,5 @@
 ﻿using Annex.Core.Data;
-using Annex.Core.Graphics;
+using Annex.Core.Graphics.Windows;
 using Annex.Core.Input.InputEvents;
 using Scaffold.DependencyInjection;
 
@@ -9,19 +9,22 @@ public class PasswordBox : Textbox, IPasswordBox
 {
     public char PasswordChar { get; set; } = '*';
 
-    public PasswordBox(IContainer container, string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(container, elementId, position, size) {
+    public PasswordBox(IContainer container, string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(container, elementId, position, size)
+    {
     }
 
-    protected override void DrawInternal(ICanvas canvas) {
+    protected override void DrawInternal(IWindow window)
+    {
         // Basically just a hack. Swap out the text each render so the logic still holds, but we prevent 
         // the actual text from being read
         string oldText = this.Text;
         this.Text = new string(this.PasswordChar, this.Text.Length);
-        base.DrawInternal(canvas);
+        base.DrawInternal(window);
         this.Text = oldText;
     }
 
-    public override void OnMouseButtonReleased(MouseButtonReleasedEvent mouseButtonReleasedEvent) {
+    public override void OnMouseButtonReleased(MouseButtonReleasedEvent mouseButtonReleasedEvent)
+    {
 
         // Prevent copying/pasting
         if (mouseButtonReleasedEvent.Button == Input.MouseButton.Right)
@@ -32,7 +35,8 @@ public class PasswordBox : Textbox, IPasswordBox
         base.OnMouseButtonReleased(mouseButtonReleasedEvent);
     }
 
-    public override void OnKeyboardKeyPressed(KeyboardKeyPressedEvent keyboardKeyPressedEvent) {
+    public override void OnKeyboardKeyPressed(KeyboardKeyPressedEvent keyboardKeyPressedEvent)
+    {
 
         // Prevent copying/pasting
         if (PlatformKeyboardService.IsControlPressed() &&

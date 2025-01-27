@@ -1,34 +1,37 @@
 ﻿using Annex.Core.Graphics.Windows;
 
-namespace Annex.Core.Graphics
+namespace Annex.Core.Graphics;
+
+internal class GraphicsService : IGraphicsService
 {
-    internal class GraphicsService : IGraphicsService
+    private readonly IGraphicsEngine _graphicsEngine;
+
+    private Dictionary<Guid, IWindow> _windows = new();
+    public IEnumerable<IWindow> Windows => _windows.Values;
+
+    public IWindow GetWindow(Guid id)
     {
-        private readonly IGraphicsEngine _graphicsEngine;
+        return this._windows[id];
+    }
 
-        private Dictionary<string, IWindow> _windows = new();
-        public IEnumerable<IWindow> Windows => _windows.Values;
+    public GraphicsService(IGraphicsEngine graphicsEngine)
+    {
+        Debug.Assert(graphicsEngine != null, "A singleton graphics engine must be registered");
+        this._graphicsEngine = graphicsEngine;
+    }
 
-        public IWindow GetWindow(string id) {
-            return this._windows[id];
-        }
+    public IWindow CreateWindow(string title, uint width, uint height, WindowStyle style)
+    {
+        var window = this._graphicsEngine.CreateWindow(title, width, height, style);
+        this._windows.Add(window.Id, window);
+        return window;
+    }
 
-        public GraphicsService(IGraphicsEngine graphicsEngine) {
-            Debug.Assert(graphicsEngine != null, "A singleton graphics engine must be registered");
-            this._graphicsEngine = graphicsEngine;
-        }
-
-        public IWindow CreateWindow(string id) {
-            var window = this._graphicsEngine.CreateWindow();
-            this._windows.Add(id, window);
-            return window;
-        }
-
-        public void Dispose() {
-            foreach (var window in Windows)
-            {
-                window.Dispose();
-            }
+    public void Dispose()
+    {
+        foreach (var window in Windows)
+        {
+            window.Dispose();
         }
     }
 }

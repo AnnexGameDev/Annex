@@ -1,6 +1,7 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
+using Annex.Core.Graphics.Windows;
 using Annex.Core.Input;
 using Annex.Core.Input.InputEvents;
 using Annex.Core.Input.Platforms;
@@ -30,28 +31,28 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
     private readonly IClipboardService _clipboardService;
     private readonly ITimeService _timeService;
     private readonly IGraphicsEngine _graphicsEngine;
-    private readonly ISceneService _sceneService;
     protected readonly IPlatformKeyboardService PlatformKeyboardService;
 
     public string SelectedText => this.Text.Substring(this.SelectionStart, this.SelectionLength);
     public int SelectionStart { get; private set; }
     public int SelectionLength { get; private set; }
 
-    public Textbox(IContainer container, string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size) {
+    public Textbox(IContainer container, string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size)
+    {
         _clipboardService = container.Resolve<IClipboardService>();
         _timeService = container.Resolve<ITimeService>();
         _graphicsEngine = container.Resolve<IGraphicsEngine>();
-        _sceneService = container.Resolve<ISceneService>();
         PlatformKeyboardService = container.Resolve<IPlatformKeyboardService>();
     }
 
-    protected override void DrawInternal(ICanvas canvas) {
-        base.DrawInternal(canvas);
+    protected override void DrawInternal(IWindow window)
+    {
+        base.DrawInternal(window);
 
         this.UpdateTextSelection();
         if (this.SelectionLength > 0 && this._selectionHighlight != null)
         {
-            canvas.Draw(this._selectionHighlight);
+            window.Draw(this._selectionHighlight);
         }
 
         if (!this._hasSelection && this.IsFocused)
@@ -59,12 +60,13 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
             this.UpdateCursor();
             if (this._cursorVisible)
             {
-                canvas.Draw(this._textCursor!);
+                window.Draw(this._textCursor!);
             }
         }
     }
 
-    private void UpdateCursor() {
+    private void UpdateCursor()
+    {
         if (_timeService.ElapsedTimeSince(this._nextToggleCursorVisiblity) > ToggleFrequency)
         {
             this._cursorVisible = !this._cursorVisible;
@@ -82,7 +84,8 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
     }
 
     // Converts the selectedX's to actual indices
-    private void UpdateTextSelection_FromMouseEvent() {
+    private void UpdateTextSelection_FromMouseEvent()
+    {
         float startMouseX = Math.Min(this._startSelectMouseX, this._endSelectMouseX) - this.Position.X;
         float endMouseX = Math.Max(this._startSelectMouseX, this._endSelectMouseX) - this.Position.X;
 
@@ -111,7 +114,8 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
     }
 
     // Updates the selection context from the indices
-    private void UpdateTextSelection() {
+    private void UpdateTextSelection()
+    {
         if (this.SelectionStart < 0)
         {
             this.SelectionStart = 0;
@@ -135,22 +139,21 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
         this._selectionHighlight.Size.Set(endX - startX, this.Size.Y);
     }
 
-    public override void OnMouseButtonReleased(MouseButtonReleasedEvent mouseButtonReleasedEvent) {
+    public override void OnMouseButtonReleased(MouseButtonReleasedEvent mouseButtonReleasedEvent)
+    {
         base.OnMouseButtonReleased(mouseButtonReleasedEvent);
 
         if (mouseButtonReleasedEvent.Button == MouseButton.Right)
         {
-
             this._rightClickContextMenu?.RemoveFromCurrentScene();
 
             this._rightClickContextMenu = new ContextMenu(
-                _sceneService,
                 new Vector2f(mouseButtonReleasedEvent.WindowX, mouseButtonReleasedEvent.WindowY),
                 new ContextMenu.Item("Cut", CutSelectedText),
                 new ContextMenu.Item("Copy", CopySelectedText),
                 new ContextMenu.Item("Paste", PasteText)
             );
-            this._rightClickContextMenu.AddToCurrentScene();
+            this._rightClickContextMenu.AddToScene(mouseButtonReleasedEvent.Window.Scene);
         }
 
         if (mouseButtonReleasedEvent.Button == MouseButton.Left)
@@ -165,7 +168,8 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
         }
     }
 
-    public override void OnMouseButtonPressed(MouseButtonPressedEvent mouseButtonPressedEvent) {
+    public override void OnMouseButtonPressed(MouseButtonPressedEvent mouseButtonPressedEvent)
+    {
         base.OnMouseButtonPressed(mouseButtonPressedEvent);
 
         if (mouseButtonPressedEvent.Button == MouseButton.Left)
@@ -182,7 +186,8 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
         }
     }
 
-    public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent) {
+    public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent)
+    {
         base.OnMouseMoved(mouseMovedEvent);
 
         if (this._isSelecting)
@@ -192,33 +197,37 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
         }
     }
 
-    public override void OnLostFocus() {
+    public override void OnLostFocus()
+    {
         base.OnLostFocus();
         this.TryCloseContextMenu();
         this.ClearSelectText();
     }
 
-    public void ClearSelectText() {
+    public void ClearSelectText()
+    {
         this.SelectionStart = 0;
         this.SelectionLength = 0;
         this._selectionHighlight?.Dispose();
         this._selectionHighlight = null;
     }
 
-    public void SelectText(int start, int length) {
+    public void SelectText(int start, int length)
+    {
         this.SelectionStart = start;
         this.SelectionLength = length;
         this.UpdateTextSelection();
     }
 
-    public override void OnKeyboardKeyPressed(KeyboardKeyPressedEvent keyboardKeyPressedEvent) {
+    public override void OnKeyboardKeyPressed(KeyboardKeyPressedEvent keyboardKeyPressedEvent)
+    {
         base.OnKeyboardKeyPressed(keyboardKeyPressedEvent);
 
         if (keyboardKeyPressedEvent.Key == KeyboardKey.X)
         {
             if (PlatformKeyboardService.IsControlPressed())
             {
-                this.CutSelectedText();
+                this.CutSelectedText(keyboardKeyPressedEvent);
                 return;
             }
         }
@@ -227,7 +236,7 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
         {
             if (PlatformKeyboardService.IsControlPressed())
             {
-                this.CopySelectedText();
+                this.CopySelectedText(keyboardKeyPressedEvent);
                 return;
             }
         }
@@ -236,7 +245,7 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
         {
             if (PlatformKeyboardService.IsControlPressed())
             {
-                this.PasteText();
+                this.PasteText(keyboardKeyPressedEvent);
                 return;
             }
         }
@@ -324,7 +333,8 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
         AddTextAtCursorOrSelection(keyboardKeyPressedEvent.LiteralContent);
     }
 
-    private void AddTextAtCursorOrSelection(string text) {
+    private void AddTextAtCursorOrSelection(string text)
+    {
         this._cursorVisible = true;
 
         if (this.CursorIndex < 0 || this.CursorIndex > this.Text.Length)
@@ -346,20 +356,25 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
         this.CursorIndex += text.Length;
     }
 
-    private void TryCloseContextMenu() {
+    private void TryCloseContextMenu()
+    {
         this._rightClickContextMenu?.RemoveFromCurrentScene();
+        this._rightClickContextMenu = null;
     }
 
     #region Clipboard actions
-    private void PasteText() {
+    private void PasteText(WindowEvent windowEvent)
+    {
         AddTextAtCursorOrSelection(_clipboardService.GetString() ?? string.Empty);
     }
 
-    private void CopySelectedText() {
+    private void CopySelectedText(WindowEvent windowEvent)
+    {
         _clipboardService.SetString(this.SelectedText);
     }
 
-    private void CutSelectedText() {
+    private void CutSelectedText(WindowEvent windowEvent)
+    {
         _clipboardService.SetString(this.SelectedText);
         this.Text = this.Text.Remove(this.SelectionStart, this.SelectionLength);
     }

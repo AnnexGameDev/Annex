@@ -1,6 +1,7 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
+using Annex.Core.Graphics.Windows;
 using Annex.Core.Input.InputEvents;
 
 namespace Annex.Core.Scenes.Elements;
@@ -28,7 +29,8 @@ public class Image : UIElement, IImage
         set;
     }
 
-    public Image(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size) {
+    public Image(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size)
+    {
         this.BackgroundContext = new TextureContext(string.Empty.ToShared(), this.Position)
         {
             RenderSize = this.Size,
@@ -36,28 +38,32 @@ public class Image : UIElement, IImage
         };
     }
 
-    protected override void DrawInternal(ICanvas canvas) {
+    protected override void DrawInternal(IWindow window)
+    {
 
         string textureToRender = BackgroundTextureId;
 
         if (_hasMouse && HoverBackgroundTextureId is not null)
         {
             textureToRender = HoverBackgroundTextureId;
-        } else if (IsFocused && FocusedBackgroundTextureId is not null)
+        }
+        else if (IsFocused && FocusedBackgroundTextureId is not null)
         {
             textureToRender = FocusedBackgroundTextureId;
         }
 
         BackgroundContext.TextureId.Set(textureToRender);
-        canvas.Draw(this.BackgroundContext);
+        window.Draw(this.BackgroundContext);
     }
 
-    public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent) {
+    public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent)
+    {
         base.OnMouseMoved(mouseMovedEvent);
         _hasMouse = true;
     }
 
-    public override void OnMouseLeft(MouseMovedEvent mouseMovedEvent) {
+    public override void OnMouseLeft(MouseMovedEvent mouseMovedEvent)
+    {
         base.OnMouseLeft(mouseMovedEvent);
         _hasMouse = false;
     }

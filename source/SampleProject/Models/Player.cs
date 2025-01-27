@@ -1,6 +1,7 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
+using Annex.Core.Graphics.Windows;
 
 namespace SampleProject.Models
 {
@@ -15,7 +16,8 @@ namespace SampleProject.Models
 
         public readonly Shared<string> Name;
 
-        public Player() {
+        public Player()
+        {
             this.Position = new Vector2f(960 / 2, 640 / 2);
             this.Name = "Player Name";
 
@@ -42,16 +44,19 @@ namespace SampleProject.Models
         }
 
 
-        internal void Animate() {
+        internal void Animate()
+        {
             this._sprite.StepColumn();
         }
 
-        public void Draw(ICanvas canvas) {
-            canvas.Draw(this._sprite);
-            canvas.Draw(this._hoverText);
+        public void DrawOn(IWindow window)
+        {
+            window.Draw(this._sprite);
+            window.Draw(this._hoverText);
         }
 
-        public void Dispose() {
+        public void Dispose()
+        {
             this._sprite.Dispose();
             this._hoverText.Dispose();
         }
