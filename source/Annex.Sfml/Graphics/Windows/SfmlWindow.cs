@@ -17,7 +17,6 @@ namespace Annex.Sfml.Graphics.Windows;
 internal class SfmlWindow : WindowBase, IWindow, IDisposable
 {
     private RenderWindow _renderWindow;
-    private WindowStyle? _newStyle;
     private readonly ICameraCache _cameraCache;
     private readonly IPlatformTargetFactory _platformTargetFactory;
     private readonly IInputHandler _inputHandler;

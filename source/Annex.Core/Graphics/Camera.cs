@@ -18,4 +18,9 @@ public class Camera
     {
         this.Id = id;
     }
+
+    public void Zoom(float percentage)
+    {
+        Size = new Vector2f(percentage * Size.X, percentage * Size.Y);
+    }
 }

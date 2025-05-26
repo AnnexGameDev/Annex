@@ -13,7 +13,8 @@ internal class TcpConnection : Connection
     private byte[] _incomingData;
     private byte[] _unprocessedData;
 
-    public TcpConnection(Socket socket, ProcessPacketHandler processPacketHandler) {
+    public TcpConnection(Socket socket, ProcessPacketHandler processPacketHandler)
+    {
         Socket = socket;
         _processPacketHandler = processPacketHandler;
 
@@ -21,11 +22,13 @@ internal class TcpConnection : Connection
         this._unprocessedData = Array.Empty<byte>();
     }
 
-    internal void ListenForIncomingPackets() {
+    internal void ListenForIncomingPackets()
+    {
         this.Socket.BeginReceive(this._incomingData, 0, this._incomingData.Length, SocketFlags.None, OnReceiveCallback, null);
     }
 
-    private void OnReceiveCallback(IAsyncResult ar) {
+    private void OnReceiveCallback(IAsyncResult ar)
+    {
         if (this.Disposed)
         {
             return;
@@ -56,7 +59,8 @@ internal class TcpConnection : Connection
         this.Socket.BeginReceive(this._incomingData, 0, this._incomingData.Length, SocketFlags.None, OnReceiveCallback, null);
     }
 
-    private bool ProcessNextIncomingPacketData() {
+    private bool ProcessNextIncomingPacketData()
+    {
         if (this._unprocessedData.Length < 4)
         {
             return false;
@@ -89,14 +93,16 @@ internal class TcpConnection : Connection
         return false;
     }
 
-    private void QueueDataForProcessing(byte[] data, int start, int length) {
+    private void QueueDataForProcessing(byte[] data, int start, int length)
+    {
         var newUnprocessData = new byte[this._unprocessedData.Length + length];
         Array.Copy(this._unprocessedData, 0, newUnprocessData, 0, this._unprocessedData.Length);
         Array.Copy(data, start, newUnprocessData, this._unprocessedData.Length, length);
         this._unprocessedData = newUnprocessData;
     }
 
-    public override void Send(OutgoingPacket packet) {
+    public override void Send(OutgoingPacket packet)
+    {
         var packetData = packet.Data();
         var packetIdData = BitConverter.GetBytes(packet.PacketId);
         var messageSizeData = BitConverter.GetBytes(packetIdData.Length + packetData.Length);
@@ -109,16 +115,25 @@ internal class TcpConnection : Connection
         this.Socket.BeginSend(outgoingData, 0, outgoingData.Length, SocketFlags.None, OnSendCallback, null);
     }
 
-    private void OnSendCallback(IAsyncResult ar) {
-        this.Socket.EndSend(ar);
+    private void OnSendCallback(IAsyncResult ar)
+    {
+        try
+        {
+            this.Socket.EndSend(ar);
+        }
+        catch
+        {
+        }
     }
 
-    public override void Destroy(string reason, Exception? exception = null) {
+    public override void Destroy(string reason, Exception? exception = null)
+    {
         base.Destroy(reason, exception);
         this.Socket.Dispose();
     }
 
-    public override string ToString() {
+    public override string ToString()
+    {
         if (this.Disposed)
         {
             return Id.ToString();
