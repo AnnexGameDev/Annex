@@ -21,6 +21,9 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
     private readonly IPlatformTargetFactory _platformTargetFactory;
     private readonly IInputHandler _inputHandler;
 
+    public uint ResolutionWidth { get; }
+    public uint ResolutionHeight { get; }
+
     public uint Width => _renderWindow.Size.X;
     public uint Height => _renderWindow.Size.Y;
     public int Left => _renderWindow.Position.X;
@@ -32,6 +35,9 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
         _cameraCache = container.Resolve<ICameraCache>()!;
         _platformTargetFactory = container.Resolve<IPlatformTargetFactory>()!;
         _inputHandler = container.Resolve<IInputHandler>()!;
+
+        ResolutionWidth = width;
+        ResolutionHeight = height;
 
         _renderWindow = CreateWindow(title, false, width, height, 0, 0, windowStyle);
 

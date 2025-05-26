@@ -12,6 +12,9 @@ public interface IWindow : IDisposable
     string Title { get; set; }
     bool IsVisible { get; set; }
 
+    uint ResolutionWidth { get; }
+    uint ResolutionHeight { get; }
+
     uint Width { get; }
     uint Height { get; }
 
