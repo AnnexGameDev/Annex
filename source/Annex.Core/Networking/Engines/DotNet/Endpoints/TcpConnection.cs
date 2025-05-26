@@ -56,7 +56,13 @@ internal class TcpConnection : Connection
         while (this.ProcessNextIncomingPacketData())
             ;
 
-        this.Socket.BeginReceive(this._incomingData, 0, this._incomingData.Length, SocketFlags.None, OnReceiveCallback, null);
+        try
+        {
+            this.Socket.BeginReceive(this._incomingData, 0, this._incomingData.Length, SocketFlags.None, OnReceiveCallback, null);
+        }
+        catch (Exception ex)
+        {
+        }
     }
 
     private bool ProcessNextIncomingPacketData()

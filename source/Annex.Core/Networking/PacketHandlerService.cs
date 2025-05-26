@@ -36,7 +36,6 @@ internal class PacketHandlerService : IPacketHandlerService
 
     public async void HandlePacket(IConnection connection, int packetId, IncomingPacket packet)
     {
-
         if (packetId == IPacket.ResponsePacketId)
         {
             Log.Verbose($"Response packet received: {packet.OriginalRequestId}");
