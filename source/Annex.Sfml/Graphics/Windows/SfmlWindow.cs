@@ -227,6 +227,11 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
 
     private IVector2<float> RelatePointTo(int x, int y, CameraId cameraId)
     {
+        return RelatePointTo(x, y, cameraId.ToString());
+    }
+
+    private IVector2<float> RelatePointTo(int x, int y, string cameraId)
+    {
         var camera = _cameraCache.GetCamera(cameraId);
 
         if (camera == null)
@@ -237,6 +242,21 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
 
         var viewPos = _renderWindow.MapPixelToCoords(new SFML.System.Vector2i(x, y), camera.View);
         return new Vector2f(viewPos.X, viewPos.Y);
+    }
+
+    public (float top, float left, float bottom, float right) GetCameraBounds(string cameraId)
+    {
+        var camera = _cameraCache.GetCamera(cameraId);
+
+        if (camera == null)
+            throw new NullReferenceException($"The camera {cameraId} couldn't be found");
+
+        float halfWidth = camera.View.Size.X / 2;
+        float halfHeight = camera.View.Size.Y / 2;
+        float centerX = camera.View.Center.X;
+        float centerY = camera.View.Center.Y;
+
+        return (centerY - halfHeight, centerX - halfWidth, centerY + halfHeight, centerX + halfWidth);
     }
 
     public Task DrawCurrentSceneAsync()

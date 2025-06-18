@@ -4,7 +4,7 @@ using SFML.Graphics;
 
 namespace Annex.Sfml.Collections.Generic;
 
-public class SfmlCamera
+internal class SfmlCamera
 {
     public Camera Camera { get; }
 
@@ -48,7 +48,7 @@ public class SfmlCamera
     }
 }
 
-public interface ICameraCache
+internal interface ICameraCache
 {
     SfmlCamera? GetCamera(CameraId cameraId);
     SfmlCamera? GetCamera(string cameraId);

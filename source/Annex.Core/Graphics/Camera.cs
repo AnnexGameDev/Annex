@@ -21,6 +21,6 @@ public class Camera
 
     public void Zoom(float percentage)
     {
-        Size = new Vector2f(percentage * Size.X, percentage * Size.Y);
+        Size = new Vector2f((int)(percentage * Size.X), (int)(percentage * Size.Y));
     }
 }

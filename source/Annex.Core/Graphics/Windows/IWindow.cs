@@ -23,6 +23,8 @@ public interface IWindow : IDisposable
 
     void SetPosition(int x, int y);
 
+    // Cameras
+    public (float top, float left, float bottom, float right) GetCameraBounds(string cameraId);
     Camera? GetCamera(CameraId cameraId);
     Camera? GetCamera(string cameraId);
     void AddCamera(Camera camera);
