@@ -80,10 +80,10 @@ public class Button : UIElement, IButton
         this._label = new Label($"{elementId}.label", this.Position, this.Size, textOffset, text);
     }
 
-    protected override void DrawInternal(IWindow window)
+    protected override void DrawInternal(IWindow window, long timeDelta)
     {
-        this._background.DrawOn(window);
-        this._label.DrawOn(window);
+        this._background.DrawOn(window, timeDelta);
+        this._label.DrawOn(window, timeDelta);
     }
 
     public override void OnMouseLeft(MouseMovedEvent mouseMovedEvent)

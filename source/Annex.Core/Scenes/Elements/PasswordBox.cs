@@ -13,13 +13,13 @@ public class PasswordBox : Textbox, IPasswordBox
     {
     }
 
-    protected override void DrawInternal(IWindow window)
+    protected override void DrawInternal(IWindow window, long timeDelta)
     {
         // Basically just a hack. Swap out the text each render so the logic still holds, but we prevent 
         // the actual text from being read
         string oldText = this.Text;
         this.Text = new string(this.PasswordChar, this.Text.Length);
-        base.DrawInternal(window);
+        base.DrawInternal(window, timeDelta);
         this.Text = oldText;
     }
 

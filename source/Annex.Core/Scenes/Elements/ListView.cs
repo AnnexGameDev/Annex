@@ -131,9 +131,9 @@ public class ListView : Image, IParentElement
         return GetElementById(id) as T;
     }
 
-    protected override void DrawInternal(IWindow window)
+    protected override void DrawInternal(IWindow window, long timeDelta)
     {
-        base.DrawInternal(window);
+        base.DrawInternal(window, timeDelta);
 
         Debug.Assert(LineHeight != 0, "LineHeight for listview is zero");
 
@@ -150,7 +150,7 @@ public class ListView : Image, IParentElement
         for (int i = _topVisibleIndex; i <= _bottomVisibleIndex; i++)
         {
             var child = _children[i];
-            child.DrawOn(window);
+            child.DrawOn(window, timeDelta);
         }
     }
 

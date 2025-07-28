@@ -78,10 +78,10 @@ public abstract class LabeledTextureUIElement : UIElement, IButton, ILabel
         this.Label = new Label($"{elementId}.label", this.Position, this.Size);
     }
 
-    protected override void DrawInternal(IWindow window)
+    protected override void DrawInternal(IWindow window, long timeDelta)
     {
-        this.Image.DrawOn(window);
-        this.Label.DrawOn(window);
+        this.Image.DrawOn(window, timeDelta);
+        this.Label.DrawOn(window, timeDelta);
     }
 
     public override void OnLostFocus()

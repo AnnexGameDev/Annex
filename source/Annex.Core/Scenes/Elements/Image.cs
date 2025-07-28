@@ -38,9 +38,8 @@ public class Image : UIElement, IImage
         };
     }
 
-    protected override void DrawInternal(IWindow window)
+    protected override void DrawInternal(IWindow window, long timeDelta)
     {
-
         string textureToRender = BackgroundTextureId;
 
         if (_hasMouse && HoverBackgroundTextureId is not null)

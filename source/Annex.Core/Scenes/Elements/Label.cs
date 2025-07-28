@@ -71,7 +71,7 @@ public class Label : UIElement, ILabel
         };
     }
 
-    protected override void DrawInternal(IWindow window)
+    protected override void DrawInternal(IWindow window, long timeDelta)
     {
         window.Draw(this.RenderText);
     }

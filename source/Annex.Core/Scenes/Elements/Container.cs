@@ -120,11 +120,11 @@ public class Container : UIElement, IAddableParentElement
         this._children.RemoveAt(i);
     }
 
-    protected override void DrawInternal(IWindow window)
+    protected override void DrawInternal(IWindow window, long timeDelta)
     {
         foreach (var child in this._children)
         {
-            child.DrawOn(window);
+            child.DrawOn(window, timeDelta);
         }
     }
 

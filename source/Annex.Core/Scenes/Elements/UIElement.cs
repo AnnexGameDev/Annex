@@ -31,13 +31,13 @@ public abstract class UIElement : IUIElement
     public event EventHandler<MouseScrollWheelMovedEvent>? OnElementMouseScrollWheelMoved;
     public event EventHandler<MouseMovedEvent>? OnElementMouseLeft;
 
-    public void DrawOn(IWindow window)
+    public void DrawOn(IWindow window, long timeDelta)
     {
         if (this.Visible)
-            this.DrawInternal(window);
+            this.DrawInternal(window, timeDelta);
     }
 
-    protected abstract void DrawInternal(IWindow canvas);
+    protected abstract void DrawInternal(IWindow canvas, long timeDelta);
 
     protected virtual void Dispose(bool disposing)
     {

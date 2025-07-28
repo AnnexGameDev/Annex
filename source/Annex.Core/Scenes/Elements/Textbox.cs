@@ -45,9 +45,9 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
         PlatformKeyboardService = container.Resolve<IPlatformKeyboardService>();
     }
 
-    protected override void DrawInternal(IWindow window)
+    protected override void DrawInternal(IWindow window, long timeDelta)
     {
-        base.DrawInternal(window);
+        base.DrawInternal(window, timeDelta);
 
         this.UpdateTextSelection();
         if (this.SelectionLength > 0 && this._selectionHighlight != null)

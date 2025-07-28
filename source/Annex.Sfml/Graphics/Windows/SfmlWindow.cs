@@ -4,6 +4,7 @@ using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
 using Annex.Core.Graphics.Windows;
 using Annex.Core.Input;
+using Annex.Core.Time;
 using Annex.Sfml.Collections.Generic;
 using Annex.Sfml.Extensions;
 using Annex.Sfml.Graphics.PlatformTargets;
@@ -20,6 +21,8 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
     private readonly ICameraCache _cameraCache;
     private readonly IPlatformTargetFactory _platformTargetFactory;
     private readonly IInputHandler _inputHandler;
+    private readonly ITimeService _timeService;
+    private long? _timeSinceLastDraw = null;
 
     public uint ResolutionWidth { get; }
     public uint ResolutionHeight { get; }
@@ -35,6 +38,7 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
         _cameraCache = container.Resolve<ICameraCache>()!;
         _platformTargetFactory = container.Resolve<IPlatformTargetFactory>()!;
         _inputHandler = container.Resolve<IInputHandler>()!;
+        _timeService = container.Resolve<ITimeService>()!;
 
         ResolutionWidth = width;
         ResolutionHeight = height;
@@ -263,7 +267,9 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
     {
         _renderWindow.Clear();
 
-        Scene.DrawOn(this);
+        long now = _timeService.Now;
+        Scene.DrawOn(this, _timeService.ElapsedTimeSince(_timeSinceLastDraw ?? now));
+        _timeSinceLastDraw = now;
 
         _renderWindow.Display();
         _renderWindow.DispatchEvents();

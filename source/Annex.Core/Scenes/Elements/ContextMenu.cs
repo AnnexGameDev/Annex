@@ -38,12 +38,12 @@ public class ContextMenu : Container, IParentElement
         }
     }
 
-    protected override void DrawInternal(IWindow window)
+    protected override void DrawInternal(IWindow window, long timeDelta)
     {
         if (this.Visible)
         {
             window.Draw(this._background);
-            base.DrawInternal(window);
+            base.DrawInternal(window, timeDelta);
         }
     }
 
@@ -96,13 +96,13 @@ public class ContextMenu : Container, IParentElement
             this.IsHovered = false;
         }
 
-        protected override void DrawInternal(IWindow window)
+        protected override void DrawInternal(IWindow window, long timeDelta)
         {
             if (this.IsHovered)
             {
                 window.Draw(this._hoveredBackground);
             }
-            base.DrawInternal(window);
+            base.DrawInternal(window, timeDelta);
         }
 
         public override void OnMouseButtonPressed(MouseButtonPressedEvent mouseButtonPressedEvent)
