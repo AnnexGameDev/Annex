@@ -10,6 +10,6 @@ public interface IConnection : IDisposable
     ConnectionState State { get; }
 
     void Send(OutgoingPacket packet);
-
     void Destroy(string reason, Exception? exception = null);
+    Task ProcessIncomingDataAsync();
 }

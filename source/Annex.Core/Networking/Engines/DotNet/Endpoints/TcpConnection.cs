@@ -1,5 +1,6 @@
 ﻿using Annex.Core.Networking.Connections;
 using Annex.Core.Networking.Packets;
+using Scaffold.Logging;
 using System.Net.Sockets;
 
 namespace Annex.Core.Networking.Engines.DotNet.Endpoints;
@@ -12,6 +13,7 @@ internal class TcpConnection : Connection
     private readonly ProcessPacketHandler _processPacketHandler;
     private byte[] _incomingData;
     private byte[] _unprocessedData;
+    private SemaphoreSlim _unprocessedDataLock = new(1);
 
     public TcpConnection(Socket socket, ProcessPacketHandler processPacketHandler)
     {
@@ -24,10 +26,10 @@ internal class TcpConnection : Connection
 
     internal void ListenForIncomingPackets()
     {
-        this.Socket.BeginReceive(this._incomingData, 0, this._incomingData.Length, SocketFlags.None, OnReceiveCallback, null);
+        this.Socket.BeginReceive(this._incomingData, 0, this._incomingData.Length, SocketFlags.None, OnReceiveCallbackAsync, null);
     }
 
-    private void OnReceiveCallback(IAsyncResult ar)
+    private async void OnReceiveCallbackAsync(IAsyncResult ar)
     {
         if (this.Disposed)
         {
@@ -52,13 +54,11 @@ internal class TcpConnection : Connection
             return;
         }
 
-        this.QueueDataForProcessing(this._incomingData, 0, lengthOfIncomingData);
-        while (this.ProcessNextIncomingPacketData())
-            ;
+        await QueueDataForProcessingAsync(this._incomingData, 0, lengthOfIncomingData);
 
         try
         {
-            this.Socket.BeginReceive(this._incomingData, 0, this._incomingData.Length, SocketFlags.None, OnReceiveCallback, null);
+            this.Socket.BeginReceive(this._incomingData, 0, this._incomingData.Length, SocketFlags.None, OnReceiveCallbackAsync, null);
         }
         catch (Exception ex)
         {
@@ -99,12 +99,24 @@ internal class TcpConnection : Connection
         return false;
     }
 
-    private void QueueDataForProcessing(byte[] data, int start, int length)
+    private async Task QueueDataForProcessingAsync(byte[] data, int start, int length)
     {
-        var newUnprocessData = new byte[this._unprocessedData.Length + length];
-        Array.Copy(this._unprocessedData, 0, newUnprocessData, 0, this._unprocessedData.Length);
-        Array.Copy(data, start, newUnprocessData, this._unprocessedData.Length, length);
-        this._unprocessedData = newUnprocessData;
+        try
+        {
+            await _unprocessedDataLock.WaitAsync();
+            var newUnprocessData = new byte[this._unprocessedData.Length + length];
+            Array.Copy(this._unprocessedData, 0, newUnprocessData, 0, this._unprocessedData.Length);
+            Array.Copy(data, start, newUnprocessData, this._unprocessedData.Length, length);
+            this._unprocessedData = newUnprocessData;
+        }
+        catch (Exception ex)
+        {
+            Log.Exception(ex);
+        }
+        finally
+        {
+            _unprocessedDataLock.Release();
+        }
     }
 
     public override void Send(OutgoingPacket packet)
@@ -145,5 +157,23 @@ internal class TcpConnection : Connection
             return Id.ToString();
         }
         return $"[{this.Socket?.RemoteEndPoint?.ToString() ?? string.Empty}]";
+    }
+
+    public override async Task ProcessIncomingDataAsync()
+    {
+        try
+        {
+            await _unprocessedDataLock.WaitAsync();
+            while (this.ProcessNextIncomingPacketData())
+                ;
+        }
+        catch (Exception ex)
+        {
+            Log.Exception(ex);
+        }
+        finally
+        {
+            _unprocessedDataLock.Release();
+        }
     }
 }
