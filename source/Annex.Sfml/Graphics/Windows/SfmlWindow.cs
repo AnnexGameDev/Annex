@@ -45,18 +45,16 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
 
         _renderWindow = CreateWindow(title, false, width, height, 0, 0, windowStyle);
 
-        var defaultCamera = new Camera(CameraId.Default)
+        var defaultCamera = new Camera(CameraId.Default, Width, Height)
         {
             Region = new Core.Data.FloatRect(0, 0, 1, 1),
-            Size = new Vector2f(Width, Height),
             Center = new Vector2f(Width / 2, Height / 2),
         };
         AddCamera(defaultCamera);
 
-        var uiCamera = new Camera(CameraId.UI)
+        var uiCamera = new Camera(CameraId.UI, Width, Height)
         {
             Region = new Core.Data.FloatRect(0, 0, 1, 1),
-            Size = new Vector2f(Width, Height),
             Center = new Vector2f(Width / 2, Height / 2),
         };
         AddCamera(uiCamera);
