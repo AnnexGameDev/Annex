@@ -12,18 +12,21 @@ namespace Annex.Sfml.Graphics.PlatformTargets
         private readonly ITextureCache _textureCache;
         private readonly DrawableVertexArray _drawable;
 
-        public BatchTexturePlatformTarget(BatchTextureContext drawContext, ITextureCache textureCache) {
+        public BatchTexturePlatformTarget(BatchTextureContext drawContext, ITextureCache textureCache)
+        {
             this._textureCache = textureCache;
 
             var texture = this._textureCache.GetTexture(drawContext.TextureId);
             this._drawable = new DrawableVertexArray(texture, drawContext);
         }
 
-        public override void Dispose() {
+        public override void Dispose()
+        {
             this._drawable.Dispose();
         }
 
-        protected override void Draw(RenderTarget renderTarget) {
+        protected override void Draw(RenderTarget renderTarget)
+        {
             this._drawable.Update();
             renderTarget.Draw(this._drawable);
         }
@@ -35,7 +38,8 @@ namespace Annex.Sfml.Graphics.PlatformTargets
             private readonly BatchTextureContext _drawContext;
             private readonly uint _batchSize;
 
-            public DrawableVertexArray(Texture texture, BatchTextureContext drawContext) {
+            public DrawableVertexArray(Texture texture, BatchTextureContext drawContext)
+            {
                 this._texture = texture;
                 this._batchSize = (uint)drawContext.Positions.Length;
                 this._drawContext = drawContext;
@@ -44,10 +48,12 @@ namespace Annex.Sfml.Graphics.PlatformTargets
                 this.Update();
             }
 
-            public void Draw(RenderTarget target, RenderStates states) {
+            public void Draw(RenderTarget target, RenderStates states)
+            {
 
                 // Calculating all this stuff is expensive
-                if (this._drawContext.UpdateFrequency != Updatability.NeverUpdates) {
+                if (this._drawContext.UpdateFrequency != Updatability.NeverUpdates)
+                {
                     this.Update();
                 }
 
@@ -56,15 +62,19 @@ namespace Annex.Sfml.Graphics.PlatformTargets
                 target.Draw(this._vertexArray, states);
             }
 
-            private Vector2f[] UpdateRect((int top, int left, int width, int height)? rect) {
-                if (rect == null) {
+            private Vector2f[] UpdateRect((int top, int left, int width, int height)? rect)
+            {
+                if (rect == null)
+                {
                     return new[] {
                                 new Vector2f(0, 0),
                                 new Vector2f(this._texture.Size.X, 0),
                                 new Vector2f(this._texture.Size.X, this._texture.Size.Y),
                                 new Vector2f(0, this._texture.Size.Y)
                         };
-                } else {
+                }
+                else
+                {
                     var r = rect.Value;
                     return new[] {
                                 new Vector2f(r.left, r.top),
@@ -75,8 +85,10 @@ namespace Annex.Sfml.Graphics.PlatformTargets
                 }
             }
 
-            public void Update() {
-                for (int i = 0; i < this._batchSize; i++) {
+            public void Update()
+            {
+                for (int i = 0; i < this._batchSize; i++)
+                {
                     uint quadNum = (uint)i * 4;
 
                     var color = this._drawContext.GetColor(i).ToSFML(KnownColor.White);
@@ -95,10 +107,10 @@ namespace Annex.Sfml.Graphics.PlatformTargets
                     float originx = position.x;
                     float originy = position.y;
 
-                    (float topleft_x, float topleft_y) = Core.Calculations.Rotation.RotateAbout(left, top, rotation, originx, originy);
-                    (float bottomright_x, float bottomright_y) = Core.Calculations.Rotation.RotateAbout(right, bottom, rotation, originx, originy);
-                    (float topright_x, float topright_y) = Core.Calculations.Rotation.RotateAbout(right, top, rotation, originx, originy);
-                    (float bottomleft_x, float bottomleft_y) = Core.Calculations.Rotation.RotateAbout(left, bottom, rotation, originx, originy);
+                    (float topleft_x, float topleft_y) = Rotate(left, top, rotation, originx, originy);
+                    (float bottomright_x, float bottomright_y) = Rotate(right, bottom, rotation, originx, originy);
+                    (float topright_x, float topright_y) = Rotate(right, top, rotation, originx, originy);
+                    (float bottomleft_x, float bottomleft_y) = Rotate(left, bottom, rotation, originx, originy);
 
                     this._vertexArray[quadNum] = new Vertex(new Vector2f(topleft_x, topleft_y), color, rects[0]);
                     this._vertexArray[quadNum + 1] = new Vertex(new Vector2f(topright_x, topright_y), color, rects[1]);
@@ -107,10 +119,21 @@ namespace Annex.Sfml.Graphics.PlatformTargets
                 }
             }
 
-            protected override void Destroy(bool disposing) {
+            private (float x, float y) Rotate(float x, float y, float rotation, float originx, float originy)
+            {
+                if (rotation == 0)
+                {
+                    return (x, y);
+                }
+                return Core.Calculations.Rotation.RotateAbout(x, y, rotation, originx, originy);
+            }
+
+            protected override void Destroy(bool disposing)
+            {
                 base.Destroy(disposing);
 
-                if (disposing) {
+                if (disposing)
+                {
                     this._texture.Dispose();
                     this._vertexArray.Dispose();
                     // _drawContext isn't owned by us.
