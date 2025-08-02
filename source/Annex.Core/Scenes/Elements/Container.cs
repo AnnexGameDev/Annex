@@ -14,7 +14,7 @@ public class Container : UIElement, IAddableParentElement
 
     public IEnumerable<IUIElement> Children => _children;
 
-    public void AddChild(IUIElement child)
+    public virtual void AddChild(IUIElement child)
     {
         this._children.Add(child);
     }
