@@ -13,25 +13,30 @@ namespace Annex.Sfml.Graphics.PlatformTargets
         private readonly TextContext _textContext;
         private readonly IFontCache _fontCache;
 
-        public TextPlatformTarget(TextContext textContext, IFontCache fontCache) {
+        public TextPlatformTarget(TextContext textContext, IFontCache fontCache)
+        {
             this._textContext = textContext;
             this._fontCache = fontCache;
             this._text = new();
         }
 
-        public override void Dispose() {
+        public override void Dispose()
+        {
             this._text.Dispose();
             // _textContext isn't owned by us
         }
 
-        protected override void Draw(RenderTarget renderTarget) {
+        protected override void Draw(RenderTarget renderTarget)
+        {
             this.UpdateIfNeeded();
             renderTarget.Draw(this._text);
         }
 
-        private void UpdateIfNeeded() {
+        private void UpdateIfNeeded()
+        {
 
-            if (string.IsNullOrEmpty(this._textContext.Font.Value) || string.IsNullOrWhiteSpace(this._textContext.Text.Value)) {
+            if (string.IsNullOrEmpty(this._textContext.Font.Value) || string.IsNullOrWhiteSpace(this._textContext.Text.Value))
+            {
                 this._text.DisplayedString = string.Empty;
                 return;
             }
@@ -48,16 +53,19 @@ namespace Annex.Sfml.Graphics.PlatformTargets
             var rotation = UpdateRotation(this._textContext.Rotation);
         }
 
-        private float UpdateRotation(IShared<float>? rotation) {
+        private float UpdateRotation(IShared<float>? rotation)
+        {
             const float DefaultRotation = 0;
             var finalRotation = rotation?.Value ?? DefaultRotation;
-            if (this._text.Rotation != finalRotation) {
+            if (this._text.Rotation != finalRotation)
+            {
                 this._text.Rotation = finalRotation;
             }
             return this._text.Rotation;
         }
 
-        private Vector2f UpdateOrigin(HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, IVector2<float>? positionOffset) {
+        private Vector2f UpdateOrigin(HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, IVector2<float>? positionOffset)
+        {
             var bounds = this._text.GetLocalBounds();
             Vector2f desiredOrigin = new Vector2f(
                 horizontalAlignment.Align(bounds),
@@ -69,72 +77,90 @@ namespace Annex.Sfml.Graphics.PlatformTargets
             desiredOrigin.X += bounds.Left;
             desiredOrigin.Y += bounds.Top;
 
-            if (this._text.Origin != desiredOrigin) {
+            if (this._text.Origin != desiredOrigin)
+            {
                 this._text.Origin = desiredOrigin;
             }
             return this._text.Origin;
         }
 
-        private Vector2f UpdatePosition(IVector2<float>? position) {
-            if (this._text.Position.DoesNotEqual(position)) {
+        private Vector2f UpdatePosition(IVector2<float>? position)
+        {
+            if (this._text.Position.DoesNotEqual(position))
+            {
                 this._text.Position = position.ToSFML();
             }
             return this._text.Position;
         }
 
-        private Color UpdateBorderColor(RGBA? borderColor) {
-            if (this._text.OutlineColor.DoesNotEqual(borderColor, Color.Black)) {
+        private Color UpdateBorderColor(RGBA? borderColor)
+        {
+            if (this._text.OutlineColor.DoesNotEqual(borderColor, Color.Black))
+            {
                 this._text.OutlineColor = borderColor.ToSFML(KnownColor.Black);
             }
             return this._text.OutlineColor;
         }
 
-        private float UpdateBorderThickness(IShared<float>? borderThickness) {
+        private float UpdateBorderThickness(IShared<float>? borderThickness)
+        {
             const float DefaultBorderThickness = 0;
             float finalBorderThickness = borderThickness?.Value ?? DefaultBorderThickness;
-            if (this._text.OutlineThickness != finalBorderThickness) {
+            if (this._text.OutlineThickness != finalBorderThickness)
+            {
                 this._text.OutlineThickness = finalBorderThickness;
             }
             return this._text.OutlineThickness;
         }
 
-        private Color UpdateFontColor(RGBA? color) {
-            if (this._text.FillColor.DoesNotEqual(color, Color.Black)) {
+        private Color UpdateFontColor(RGBA? color)
+        {
+            if (this._text.FillColor.DoesNotEqual(color, Color.Black))
+            {
                 this._text.FillColor = color.ToSFML(KnownColor.Black);
             }
             return this._text.FillColor;
         }
 
-        private uint UpdateFontSize(IShared<uint>? fontSize) {
+        private uint UpdateFontSize(IShared<uint>? fontSize)
+        {
             const uint DefaultFontSize = 12;
             uint finalFontSize = fontSize?.Value ?? DefaultFontSize;
-            if (this._text.CharacterSize != finalFontSize) {
+            if (this._text.CharacterSize != finalFontSize)
+            {
                 this._text.CharacterSize = finalFontSize;
             }
             return this._text.CharacterSize;
         }
 
-        private string UpdateText(string text) {
-            if (this._text.DisplayedString != text) {
+        private string UpdateText(string text)
+        {
+            if (this._text.DisplayedString != text)
+            {
                 this._text.DisplayedString = text;
             }
             return this._text.DisplayedString;
         }
 
-        private Font UpdateFont(string font) {
+        private Font UpdateFont(string font)
+        {
             var sfmlFont = this._fontCache.GetFont(font);
-            if (sfmlFont != this._text.Font) {
+            if (sfmlFont != this._text.Font)
+            {
                 this._text.Font = sfmlFont;
             }
             return this._text.Font;
         }
 
-        public Core.Data.FloatRect GetTextBounds() {
+        public Core.Data.FloatRect GetTextBounds()
+        {
             return this._text.GetLocalBounds().ToAnnex();
         }
 
-        public float GetCharacterX(int index) {
-            if (index == this._text.DisplayedString.Length) {
+        public float GetCharacterX(int index)
+        {
+            if (index == this._text.DisplayedString.Length)
+            {
                 return this.GetTextBounds().Width;
             }
             return this._text.FindCharacterPos((uint)index).X;

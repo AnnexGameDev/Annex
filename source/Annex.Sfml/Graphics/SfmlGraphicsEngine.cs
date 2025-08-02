@@ -46,7 +46,6 @@ public class SfmlGraphicsEngine : IGraphicsEngine
 
     public float GetCharacterX(TextContext textContext, int index, bool forceContextUpdate)
     {
-
         if (forceContextUpdate)
         {
             this._platformTargetFactory.GetPlatformTarget(textContext);

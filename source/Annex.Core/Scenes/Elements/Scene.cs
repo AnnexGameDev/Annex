@@ -66,7 +66,6 @@ public class Scene : Container, IScene
     private IUIElement? _lastMouseMovedElement = null;
     public virtual void OnMouseMoved(IWindow window, MouseMovedEvent mouseMovedEvent)
     {
-
         var newLastMovedElement = this.GetFirstVisibleElement(mouseMovedEvent.WindowX, mouseMovedEvent.WindowY);
         if (this._lastMouseMovedElement != newLastMovedElement)
         {

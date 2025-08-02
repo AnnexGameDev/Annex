@@ -24,6 +24,7 @@ public class ListView : Image, IParentElement
     public int LineHeight { get; set; } = 25;
     public int SelectedIndex { get; set; }
     public uint FontSize { get; set; } = 11;
+    public string Font { get; set; } = "default.ttf";
     public RGBA? SelectedFontColor { get; set; }
     public RGBA? FontColor { get; set; } = KnownColor.Black;
     public bool IsSelectable { get; set; } = true;
@@ -312,6 +313,7 @@ public class ListView : Image, IParentElement
         {
             HorizontalTextAlignment = HorizontalAlignment.Left;
             VerticalTextAlignment = VerticalAlignment.Middle;
+            Font = parent.Font;
             FontSize = parent.FontSize;
             _parent = parent;
             _text = text;
