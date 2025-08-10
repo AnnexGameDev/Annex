@@ -10,78 +10,84 @@ public abstract class LabeledTextureUIElement : UIElement, IButton, ILabel
     protected readonly Image Image;
     protected readonly Label Label;
 
+    public event EventHandler<TextChangedEventArgs>? OnTextChanged;
+
     public string? FocusedBackgroundTextureId
     {
-        get => this.Image.FocusedBackgroundTextureId;
-        set => this.Image.FocusedBackgroundTextureId = value;
+        get => Image.FocusedBackgroundTextureId;
+        set => Image.FocusedBackgroundTextureId = value;
     }
     public string? HoverBackgroundTextureId
     {
-        get => this.Image.HoverBackgroundTextureId;
-        set => this.Image.HoverBackgroundTextureId = value;
+        get => Image.HoverBackgroundTextureId;
+        set => Image.HoverBackgroundTextureId = value;
     }
     public string BackgroundTextureId
     {
-        get => this.Image.BackgroundTextureId;
-        set => this.Image.BackgroundTextureId = value;
+        get => Image.BackgroundTextureId;
+        set => Image.BackgroundTextureId = value;
     }
     public string Text
     {
-        get => this.Label.Text;
-        set => this.Label.Text = value;
+        get => Label.Text;
+        set
+        {
+            string oldText = Label.Text;
+            Label.Text = value;
+            OnTextChanged?.Invoke(this, new TextChangedEventArgs(oldText));
+        }
     }
     public string Font
     {
-        get => this.Label.Font;
-        set => this.Label.Font = value;
+        get => Label.Font;
+        set => Label.Font = value;
     }
     public uint FontSize
     {
-        get => this.Label.FontSize;
-        set => this.Label.FontSize = value;
+        get => Label.FontSize;
+        set => Label.FontSize = value;
     }
     public RGBA FontColor
     {
-        get => this.Label.FontColor;
-        set => this.Label.FontColor = value;
+        get => Label.FontColor;
+        set => Label.FontColor = value;
     }
     public HorizontalAlignment HorizontalTextAlignment
     {
-        get => this.Label.HorizontalTextAlignment;
-        set => this.Label.HorizontalTextAlignment = value;
+        get => Label.HorizontalTextAlignment;
+        set => Label.HorizontalTextAlignment = value;
     }
     public VerticalAlignment VerticalTextAlignment
     {
-        get => this.Label.VerticalTextAlignment;
-        set => this.Label.VerticalTextAlignment = value;
+        get => Label.VerticalTextAlignment;
+        set => Label.VerticalTextAlignment = value;
     }
     public IVector2<float> TextPositionOffset
     {
-        get => this.Label.TextPositionOffset;
-        set => this.Label.TextPositionOffset = value;
+        get => Label.TextPositionOffset;
+        set => Label.TextPositionOffset = value;
     }
     public float TextBorderThickness
     {
-        get => this.Label.TextBorderThickness;
-        set => this.Label.TextBorderThickness = value;
+        get => Label.TextBorderThickness;
+        set => Label.TextBorderThickness = value;
     }
     public RGBA TextBorderColor
     {
-        get => this.Label.TextBorderColor;
-        set => this.Label.TextBorderColor = value;
+        get => Label.TextBorderColor;
+        set => Label.TextBorderColor = value;
     }
 
     public LabeledTextureUIElement(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size)
     {
-
-        this.Image = new Image($"{elementId}.background", this.Position, this.Size);
-        this.Label = new Label($"{elementId}.label", this.Position, this.Size);
+        Image = new Image($"{elementId}.background", Position, Size);
+        Label = new Label($"{elementId}.label", Position, Size);
     }
 
     protected override void DrawInternal(IWindow window, long timeDelta)
     {
-        this.Image.DrawOn(window, timeDelta);
-        this.Label.DrawOn(window, timeDelta);
+        Image.DrawOn(window, timeDelta);
+        Label.DrawOn(window, timeDelta);
     }
 
     public override void OnLostFocus()
