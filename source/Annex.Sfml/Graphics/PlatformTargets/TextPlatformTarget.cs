@@ -5,165 +5,210 @@ using Annex.Sfml.Extensions;
 using SFML.Graphics;
 using Vector2f = SFML.System.Vector2f;
 
-namespace Annex.Sfml.Graphics.PlatformTargets
+namespace Annex.Sfml.Graphics.PlatformTargets;
+
+internal class TextPlatformTarget : PlatformTarget
 {
-    internal class TextPlatformTarget : PlatformTarget
+    private readonly Text _text;
+    private readonly TextContext _textContext;
+    private readonly IFontCache _fontCache;
+
+    private float _superSampleScale;
+    private RenderTexture? _renderedText_Texture;
+    private Sprite? _renderedText_Sprite;
+
+    public TextPlatformTarget(TextContext textContext, IFontCache fontCache)
     {
-        private readonly Text _text;
-        private readonly TextContext _textContext;
-        private readonly IFontCache _fontCache;
+        _textContext = textContext;
+        _fontCache = fontCache;
+        _text = new();
+    }
 
-        public TextPlatformTarget(TextContext textContext, IFontCache fontCache)
+    public override void Dispose()
+    {
+        _text.Dispose();
+        _renderedText_Sprite?.Dispose();
+        _renderedText_Texture?.Dispose();
+        // _textContext isn't owned by us
+    }
+
+    protected override void Draw(RenderTarget renderTarget)
+    {
+        if (UpdateTextTextureIfNeeded())
         {
-            this._textContext = textContext;
-            this._fontCache = fontCache;
-            this._text = new();
+            ReCreateTextTexture();
         }
+        UpdateTexturePositionIfNeeded();
+        renderTarget.Draw(_renderedText_Sprite);
+    }
 
-        public override void Dispose()
+    private void UpdateTexturePositionIfNeeded()
+    {
+        UpdatePosition(_textContext.Position);
+        UpdateOrigin(_textContext.HorizontalAlignment, _textContext.VerticalAlignment, _textContext.PositionOffset);
+        UpdateRotation(_textContext.Rotation);
+    }
+
+    private void ReCreateTextTexture()
+    {
+        uint originalCharacterSize = _text.CharacterSize;
+        _text.CharacterSize = (uint)(_text.CharacterSize * _superSampleScale); // temporarily scale the text size for rendering purposes
+
+        _renderedText_Sprite?.Dispose();
+        _renderedText_Texture?.Dispose();
+
+        var bounds = _text.GetLocalBounds();
+        _text.Position = new Vector2f(-bounds.Left, -bounds.Top);
+
+        uint width = (uint)Math.Ceiling(bounds.Width + 2);
+        uint height = (uint)Math.Ceiling(bounds.Height + 2);
+
+        _renderedText_Texture = new RenderTexture(width, height);
+        _renderedText_Texture.Clear(Color.Transparent);
+        _renderedText_Texture.Draw(_text);
+        _renderedText_Texture.Display();
+
+        _text.CharacterSize = originalCharacterSize; // undo
+
+        _renderedText_Sprite = new Sprite(_renderedText_Texture.Texture)
         {
-            this._text.Dispose();
-            // _textContext isn't owned by us
-        }
+            Scale = new Vector2f(1.0f / _superSampleScale, 1.0f / _superSampleScale)
+        };
+    }
 
-        protected override void Draw(RenderTarget renderTarget)
+    private bool UpdateTextTextureIfNeeded()
+    {
+        bool update = false;
+        update |= UpdateSuperSampleScale(_textContext.SuperSampleCount?.Value ?? 1);
+        update |= UpdateFont(_textContext.Font.Value);
+        update |= UpdateText(_textContext.Text.Value);
+        update |= UpdateFontSize(_textContext.FontSize);
+        update |= UpdateFontColor(_textContext.Color);
+        update |= UpdateBorderThickness(_textContext.BorderThickness);
+        update |= UpdateBorderColor(_textContext.BorderColor);
+        return update;
+    }
+
+    private bool UpdateSuperSampleScale(float value)
+    {
+        if (_superSampleScale != value)
         {
-            this.UpdateIfNeeded();
-            renderTarget.Draw(this._text);
+            _superSampleScale = value;
+            return true;
         }
+        return false;
+    }
 
-        private void UpdateIfNeeded()
+    private void UpdateRotation(IShared<float>? rotation)
+    {
+        const float DefaultRotation = 0;
+        var finalRotation = rotation?.Value ?? DefaultRotation;
+        if (_renderedText_Sprite.Rotation != finalRotation)
         {
-
-            if (string.IsNullOrEmpty(this._textContext.Font.Value) || string.IsNullOrWhiteSpace(this._textContext.Text.Value))
-            {
-                this._text.DisplayedString = string.Empty;
-                return;
-            }
-
-            var font = UpdateFont(this._textContext.Font.Value);
-            var text = UpdateText(this._textContext.Text.Value);
-            var fontSize = UpdateFontSize(this._textContext.FontSize);
-            var color = UpdateFontColor(this._textContext.Color);
-            var borderThickness = UpdateBorderThickness(this._textContext.BorderThickness);
-            var borderColor = UpdateBorderColor(this._textContext.BorderColor);
-
-            var position = UpdatePosition(this._textContext.Position);
-            var origin = UpdateOrigin(this._textContext.HorizontalAlignment, this._textContext.VerticalAlignment, this._textContext.PositionOffset);
-            var rotation = UpdateRotation(this._textContext.Rotation);
+            _renderedText_Sprite.Rotation = finalRotation;
         }
+    }
 
-        private float UpdateRotation(IShared<float>? rotation)
+    private void UpdateOrigin(HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, IVector2<float>? positionOffset)
+    {
+        var bounds = _renderedText_Sprite.GetLocalBounds();
+        Vector2f desiredOrigin = new Vector2f(
+            horizontalAlignment.Align(_renderedText_Texture.Size.X),
+            verticalAlignment.Align(_renderedText_Texture.Size.Y)
+        );
+        desiredOrigin.X -= (positionOffset?.X ?? 0) * _superSampleScale;
+        desiredOrigin.Y -= (positionOffset?.Y ?? 0) * _superSampleScale;
+
+        if (_renderedText_Sprite.Origin != desiredOrigin)
         {
-            const float DefaultRotation = 0;
-            var finalRotation = rotation?.Value ?? DefaultRotation;
-            if (this._text.Rotation != finalRotation)
-            {
-                this._text.Rotation = finalRotation;
-            }
-            return this._text.Rotation;
+            _renderedText_Sprite.Origin = desiredOrigin;
         }
+    }
 
-        private Vector2f UpdateOrigin(HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, IVector2<float>? positionOffset)
+    private void UpdatePosition(IVector2<float>? position)
+    {
+        if (_renderedText_Sprite.Position.DoesNotEqual(position))
         {
-            var bounds = this._text.GetLocalBounds();
-            Vector2f desiredOrigin = new Vector2f(
-                horizontalAlignment.Align(bounds),
-                verticalAlignment.Align(bounds)
-            );
-            desiredOrigin.X -= positionOffset?.X ?? 0;
-            desiredOrigin.Y -= positionOffset?.Y ?? 0;
-
-            desiredOrigin.X += bounds.Left;
-            desiredOrigin.Y += bounds.Top;
-
-            if (this._text.Origin != desiredOrigin)
-            {
-                this._text.Origin = desiredOrigin;
-            }
-            return this._text.Origin;
+            _renderedText_Sprite.Position = position.ToSFML();
         }
+    }
 
-        private Vector2f UpdatePosition(IVector2<float>? position)
+    private bool UpdateBorderColor(RGBA? borderColor)
+    {
+        if (_text.OutlineColor.DoesNotEqual(borderColor, Color.Black))
         {
-            if (this._text.Position.DoesNotEqual(position))
-            {
-                this._text.Position = position.ToSFML();
-            }
-            return this._text.Position;
+            _text.OutlineColor = borderColor.ToSFML(KnownColor.Black);
+            return true;
         }
+        return false;
+    }
 
-        private Color UpdateBorderColor(RGBA? borderColor)
+    private bool UpdateBorderThickness(IShared<float>? borderThickness)
+    {
+        const float DefaultBorderThickness = 0;
+        float finalBorderThickness = borderThickness?.Value ?? DefaultBorderThickness;
+        if (_text.OutlineThickness != finalBorderThickness)
         {
-            if (this._text.OutlineColor.DoesNotEqual(borderColor, Color.Black))
-            {
-                this._text.OutlineColor = borderColor.ToSFML(KnownColor.Black);
-            }
-            return this._text.OutlineColor;
+            _text.OutlineThickness = finalBorderThickness;
+            return true;
         }
+        return false;
+    }
 
-        private float UpdateBorderThickness(IShared<float>? borderThickness)
+    private bool UpdateFontColor(RGBA? color)
+    {
+        if (_text.FillColor.DoesNotEqual(color, Color.Black))
         {
-            const float DefaultBorderThickness = 0;
-            float finalBorderThickness = borderThickness?.Value ?? DefaultBorderThickness;
-            if (this._text.OutlineThickness != finalBorderThickness)
-            {
-                this._text.OutlineThickness = finalBorderThickness;
-            }
-            return this._text.OutlineThickness;
+            _text.FillColor = color.ToSFML(KnownColor.Black);
+            return true;
         }
+        return false;
+    }
 
-        private Color UpdateFontColor(RGBA? color)
+    private bool UpdateFontSize(IShared<uint>? fontSize)
+    {
+        const uint DefaultFontSize = 12;
+        uint finalFontSize = fontSize?.Value ?? DefaultFontSize;
+        if (_text.CharacterSize != finalFontSize)
         {
-            if (this._text.FillColor.DoesNotEqual(color, Color.Black))
-            {
-                this._text.FillColor = color.ToSFML(KnownColor.Black);
-            }
-            return this._text.FillColor;
+            _text.CharacterSize = finalFontSize;
+            return true;
         }
+        return false;
+    }
 
-        private uint UpdateFontSize(IShared<uint>? fontSize)
+    private bool UpdateText(string text)
+    {
+        if (_text.DisplayedString != text)
         {
-            const uint DefaultFontSize = 12;
-            uint finalFontSize = fontSize?.Value ?? DefaultFontSize;
-            if (this._text.CharacterSize != finalFontSize)
-            {
-                this._text.CharacterSize = finalFontSize;
-            }
-            return this._text.CharacterSize;
+            _text.DisplayedString = text;
+            return true;
         }
+        return false;
+    }
 
-        private string UpdateText(string text)
+    private bool UpdateFont(string font)
+    {
+        var sfmlFont = _fontCache.GetFont(font);
+        if (sfmlFont != _text.Font)
         {
-            if (this._text.DisplayedString != text)
-            {
-                this._text.DisplayedString = text;
-            }
-            return this._text.DisplayedString;
+            _text.Font = sfmlFont;
+            return true;
         }
+        return false;
+    }
 
-        private Font UpdateFont(string font)
-        {
-            var sfmlFont = this._fontCache.GetFont(font);
-            if (sfmlFont != this._text.Font)
-            {
-                this._text.Font = sfmlFont;
-            }
-            return this._text.Font;
-        }
+    public Core.Data.FloatRect GetTextBounds()
+    {
+        return _text.GetLocalBounds().ToAnnex();
+    }
 
-        public Core.Data.FloatRect GetTextBounds()
+    public float GetCharacterX(int index)
+    {
+        if (index == _text.DisplayedString.Length)
         {
-            return this._text.GetLocalBounds().ToAnnex();
+            return GetTextBounds().Width;
         }
-
-        public float GetCharacterX(int index)
-        {
-            if (index == this._text.DisplayedString.Length)
-            {
-                return this.GetTextBounds().Width;
-            }
-            return this._text.FindCharacterPos((uint)index).X;
-        }
+        return _text.FindCharacterPos((uint)index).X;
     }
 }

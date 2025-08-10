@@ -18,6 +18,8 @@ namespace Annex.Core.Graphics.Contexts
 
     public class TextContext : DrawContext
     {
+        public IShared<float>? SuperSampleCount { get; init; }
+
         public IShared<string> Text { get; }
         public IShared<string> Font { get; }
 
@@ -34,7 +36,8 @@ namespace Annex.Core.Graphics.Contexts
         public HorizontalAlignment HorizontalAlignment { get; set; }
         public VerticalAlignment VerticalAlignment { get; set; }
 
-        public TextContext(IShared<string> text, IShared<string> font) {
+        public TextContext(IShared<string> text, IShared<string> font)
+        {
             this.Text = text;
             this.Font = font;
 

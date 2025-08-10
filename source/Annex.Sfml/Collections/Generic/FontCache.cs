@@ -9,22 +9,29 @@ namespace Annex.Sfml.Collections.Generic
         private readonly ICache<string, Font> _cache = new Cache<string, Font>();
         private readonly IAssetGroup _fonts;
 
-        public FontCache(IAssetService assetService) {
+        public FontCache(IAssetService assetService)
+        {
             this._fonts = assetService.Fonts();
         }
 
-        public Font GetFont(string fontId) {
+        public Font GetFont(string fontId)
+        {
 
-            if (this._cache.TryGetValue(fontId, out var font)) {
+            if (this._cache.TryGetValue(fontId, out var font))
+            {
                 return font;
             }
 
             var asset = this._fonts.GetAsset(fontId);
 
-            if (asset is not Font newFont) {
-                if (asset.FilepathSupported) {
+            if (asset is not Font newFont)
+            {
+                if (asset.FilepathSupported)
+                {
                     newFont = new Font(asset.FilePath);
-                } else {
+                }
+                else
+                {
                     newFont = new Font(asset.ToBytes());
                 }
             }
