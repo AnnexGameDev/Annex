@@ -1,22 +1,24 @@
 ﻿using Annex.Core.Graphics.Contexts;
 using Annex.Sfml.Collections.Generic;
 
-namespace Annex.Sfml.Graphics.PlatformTargets
+namespace Annex.Sfml.Graphics.PlatformTargets;
+
+internal class BatchTexturePlatformTargetCreator : PlatformTargetCreator<BatchTexturePlatformTarget>
 {
-    internal class BatchTexturePlatformTargetCreator : PlatformTargetCreator<BatchTexturePlatformTarget>
+    private readonly ITextureCache _textureCache;
+
+    public BatchTexturePlatformTargetCreator(ITextureCache textureCache)
     {
-        private readonly ITextureCache _textureCache;
+        _textureCache = textureCache;
+    }
 
-        public BatchTexturePlatformTargetCreator(ITextureCache textureCache) {
-            this._textureCache = textureCache;
-        }
+    protected override PlatformTarget CreatePlatformTargetFor(DrawContext drawContext)
+    {
+        return new BatchTexturePlatformTarget((BatchTextureContext)drawContext, _textureCache);
+    }
 
-        protected override PlatformTarget CreatePlatformTargetFor(DrawContext drawContext) {
-            return new BatchTexturePlatformTarget((BatchTextureContext)drawContext, this._textureCache);
-        }
-
-        protected override bool Supports(DrawContext drawContext) {
-            return drawContext is BatchTextureContext;
-        }
+    protected override bool Supports(DrawContext drawContext)
+    {
+        return drawContext is BatchTextureContext;
     }
 }

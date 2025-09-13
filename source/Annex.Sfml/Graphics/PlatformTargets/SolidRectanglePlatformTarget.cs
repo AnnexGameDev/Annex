@@ -3,49 +3,56 @@ using Annex.Core.Graphics.Contexts;
 using Annex.Sfml.Extensions;
 using SFML.Graphics;
 
-namespace Annex.Sfml.Graphics.PlatformTargets
+namespace Annex.Sfml.Graphics.PlatformTargets;
+
+internal class SolidRectanglePlatformTarget : TransformablePlatformTarget
 {
-    internal class SolidRectanglePlatformTarget : TransformablePlatformTarget
+    private readonly SolidRectangleContext _rectangleContext;
+    private readonly RectangleShape _rectangle;
+    protected override Transformable Transformable => _rectangle;
+
+    public SolidRectanglePlatformTarget(SolidRectangleContext drawContext)
     {
-        private readonly SolidRectangleContext _rectangleContext;
-        private readonly RectangleShape _rectangle;
-        protected override Transformable Transformable => this._rectangle;
+        _rectangleContext = drawContext;
+        _rectangle = new RectangleShape();
+    }
 
-        public SolidRectanglePlatformTarget(SolidRectangleContext drawContext) {
-            this._rectangleContext = drawContext;
-            this._rectangle = new RectangleShape();
+    protected override void Draw(RenderTarget renderTarget)
+    {
+        UpdateIfNeeded();
+        renderTarget.Draw(_rectangle);
+    }
+
+    private void UpdateIfNeeded()
+    {
+        if (_rectangle.FillColor.DoesNotEqual(_rectangleContext.FillColor))
+        {
+            _rectangle.FillColor = _rectangleContext.FillColor.ToSFML();
         }
 
-        protected override void Draw(RenderTarget renderTarget) {
-            this.UpdateIfNeeded();
-            renderTarget.Draw(this._rectangle);
+        if (_rectangle.Size.DoesNotEqual(_rectangleContext.Size))
+        {
+            _rectangle.Size = _rectangleContext.Size.ToSFML();
         }
 
-        private void UpdateIfNeeded() {
-            if (this._rectangle.FillColor.DoesNotEqual(this._rectangleContext.FillColor)) {
-                this._rectangle.FillColor = this._rectangleContext.FillColor.ToSFML();
-            }
+        (var position, var origin) = UpdatePositionAndOrigin(_rectangleContext.Position, _rectangleContext.RenderOffset);
+        UpdateRotation(_rectangleContext.Rotation);
 
-            if (this._rectangle.Size.DoesNotEqual(this._rectangleContext.Size)) {
-                this._rectangle.Size = this._rectangleContext.Size.ToSFML();
-            }
-
-            (var position, var origin) = UpdatePositionAndOrigin(this._rectangleContext.Position, this._rectangleContext.RenderOffset);
-            UpdateRotation(this._rectangleContext.Rotation);
-
-            if (this._rectangle.OutlineColor.DoesNotEqual(this._rectangleContext.BorderColor, Color.Transparent)) {
-                this._rectangle.OutlineColor = this._rectangleContext.BorderColor.ToSFML(KnownColor.Transparent);
-            }
-
-            const float defaultThickness = 0;
-            if (this._rectangle.OutlineThickness != (this._rectangleContext.BorderThickness?.Value ?? defaultThickness)) {
-                this._rectangle.OutlineThickness = (this._rectangleContext.BorderThickness?.Value ?? defaultThickness);
-            }
+        if (_rectangle.OutlineColor.DoesNotEqual(_rectangleContext.BorderColor, Color.Transparent))
+        {
+            _rectangle.OutlineColor = _rectangleContext.BorderColor.ToSFML(KnownColor.Transparent);
         }
 
-        public override void Dispose() {
-            this._rectangle.Dispose();
-            // _rectangleContext is not owned by us
+        const float defaultThickness = 0;
+        if (_rectangle.OutlineThickness != (_rectangleContext.BorderThickness?.Value ?? defaultThickness))
+        {
+            _rectangle.OutlineThickness = (_rectangleContext.BorderThickness?.Value ?? defaultThickness);
         }
+    }
+
+    public override void Dispose()
+    {
+        _rectangle.Dispose();
+        // _rectangleContext is not owned by us
     }
 }

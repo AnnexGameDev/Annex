@@ -1,18 +1,20 @@
-﻿namespace Annex.Core.Graphics.Contexts
+﻿namespace Annex.Core.Graphics.Contexts;
+
+public abstract class DrawContext : IDisposable
 {
-    public abstract class DrawContext : IDisposable
+    public IDisposable? PlatformTarget { get; private set; }
+
+    public string? Camera { get; init; } = CameraId.Default.ToString();
+    public Shader? Shader { get; init; } = null;
+
+    public void SetPlatformTarget(IDisposable? platformTarget)
     {
-        public IDisposable? PlatformTarget { get; private set; }
+        PlatformTarget?.Dispose();
+        PlatformTarget = platformTarget;
+    }
 
-        public string? Camera { get; init; } = CameraId.Default.ToString();
-
-        public void SetPlatformTarget(IDisposable? platformTarget) {
-            this.PlatformTarget?.Dispose();
-            this.PlatformTarget = platformTarget;
-        }
-
-        public void Dispose() {
-            this.SetPlatformTarget(null);
-        }
+    public void Dispose()
+    {
+        SetPlatformTarget(null);
     }
 }

@@ -1,94 +1,105 @@
 ﻿using Annex.Core.Data;
 
-namespace Annex.Core.Graphics.Contexts
+namespace Annex.Core.Graphics.Contexts;
+
+public enum Updatability
 {
-    public enum Updatability
+    NeverUpdates,
+    Updates
+}
+
+public class BatchTextureContext : DrawContext
+{
+    public string TextureId { get; }
+    public (float x, float y)[] Positions { get; }
+    public (float x, float y)[]? RenderSizes { get; init; }
+    public (float x, float y)[]? RenderOffsets { get; init; }
+    public (int top, int left, int width, int height)[]? SourceTextureRects { get; init; }
+    public RGBA[]? RenderColors { get; init; }
+    public float[]? Rotations { get; init; } // TODO: Not supported, currently broken
+
+    public readonly Updatability UpdateFrequency;
+
+    public BatchTextureContext(string textureId, (float x, float y)[] positions, Updatability updateFrequency)
     {
-        NeverUpdates,
-        Updates
+        TextureId = textureId;
+        Positions = positions;
+        UpdateFrequency = updateFrequency;
+
+        RenderSizes = null;
+        RenderOffsets = null;
+        SourceTextureRects = null;
+        RenderColors = null;
+        Rotations = null;
     }
 
-    public class BatchTextureContext : DrawContext
+    public (float x, float y)? GetSize(int index)
     {
-        public string TextureId { get; }
-        public (float x, float y)[] Positions { get; }
-        public (float x, float y)[]? RenderSizes { get; init; }
-        public (float x, float y)[]? RenderOffsets { get; init; }
-        public (int top, int left, int width, int height)[]? SourceTextureRects { get; init; }
-        public RGBA[]? RenderColors { get; init; }
-        public float[]? Rotations { get; init; } // TODO: Not supported, currently broken
+        if (RenderSizes == null)
+            return null;
 
-        public readonly Updatability UpdateFrequency;
-
-        public BatchTextureContext(string textureId, (float x, float y)[] positions, Updatability updateFrequency) {
-            this.TextureId = textureId;
-            this.Positions = positions;
-            this.UpdateFrequency = updateFrequency;
-
-            this.RenderSizes = null;
-            this.RenderOffsets = null;
-            this.SourceTextureRects = null;
-            this.RenderColors = null;
-            this.Rotations = null;
+        if (RenderSizes.Length == 1)
+        {
+            index = 0;
         }
 
-        public (float x, float y)? GetSize(int index) {
-            if (this.RenderSizes == null)
-                return null;
+        return RenderSizes[index];
+    }
 
-            if (this.RenderSizes.Length == 1) {
-                index = 0;
-            }
+    public (float x, float y) GetPosition(int index)
+    {
+        return Positions[index];
+    }
 
-            return this.RenderSizes[index];
+    public (float x, float y)? GetOffset(int index)
+    {
+        if (RenderOffsets == null)
+            return null;
+
+        if (RenderOffsets.Length == 1)
+        {
+            index = 0;
         }
 
-        public (float x, float y) GetPosition(int index) {
-            return this.Positions[index];
+        return RenderOffsets[index];
+    }
+
+    public (int top, int left, int width, int height)? GetSourceTextureRect(int index)
+    {
+        if (SourceTextureRects == null)
+            return null;
+
+        if (SourceTextureRects.Length == 1)
+        {
+            index = 0;
         }
 
-        public (float x, float y)? GetOffset(int index) {
-            if (this.RenderOffsets == null)
-                return null;
+        return SourceTextureRects[index];
+    }
 
-            if (this.RenderOffsets.Length == 1) {
-                index = 0;
-            }
+    public RGBA? GetColor(int index)
+    {
+        if (RenderColors == null)
+            return null;
 
-            return this.RenderOffsets[index];
+        if (RenderColors.Length == 1)
+        {
+            index = 0;
         }
 
-        public (int top, int left, int width, int height)? GetSourceTextureRect(int index) {
-            if (this.SourceTextureRects == null)
-                return null;
+        return RenderColors[index];
+    }
 
-            if (this.SourceTextureRects.Length == 1) {
-                index = 0;
-            }
+    public float? GetRotation(int index)
+    {
+        if (Rotations == null)
+            return null;
 
-            return this.SourceTextureRects[index];
+        if (Rotations.Length == 1)
+        {
+            index = 0;
         }
 
-        public RGBA? GetColor(int index) {
-            if (this.RenderColors == null)
-                return null;
-
-            if (this.RenderColors.Length == 1) {
-                index = 0;
-            }
-
-            return this.RenderColors[index];
-        }
-
-        public float? GetRotation(int index) {
-            if (this.Rotations == null)
-                return null;
-
-            if (this.Rotations.Length == 1) {
-                index = 0;
-            }
-
-            return this.Rotations[index];
-        }
+        return Rotations[index];
     }
 }

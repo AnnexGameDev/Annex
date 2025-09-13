@@ -1,22 +1,24 @@
 ﻿using Annex.Core.Graphics.Contexts;
 using Annex.Sfml.Collections.Generic;
 
-namespace Annex.Sfml.Graphics.PlatformTargets
+namespace Annex.Sfml.Graphics.PlatformTargets;
+
+internal class TexturePlatformTargetCreator : PlatformTargetCreator<TexturePlatformTarget>
 {
-    internal class TexturePlatformTargetCreator : PlatformTargetCreator<TexturePlatformTarget>
+    private readonly ITextureCache _textureCache;
+
+    public TexturePlatformTargetCreator(ITextureCache textureCache)
     {
-        private readonly ITextureCache _textureCache;
+        _textureCache = textureCache;
+    }
 
-        public TexturePlatformTargetCreator(ITextureCache textureCache) {
-            this._textureCache = textureCache;
-        }
+    protected override PlatformTarget CreatePlatformTargetFor(DrawContext drawContext)
+    {
+        return new TexturePlatformTarget((TextureContext)drawContext, _textureCache);
+    }
 
-        protected override PlatformTarget CreatePlatformTargetFor(DrawContext drawContext) {
-            return new TexturePlatformTarget((TextureContext)drawContext, this._textureCache);
-        }
-
-        protected override bool Supports(DrawContext drawContext) {
-            return drawContext is TextureContext;
-        }
+    protected override bool Supports(DrawContext drawContext)
+    {
+        return drawContext is TextureContext;
     }
 }

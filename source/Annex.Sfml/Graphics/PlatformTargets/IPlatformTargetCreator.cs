@@ -1,9 +1,8 @@
 ﻿using Annex.Core.Graphics.Contexts;
 
-namespace Annex.Sfml.Graphics.PlatformTargets
+namespace Annex.Sfml.Graphics.PlatformTargets;
+
+internal interface IPlatformTargetCreator
 {
-    public interface IPlatformTargetCreator
-    {
-        bool TryGetOrCreate(DrawContext drawContext, out PlatformTarget? sfmlPlatformTarget);
-    }
+    bool TryGetOrCreate(DrawContext drawContext, out PlatformTarget? sfmlPlatformTarget);
 }

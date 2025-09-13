@@ -1,35 +1,33 @@
 ﻿using Annex.Core.Graphics.Contexts;
 
-namespace Annex.Sfml.Graphics.PlatformTargets
+namespace Annex.Sfml.Graphics.PlatformTargets;
+
+internal abstract class PlatformTargetCreator<TPlatformTarget> : IPlatformTargetCreator where TPlatformTarget : PlatformTarget
 {
-    public abstract class PlatformTargetCreator<TPlatformTarget> : IPlatformTargetCreator where TPlatformTarget : PlatformTarget
+    public bool TryGetOrCreate(DrawContext drawContext, out PlatformTarget? platformTarget)
     {
-        public bool TryGetOrCreate(DrawContext drawContext, out PlatformTarget? platformTarget) {
+        platformTarget = default;
 
-            platformTarget = default;
+        if (!Supports(drawContext))
+            return false;
 
-            if (!this.Supports(drawContext))
-                return false;
-
-            if (this.GetExistingPlatformTarget(drawContext) is TPlatformTarget existingPlatformTarget) {
-                platformTarget = existingPlatformTarget;
-                return true;
-            }
-
-            var newPlatformTarget = this.CreatePlatformTargetFor(drawContext);
-            drawContext.SetPlatformTarget(newPlatformTarget);
-            platformTarget = newPlatformTarget;
+        if (GetExistingPlatformTarget(drawContext) is TPlatformTarget existingPlatformTarget)
+        {
+            platformTarget = existingPlatformTarget;
             return true;
         }
 
-        protected abstract PlatformTarget CreatePlatformTargetFor(DrawContext drawContext);
-        protected abstract bool Supports(DrawContext drawContext);
+        var newPlatformTarget = CreatePlatformTargetFor(drawContext);
+        drawContext.SetPlatformTarget(newPlatformTarget);
+        platformTarget = newPlatformTarget;
+        return true;
+    }
 
-        private TPlatformTarget? GetExistingPlatformTarget(DrawContext context) {
-            if (context.PlatformTarget is TPlatformTarget platformTarget) {
-                return platformTarget;
-            }
-            return null;
-        }
+    protected abstract PlatformTarget CreatePlatformTargetFor(DrawContext drawContext);
+    protected abstract bool Supports(DrawContext drawContext);
+
+    private static TPlatformTarget? GetExistingPlatformTarget(DrawContext context)
+    {
+        return context.PlatformTarget as TPlatformTarget;
     }
 }

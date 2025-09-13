@@ -1,58 +1,64 @@
 ﻿using Annex.Core.Graphics.Contexts;
 using Annex.Sfml.Collections.Generic;
 
-namespace Annex.Sfml.Graphics.PlatformTargets
+namespace Annex.Sfml.Graphics.PlatformTargets;
+
+internal class TexturePlatformTarget : SpritePlatformTarget
 {
-    internal class TexturePlatformTarget : SpritePlatformTarget
+    private readonly TextureContext _textureContext;
+
+    public TexturePlatformTarget(TextureContext context, ITextureCache textureCache) : base(textureCache)
     {
-        private readonly TextureContext _textureContext;
+        _textureContext = context;
+    }
 
-        public TexturePlatformTarget(TextureContext context, ITextureCache textureCache) : base(textureCache) {
-            this._textureContext = context;
+    protected override void UpdateIfNeeded()
+    {
+
+        if (string.IsNullOrEmpty(_textureContext.TextureId.Value))
+        {
+            return;
         }
 
-        protected override void UpdateIfNeeded() {
+        var texture = UpdateTexture(_textureContext.TextureId.Value);
+        var rect = UpdateTextureRect(_textureContext.SourceTextureRect);
 
-            if (string.IsNullOrEmpty(this._textureContext.TextureId.Value)) {
-                return;
-            }
+        // Compute scale
+        int textureWidth = (int)texture.Size.X;
+        int textureHeight = (int)texture.Size.Y;
+        float sourceX = GetSourceWidth(textureWidth);
+        float sourceY = GetSourceHeight(textureHeight);
+        float desiredRenderX = GetDesiredRenderX(textureWidth);
+        float desiredRenderY = GetDesiredRenderY(textureHeight);
 
-            var texture = UpdateTexture(this._textureContext.TextureId.Value);
-            var rect = UpdateTextureRect(this._textureContext.SourceTextureRect);
+        float scaleX = desiredRenderX / sourceX;
+        float scaleY = desiredRenderY / sourceY;
+        var scale = UpdateScale(scaleX, scaleY);
 
-            // Compute scale
-            int textureWidth = (int)texture.Size.X;
-            int textureHeight = (int)texture.Size.Y;
-            float sourceX = GetSourceWidth(textureWidth);
-            float sourceY = GetSourceHeight(textureHeight);
-            float desiredRenderX = GetDesiredRenderX(textureWidth);
-            float desiredRenderY = GetDesiredRenderY(textureHeight);
+        (var position, var origin) = UpdatePositionAndOrigin(_textureContext.Position, _textureContext.RenderOffset);
+        var color = UpdateColor(_textureContext.RenderColor);
+        var rotation = UpdateRotation(_textureContext.Rotation);
+    }
 
-            float scaleX = desiredRenderX / sourceX;
-            float scaleY = desiredRenderY / sourceY;
-            var scale = UpdateScale(scaleX, scaleY);
+    private float GetDesiredRenderX(int textureX)
+    {
+        float sourceWidth = _textureContext.SourceTextureRect?.Width ?? textureX;
+        return _textureContext.RenderSize?.X ?? sourceWidth;
+    }
 
-            (var position, var origin) = UpdatePositionAndOrigin(this._textureContext.Position, this._textureContext.RenderOffset);
-            var color = UpdateColor(this._textureContext.RenderColor);
-            var rotation = UpdateRotation(this._textureContext.Rotation);
-        }
+    private float GetDesiredRenderY(int textureY)
+    {
+        float sourceHeight = _textureContext.SourceTextureRect?.Height ?? textureY;
+        return _textureContext.RenderSize?.Y ?? sourceHeight;
+    }
 
-        private float GetDesiredRenderX(int textureX) {
-            float sourceWidth = this._textureContext.SourceTextureRect?.Width ?? textureX;
-            return this._textureContext.RenderSize?.X ?? sourceWidth;
-        }
+    private float GetSourceWidth(int textureX)
+    {
+        return _textureContext.SourceTextureRect?.Width ?? textureX;
+    }
 
-        private float GetDesiredRenderY(int textureY) {
-            float sourceHeight = this._textureContext.SourceTextureRect?.Height ?? textureY;
-            return this._textureContext.RenderSize?.Y ?? sourceHeight;
-        }
-
-        private float GetSourceWidth(int textureX) {
-            return this._textureContext.SourceTextureRect?.Width ?? textureX;
-        }
-
-        private float GetSourceHeight(int textureY) {
-            return this._textureContext.SourceTextureRect?.Height ?? textureY;
-        }
+    private float GetSourceHeight(int textureY)
+    {
+        return _textureContext.SourceTextureRect?.Height ?? textureY;
     }
 }
