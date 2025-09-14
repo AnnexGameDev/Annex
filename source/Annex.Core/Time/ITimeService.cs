@@ -3,6 +3,7 @@
     public interface ITimeService
     {
         long Now { get; }
+        float NowF { get; }
         long ElapsedTimeSince(long time);
     }
 }

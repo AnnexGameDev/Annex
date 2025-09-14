@@ -11,6 +11,7 @@ internal class BatchTexturePlatformTarget : PlatformTarget
 {
     private readonly ITextureCache _textureCache;
     private readonly DrawableVertexArray _drawable;
+    public override object Target => _drawable.Texture;
 
     public BatchTexturePlatformTarget(BatchTextureContext drawContext, ITextureCache textureCache)
     {
@@ -33,14 +34,14 @@ internal class BatchTexturePlatformTarget : PlatformTarget
 
     private class DrawableVertexArray : Transformable, Drawable
     {
-        private readonly Texture _texture;
+        public readonly Texture Texture;
         private readonly VertexArray _vertexArray;
         private readonly BatchTextureContext _drawContext;
         private readonly uint _batchSize;
 
         public DrawableVertexArray(Texture texture, BatchTextureContext drawContext)
         {
-            _texture = texture;
+            Texture = texture;
             _batchSize = (uint)drawContext.Positions.Length;
             _drawContext = drawContext;
             _vertexArray = new VertexArray(PrimitiveType.Quads, 4 * _batchSize);
@@ -57,7 +58,7 @@ internal class BatchTexturePlatformTarget : PlatformTarget
             }
 
             states.Transform *= Transform;
-            states.Texture = _texture;
+            states.Texture = Texture;
             states.Shader = ShaderCache.GetShader(_drawContext.Shader);
             target.Draw(_vertexArray, states);
         }
@@ -68,9 +69,9 @@ internal class BatchTexturePlatformTarget : PlatformTarget
             {
                 return new[] {
                             new Vector2f(0, 0),
-                            new Vector2f(_texture.Size.X, 0),
-                            new Vector2f(_texture.Size.X, _texture.Size.Y),
-                            new Vector2f(0, _texture.Size.Y)
+                            new Vector2f(Texture.Size.X, 0),
+                            new Vector2f(Texture.Size.X, Texture.Size.Y),
+                            new Vector2f(0, Texture.Size.Y)
                     };
             }
             else
@@ -94,7 +95,7 @@ internal class BatchTexturePlatformTarget : PlatformTarget
                 var color = _drawContext.GetColor(i).ToSFML(KnownColor.White);
                 var rects = UpdateRect(_drawContext.GetSourceTextureRect(i));
 
-                var size = _drawContext.GetSize(i) ?? (_texture.Size.X, _texture.Size.Y);
+                var size = _drawContext.GetSize(i) ?? (Texture.Size.X, Texture.Size.Y);
                 var position = _drawContext.GetPosition(i);
                 var offset = _drawContext.GetOffset(i) ?? (0, 0);
                 var rotation = _drawContext.GetRotation(i) ?? 0;
@@ -134,7 +135,7 @@ internal class BatchTexturePlatformTarget : PlatformTarget
 
             if (disposing)
             {
-                _texture.Dispose();
+                Texture.Dispose();
                 _vertexArray.Dispose();
                 // _drawContext isn't owned by us.
             }

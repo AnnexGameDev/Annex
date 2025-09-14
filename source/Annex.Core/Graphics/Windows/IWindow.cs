@@ -11,6 +11,7 @@ public interface IWindow : IDisposable
     Guid Id { get; }
     string Title { get; set; }
     bool IsVisible { get; set; }
+    object Buffer { get; }
 
     uint ResolutionWidth { get; }
     uint ResolutionHeight { get; }
@@ -53,4 +54,5 @@ public interface IWindow : IDisposable
     // Graphics
     Task DrawCurrentSceneAsync();
     void Draw(DrawContext context);
+    void UpdateBuffer();
 }

@@ -17,6 +17,8 @@ internal class TextPlatformTarget : PlatformTarget
     private RenderTexture? _renderedText_Texture;
     private Sprite? _renderedText_Sprite;
 
+    public override object Target => _text;
+
     public TextPlatformTarget(TextContext textContext, IFontCache fontCache)
     {
         _textContext = textContext;

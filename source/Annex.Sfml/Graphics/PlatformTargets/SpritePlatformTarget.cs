@@ -1,4 +1,5 @@
 ﻿using Annex.Core.Data;
+using Annex.Core.Graphics.Contexts;
 using Annex.Sfml.Collections.Generic;
 using Annex.Sfml.Extensions;
 using SFML.Graphics;
@@ -6,14 +7,18 @@ using IntRect = SFML.Graphics.IntRect;
 
 namespace Annex.Sfml.Graphics.PlatformTargets;
 
-internal abstract class SpritePlatformTarget : TransformablePlatformTarget
+internal abstract class SpritePlatformTarget<T> : TransformablePlatformTarget where T : DrawContext
 {
     private readonly Sprite _sprite;
     protected override Transformable Transformable => _sprite;
+    public override object Target => _sprite.Texture;
     private readonly ITextureCache _textureCache;
+    protected readonly T Context;
+    private RenderStates _renderState = RenderStates.Default;
 
-    public SpritePlatformTarget(ITextureCache textureCache)
+    public SpritePlatformTarget(T context, ITextureCache textureCache)
     {
+        Context = context;
         _textureCache = textureCache;
         _sprite = new();
     }
@@ -26,7 +31,8 @@ internal abstract class SpritePlatformTarget : TransformablePlatformTarget
     protected override void Draw(RenderTarget renderTarget)
     {
         UpdateIfNeeded();
-        renderTarget.Draw(_sprite);
+        _renderState.Shader = ShaderCache.GetShader(Context.Shader);
+        renderTarget.Draw(_sprite, _renderState);
     }
 
     protected abstract void UpdateIfNeeded();

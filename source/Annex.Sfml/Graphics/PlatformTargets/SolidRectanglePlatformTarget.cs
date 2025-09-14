@@ -10,6 +10,7 @@ internal class SolidRectanglePlatformTarget : TransformablePlatformTarget
     private readonly SolidRectangleContext _rectangleContext;
     private readonly RectangleShape _rectangle;
     protected override Transformable Transformable => _rectangle;
+    public override object Target => _rectangle;
 
     public SolidRectanglePlatformTarget(SolidRectangleContext drawContext)
     {

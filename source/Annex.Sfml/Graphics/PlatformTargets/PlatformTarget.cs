@@ -1,9 +1,12 @@
-﻿using SFML.Graphics;
+﻿using Annex.Core.Graphics;
+using SFML.Graphics;
 
 namespace Annex.Sfml.Graphics.PlatformTargets;
 
-internal abstract class PlatformTarget : IDisposable
+internal abstract class PlatformTarget : IPlatformTarget
 {
+    public abstract object Target { get; }
+
     protected abstract void Draw(RenderTarget renderTarget);
 
     public void TryDraw(RenderTarget? renderTarget)

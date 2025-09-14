@@ -2,12 +2,12 @@
 
 public abstract class DrawContext : IDisposable
 {
-    public IDisposable? PlatformTarget { get; private set; }
+    public IPlatformTarget? PlatformTarget { get; private set; }
 
     public string? Camera { get; init; } = CameraId.Default.ToString();
-    public Shader? Shader { get; init; } = null;
+    public Shader? Shader { get; set; } = null;
 
-    public void SetPlatformTarget(IDisposable? platformTarget)
+    public void SetPlatformTarget(IPlatformTarget? platformTarget)
     {
         PlatformTarget?.Dispose();
         PlatformTarget = platformTarget;

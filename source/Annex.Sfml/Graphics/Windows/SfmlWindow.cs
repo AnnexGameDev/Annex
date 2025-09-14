@@ -17,6 +17,8 @@ namespace Annex.Sfml.Graphics.Windows;
 
 internal class SfmlWindow : WindowBase, IWindow, IDisposable
 {
+    private RenderTexture _buffer;
+    private Sprite _bufferSprite;
     private RenderWindow _renderWindow;
     private readonly ICameraCache _cameraCache;
     private readonly IPlatformTargetFactory _platformTargetFactory;
@@ -27,6 +29,7 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
     public uint ResolutionWidth { get; }
     public uint ResolutionHeight { get; }
 
+    public object Buffer => _buffer.Texture;
     public uint Width => _renderWindow.Size.X;
     public uint Height => _renderWindow.Size.Y;
     public int Left => _renderWindow.Position.X;
@@ -103,6 +106,9 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
         renderWindow.Size.Set(resolutionX, resolutionY);
         renderWindow.Position.Set(positionX, positionY);
         renderWindow.SetVisible(isVisible);
+
+        _buffer = new RenderTexture(resolutionX, resolutionY);
+        _bufferSprite = new Sprite(_buffer.Texture);
 
         AttachInputHandlers(renderWindow);
         return renderWindow;
@@ -181,10 +187,10 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
             }
             else
             {
-                _renderWindow.SetView(view);
+                _buffer.SetView(view);
             }
 
-            platformTarget.TryDraw(_renderWindow);
+            platformTarget.TryDraw(_buffer);
         }
     }
 
@@ -264,13 +270,21 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
     public Task DrawCurrentSceneAsync()
     {
         _renderWindow.Clear();
+        _buffer.Clear();
 
         long now = _timeService.Now;
         Scene.DrawOn(this, _timeService.ElapsedTimeSince(_timeSinceLastDraw ?? now));
         _timeSinceLastDraw = now;
 
+        _buffer.Display();
+        _renderWindow.Draw(_bufferSprite);
         _renderWindow.Display();
         _renderWindow.DispatchEvents();
         return Task.CompletedTask;
+    }
+
+    public void UpdateBuffer()
+    {
+        _renderWindow.Draw(_bufferSprite);
     }
 }
