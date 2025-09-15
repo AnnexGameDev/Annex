@@ -6,6 +6,7 @@ public class Camera
 {
     private uint _originalWidth;
     private uint _originalHeight;
+    private uint _originalResolutionWidth;
     private Vector2f _size = new Vector2f();
 
     public string Id { get; }
@@ -22,7 +23,7 @@ public class Camera
     {
         Id = id;
         _originalHeight = height;
-        _originalWidth = width;
+        _originalWidth = _originalResolutionWidth = width;
         _size.Set(width, height);
     }
 
@@ -60,7 +61,7 @@ public class Camera
         _size.Set(_originalWidth * _currentZoomLevel, _originalHeight * _currentZoomLevel);
 
         const float increment = 0.5f;
-        float superSampleScale = Math.Max((_originalWidth / Size.X), 1);
+        float superSampleScale = Math.Max((_originalResolutionWidth / Size.X), 1);
         float superSampleScaleInIncrement = (float)Math.Ceiling(superSampleScale / increment) * increment;
         TextRenderingSuperSampleScaleBasedOnZoom.Set(superSampleScaleInIncrement);
     }
