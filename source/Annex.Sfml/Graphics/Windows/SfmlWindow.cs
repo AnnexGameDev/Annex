@@ -30,6 +30,9 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
     public uint ResolutionHeight { get; }
 
     public object Buffer => _buffer.Texture;
+    public uint BufferHeight => _buffer.Size.Y;
+    public uint BufferWidth => _buffer.Size.X;
+
     public uint Width => _renderWindow.Size.X;
     public uint Height => _renderWindow.Size.Y;
     public int Left => _renderWindow.Position.X;

@@ -12,6 +12,8 @@ public interface IWindow : IDisposable
     string Title { get; set; }
     bool IsVisible { get; set; }
     object Buffer { get; }
+    uint BufferHeight { get; }
+    uint BufferWidth { get; }
 
     uint ResolutionWidth { get; }
     uint ResolutionHeight { get; }
@@ -47,6 +49,7 @@ public interface IWindow : IDisposable
 
     // Scenes
     IScene Scene { get; }
+
     void LoadScene(IScene sceneInstance, object? parameters = null);
     void LoadScene<T>(object? parameters = null) where T : IScene;
     bool IsCurrentScene<T>() where T : IScene;

@@ -4,8 +4,8 @@ namespace Annex.Core.Graphics;
 
 public class Camera
 {
-    private readonly uint _originalWidth;
-    private readonly uint _originalHeight;
+    private uint _originalWidth;
+    private uint _originalHeight;
     private Vector2f _size = new Vector2f();
 
     public string Id { get; }
@@ -13,6 +13,8 @@ public class Camera
     public IReadonlyVector2<float> Size => _size;
     public IVector2<float> Center { get; set; } = new Vector2f();
     public IShared<float> Rotation { get; set; } = 0.0f.ToShared();
+
+    private uint _currentZoomLevel = 1;
 
     public IShared<float> TextRenderingSuperSampleScaleBasedOnZoom { get; } = new Shared<float>(1);
 
@@ -28,11 +30,34 @@ public class Camera
     {
     }
 
-    public void Zoom(float percentage)
+    public void Zoom(double delta)
     {
-        var newY = Size.Y * percentage;
-        var newX = newY * _originalWidth / _originalHeight;
-        _size.Set(newX, newY);
+        if (delta > 0)
+        {
+            SetZoomLevel(_currentZoomLevel - 1);
+        }
+        else
+        {
+            SetZoomLevel(Math.Max(0, _currentZoomLevel + 1));
+        }
+    }
+
+    public void SetBaseCameraDimentions(uint width, uint height)
+    {
+        _originalWidth = width;
+        _originalHeight = height;
+        SetZoomLevel(_currentZoomLevel);
+    }
+
+    public void SetZoomLevel(uint newZoomLevel)
+    {
+        if (newZoomLevel == 0)
+        {
+            return;
+        }
+
+        _currentZoomLevel = newZoomLevel;
+        _size.Set(_originalWidth * _currentZoomLevel, _originalHeight * _currentZoomLevel);
 
         const float increment = 0.5f;
         float superSampleScale = Math.Max((_originalWidth / Size.X), 1);

@@ -64,7 +64,7 @@ public class BatchTextureContext : DrawContext
         return RenderOffsets[index];
     }
 
-    public (int top, int left, int width, int height)? GetSourceTextureRect(int index)
+    public virtual (int top, int left, int width, int height)? GetSourceTextureRect(int index)
     {
         if (SourceTextureRects == null)
             return null;

@@ -1,5 +1,6 @@
 ﻿using Scaffold.Logging;
 using SFML.Graphics;
+using SFML.Graphics.Glsl;
 using AnnexShader = Annex.Core.Graphics.Shader;
 
 namespace Annex.Sfml.Extensions;
@@ -16,11 +17,15 @@ public static class ShaderExtensions
             }
             if (annexShader.UsesTexture && annexShader.Texture is Texture texture)
             {
-                shader.SetUniform("base_texture", texture);
+                shader.SetUniform("texture", texture);
             }
             if (annexShader.UsesTime)
             {
                 shader.SetUniform("time", annexShader.Time);
+            }
+            if (annexShader.UsesScreenTextureSize)
+            {
+                shader.SetUniform("screen_texture_size", new Vec2(annexShader.BufferWidth, annexShader.BufferHeight));
             }
         }
         catch (Exception ex)

@@ -1,5 +1,4 @@
-﻿
-namespace Annex.Core.Graphics;
+﻿namespace Annex.Core.Graphics;
 
 public class Shader
 {
@@ -9,6 +8,7 @@ public class Shader
 
     public bool UsesScreenSize = false;
     public bool UsesScreenTexture = false;
+    public bool UsesScreenTextureSize = false;
     public bool UsesTexture = false;
     public bool UsesTime = false;
 
@@ -16,6 +16,8 @@ public class Shader
     public object? ScreenTexture = null;
     public object? Texture = null;
     public float Time = 0;
+    public uint BufferHeight;
+    public uint BufferWidth;
 
     protected const string DefaultVertexShader =
 @"void main()
@@ -44,7 +46,7 @@ void main()
     {
     }
 
-    public void UpdateUniforms(object? screenTexture, object? texture, float time)
+    public void UpdateUniforms(object? screenTexture, object? texture, float time, uint screenWidth, uint screenHeight)
     {
         if (UsesScreenTexture)
         {
@@ -57,6 +59,11 @@ void main()
         if (UsesTime)
         {
             Time = time;
+        }
+        if (UsesScreenTextureSize)
+        {
+            BufferWidth = screenWidth;
+            BufferHeight = screenHeight;
         }
     }
 }
