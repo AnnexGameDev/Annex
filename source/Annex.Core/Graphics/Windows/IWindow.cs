@@ -2,6 +2,7 @@
 using Annex.Core.Data;
 using Annex.Core.Graphics.Contexts;
 using Annex.Core.Input;
+using Annex.Core.Input.InputEvents;
 using Annex.Core.Scenes.Elements;
 
 namespace Annex.Core.Graphics.Windows;
@@ -27,7 +28,13 @@ public interface IWindow : IDisposable
     void SetPosition(int x, int y);
 
     // Cameras
-    public (float top, float left, float bottom, float right) GetCameraBounds(string cameraId);
+    (float top, float left, float bottom, float right) GetCameraBounds(string cameraId);
+    (float x, float y) GetCameraPoint(string cameraId, MouseButtonPressedEvent @event);
+    (float x, float y) GetCameraPoint(CameraId cameraId, MouseButtonPressedEvent @event);
+    (float x, float y) GetCameraPoint(string cameraId, MouseButtonReleasedEvent @event);
+    (float x, float y) GetCameraPoint(CameraId cameraId, MouseButtonReleasedEvent @event);
+    (float x, float y) GetCameraPoint(string cameraId, MouseMovedEvent @event);
+    (float x, float y) GetCameraPoint(CameraId cameraId, MouseMovedEvent @event);
     Camera? GetCamera(CameraId cameraId);
     Camera? GetCamera(string cameraId);
     void AddCamera(Camera camera);

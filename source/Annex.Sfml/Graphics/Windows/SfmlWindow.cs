@@ -4,6 +4,7 @@ using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
 using Annex.Core.Graphics.Windows;
 using Annex.Core.Input;
+using Annex.Core.Input.InputEvents;
 using Annex.Core.Time;
 using Annex.Sfml.Collections.Generic;
 using Annex.Sfml.Extensions;
@@ -290,4 +291,21 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
     {
         _renderWindow.Draw(_bufferSprite);
     }
+
+    private (float x, float y) GetCameraPoint(string cameraId, float screenX, float screenY)
+    {
+        var (top, left, bottom, right) = GetCameraBounds(cameraId);
+
+        return (
+            (right - left) * screenX / Width + left,
+            (bottom - top) * screenY / Height + top
+        );
+    }
+
+    public (float x, float y) GetCameraPoint(string cameraId, MouseButtonPressedEvent @event) => GetCameraPoint(cameraId, @event.WindowX, @event.WindowY);
+    public (float x, float y) GetCameraPoint(CameraId cameraId, MouseButtonPressedEvent @event) => GetCameraPoint(cameraId.ToString(), @event);
+    public (float x, float y) GetCameraPoint(string cameraId, MouseButtonReleasedEvent @event) => GetCameraPoint(cameraId, @event.WindowX, @event.WindowY);
+    public (float x, float y) GetCameraPoint(CameraId cameraId, MouseButtonReleasedEvent @event) => GetCameraPoint(cameraId.ToString(), @event);
+    public (float x, float y) GetCameraPoint(string cameraId, MouseMovedEvent @event) => GetCameraPoint(cameraId, @event.WindowX, @event.WindowY);
+    public (float x, float y) GetCameraPoint(CameraId cameraId, MouseMovedEvent @event) => GetCameraPoint(cameraId.ToString(), @event);
 }
