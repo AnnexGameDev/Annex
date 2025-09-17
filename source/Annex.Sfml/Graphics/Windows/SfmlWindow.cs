@@ -1,5 +1,4 @@
-﻿using Annex.Core.Assets;
-using Annex.Core.Data;
+﻿using Annex.Core.Data;
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
 using Annex.Core.Graphics.Windows;
@@ -77,15 +76,23 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
         _renderWindow.Position.Set(x, y);
     }
 
-    public void SetIcon(uint sizeX, uint sizeY, IAsset icon)
+    public void SetIcon(uint sizeX, uint sizeY, object texture)
     {
-        using var image = new Image(icon.ToBytes());
+        if (texture is not Texture sfmlTexture)
+        {
+            return;
+        }
+        using var image = sfmlTexture.CopyToImage();
         this._renderWindow?.SetIcon(sizeX, sizeY, image.Pixels);
     }
 
-    public void SetMouseImage(IAsset img, uint sizeX, uint sizeY, uint offsetX, uint offsetY)
+    public void SetMouseImage(object texture, uint sizeX, uint sizeY, uint offsetX, uint offsetY)
     {
-        using var image = new Image(img.ToBytes());
+        if (texture is not Texture sfmlTexture)
+        {
+            return;
+        }
+        using var image = sfmlTexture.CopyToImage();
         this._renderWindow?.SetMouseCursor(new Cursor(image.Pixels, new SFML.System.Vector2u(sizeX, sizeY), new SFML.System.Vector2u(offsetX, offsetY)));
     }
 

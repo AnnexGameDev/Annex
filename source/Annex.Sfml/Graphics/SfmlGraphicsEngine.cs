@@ -1,5 +1,4 @@
-﻿using Annex.Core.Data;
-using Annex.Core.Graphics;
+﻿using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
 using Annex.Core.Graphics.Windows;
 using Annex.Sfml.Collections.Generic;
@@ -7,6 +6,7 @@ using Annex.Sfml.Graphics.PlatformTargets;
 using Annex.Sfml.Graphics.Windows;
 using Scaffold.DependencyInjection;
 using Scaffold.Extensions;
+using SFML.Graphics;
 
 namespace Annex.Sfml.Graphics;
 
@@ -17,25 +17,23 @@ public class SfmlGraphicsEngine : IGraphicsEngine
 
     public SfmlGraphicsEngine(IContainer container)
     {
-        this._container = container;
-        this._container.Register<IPlatformTargetFactory, PlatformTargetFactory>();
-        this._container.RegisterSingleton<ITextureCache, TextureCache>();
-        this._container.RegisterSingleton<IFontCache, FontCache>();
-        this._container.RegisterAggregate<IPlatformTargetCreator, TextPlatformTargetCreator>();
-        this._container.RegisterAggregate<IPlatformTargetCreator, TexturePlatformTargetCreator>();
-        this._container.RegisterAggregate<IPlatformTargetCreator, SpritesheetPlatformTargetCreator>();
-        this._container.RegisterAggregate<IPlatformTargetCreator, SolidRectanglePlatformTargetCreator>();
-        this._container.RegisterAggregate<IPlatformTargetCreator, BatchTexturePlatformTargetCreator>();
-        this._container.Register<ICameraCache, CameraCache>();
+        _container = container;
+        _container.Register<IPlatformTargetFactory, PlatformTargetFactory>();
+        _container.RegisterAggregate<IPlatformTargetCreator, TextPlatformTargetCreator>();
+        _container.RegisterAggregate<IPlatformTargetCreator, TexturePlatformTargetCreator>();
+        _container.RegisterAggregate<IPlatformTargetCreator, SpritesheetPlatformTargetCreator>();
+        _container.RegisterAggregate<IPlatformTargetCreator, SolidRectanglePlatformTargetCreator>();
+        _container.RegisterAggregate<IPlatformTargetCreator, BatchTexturePlatformTargetCreator>();
+        _container.Register<ICameraCache, CameraCache>();
 
-        this._platformTargetFactory = this._container.Resolve<IPlatformTargetFactory>();
+        _platformTargetFactory = _container.Resolve<IPlatformTargetFactory>();
     }
 
-    public FloatRect GetTextBounds(TextContext textContext, bool forceContextUpdate)
+    public Core.Data.FloatRect GetTextBounds(TextContext textContext, bool forceContextUpdate)
     {
         if (forceContextUpdate)
         {
-            this._platformTargetFactory.GetPlatformTarget(textContext);
+            _platformTargetFactory.GetPlatformTarget(textContext);
         }
         if (textContext.PlatformTarget is TextPlatformTarget textPlatformTarget)
         {
@@ -48,7 +46,7 @@ public class SfmlGraphicsEngine : IGraphicsEngine
     {
         if (forceContextUpdate)
         {
-            this._platformTargetFactory.GetPlatformTarget(textContext);
+            _platformTargetFactory.GetPlatformTarget(textContext);
         }
 
         if (textContext.PlatformTarget is TextPlatformTarget platformTarget)
@@ -62,4 +60,7 @@ public class SfmlGraphicsEngine : IGraphicsEngine
     {
         return new SfmlWindow(_container, title, width, height, windowStyle);
     }
+
+    public static object TextureLoadingStrategy(string assetId) => new Texture(assetId);
+    public static object FontLoadingStrategy(string assetId) => new Font(assetId);
 }

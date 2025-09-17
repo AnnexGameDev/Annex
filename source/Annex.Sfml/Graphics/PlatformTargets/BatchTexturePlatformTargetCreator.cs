@@ -1,20 +1,19 @@
 ﻿using Annex.Core.Graphics.Contexts;
-using Annex.Sfml.Collections.Generic;
 
 namespace Annex.Sfml.Graphics.PlatformTargets;
 
 internal class BatchTexturePlatformTargetCreator : PlatformTargetCreator<BatchTexturePlatformTarget>
 {
-    private readonly ITextureCache _textureCache;
+    private readonly TextureAssetProvider _textureAssetProvider;
 
-    public BatchTexturePlatformTargetCreator(ITextureCache textureCache)
+    public BatchTexturePlatformTargetCreator(TextureAssetProvider textureAssetProvider)
     {
-        _textureCache = textureCache;
+        _textureAssetProvider = textureAssetProvider;
     }
 
     protected override PlatformTarget CreatePlatformTargetFor(DrawContext drawContext)
     {
-        return new BatchTexturePlatformTarget((BatchTextureContext)drawContext, _textureCache);
+        return new BatchTexturePlatformTarget((BatchTextureContext)drawContext, _textureAssetProvider);
     }
 
     protected override bool Supports(DrawContext drawContext)

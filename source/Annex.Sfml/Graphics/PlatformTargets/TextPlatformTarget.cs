@@ -1,6 +1,5 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Graphics.Contexts;
-using Annex.Sfml.Collections.Generic;
 using Annex.Sfml.Extensions;
 using SFML.Graphics;
 using Vector2f = SFML.System.Vector2f;
@@ -11,7 +10,7 @@ internal class TextPlatformTarget : PlatformTarget
 {
     private readonly Text _text;
     private readonly TextContext _textContext;
-    private readonly IFontCache _fontCache;
+    private readonly FontAssetProvider _fontAssetProvider;
 
     private float _superSampleScale;
     private RenderTexture? _renderedText_Texture;
@@ -19,10 +18,10 @@ internal class TextPlatformTarget : PlatformTarget
 
     public override object Target => _text;
 
-    public TextPlatformTarget(TextContext textContext, IFontCache fontCache)
+    public TextPlatformTarget(TextContext textContext, FontAssetProvider fontAssetProvider)
     {
         _textContext = textContext;
-        _fontCache = fontCache;
+        _fontAssetProvider = fontAssetProvider;
         _text = new();
     }
 
@@ -191,7 +190,10 @@ internal class TextPlatformTarget : PlatformTarget
 
     private bool UpdateFont(string font)
     {
-        var sfmlFont = _fontCache.GetFont(font);
+        if (!_fontAssetProvider.TryGetAsset(font, out var sfmlFont))
+        {
+            throw new KeyNotFoundException(font);
+        }
         if (sfmlFont != _text.Font)
         {
             _text.Font = sfmlFont;

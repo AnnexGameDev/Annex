@@ -1,5 +1,4 @@
-﻿using Annex.Core.Assets;
-using Annex.Core.Graphics;
+﻿using Annex.Core.Graphics;
 using Annex.Core.Input;
 using Annex.Core.Input.Platforms;
 using Annex.Core.Networking;
@@ -26,11 +25,6 @@ public abstract class AnnexApp : ScaffoldApp
         container.RegisterSingleton<IGraphicsService, GraphicsService>();
         container.RegisterSingleton<IPacketHandlerService, PacketHandlerService>();
         container.Register<IInputHandler, InputHandler>();
-
-        container.RegisterAssetGroup(KnownAssetGroups.TextureGroupId);
-        container.RegisterAssetGroup(KnownAssetGroups.FontGroupId);
-        container.RegisterAssetGroup(KnownAssetGroups.SceneDataGroupId);
-        container.RegisterSingleton<IAssetService, AssetService>();
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {

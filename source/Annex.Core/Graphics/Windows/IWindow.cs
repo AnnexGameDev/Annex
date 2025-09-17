@@ -1,5 +1,4 @@
-﻿using Annex.Core.Assets;
-using Annex.Core.Data;
+﻿using Annex.Core.Data;
 using Annex.Core.Graphics.Contexts;
 using Annex.Core.Input;
 using Annex.Core.Input.InputEvents;
@@ -39,8 +38,8 @@ public interface IWindow : IDisposable
     Camera? GetCamera(string cameraId);
     void AddCamera(Camera camera);
 
-    void SetIcon(uint sizeX, uint sizeY, IAsset asset);
-    void SetMouseImage(IAsset img, uint sizeX, uint sizeY, uint offsetX, uint offsetY);
+    void SetIcon(uint sizeX, uint sizeY, object asset);
+    void SetMouseImage(object img, uint sizeX, uint sizeY, uint offsetX, uint offsetY);
 
     // Mouse
     IVector2<float> GetMousePos(CameraId cameraId = CameraId.UI);

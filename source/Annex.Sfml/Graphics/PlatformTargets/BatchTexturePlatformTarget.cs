@@ -1,6 +1,5 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Graphics.Contexts;
-using Annex.Sfml.Collections.Generic;
 using Annex.Sfml.Extensions;
 using SFML.Graphics;
 using Vector2f = SFML.System.Vector2f;
@@ -9,15 +8,16 @@ namespace Annex.Sfml.Graphics.PlatformTargets;
 
 internal class BatchTexturePlatformTarget : PlatformTarget
 {
-    private readonly ITextureCache _textureCache;
     private readonly DrawableVertexArray _drawable;
+
     public override object Target => _drawable.Texture;
 
-    public BatchTexturePlatformTarget(BatchTextureContext drawContext, ITextureCache textureCache)
+    public BatchTexturePlatformTarget(BatchTextureContext drawContext, TextureAssetProvider textureAssetProvider)
     {
-        _textureCache = textureCache;
-
-        var texture = _textureCache.GetTexture(drawContext.TextureId);
+        if (!textureAssetProvider.TryGetAsset(drawContext.TextureId, out var texture))
+        {
+            throw new KeyNotFoundException(drawContext.TextureId);
+        }
         _drawable = new DrawableVertexArray(texture, drawContext);
     }
 

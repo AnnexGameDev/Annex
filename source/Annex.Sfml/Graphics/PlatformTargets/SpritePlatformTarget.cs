@@ -1,6 +1,5 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Graphics.Contexts;
-using Annex.Sfml.Collections.Generic;
 using Annex.Sfml.Extensions;
 using SFML.Graphics;
 using IntRect = SFML.Graphics.IntRect;
@@ -12,14 +11,14 @@ internal abstract class SpritePlatformTarget<T> : TransformablePlatformTarget wh
     private readonly Sprite _sprite;
     protected override Transformable Transformable => _sprite;
     public override object Target => _sprite.Texture;
-    private readonly ITextureCache _textureCache;
+    private readonly TextureAssetProvider _textureAssetProvider;
     protected readonly T Context;
     private RenderStates _renderState = RenderStates.Default;
 
-    public SpritePlatformTarget(T context, ITextureCache textureCache)
+    public SpritePlatformTarget(T context, TextureAssetProvider textureAssetProvider)
     {
         Context = context;
-        _textureCache = textureCache;
+        _textureAssetProvider = textureAssetProvider;
         _sprite = new();
     }
 
@@ -39,7 +38,10 @@ internal abstract class SpritePlatformTarget<T> : TransformablePlatformTarget wh
 
     protected Texture UpdateTexture(string textureId)
     {
-        var texture = _textureCache.GetTexture(textureId);
+        if (!_textureAssetProvider.TryGetAsset(textureId, out var texture))
+        {
+            throw new KeyNotFoundException(textureId);
+        }
         if (texture != _sprite.Texture)
         {
             _sprite.Texture = texture;

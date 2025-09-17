@@ -1,9 +1,10 @@
 ﻿using Annex.Core.Scenes.Elements;
 
-namespace Annex.Core.Scenes.Layouts.Html
+namespace Annex.Core.Scenes.Layouts.Html;
+
+public interface IHtmlSceneLoader
 {
-    public interface IHtmlSceneLoader
-    {
-        void Load(string assetId, IScene scene);
-    }
+    const string AssetProviderId = "html-scene-provider";
+
+    void Load(string assetId, IScene scene);
 }
