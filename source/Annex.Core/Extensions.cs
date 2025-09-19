@@ -40,8 +40,8 @@ public static class Extensions
         return $"{char.ToUpper(str[0])}{str[1..].ToLower()}";
     }
 
-    public static AssetProvider<T>? GetProvider<T>(this IEnumerable<IAssetProvider> providers, string assetProviderId)
+    public static IAssetProvider<T>? GetProvider<T>(this IEnumerable<IAssetProvider> providers, string assetProviderId)
     {
-        return providers.Where(provider => provider.ProviderId == assetProviderId).SingleOrDefault() as AssetProvider<T>;
+        return providers.Where(provider => provider.ProviderId == assetProviderId).SingleOrDefault() as IAssetProvider<T>;
     }
 }

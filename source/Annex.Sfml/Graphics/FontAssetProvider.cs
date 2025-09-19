@@ -8,7 +8,7 @@ namespace Annex.Sfml.Graphics;
 internal class FontAssetProvider : AssetProvider<Font>
 {
     private readonly IEnumerable<IAssetProvider> _assetProviders;
-    private AssetProvider<object>? _fontAssetProvider;
+    private IAssetProvider<object>? _fontAssetProvider;
 
     public FontAssetProvider(IEnumerable<IAssetProvider> assetProviders) : base("sfml-font-asset-provider")
     {

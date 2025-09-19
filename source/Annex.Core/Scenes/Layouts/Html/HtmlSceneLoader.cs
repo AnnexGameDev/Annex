@@ -11,7 +11,7 @@ namespace Annex.Core.Scenes.Layouts.Html;
 
 internal class HtmlSceneLoader : IHtmlSceneLoader
 {
-    private readonly AssetProvider<string> _sceneAssets;
+    private readonly IAssetProvider<string> _sceneAssets;
     private readonly IContainer _container;
     private readonly IUIElementTypeResolverService _uiElementTypeResolverService;
 

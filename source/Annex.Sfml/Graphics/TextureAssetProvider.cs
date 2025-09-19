@@ -8,7 +8,7 @@ namespace Annex.Sfml.Graphics;
 internal class TextureAssetProvider : AssetProvider<Texture>
 {
     private readonly IEnumerable<IAssetProvider> _assetProviders;
-    private AssetProvider<object>? _textureProvider;
+    private IAssetProvider<object>? _textureProvider;
 
     public TextureAssetProvider(IEnumerable<IAssetProvider> assetProviders) : base("sfml-texture-asset-provider")
     {

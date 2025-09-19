@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Annex.Core.Assets;
 
-public abstract class AssetProvider<T> : IAssetProvider
+public abstract class AssetProvider<T> : IAssetProvider<T>
 {
     public string ProviderId { get; }
     private readonly IDictionary<string, T> _assets = new ConcurrentDictionary<string, T>();
