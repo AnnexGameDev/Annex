@@ -11,6 +11,7 @@ public abstract class UIElement : IUIElement
     public IVector2<float> Position { get; }
     public bool Visible { get; set; }
     protected bool IsFocused { get; private set; }
+    public bool InputTransparent { get; set; } = false;
 
     public UIElement(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null)
     {
@@ -74,7 +75,7 @@ public abstract class UIElement : IUIElement
             return false;
         if (y < this.Position.Y || y > this.Position.Y + this.Size.Y)
             return false;
-        return true;
+        return !InputTransparent;
     }
 
     public virtual void OnLostFocus()
