@@ -96,4 +96,23 @@ public class Scene : Container, IScene
             this.FocusElement?.OnGainedFocus();
         }
     }
+
+    public void AddChild(IUIElement element, bool focus = false)
+    {
+        base.AddChild(element);
+        if (focus)
+        {
+            FocusElement = element;
+        }
+    }
+
+    public override void RemoveChild(string elementId)
+    {
+        base.RemoveChild(elementId);
+
+        if (FocusElement?.ElementID == elementId)
+        {
+            FocusElement = null;
+        }
+    }
 }

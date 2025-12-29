@@ -89,7 +89,7 @@ public class Container : UIElement, IAddableParentElement
         return this;
     }
 
-    public void RemoveChild(string elementId)
+    public virtual void RemoveChild(string elementId)
     {
         for (int i = 0; i < this._children.Count; i++)
         {
