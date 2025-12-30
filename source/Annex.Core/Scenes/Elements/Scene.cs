@@ -52,6 +52,11 @@ public class Scene : Container, IScene
     {
         var newFocusElement = GetFirstVisibleElement(mouseButtonPressedEvent.WindowX, mouseButtonPressedEvent.WindowY);
         newFocusElement?.OnMouseButtonPressed(mouseButtonPressedEvent);
+
+        if (newFocusElement != null && newFocusElement is not IScene)
+        {
+            mouseButtonPressedEvent.Handled = true;
+        }
         SetFocus(newFocusElement);
     }
 

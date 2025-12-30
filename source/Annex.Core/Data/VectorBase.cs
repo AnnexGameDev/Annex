@@ -31,4 +31,9 @@ public class VectorBase<T> : IVector2<T> where T : struct
     }
 
     public void Set(IVector2<T> vector) => this.Set(vector.X, vector.Y);
+
+    public override string ToString()
+    {
+        return $"{X},{Y}";
+    }
 }
