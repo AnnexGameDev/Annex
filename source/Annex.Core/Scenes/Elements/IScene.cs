@@ -19,4 +19,6 @@ public interface IScene : IUIElement, IAddableParentElement
     void OnWindowGainedFocus(IWindow window);
     void OnWindowLostFocus(IWindow window);
     void SetFocus(IUIElement? element);
+
+    void AddChild(IUIElement child, bool focus = false);
 }
