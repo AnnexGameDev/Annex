@@ -299,13 +299,19 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
         _renderWindow.Draw(_bufferSprite);
     }
 
-    private (float x, float y) GetCameraPoint(string cameraId, float screenX, float screenY)
+    private (float x, float y) GetCameraPoint(string cameraId, float uiCameraSpaceX, float uiCameraSpaceY)
     {
+        if (cameraId == CameraId.UI.ToString())
+        {
+            return (uiCameraSpaceX, uiCameraSpaceY);
+        }
+
+        var uiCamera = GetCamera(CameraId.UI);
         var (top, left, bottom, right) = GetCameraBounds(cameraId);
 
         return (
-            (right - left) * screenX / Width + left,
-            (bottom - top) * screenY / Height + top
+            (right - left) * uiCameraSpaceX / uiCamera.Size.X + left,
+            (bottom - top) * uiCameraSpaceY / uiCamera.Size.Y + top
         );
     }
 
