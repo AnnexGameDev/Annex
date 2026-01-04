@@ -1,7 +1,16 @@
-﻿namespace Annex.Core;
+﻿
+namespace Annex.Core;
 
 public static class Assert
 {
+    public static void IsFalse(bool value, string message = "")
+    {
+        if (value is not false)
+        {
+            throw new AssertionFailedException(message);
+        }
+    }
+
     public static void IsNotNull(object? instance, string message = "") {
         if (instance is null)
         {
