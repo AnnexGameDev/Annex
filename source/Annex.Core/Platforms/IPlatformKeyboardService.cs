@@ -1,4 +1,4 @@
-﻿namespace Annex.Core.Input.Platforms
+﻿namespace Annex.Core.Hardware
 {
     public interface IPlatformKeyboardService
     {

@@ -2,9 +2,9 @@
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
 using Annex.Core.Graphics.Windows;
+using Annex.Core.Hardware;
 using Annex.Core.Input;
 using Annex.Core.Input.InputEvents;
-using Annex.Core.Input.Platforms;
 using Annex.Core.Time;
 using Scaffold.DependencyInjection;
 using Scaffold.Logging;

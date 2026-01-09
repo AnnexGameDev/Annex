@@ -1,7 +1,9 @@
 ﻿using Annex.Core.Graphics;
+using Annex.Core.Hardware;
 using Annex.Core.Input;
-using Annex.Core.Input.Platforms;
 using Annex.Core.Networking;
+using Annex.Core.Platforms;
+using Annex.Core.Platforms.Windows;
 using Annex.Core.Scenes.Layouts;
 using Annex.Core.Scenes.Layouts.Html;
 using Annex.Core.Time;
@@ -29,6 +31,7 @@ public abstract class AnnexApp : ScaffoldApp
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             container.Register<IPlatformKeyboardService, WindowsKeyboardService>();
+            container.Register<IPlatformScreenService, WindowsScreenService>();
         }
     }
 }

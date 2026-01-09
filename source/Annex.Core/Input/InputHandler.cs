@@ -1,7 +1,7 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Graphics.Windows;
+using Annex.Core.Hardware;
 using Annex.Core.Input.InputEvents;
-using Annex.Core.Input.Platforms;
 using Scaffold.Logging;
 
 namespace Annex.Core.Input;

@@ -1,7 +1,8 @@
 ﻿#if WINDOWS
+using Annex.Core.Hardware;
 using System.Runtime.InteropServices;
 
-namespace Annex.Core.Input.Platforms
+namespace Annex.Core.Platforms.Windows
 {
     internal class WindowsKeyboardService : IPlatformKeyboardService
     {
