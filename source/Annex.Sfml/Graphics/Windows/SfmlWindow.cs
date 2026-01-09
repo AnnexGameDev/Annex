@@ -12,6 +12,7 @@ using Scaffold.DependencyInjection;
 using Scaffold.Logging;
 using SFML.Graphics;
 using SFML.Window;
+using WindowBase = Annex.Core.Graphics.Windows.WindowBase;
 
 namespace Annex.Sfml.Graphics.Windows;
 
