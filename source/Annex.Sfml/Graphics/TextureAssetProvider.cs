@@ -1,6 +1,7 @@
 ﻿using Annex.Core;
 using Annex.Core.Assets;
 using Annex.Core.Graphics;
+using Annex.Core.Time;
 using SFML.Graphics;
 
 namespace Annex.Sfml.Graphics;
@@ -10,7 +11,7 @@ internal class TextureAssetProvider : AssetProvider<Texture>
     private readonly IEnumerable<IAssetProvider> _assetProviders;
     private IAssetProvider<object>? _textureProvider;
 
-    public TextureAssetProvider(IEnumerable<IAssetProvider> assetProviders) : base("sfml-texture-asset-provider")
+    public TextureAssetProvider(IEnumerable<IAssetProvider> assetProviders, ITimeService timeService) : base("sfml-texture-asset-provider", timeService)
     {
         _assetProviders = assetProviders;
     }

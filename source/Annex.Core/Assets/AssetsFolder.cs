@@ -1,11 +1,13 @@
-﻿namespace Annex.Core.Assets;
+﻿using Annex.Core.Time;
+
+namespace Annex.Core.Assets;
 
 public class AssetsFolder<T> : AssetProvider<T>
 {
     private readonly string _basePath;
     private readonly string _assetFilter;
 
-    public AssetsFolder(string providerId, string path, string filter, Func<string, T> assetLoader) : base(providerId, assetLoader)
+    public AssetsFolder(string providerId, string path, string filter, ITimeService timeService, Func<string, T> assetLoader) : base(providerId, timeService, assetLoader)
     {
         _basePath = path;
         _assetFilter = filter;

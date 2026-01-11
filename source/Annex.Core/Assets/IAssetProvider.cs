@@ -5,6 +5,7 @@ namespace Annex.Core.Assets;
 public interface IAssetProvider
 {
     string ProviderId { get; }
+    void PurgeAssetsNotUsedSince(long time);
 }
 
 public interface IAssetProvider<T> : IAssetProvider
