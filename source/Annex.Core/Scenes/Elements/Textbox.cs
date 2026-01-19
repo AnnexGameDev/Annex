@@ -25,6 +25,8 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
     private int _startSelectMouseX;
     private int _endSelectMouseX;
     private ContextMenu? _rightClickContextMenu;
+    private int _lastSelectionStart = 0;
+    private int _lastSelectionLength = 0;
 
     private bool _hasSelection => this._isSelecting || this.SelectionLength > 0;
 
@@ -125,6 +127,13 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
         {
             this.SelectionLength = maxPossibleSelection;
         }
+
+        if (_lastSelectionStart == SelectionStart && _lastSelectionLength == SelectionLength)
+        {
+            return;
+        }
+        _lastSelectionStart = SelectionStart;
+        _lastSelectionLength = SelectionLength;
 
         this._selectionHighlight ??= new SolidRectangleContext(new RGBA(0, 0, 255, 100), new Vector2f(), new Vector2f())
         {
