@@ -64,7 +64,7 @@ public class Label : UIElement, ILabel
             Position = this.Position,
             PositionOffset = textOffset ?? new Vector2f(),
             Camera = CameraId.UI.ToString(),
-            FontSize = new Shared<uint>(11),
+            FontSize = new Shared<uint>(12),
             Color = KnownColor.Black,
             BorderThickness = new Shared<float>(0),
             BorderColor = KnownColor.Transparent

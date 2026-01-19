@@ -43,6 +43,7 @@ internal class TextPlatformTarget : PlatformTarget
             ReCreateTextTexture();
         }
         UpdateTexturePositionIfNeeded();
+
         renderTarget.Draw(_renderedText_Sprite);
     }
 
@@ -62,12 +63,15 @@ internal class TextPlatformTarget : PlatformTarget
         _renderedText_Texture?.Dispose();
 
         var bounds = _text.GetLocalBounds();
-        _text.Position = new Vector2f(-bounds.Left, -bounds.Top);
 
-        uint width = (uint)Math.Ceiling(bounds.Width + 2);
-        uint height = (uint)Math.Ceiling(bounds.Height + 2);
+        uint width = (uint)Math.Ceiling(bounds.Width);
+        uint height = (uint)Math.Ceiling(bounds.Height);
 
-        _renderedText_Texture = new RenderTexture(width, height);
+        uint widthPadding = 6;
+        uint heightPadding = 6;
+        _text.Position = new Vector2f(-bounds.Left + widthPadding / 2, -bounds.Top + heightPadding / 2);
+
+        _renderedText_Texture = new RenderTexture(width + widthPadding, height + heightPadding);
         _renderedText_Texture.Clear(Color.Transparent);
         _renderedText_Texture.Draw(_text);
         _renderedText_Texture.Display();
