@@ -41,6 +41,8 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
     public int Left => _renderWindow.Position.X;
     public int Top => _renderWindow.Position.Y;
 
+    public nint SystemHandle => _renderWindow.SystemHandle;
+
     public SfmlWindow(IContainer container, string title, uint width, uint height, WindowStyle windowStyle)
         : base(container)
     {
@@ -52,7 +54,7 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
         ResolutionWidth = width;
         ResolutionHeight = height;
 
-        _renderWindow = CreateWindow(title, false, width, height, 0, 0, windowStyle);
+        _renderWindow = CreateWindow(title, width, height, 0, 0, windowStyle);
 
         var defaultCamera = new Camera(CameraId.Default, Width, Height)
         {
@@ -112,14 +114,14 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
     }
 
     #region RenderWindow management
-    private RenderWindow CreateWindow(string title, bool isVisible, uint resolutionX, uint resolutionY, int positionX, int positionY, WindowStyle style)
+    private RenderWindow CreateWindow(string title, uint resolutionX, uint resolutionY, int positionX, int positionY, WindowStyle style)
     {
         var videoMode = new VideoMode(resolutionX, resolutionY);
         var renderWindow = new RenderWindow(videoMode, title, style.ToSfmlStyle());
 
         renderWindow.Size.Set(resolutionX, resolutionY);
         renderWindow.Position.Set(positionX, positionY);
-        renderWindow.SetVisible(isVisible);
+        renderWindow.SetVisible(true);
 
         _buffer = new RenderTexture(resolutionX, resolutionY);
         _bufferSprite = new Sprite(_buffer.Texture);

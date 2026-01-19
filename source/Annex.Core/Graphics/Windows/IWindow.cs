@@ -10,6 +10,7 @@ namespace Annex.Core.Graphics.Windows;
 public interface IWindow : IDisposable
 {
     Guid Id { get; }
+    nint SystemHandle { get; }
     string Title { get; set; }
     bool IsVisible { get; set; }
     object Buffer { get; }

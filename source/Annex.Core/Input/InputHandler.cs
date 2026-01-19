@@ -13,7 +13,7 @@ internal class InputHandler : IInputHandler
     private readonly bool[] _keyboardKeyPressed;
     private readonly bool[] _mouseButtonStates;
 
-    private bool InputShouldBeProcessed { get; set; }
+    private bool InputShouldBeProcessed { get; set; } = true; // Window should be visible by default
 
     public InputHandler(IPlatformKeyboardService platformKeyboardService)
     {

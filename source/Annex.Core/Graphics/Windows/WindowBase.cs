@@ -10,14 +10,17 @@ public abstract class WindowBase
 {
     public Guid Id { get; } = Guid.NewGuid();
 
-    private bool _isVisible = false;
+    private bool _isVisible = true;
     public bool IsVisible
     {
         get => _isVisible;
         set
         {
-            _isVisible = value;
-            RaisePropertyChanged();
+            if (_isVisible != value)
+            {
+                _isVisible = value;
+                RaisePropertyChanged();
+            }
         }
     }
 

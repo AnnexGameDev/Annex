@@ -11,7 +11,7 @@ internal class GraphicsService : IGraphicsService
 
     public IWindow GetWindow(Guid id)
     {
-        return this._windows[id];
+        return _windows[id];
     }
 
     public GraphicsService(IGraphicsEngine graphicsEngine)
@@ -22,8 +22,8 @@ internal class GraphicsService : IGraphicsService
 
     public IWindow CreateWindow(string title, uint width, uint height, WindowStyle style)
     {
-        var window = this._graphicsEngine.CreateWindow(title, width, height, style);
-        this._windows.Add(window.Id, window);
+        var window = _graphicsEngine.CreateWindow(title, width, height, style);
+        _windows.Add(window.Id, window);
         return window;
     }
 
