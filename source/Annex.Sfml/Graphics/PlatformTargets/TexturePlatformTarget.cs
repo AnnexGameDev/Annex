@@ -1,10 +1,11 @@
-﻿using Annex.Core.Graphics.Contexts;
+﻿using Annex.Core.Assets;
+using Annex.Core.Graphics.Contexts;
 
 namespace Annex.Sfml.Graphics.PlatformTargets;
 
 internal class TexturePlatformTarget : SpritePlatformTarget<TextureContext>
 {
-    public TexturePlatformTarget(TextureContext context, TextureAssetProvider textureAssetProvider) : base(context, textureAssetProvider)
+    public TexturePlatformTarget(TextureContext context, IAssetStore textures) : base(context, textures)
     {
     }
 

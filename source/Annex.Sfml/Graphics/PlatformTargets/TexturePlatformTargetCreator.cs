@@ -1,19 +1,14 @@
-﻿using Annex.Core.Graphics.Contexts;
+﻿using Annex.Core.Assets;
+using Annex.Core.Graphics.Contexts;
 
 namespace Annex.Sfml.Graphics.PlatformTargets;
 
 internal class TexturePlatformTargetCreator : PlatformTargetCreator<TexturePlatformTarget>
 {
-    private readonly TextureAssetProvider _textureAssetProvider;
-
-    public TexturePlatformTargetCreator(TextureAssetProvider textureAssetProvider)
+    protected override PlatformTarget CreatePlatformTargetFor(DrawContext drawContext, AssetRegistry assets)
     {
-        _textureAssetProvider = textureAssetProvider;
-    }
-
-    protected override PlatformTarget CreatePlatformTargetFor(DrawContext drawContext)
-    {
-        return new TexturePlatformTarget((TextureContext)drawContext, _textureAssetProvider);
+        var textures = assets.GetTextures();
+        return new TexturePlatformTarget((TextureContext)drawContext, textures);
     }
 
     protected override bool Supports(DrawContext drawContext)

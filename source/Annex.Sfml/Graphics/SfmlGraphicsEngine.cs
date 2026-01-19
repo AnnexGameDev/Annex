@@ -31,26 +31,25 @@ public class SfmlGraphicsEngine : IGraphicsEngine
 
     public Core.Data.FloatRect GetTextBounds(TextContext textContext, bool forceContextUpdate)
     {
-        if (forceContextUpdate)
+        if (textContext.PlatformTarget is TextPlatformTarget platformTarget)
         {
-            _platformTargetFactory.GetPlatformTarget(textContext);
-        }
-        if (textContext.PlatformTarget is TextPlatformTarget textPlatformTarget)
-        {
-            return textPlatformTarget.GetTextBounds();
+            if (forceContextUpdate)
+            {
+                platformTarget.Invalidate();
+            }
+            return platformTarget.GetTextBounds();
         }
         throw new InvalidOperationException($"Unable to transform textContext to text platform target");
     }
 
     public float GetCharacterX(TextContext textContext, int index, bool forceContextUpdate)
     {
-        if (forceContextUpdate)
-        {
-            _platformTargetFactory.GetPlatformTarget(textContext);
-        }
-
         if (textContext.PlatformTarget is TextPlatformTarget platformTarget)
         {
+            if (forceContextUpdate)
+            {
+                platformTarget.Invalidate();
+            }
             return platformTarget.GetCharacterX(index);
         }
         throw new InvalidOperationException($"Unable to transform textContext to text platform target");

@@ -1,10 +1,11 @@
-﻿using Annex.Core.Graphics.Contexts;
+﻿using Annex.Core.Assets;
+using Annex.Core.Graphics.Contexts;
 
 namespace Annex.Sfml.Graphics.PlatformTargets;
 
 internal abstract class PlatformTargetCreator<TPlatformTarget> : IPlatformTargetCreator where TPlatformTarget : PlatformTarget
 {
-    public bool TryGetOrCreate(DrawContext drawContext, out PlatformTarget? platformTarget)
+    public bool TryGetOrCreate(DrawContext drawContext, AssetRegistry assets, out PlatformTarget? platformTarget)
     {
         platformTarget = default;
 
@@ -17,13 +18,13 @@ internal abstract class PlatformTargetCreator<TPlatformTarget> : IPlatformTarget
             return true;
         }
 
-        var newPlatformTarget = CreatePlatformTargetFor(drawContext);
+        var newPlatformTarget = CreatePlatformTargetFor(drawContext, assets);
         drawContext.SetPlatformTarget(newPlatformTarget);
         platformTarget = newPlatformTarget;
         return true;
     }
 
-    protected abstract PlatformTarget CreatePlatformTargetFor(DrawContext drawContext);
+    protected abstract PlatformTarget CreatePlatformTargetFor(DrawContext drawContext, AssetRegistry assets);
     protected abstract bool Supports(DrawContext drawContext);
 
     private static TPlatformTarget? GetExistingPlatformTarget(DrawContext context)

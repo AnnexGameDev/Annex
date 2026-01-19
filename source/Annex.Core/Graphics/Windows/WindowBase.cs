@@ -76,12 +76,6 @@ public abstract class WindowBase
         oldScene?.Dispose();
     }
 
-    public void LoadScene(IScene sceneInstance, object? parameters = null)
-    {
-        Log.Verbose($"Loading scene instance {sceneInstance.GetType().Name}");
-        SwitchTo(sceneInstance, parameters);
-    }
-
     private class NullScene : Scene
     {
     }

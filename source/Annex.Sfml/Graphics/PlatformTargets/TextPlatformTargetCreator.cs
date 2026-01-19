@@ -1,19 +1,14 @@
-﻿using Annex.Core.Graphics.Contexts;
+﻿using Annex.Core.Assets;
+using Annex.Core.Graphics.Contexts;
 
 namespace Annex.Sfml.Graphics.PlatformTargets;
 
 internal class TextPlatformTargetCreator : PlatformTargetCreator<TextPlatformTarget>
 {
-    private readonly FontAssetProvider _fontAssetProvider;
-
-    public TextPlatformTargetCreator(FontAssetProvider fontAssetProvider)
+    protected override PlatformTarget CreatePlatformTargetFor(DrawContext drawContext, AssetRegistry assets)
     {
-        _fontAssetProvider = fontAssetProvider;
-    }
-
-    protected override PlatformTarget CreatePlatformTargetFor(DrawContext drawContext)
-    {
-        return new TextPlatformTarget((TextContext)drawContext, _fontAssetProvider);
+        var fonts = assets.GetFonts();
+        return new TextPlatformTarget((TextContext)drawContext, fonts);
     }
 
     protected override bool Supports(DrawContext drawContext)

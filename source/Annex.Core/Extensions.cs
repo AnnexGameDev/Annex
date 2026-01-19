@@ -1,6 +1,4 @@
-﻿using Annex.Core.Assets;
-
-namespace Annex.Core;
+﻿namespace Annex.Core;
 
 public static class Extensions
 {
@@ -38,10 +36,5 @@ public static class Extensions
     public static string ToCamelCaseWord(this string str)
     {
         return $"{char.ToUpper(str[0])}{str[1..].ToLower()}";
-    }
-
-    public static IAssetProvider<T>? GetProvider<T>(this IEnumerable<IAssetProvider> providers, string assetProviderId)
-    {
-        return providers.Where(provider => provider.ProviderId == assetProviderId).SingleOrDefault() as IAssetProvider<T>;
     }
 }

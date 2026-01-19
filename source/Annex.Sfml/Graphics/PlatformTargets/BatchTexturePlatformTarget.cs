@@ -1,4 +1,5 @@
-﻿using Annex.Core.Data;
+﻿using Annex.Core.Assets;
+using Annex.Core.Data;
 using Annex.Core.Graphics.Contexts;
 using Annex.Sfml.Extensions;
 using SFML.Graphics;
@@ -12,12 +13,9 @@ internal class BatchTexturePlatformTarget : PlatformTarget
 
     public override object Target => _drawable.Texture;
 
-    public BatchTexturePlatformTarget(BatchTextureContext drawContext, TextureAssetProvider textureAssetProvider)
+    public BatchTexturePlatformTarget(BatchTextureContext drawContext, IAssetStore textures)
     {
-        if (!textureAssetProvider.TryGetAsset(drawContext.TextureId, out var texture))
-        {
-            throw new KeyNotFoundException(drawContext.TextureId);
-        }
+        var texture = (Texture)textures.GetUntyped(drawContext.TextureId);
         _drawable = new DrawableVertexArray(texture, drawContext);
     }
 
@@ -135,9 +133,9 @@ internal class BatchTexturePlatformTarget : PlatformTarget
 
             if (disposing)
             {
-                Texture.Dispose();
                 _vertexArray.Dispose();
                 // _drawContext isn't owned by us.
+                // Texture is owned by the asset store.
             }
         }
     }

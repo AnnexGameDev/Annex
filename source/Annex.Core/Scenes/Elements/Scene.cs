@@ -1,4 +1,5 @@
-﻿using Annex.Core.Data;
+﻿using Annex.Core.Assets;
+using Annex.Core.Data;
 using Annex.Core.Graphics.Windows;
 using Annex.Core.Input.InputEvents;
 
@@ -6,6 +7,8 @@ namespace Annex.Core.Scenes.Elements;
 
 public class Scene : Container, IScene
 {
+    public AssetRegistry Assets { get; } = new AssetRegistry();
+
     /// <summary>
     /// The IUIElement that currently has the focus
     /// </summary>
@@ -118,6 +121,16 @@ public class Scene : Container, IScene
         if (FocusElement?.ElementID == elementId)
         {
             FocusElement = null;
+        }
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+
+        if (disposing)
+        {
+            Assets.Dispose();
         }
     }
 }

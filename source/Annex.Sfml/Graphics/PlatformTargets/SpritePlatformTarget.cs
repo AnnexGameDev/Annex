@@ -1,4 +1,5 @@
-﻿using Annex.Core.Data;
+﻿using Annex.Core.Assets;
+using Annex.Core.Data;
 using Annex.Core.Graphics.Contexts;
 using Annex.Sfml.Extensions;
 using SFML.Graphics;
@@ -11,14 +12,14 @@ internal abstract class SpritePlatformTarget<T> : TransformablePlatformTarget wh
     private readonly Sprite _sprite;
     protected override Transformable Transformable => _sprite;
     public override object Target => _sprite.Texture;
-    private readonly TextureAssetProvider _textureAssetProvider;
+    private readonly IAssetStore _textures;
     protected readonly T Context;
     private RenderStates _renderState = RenderStates.Default;
 
-    public SpritePlatformTarget(T context, TextureAssetProvider textureAssetProvider)
+    public SpritePlatformTarget(T context, IAssetStore textures)
     {
         Context = context;
-        _textureAssetProvider = textureAssetProvider;
+        _textures = textures;
         _sprite = new();
     }
 
@@ -38,10 +39,7 @@ internal abstract class SpritePlatformTarget<T> : TransformablePlatformTarget wh
 
     protected Texture UpdateTexture(string textureId)
     {
-        if (!_textureAssetProvider.TryGetAsset(textureId, out var texture))
-        {
-            throw new KeyNotFoundException(textureId);
-        }
+        var texture = (Texture)_textures.GetUntyped(textureId);
         if (texture != _sprite.Texture)
         {
             _sprite.Texture = texture;

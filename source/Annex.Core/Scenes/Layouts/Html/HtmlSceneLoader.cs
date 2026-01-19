@@ -11,13 +11,11 @@ namespace Annex.Core.Scenes.Layouts.Html;
 
 internal class HtmlSceneLoader : IHtmlSceneLoader
 {
-    private readonly IAssetProvider<string> _sceneAssets;
     private readonly IContainer _container;
     private readonly IUIElementTypeResolverService _uiElementTypeResolverService;
 
-    public HtmlSceneLoader(IEnumerable<IAssetProvider> assetProviders, IContainer container, IUIElementTypeResolverService uIElementTypeResolverService)
+    public HtmlSceneLoader(IContainer container, IUIElementTypeResolverService uIElementTypeResolverService)
     {
-        _sceneAssets = assetProviders.GetProvider<string>(IHtmlSceneLoader.AssetProviderId);
         _container = container;
         _uiElementTypeResolverService = uIElementTypeResolverService;
     }
@@ -27,7 +25,9 @@ internal class HtmlSceneLoader : IHtmlSceneLoader
 
         try
         {
-            var document = GetDocumentRoot(assetId);
+            var htmlScenes = sceneInstance.Assets.GetHtmlScenes();
+
+            var document = GetDocumentRoot(assetId, htmlScenes);
             var styles = new Styles(document);
             if (GetSceneElement(document) is not XElement scene)
             {
@@ -103,14 +103,9 @@ internal class HtmlSceneLoader : IHtmlSceneLoader
         return sceneNodes.FirstOrDefault();
     }
 
-    private XElement GetDocumentRoot(string assetId)
+    private XElement GetDocumentRoot(string assetId, IAssetStore htmlScenes)
     {
-        string? sceneData;
-
-        if (!_sceneAssets.TryGetAsset(assetId, out sceneData))
-        {
-            Log.Error($"Failed to load scene for {assetId}");
-        }
+        string sceneData = (string)htmlScenes.GetUntyped(assetId);
 
         // XDocument requires a root element, so inject one manually for safety.
         string fakeRoot = $"<root>{sceneData}</root>";

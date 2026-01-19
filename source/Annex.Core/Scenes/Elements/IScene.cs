@@ -1,10 +1,13 @@
-﻿using Annex.Core.Graphics.Windows;
+﻿using Annex.Core.Assets;
+using Annex.Core.Graphics.Windows;
 using Annex.Core.Input.InputEvents;
 
 namespace Annex.Core.Scenes.Elements;
 
 public interface IScene : IUIElement, IAddableParentElement
 {
+    AssetRegistry Assets { get; }
+
     void OnLeave(OnSceneLeaveEventArgs onSceneLeaveEventArgs);
     void OnEnter(OnSceneEnterEventArgs onSceneEnterEventArgs);
 

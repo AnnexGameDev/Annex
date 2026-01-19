@@ -1,4 +1,5 @@
-﻿using Annex.Core.Data;
+﻿using Annex.Core.Assets;
+using Annex.Core.Data;
 using Annex.Core.Graphics.Contexts;
 using Annex.Sfml.Extensions;
 using SFML.Graphics;
@@ -10,7 +11,7 @@ internal class TextPlatformTarget : PlatformTarget
 {
     private readonly Text _text;
     private readonly TextContext _textContext;
-    private readonly FontAssetProvider _fontAssetProvider;
+    private readonly IAssetStore _fonts;
 
     private float _superSampleScale;
     private RenderTexture? _renderedText_Texture;
@@ -18,10 +19,12 @@ internal class TextPlatformTarget : PlatformTarget
 
     public override object Target => _text;
 
-    public TextPlatformTarget(TextContext textContext, FontAssetProvider fontAssetProvider)
+    private bool _invalidated = false;
+
+    public TextPlatformTarget(TextContext textContext, IAssetStore fonts)
     {
         _textContext = textContext;
-        _fontAssetProvider = fontAssetProvider;
+        _fonts = fonts;
         _text = new();
     }
 
@@ -79,7 +82,7 @@ internal class TextPlatformTarget : PlatformTarget
 
     private bool UpdateTextTextureIfNeeded()
     {
-        bool update = false;
+        bool update = _invalidated;
         update |= UpdateSuperSampleScale(_textContext.SuperSampleCount?.Value ?? 1);
         update |= UpdateFont(_textContext.Font.Value);
         update |= UpdateText(_textContext.Text.Value);
@@ -190,10 +193,7 @@ internal class TextPlatformTarget : PlatformTarget
 
     private bool UpdateFont(string font)
     {
-        if (!_fontAssetProvider.TryGetAsset(font, out var sfmlFont))
-        {
-            throw new KeyNotFoundException(font);
-        }
+        var sfmlFont = (Font)_fonts.GetUntyped(font);
         if (sfmlFont != _text.Font)
         {
             _text.Font = sfmlFont;
@@ -214,5 +214,10 @@ internal class TextPlatformTarget : PlatformTarget
             return GetTextBounds().Width;
         }
         return _text.FindCharacterPos((uint)index).X;
+    }
+
+    internal void Invalidate()
+    {
+        _invalidated = true;
     }
 }

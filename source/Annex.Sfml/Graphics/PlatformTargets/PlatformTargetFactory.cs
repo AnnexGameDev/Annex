@@ -1,4 +1,5 @@
-﻿using Annex.Core.Graphics.Contexts;
+﻿using Annex.Core.Assets;
+using Annex.Core.Graphics.Contexts;
 
 namespace Annex.Sfml.Graphics.PlatformTargets;
 
@@ -11,11 +12,11 @@ internal class PlatformTargetFactory : IPlatformTargetFactory
         _sfmlPlatformTargetCreators = sfmlPlatformTargetCreators;
     }
 
-    public PlatformTarget? GetPlatformTarget(DrawContext context)
+    public PlatformTarget? GetPlatformTarget(DrawContext context, AssetRegistry assets)
     {
         foreach (var creator in _sfmlPlatformTargetCreators)
         {
-            if (creator.TryGetOrCreate(context, out var sfmlPlatformTarget))
+            if (creator.TryGetOrCreate(context, assets, out var sfmlPlatformTarget))
             {
                 return sfmlPlatformTarget;
             }

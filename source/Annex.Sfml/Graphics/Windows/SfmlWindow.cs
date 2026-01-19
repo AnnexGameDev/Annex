@@ -1,4 +1,5 @@
-﻿using Annex.Core.Data;
+﻿using Annex.Core.Assets;
+using Annex.Core.Data;
 using Annex.Core.Graphics;
 using Annex.Core.Graphics.Contexts;
 using Annex.Core.Graphics.Windows;
@@ -26,6 +27,7 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
     private readonly IInputHandler _inputHandler;
     private readonly ITimeService _timeService;
     private long? _timeSinceLastDraw = null;
+    private AssetRegistry? _assetsToUseThisFrame;
 
     public uint ResolutionWidth { get; }
     public uint ResolutionHeight { get; }
@@ -181,7 +183,12 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
     #region Canvas
     public void Draw(DrawContext context)
     {
-        var platformTarget = _platformTargetFactory.GetPlatformTarget(context);
+        if (_assetsToUseThisFrame == null)
+        {
+            throw new InvalidOperationException("No assets specified for the current draw");
+        }
+
+        var platformTarget = _platformTargetFactory.GetPlatformTarget(context, _assetsToUseThisFrame);
 
         if (platformTarget == null)
         {
@@ -281,6 +288,7 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
 
     public Task DrawCurrentSceneAsync()
     {
+        _assetsToUseThisFrame = Scene.Assets;
         _renderWindow.Clear();
         _buffer.Clear();
 
@@ -292,6 +300,7 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
         _renderWindow.Draw(_bufferSprite);
         _renderWindow.Display();
         _renderWindow.DispatchEvents();
+        _assetsToUseThisFrame = null;
         return Task.CompletedTask;
     }
 

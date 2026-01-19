@@ -1,4 +1,5 @@
-﻿using Annex.Core.Data;
+﻿using Annex.Core.Assets;
+using Annex.Core.Data;
 using Annex.Core.Graphics.Contexts;
 using Annex.Core.Input;
 using Annex.Core.Input.InputEvents;
@@ -56,7 +57,6 @@ public interface IWindow : IDisposable
     // Scenes
     IScene Scene { get; }
 
-    void LoadScene(IScene sceneInstance, object? parameters = null);
     void LoadScene<T>(object? parameters = null) where T : IScene;
     bool IsCurrentScene<T>() where T : IScene;
 
