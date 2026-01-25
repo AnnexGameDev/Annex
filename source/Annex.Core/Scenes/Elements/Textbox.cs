@@ -167,13 +167,7 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
 
         if (mouseButtonReleasedEvent.Button == MouseButton.Left)
         {
-            this._isSelecting = false;
-            this.UpdateTextSelection_FromMouseEvent();
-
-            // Take advantage of text selection above to compute the cursor index
-            this.CursorIndex = this.SelectionStart;
-            this._cursorVisible = true;
-            this._nextToggleCursorVisiblity = _timeService.Now;
+            TryStopSelecting();
         }
     }
 
@@ -204,6 +198,12 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
             this._endSelectMouseX = (int)mouseMovedEvent.WindowX;
             this.UpdateTextSelection_FromMouseEvent();
         }
+    }
+
+    public override void OnMouseLeft(MouseMovedEvent mouseMovedEvent)
+    {
+        base.OnMouseLeft(mouseMovedEvent);
+        TryStopSelecting();
     }
 
     public override void OnLostFocus()
@@ -370,6 +370,22 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
         this._rightClickContextMenu?.RemoveFromCurrentScene();
         this._rightClickContextMenu = null;
     }
+
+    private void TryStopSelecting()
+    {
+        if (!_isSelecting)
+        {
+            return;
+        }
+        this._isSelecting = false;
+        this.UpdateTextSelection_FromMouseEvent();
+
+        // Take advantage of text selection above to compute the cursor index
+        this.CursorIndex = this.SelectionStart;
+        this._cursorVisible = true;
+        this._nextToggleCursorVisiblity = _timeService.Now;
+    }
+
 
     #region Clipboard actions
     private void PasteText(WindowEvent windowEvent)
