@@ -9,6 +9,9 @@ namespace Annex.Sfml.Graphics.PlatformTargets;
 
 internal class TextPlatformTarget : PlatformTarget
 {
+    internal const uint _widthPadding = 6;
+    internal const uint _heightPadding = 6;
+
     private readonly Text _text;
     private readonly TextContext _textContext;
     private readonly IAssetStore _fonts;
@@ -67,11 +70,9 @@ internal class TextPlatformTarget : PlatformTarget
         uint width = (uint)Math.Ceiling(bounds.Width);
         uint height = (uint)Math.Ceiling(bounds.Height);
 
-        uint widthPadding = 6;
-        uint heightPadding = 6;
-        _text.Position = new Vector2f(-bounds.Left + widthPadding / 2, -bounds.Top + heightPadding / 2);
+        _text.Position = new Vector2f(-bounds.Left + _widthPadding / 2, -bounds.Top + _heightPadding / 2);
 
-        _renderedText_Texture = new RenderTexture(width + widthPadding, height + heightPadding);
+        _renderedText_Texture = new RenderTexture(width + _widthPadding, height + _heightPadding);
         _renderedText_Texture.Clear(Color.Transparent);
         _renderedText_Texture.Draw(_text);
         _renderedText_Texture.Display();
@@ -215,9 +216,9 @@ internal class TextPlatformTarget : PlatformTarget
     {
         if (index == _text.DisplayedString.Length)
         {
-            return GetTextBounds().Width;
+            return GetTextBounds().Width + _widthPadding / 2;
         }
-        return _text.FindCharacterPos((uint)index).X;
+        return _text.FindCharacterPos((uint)index).X + _widthPadding / 2;
     }
 
     internal void Invalidate()
