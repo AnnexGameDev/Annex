@@ -7,14 +7,6 @@ public static class Extensions
         Task.Run(async () => await task).ConfigureAwait(false);
     }
 
-    public static void ForEach<T>(this IEnumerable<T> collection, Action<T> action)
-    {
-        foreach (var element in collection)
-        {
-            action(element);
-        }
-    }
-
     public static IEnumerable<K> Indicies<T, K>(this IEnumerable<T> collection, Func<int, K> selector)
     {
         int count = collection.Count();
