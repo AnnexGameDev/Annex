@@ -20,6 +20,7 @@ internal class SpritesheetPlatformTarget : SpritePlatformTarget<SpritesheetConte
 
         int frameSizeX = (int)texture.Size.X / Context.NumColumns;
         int frameSizeY = (int)texture.Size.Y / Context.NumRows;
+        Context.FrameSize.Set(frameSizeX, frameSizeY);
         int top = Context.Row * frameSizeY;
         int left = Context.Column * frameSizeX;
         var rect = UpdateTextureRect(top, left, frameSizeX, frameSizeY);

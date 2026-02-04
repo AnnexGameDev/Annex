@@ -1,28 +1,27 @@
-﻿namespace Annex.Core.Data
+﻿namespace Annex.Core.Data;
+
+public class ScalingVector2f : IVector2<float>
 {
-    public class ScalingVector2f : IVector2<float>
-    {
-        public IVector2<float> BaseVector { get; }
-        public IVector2<float> ScaleVector { get; }
+    public IVector2<float> BaseVector { get; }
+    public IVector2<float> ScaleVector { get; }
 
-        public float X => this.BaseVector.X * this.ScaleVector.X;
-        public float Y => this.BaseVector.Y * this.ScaleVector.Y;
+    public float X => BaseVector.X * ScaleVector.X;
+    public float Y => BaseVector.Y * ScaleVector.Y;
 
-        public ScalingVector2f(IVector2<float> baseVector, float xScale, float yScale) : this(baseVector, new Vector2f(xScale, yScale)) {
+    public ScalingVector2f(IVector2<float> baseVector, float xScale, float yScale) : this(baseVector, new Vector2f(xScale, yScale)) {
 
-        }
+    }
 
-        public ScalingVector2f(IVector2<float> baseVector, IVector2<float> scaleVector) {
-            this.BaseVector = baseVector;
-            this.ScaleVector = scaleVector;
-        }
+    public ScalingVector2f(IVector2<float> baseVector, IVector2<float> scaleVector) {
+        BaseVector = baseVector;
+        ScaleVector = scaleVector;
+    }
 
-        public virtual void Set(IVector2<float> vector) {
-            throw new NotImplementedException($"{nameof(ScalingVector2f)} doesn't support {nameof(Set)}");
-        }
+    public virtual void Set(IVector2<float> vector) {
+        throw new NotImplementedException($"{nameof(ScalingVector2f)} doesn't support {nameof(Set)}");
+    }
 
-        public virtual void Set(float x, float y) {
-            throw new NotImplementedException($"{nameof(ScalingVector2f)} doesn't support {nameof(Set)}");
-        }
+    public virtual void Set(float x, float y) {
+        throw new NotImplementedException($"{nameof(ScalingVector2f)} doesn't support {nameof(Set)}");
     }
 }

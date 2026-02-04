@@ -48,7 +48,7 @@ internal abstract class TransformablePlatformTarget : PlatformTarget
         return Transformable.Origin;
     }
 
-    protected (Vector2f position, Vector2f origin) UpdatePositionAndOrigin(IVector2<float> position, IVector2<float>? renderOffset)
+    protected (Vector2f position, Vector2f origin) UpdatePositionAndOrigin(IReadonlyVector2<float> position, IReadonlyVector2<float>? renderOffset)
     {
         var finalPosition = UpdatePosition(position.X, position.Y);
 
