@@ -12,24 +12,24 @@ public class Vector2f : VectorBase<float>
 
     public void Scale(float scale)
     {
-        this.X *= scale;
-        this.Y *= scale;
+        X *= scale;
+        Y *= scale;
     }
 
     public void Add(float dx, float dy)
     {
-        this.X += dx;
-        this.Y += dy;
+        X += dx;
+        Y += dy;
     }
 
     public void Add(IVector2<float> vector)
     {
-        this.Add(vector.X, vector.Y);
+        Add(vector.X, vector.Y);
     }
 
-    public void Set(IVector2<float> vector)
+    public void Set(IReadonlyVector2<float> vector)
     {
-        this.Set(vector.X, vector.Y);
+        Set(vector.X, vector.Y);
     }
 
     public static Vector2f SumOf(params IVector2<float>[] vectors)

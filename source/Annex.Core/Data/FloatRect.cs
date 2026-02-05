@@ -16,18 +16,26 @@ namespace Annex.Core.Data
 
         public FloatRect(float top, float left, float width, float height)
         {
-            this.Top = top;
-            this.Left = left;
-            this.Width = width;
-            this.Height = height;
+            Top = top;
+            Left = left;
+            Width = width;
+            Height = height;
         }
 
         public void Set(float top, float left, float width, float height)
         {
-            this.Top = top;
-            this.Left = left;
-            this.Width = width;
-            this.Height = height;
+            Top = top;
+            Left = left;
+            Width = width;
+            Height = height;
+        }
+
+        public void Set(FloatRect floatRect)
+        {
+            Top = floatRect.Top;
+            Left = floatRect.Left;
+            Width = floatRect.Width;
+            Height = floatRect.Height;
         }
     }
 }
