@@ -18,31 +18,31 @@ public class SpritesheetContext : DrawContext
     public int NumRows { get; }
     public int NumColumns { get; }
 
-    public SpritesheetContext(IShared<string> textureId, IReadonlyVector2<float> position, uint numRows, uint numColumns) {
-        this.TextureId = textureId;
-        this.Position = position;
-        this.RenderColor = null;
-        this.Rotation = null;
-        this.RenderOffset = null;
-        this.RenderSize = null;
+    public SpritesheetContext(IShared<string> textureId, IReadonlyVector2<float> position, int numRows, int numColumns) {
+        TextureId = textureId;
+        Position = position;
+        RenderColor = null;
+        Rotation = null;
+        RenderOffset = null;
+        RenderSize = null;
 
-        this.NumRows = (int)numRows;
-        this.NumColumns = (int)numColumns;
+        NumRows = numRows;
+        NumColumns = numColumns;
     }
 
     public void StepRow() {
-        this.SetRow(this.Row + 1);
+        SetRow(Row + 1);
     }
 
     public void StepColumn() {
-        this.SetColumn(this.Column + 1);
+        SetColumn(Column + 1);
     }
 
     public void SetRow(int row) {
-        this.Row = row % this.NumRows;
+        Row = row % NumRows;
     }
 
     public void SetColumn(int column) {
-        this.Column = column % this.NumColumns;
+        Column = column % NumColumns;
     }
 }
