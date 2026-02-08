@@ -2,17 +2,17 @@
 
 public class ScalingVector2f : IVector2<float>
 {
-    public IVector2<float> BaseVector { get; }
-    public IVector2<float> ScaleVector { get; }
+    public IReadonlyVector2<float> BaseVector { get; }
+    public IReadonlyVector2<float> ScaleVector { get; }
 
     public float X => BaseVector.X * ScaleVector.X;
     public float Y => BaseVector.Y * ScaleVector.Y;
 
-    public ScalingVector2f(IVector2<float> baseVector, float xScale, float yScale) : this(baseVector, new Vector2f(xScale, yScale)) {
+    public ScalingVector2f(IReadonlyVector2<float> baseVector, float xScale, float yScale) : this(baseVector, new Vector2f(xScale, yScale)) {
 
     }
 
-    public ScalingVector2f(IVector2<float> baseVector, IVector2<float> scaleVector) {
+    public ScalingVector2f(IReadonlyVector2<float> baseVector, IReadonlyVector2<float> scaleVector) {
         BaseVector = baseVector;
         ScaleVector = scaleVector;
     }

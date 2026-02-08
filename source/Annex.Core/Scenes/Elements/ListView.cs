@@ -335,9 +335,11 @@ public class ListView : Image, IParentElement
 
         private void RefreshPosition()
         {
+            // This is BAD. But unless we can set a field for the position of the class, it's impossible.
             var position = (OffsetVector2f)Position;
             var scale = (ScalingVector2f)position.OffsetVector;
-            scale.ScaleVector.Set(0, Index);
+            var scaleVector = (Vector2f)scale.ScaleVector;
+            scaleVector.Set(0, Index);
         }
 
         public override void OnMouseButtonPressed(MouseButtonPressedEvent mouseButtonPressedEvent)
