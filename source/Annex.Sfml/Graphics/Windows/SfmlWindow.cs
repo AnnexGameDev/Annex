@@ -288,7 +288,7 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
         return (centerY - halfHeight, centerX - halfWidth, centerY + halfHeight, centerX + halfWidth);
     }
 
-    public Task DrawCurrentSceneAsync()
+    public void DrawCurrentScene()
     {
         _assetsToUseThisFrame = Scene.Assets;
         _renderWindow.Clear();
@@ -303,7 +303,6 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
         _renderWindow.Display();
         _renderWindow.DispatchEvents();
         _assetsToUseThisFrame = null;
-        return Task.CompletedTask;
     }
 
     public void UpdateBuffer()

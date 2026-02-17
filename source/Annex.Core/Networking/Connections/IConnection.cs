@@ -11,5 +11,5 @@ public interface IConnection : IDisposable
 
     void Send(OutgoingPacket packet);
     void Destroy(string reason, Exception? exception = null);
-    Task ProcessIncomingDataAsync();
+    void ProcessIncomingData();
 }

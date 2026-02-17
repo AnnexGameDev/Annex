@@ -5,22 +5,22 @@ namespace Annex.Core.Events;
 public class GameEvent : IGameEvent
 {
     private long _lastProbe;
-    private readonly Func<Task> _task;
+    private readonly Action _action;
     private readonly int _interval;
     private readonly ITimeService _timeService;
 
-    public GameEvent(ITimeService timeService, Func<Task> task, int interval)
+    public GameEvent(ITimeService timeService, Action action, int interval)
     {
-        _task = task;
+        _action = action;
         _interval = interval;
         _timeService = timeService;
     }
 
-    public async Task ProbeAsync()
+    public void Probe()
     {
         if (_timeService.ElapsedTimeSince(_lastProbe) >= _interval)
         {
-            await _task();
+            _action();
             _lastProbe = _timeService.Now;
         }
     }

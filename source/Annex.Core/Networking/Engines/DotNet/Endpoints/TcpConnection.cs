@@ -159,11 +159,11 @@ internal class TcpConnection : Connection
         return $"[{this.Socket?.RemoteEndPoint?.ToString() ?? string.Empty}]";
     }
 
-    public override async Task ProcessIncomingDataAsync()
+    public override void ProcessIncomingData()
     {
         try
         {
-            await _unprocessedDataLock.WaitAsync();
+            _unprocessedDataLock.Wait();
             while (this.ProcessNextIncomingPacketData())
                 ;
         }

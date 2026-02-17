@@ -72,5 +72,5 @@ public abstract class Connection : IConnection
     }
 
     public abstract void Send(OutgoingPacket packet);
-    public abstract Task ProcessIncomingDataAsync();
+    public abstract void ProcessIncomingData();
 }

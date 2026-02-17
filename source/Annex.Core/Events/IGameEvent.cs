@@ -2,5 +2,5 @@
 
 public interface IGameEvent
 {
-    Task ProbeAsync();
+    void Probe();
 }

@@ -62,7 +62,7 @@ public interface IWindow : IDisposable
     bool IsCurrentScene<T>() where T : IScene;
 
     // Graphics
-    Task DrawCurrentSceneAsync();
+    void DrawCurrentScene();
     void Draw(DrawContext context);
     void UpdateBuffer();
 }
