@@ -30,7 +30,7 @@ internal class InputHandler : IInputHandler
             return;
         }
 
-        Log.Verbose($"KeyboardKey Pressed: {key}");
+        Log.Debug($"KeyboardKey Pressed: {key}");
 
         if (key == KeyboardKey.Unknown)
         {
@@ -53,7 +53,7 @@ internal class InputHandler : IInputHandler
             return;
         }
 
-        Log.Verbose($"KeyboardKey Released: {key}");
+        Log.Debug($"KeyboardKey Released: {key}");
 
         if (key == KeyboardKey.Unknown)
         {
@@ -67,7 +67,7 @@ internal class InputHandler : IInputHandler
 
     public void HandleWindowClosed(IWindow window)
     {
-        Log.Verbose($"Window closed: {window.Title}");
+        Log.Normal($"Window closed: {window.Title}");
         window.Scene.OnWindowClosed(window);
     }
 
@@ -79,7 +79,7 @@ internal class InputHandler : IInputHandler
         }
 
         // TODO: Track drag / dbl click
-        Log.Verbose($"MouseButton Pressed: {button}  x:{position.X}  y:{position.Y}");
+        Log.Debug($"MouseButton Pressed: {button} x:{position.X} y:{position.Y}");
         var mouseButtonPressedEvent = new MouseButtonPressedEvent(window, button, position.X, position.Y);
         this._mouseButtonStates[(int)button] = true;
         window.Scene.OnMouseButtonPressed(window, mouseButtonPressedEvent);
@@ -93,7 +93,7 @@ internal class InputHandler : IInputHandler
         }
 
         // TODO: Track drag / dbl click
-        Log.Verbose($"MouseButton Released: {button}  x:{position.X}  y:{position.Y}");
+        Log.Debug($"MouseButton Released: {button} x:{position.X} y:{position.Y}");
         var mouseButtonReleasedEvent = new MouseButtonReleasedEvent(window, button, position.X, position.Y);
         this._mouseButtonStates[(int)button] = false;
         window.Scene.OnMouseButtonReleased(window, mouseButtonReleasedEvent);
@@ -106,7 +106,6 @@ internal class InputHandler : IInputHandler
             return;
         }
 
-        Log.Verbose($"Mouse Moved: x:{position.X}  y:{position.Y}");
         var mouseMovedEvent = new MouseMovedEvent(window, position.X, position.Y);
         window.Scene.OnMouseMoved(window, mouseMovedEvent);
     }
@@ -118,7 +117,6 @@ internal class InputHandler : IInputHandler
             return;
         }
 
-        Log.Verbose($"MouseScrollWheel Moved: {delta}");
         var mouseScrollWheelMovedEvent = new MouseScrollWheelMovedEvent(window, delta);
         window.Scene.OnMouseScrollWheelMoved(window, mouseScrollWheelMovedEvent);
     }
@@ -145,14 +143,14 @@ internal class InputHandler : IInputHandler
 
     public void HandleWindowGainedFocus(IWindow window)
     {
-        Log.Verbose($"Window gained focus");
+        Log.Normal($"Window gained focus");
         this.InputShouldBeProcessed = true;
         window.Scene.OnWindowGainedFocus(window);
     }
 
     public void HandleWindowLostFocus(IWindow window)
     {
-        Log.Verbose($"Window lost focus");
+        Log.Normal($"Window lost focus");
         this.InputShouldBeProcessed = false;
         window.Scene.OnWindowLostFocus(window);
     }

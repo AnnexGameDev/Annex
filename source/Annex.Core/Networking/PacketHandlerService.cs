@@ -38,7 +38,6 @@ internal class PacketHandlerService : IPacketHandlerService
     {
         if (packetId == IPacket.ResponsePacketId)
         {
-            Log.Verbose($"Response packet received: {packet.OriginalRequestId}");
             OnResponseReceived(packet);
             return;
         }
@@ -49,7 +48,6 @@ internal class PacketHandlerService : IPacketHandlerService
             return;
         }
 
-        Log.Verbose($"Packet received for {connection}");
         try
         {
             await handler!.HandleAsync(connection, packet);

@@ -50,7 +50,7 @@ public abstract class WindowBase
 
     public void LoadScene<T>(object? parameters = null) where T : IScene
     {
-        Log.Verbose($"Loading scene {typeof(T).Name}");
+        Log.Normal($"Loading scene {typeof(T).Name}");
 
         var newScene = _container.Resolve<T>();
         var oldScene = _currentScene;
