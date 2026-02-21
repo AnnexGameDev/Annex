@@ -39,6 +39,7 @@ internal class SolidRectanglePlatformTarget : TransformablePlatformTarget
         (var position, var origin) = UpdatePositionAndOrigin(_rectangleContext.Position, _rectangleContext.RenderOffset);
         UpdateRotation(_rectangleContext.Rotation);
 
+
         if (_rectangle.OutlineColor.DoesNotEqual(_rectangleContext.BorderColor, Color.Transparent))
         {
             _rectangle.OutlineColor = _rectangleContext.BorderColor.ToSFML(KnownColor.Transparent);
