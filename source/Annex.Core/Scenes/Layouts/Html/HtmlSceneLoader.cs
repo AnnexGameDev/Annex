@@ -22,28 +22,20 @@ internal class HtmlSceneLoader : IHtmlSceneLoader
 
     public void Load(string assetId, IScene sceneInstance)
     {
+        var htmlScenes = sceneInstance.Assets.GetHtmlScenes();
 
-        try
+        var document = GetDocumentRoot(assetId, htmlScenes);
+        var styles = new Styles(document);
+        if (GetSceneElement(document) is not XElement scene)
         {
-            var htmlScenes = sceneInstance.Assets.GetHtmlScenes();
-
-            var document = GetDocumentRoot(assetId, htmlScenes);
-            var styles = new Styles(document);
-            if (GetSceneElement(document) is not XElement scene)
-            {
-                Log.Warning($"Failed to retrieve scene from asset: '{assetId}'");
-                return;
-            }
-
-            // Apply styles to the scene
-            ProcessElement(sceneInstance, null, scene, styles);
-
-            ProcessChildren(sceneInstance, scene, styles, sceneInstance.GetType());
+            Log.Warning($"Failed to retrieve scene from asset: '{assetId}'");
+            return;
         }
-        catch (Exception ex)
-        {
-            Log.Error($"An exception was thrown while loading {assetId}", ex);
-        }
+
+        // Apply styles to the scene
+        ProcessElement(sceneInstance, null, scene, styles);
+
+        ProcessChildren(sceneInstance, scene, styles, sceneInstance.GetType());
     }
 
     private void ProcessChildren(IAddableParentElement parentInstance, XElement parentElement, Styles styles, Type sceneType)
