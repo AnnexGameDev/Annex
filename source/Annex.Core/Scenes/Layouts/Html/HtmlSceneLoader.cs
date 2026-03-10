@@ -42,7 +42,6 @@ internal class HtmlSceneLoader : IHtmlSceneLoader
     {
         foreach (var childElement in parentElement.Elements())
         {
-
             if (!TryCreateInstance(childElement, styles, sceneType, out var childInstance))
             {
                 continue;
@@ -60,7 +59,6 @@ internal class HtmlSceneLoader : IHtmlSceneLoader
 
     private bool TryCreateInstance(XElement element, Styles styles, Type sceneType, out IUIElement uiElement)
     {
-
         string? typeNameToInstantiate = element.Name.ToString();
         typeNameToInstantiate = typeNameToInstantiate switch
         {
@@ -146,7 +144,6 @@ internal class HtmlSceneLoader : IHtmlSceneLoader
 
     private void SetListView(ListView listview, XElement element, Styles styles)
     {
-
         if (GetIntAttribute("line-height", element, styles) is int lineHeight)
         {
             listview.LineHeight = lineHeight;
