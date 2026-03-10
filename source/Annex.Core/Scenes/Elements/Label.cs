@@ -47,32 +47,32 @@ public class Label : UIElement, ILabel
     }
     public float TextBorderThickness
     {
-        get => this.RenderText.BorderThickness?.Value ?? 0;
-        set => this.RenderText.BorderThickness?.Set(value);
+        get => RenderText.BorderThickness?.Value ?? 0;
+        set => RenderText.BorderThickness?.Set(value);
     }
     public RGBA TextBorderColor
     {
-        get => this.RenderText.BorderColor ?? KnownColor.Transparent;
-        set => this.RenderText.BorderColor?.Set(value);
+        get => RenderText.BorderColor ?? KnownColor.Transparent;
+        set => RenderText.BorderColor?.Set(value);
     }
 
     public Label(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null, IVector2<float>? textOffset = null, IShared<string>? text = null)
         : base(elementId, position, size)
     {
-        this.RenderText = new TextContext(text ?? string.Empty.ToShared(), "default.ttf".ToShared())
+        RenderText = new TextContext(text ?? string.Empty.ToShared(), "default.ttf".ToShared())
         {
-            Position = this.Position,
+            Position = Position,
             PositionOffset = textOffset ?? new Vector2f(),
             Camera = CameraId.UI.ToString(),
             FontSize = new Shared<uint>(12),
             Color = KnownColor.Black,
             BorderThickness = new Shared<float>(0),
-            BorderColor = KnownColor.Transparent
+            BorderColor = KnownColor.Transparent,
         };
     }
 
     protected override void DrawInternal(IWindow window, long timeDelta)
     {
-        window.Draw(this.RenderText);
+        window.Draw(RenderText);
     }
 }

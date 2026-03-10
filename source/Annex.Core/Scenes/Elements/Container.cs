@@ -16,20 +16,19 @@ public class Container : UIElement, IAddableParentElement
 
     public virtual void AddChild(IUIElement child)
     {
-        this._children.Add(child);
+        _children.Add(child);
     }
 
     public IUIElement? GetElementById(string id)
     {
-
-        if (this.ElementID == id)
+        if (ElementID == id)
         {
             return this;
         }
 
-        for (int i = 0; i < this._children.Count; i++)
+        for (int i = 0; i < _children.Count; i++)
         {
-            var child = this._children[i];
+            var child = _children[i];
             if (child.ElementID == id)
             {
                 return child;
@@ -57,12 +56,12 @@ public class Container : UIElement, IAddableParentElement
     public IUIElement? GetFirstVisibleElement(float x, float y)
     {
 
-        if (!this.IsInBounds(x, y))
+        if (!IsInBounds(x, y))
             return null;
 
-        for (int i = this._children.Count - 1; i >= 0; i--)
+        for (int i = _children.Count - 1; i >= 0; i--)
         {
-            var child = this._children[i];
+            var child = _children[i];
 
             if (!child.Visible)
             {
@@ -91,11 +90,11 @@ public class Container : UIElement, IAddableParentElement
 
     public virtual void RemoveChild(string elementId)
     {
-        for (int i = 0; i < this._children.Count; i++)
+        for (int i = 0; i < _children.Count; i++)
         {
-            if (this._children[i].ElementID == elementId)
+            if (_children[i].ElementID == elementId)
             {
-                this.RemoveChild(i);
+                RemoveChild(i);
                 break;
             }
         }
@@ -103,11 +102,11 @@ public class Container : UIElement, IAddableParentElement
 
     public void RemoveChild(IUIElement child)
     {
-        for (int i = 0; i < this._children.Count; i++)
+        for (int i = 0; i < _children.Count; i++)
         {
-            if (this._children[i] == child)
+            if (_children[i] == child)
             {
-                this.RemoveChild(i);
+                RemoveChild(i);
                 break;
             }
         }
@@ -115,16 +114,16 @@ public class Container : UIElement, IAddableParentElement
 
     private void RemoveChild(int i)
     {
-        var child = this._children[i];
+        var child = _children[i];
         child.Dispose();
-        this._children.RemoveAt(i);
+        _children.RemoveAt(i);
     }
 
     protected override void DrawInternal(IWindow window, long timeDelta)
     {
-        foreach (var child in this._children)
+        for (int i = 0; i < _children.Count; i++)
         {
-            child.DrawOn(window, timeDelta);
+            _children[i]?.DrawOn(window, timeDelta);
         }
     }
 
@@ -134,9 +133,9 @@ public class Container : UIElement, IAddableParentElement
 
         if (disposing)
         {
-            for (int i = 0; i < this._children.Count; i++)
+            for (int i = 0; i < _children.Count; i++)
             {
-                var child = this._children[i];
+                var child = _children[i];
                 child.Dispose();
             }
         }
