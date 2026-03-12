@@ -8,7 +8,7 @@ namespace Annex.Core.Scenes.Elements;
 
 public class Image : UIElement, IImage
 {
-    protected readonly TextureContext BackgroundContext;
+    public TextureContext TextureContext { get; }
     private bool _hasMouse;
 
     public string? HoverBackgroundTextureId
@@ -31,9 +31,9 @@ public class Image : UIElement, IImage
 
     public Image(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size)
     {
-        this.BackgroundContext = new TextureContext(string.Empty.ToShared(), this.Position)
+        TextureContext = new TextureContext(string.Empty.ToShared(), Position)
         {
-            RenderSize = this.Size,
+            RenderSize = Size,
             Camera = CameraId.UI.ToString()
         };
     }
@@ -51,8 +51,8 @@ public class Image : UIElement, IImage
             textureToRender = FocusedBackgroundTextureId;
         }
 
-        BackgroundContext.TextureId.Set(textureToRender);
-        window.Draw(this.BackgroundContext);
+        TextureContext.TextureId.Set(textureToRender);
+        window.Draw(TextureContext);
     }
 
     public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent)

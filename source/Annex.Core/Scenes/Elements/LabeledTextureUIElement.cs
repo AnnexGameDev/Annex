@@ -34,7 +34,10 @@ public abstract class LabeledTextureUIElement : UIElement, IButton, ILabel
         {
             string oldText = Label.Text;
             Label.Text = value;
-            OnTextChanged?.Invoke(this, new TextChangedEventArgs(oldText));
+            if (oldText != value)
+            {
+                OnTextChanged?.Invoke(this, new TextChangedEventArgs(oldText));
+            }
         }
     }
     public string Font

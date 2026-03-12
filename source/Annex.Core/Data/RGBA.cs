@@ -31,11 +31,30 @@ public class RGBA
         A = a;
     }
 
+    public RGBA(KnownColor color) : this((uint)color)
+    {
+    }
+
     public static RGBA Parse(string arg) {
         // Maybe it's a name
         if (Enum.TryParse<KnownColor>(arg.ToCamelCaseWord(), out var color))
         {
             return new RGBA((uint)color);
+        }
+
+        if (arg.StartsWith('#'))
+        {
+            byte a = 255;
+
+            if (arg.Length == 9)
+            {
+                a = Convert.ToByte(arg[7..9], 16);
+            }
+
+            byte r = Convert.ToByte(arg[1..3], 16);
+            byte g = Convert.ToByte(arg[3..5], 16);
+            byte b = Convert.ToByte(arg[5..7], 16);
+            return new RGBA(r, g, b, a);
         }
 
         // Maybe it's RGB?
@@ -57,10 +76,26 @@ public class RGBA
     }
 
     public void Set(RGBA value) {
-        this.R = value.R;
-        this.G = value.G;
-        this.B = value.B;
-        this.A = value.A;
+        R = value.R;
+        G = value.G;
+        B = value.B;
+        A = value.A;
+    }
+
+    public void Set(byte r, byte g, byte b)
+    {
+        R = r;
+        G = g;
+        B = b;
+        A = 255;
+    }
+
+    public void Set(byte r, byte g, byte b, byte a)
+    {
+        R = r;
+        G = g;
+        B = b;
+        A = a;
     }
 
     public static implicit operator RGBA(KnownColor knownColor) {
@@ -70,5 +105,10 @@ public class RGBA
     public override string ToString()
     {
         return $"R:{R} G:{G} B:{B} A:{A}";
+    }
+
+    public string ToHex()
+    {
+        return $"#{R:X2}{G:X2}{B:X2}";
     }
 }
