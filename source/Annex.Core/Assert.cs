@@ -3,6 +3,14 @@ namespace Annex.Core;
 
 public static class Assert
 {
+    public static void IsTrue(bool value, string message = "")
+    {
+        if (value is not true)
+        {
+            throw new ArgumentException(message);
+        }
+    }
+
     public static void IsFalse(bool value, string message = "")
     {
         if (value is not false)

@@ -13,6 +13,7 @@ internal class HtmlSceneLoader : IHtmlSceneLoader
 {
     private readonly IContainer _container;
     private readonly IUIElementTypeResolverService _uiElementTypeResolverService;
+    private static readonly char[] KnownCalcOperators = new[] { '-', '+', '/', '*' };
 
     public HtmlSceneLoader(IContainer container, IUIElementTypeResolverService uIElementTypeResolverService)
     {
@@ -330,35 +331,16 @@ internal class HtmlSceneLoader : IHtmlSceneLoader
 
     private float ComputeVectorValue(string val, float parentVal)
     {
-
         val = val.Trim();
 
         if (val.StartsWith("calc(") && val.EndsWith(")"))
         {
-
             val = val[5..^1];
-            var possibleOperators = new[] { '-', '+', '/', '*' };
-            var terms = val.Split(possibleOperators).Select(term => ComputeVectorValue(term, parentVal)).ToList();
-            var operators = val.FindAll(possibleOperators).ToList();
+            var terms = val.Split(KnownCalcOperators).Select(term => ComputeVectorValue(term, parentVal)).ToList();
+            var operators = val.FindAll(KnownCalcOperators).ToList();
             operators.Insert(0, '+'); // to match the length of the terms collection
 
-            float result = 0;
-            for (int i = 0; i < operators.Count; i++)
-            {
-                var op = operators[i];
-                float term = terms[i];
-
-                result = op switch
-                {
-                    '+' => result + term,
-                    '-' => result - term,
-                    '*' => result * term,
-                    '/' => result / term,
-                    _ => throw new NotSupportedException()
-                };
-            }
-
-            return result;
+            return Calc.Compute(terms, operators);
         }
 
         return val.EndsWith("%") ? parentVal * float.Parse(val[..^1]) / 100 : float.Parse(val);
