@@ -7,11 +7,11 @@ namespace Annex.Core.Scenes
         /// The first time a scene is loaded, the previous scene is null
         public IScene? PreviousScene { get; }
 
-        public object Parameter { get; }
+        public object Parameters { get; }
 
         public OnSceneEnterEventArgs(IScene? previousScene, object parameter) {
             this.PreviousScene = previousScene;
-            Parameter = parameter;
+            Parameters = parameter;
         }
     }
 }

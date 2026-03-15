@@ -48,7 +48,7 @@ public abstract class WindowBase
 
     protected abstract void RaisePropertyChanged([CallerMemberName] string property = "");
 
-    public void LoadScene(IScene newScene, object? parameters = null)
+    public void LoadScene(IScene newScene, object? parameters = null, bool disposeOldScene = true)
     {
         Log.Normal($"Loading scene {newScene.GetType().Name}");
 
@@ -61,10 +61,13 @@ public abstract class WindowBase
         _currentScene = newScene;
         _currentScene.OnEnter(enteringSceneArgs);
 
-        oldScene?.Dispose();
+        if (disposeOldScene)
+        {
+            oldScene?.Dispose();
+        }
     }
 
-    public void LoadScene<T>(object? parameters = null) where T : IScene
+    public void LoadScene<T>(object? parameters = null, bool disposeOldScene = true) where T : IScene
     {
         var newScene = _container.Resolve<T>();
 
@@ -75,7 +78,7 @@ public abstract class WindowBase
             return;
         }
 
-        LoadScene(newScene, parameters);
+        LoadScene(newScene, parameters, disposeOldScene);
     }
 
 

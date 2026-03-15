@@ -4,6 +4,7 @@ using Annex.Core.Graphics.Contexts;
 using Annex.Core.Graphics.Windows;
 using Annex.Core.Input;
 using Annex.Core.Input.InputEvents;
+using System.Runtime.CompilerServices;
 
 namespace Annex.Core.Scenes.Elements;
 
@@ -62,6 +63,11 @@ public class ListView : Image, IParentElement
             RenderSize = new Vector2f(),
             Camera = CameraId.UI.ToString()
         };
+    }
+
+    public T GetElement<T>([CallerMemberName] string elementId = "") where T : class, IUIElement
+    {
+        return GetElementById<T>(elementId) ?? throw new UIElementNotFoundException(elementId);
     }
 
     public IUIElement? GetElementById(string id)

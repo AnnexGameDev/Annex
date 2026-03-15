@@ -1,6 +1,7 @@
 ﻿using Annex.Core.Data;
 using Annex.Core.Graphics.Windows;
 using Scaffold.Collections;
+using System.Runtime.CompilerServices;
 
 namespace Annex.Core.Scenes.Elements;
 
@@ -17,6 +18,11 @@ public class Container : UIElement, IAddableParentElement
     public virtual void AddChild(IUIElement child)
     {
         _children.Add(child);
+    }
+
+    public T GetElement<T>([CallerMemberName] string elementId = "") where T : class, IUIElement
+    {
+        return GetElementById<T>(elementId) ?? throw new UIElementNotFoundException(elementId);
     }
 
     public IUIElement? GetElementById(string id)
