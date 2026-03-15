@@ -1,4 +1,5 @@
 ﻿using Annex.Core.Graphics.Windows;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Annex.Core.Graphics;
 
@@ -9,15 +10,12 @@ internal class GraphicsService : IGraphicsService
     private Dictionary<Guid, IWindow> _windows = new();
     public IEnumerable<IWindow> Windows => _windows.Values;
 
-    public IWindow GetWindow(Guid id)
-    {
-        return _windows[id];
-    }
+    public bool TryGetWindow(Guid id, [NotNullWhen(true)] out IWindow? window) => _windows.TryGetValue(id, out window);
 
     public GraphicsService(IGraphicsEngine graphicsEngine)
     {
         Debug.Assert(graphicsEngine != null, "A singleton graphics engine must be registered");
-        this._graphicsEngine = graphicsEngine;
+        _graphicsEngine = graphicsEngine;
     }
 
     public IWindow CreateWindow(string title, uint width, uint height, WindowStyle style)
@@ -33,5 +31,11 @@ internal class GraphicsService : IGraphicsService
         {
             window.Dispose();
         }
+    }
+
+    public void DestroyWindow(Guid id)
+    {
+        _windows[id].Dispose();
+        _windows.Remove(id);
     }
 }

@@ -358,7 +358,6 @@ internal class HtmlSceneLoader : IHtmlSceneLoader
         string x = data[0];
         string y = data[1];
 
-
         float xf = ComputeVectorValue(x, parentValue?.X ?? 0);
         float yf = ComputeVectorValue(y, parentValue?.Y ?? 0);
         return new Vector2f(xf, yf);

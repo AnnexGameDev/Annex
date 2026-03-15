@@ -48,25 +48,10 @@ public abstract class WindowBase
 
     protected abstract void RaisePropertyChanged([CallerMemberName] string property = "");
 
-    public void LoadScene<T>(object? parameters = null) where T : IScene
+    public void LoadScene(IScene newScene, object? parameters = null)
     {
-        Log.Normal($"Loading scene {typeof(T).Name}");
+        Log.Normal($"Loading scene {newScene.GetType().Name}");
 
-        var newScene = _container.Resolve<T>();
-        var oldScene = _currentScene;
-
-        // If the new scene can't be resolved, don't switch.
-        if (newScene == null)
-        {
-            Log.Error($"Unable to resolve scene {typeof(T).Name}.");
-            return;
-        }
-
-        SwitchTo(newScene, parameters);
-    }
-
-    private void SwitchTo<T>(T newScene, object? parameters = null) where T : IScene
-    {
         var oldScene = _currentScene;
 
         var leavingSceneArgs = new OnSceneLeaveEventArgs(newScene);
@@ -78,6 +63,21 @@ public abstract class WindowBase
 
         oldScene?.Dispose();
     }
+
+    public void LoadScene<T>(object? parameters = null) where T : IScene
+    {
+        var newScene = _container.Resolve<T>();
+
+        // If the new scene can't be resolved, don't switch.
+        if (newScene == null)
+        {
+            Log.Error($"Unable to resolve scene {typeof(T).Name}.");
+            return;
+        }
+
+        LoadScene(newScene, parameters);
+    }
+
 
     private class NullScene : Scene
     {

@@ -58,6 +58,7 @@ public interface IWindow : IDisposable
     // Scenes
     IScene Scene { get; }
 
+    void LoadScene(IScene scene, object? parameters = null);
     void LoadScene<T>(object? parameters = null) where T : IScene;
     bool IsCurrentScene<T>() where T : IScene;
 
