@@ -16,6 +16,7 @@ public class Camera
     public IShared<float> Rotation { get; set; } = 0.0f.ToShared();
 
     private uint _currentZoomLevel = 1;
+    private uint _maxZoomLevel = uint.MaxValue;
 
     public IShared<float> TextRenderingSuperSampleScaleBasedOnZoom { get; } = new Shared<float>(1);
 
@@ -56,6 +57,14 @@ public class Camera
         {
             return;
         }
+        if (newZoomLevel > _maxZoomLevel)
+        {
+            if (_currentZoomLevel > _maxZoomLevel)
+            {
+                SetZoomLevel(_maxZoomLevel);
+            }
+            return;
+        }
 
         _currentZoomLevel = newZoomLevel;
         _size.Set(_originalWidth * _currentZoomLevel, _originalHeight * _currentZoomLevel);
@@ -64,5 +73,11 @@ public class Camera
         float superSampleScale = Math.Max((_originalResolutionWidth / Size.X), 1);
         float superSampleScaleInIncrement = (float)Math.Ceiling(superSampleScale / increment) * increment;
         TextRenderingSuperSampleScaleBasedOnZoom.Set(superSampleScaleInIncrement);
+    }
+
+    public void SetMaxZoomLevel(uint zoomLevel)
+    {
+        _maxZoomLevel = zoomLevel;
+        SetZoomLevel(_currentZoomLevel);
     }
 }
