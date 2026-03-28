@@ -18,10 +18,6 @@
 		<DefineConstants>$(DefineConstants)TRACE;</DefineConstants>
 	</PropertyGroup>
 
-	<Target Name="NugetPackAutoVersioning" AfterTargets="Build">
-		<Exec Command="dotnet pack -p:PackageVersion=$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd.HHmmss&quot;)) --no-build --configuration $(Configuration) --output &quot;$(SolutionDir)nuget&quot;" />
-	</Target>
-
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\scaffold\source\Scaffold\Scaffold.csproj" />
 	</ItemGroup>
