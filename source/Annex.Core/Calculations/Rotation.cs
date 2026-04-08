@@ -9,6 +9,17 @@ namespace Annex.Core.Calculations
             return ((float)Math.Cos(degrees.ToRadians()), (float)Math.Sin(degrees.ToRadians()));
         }
 
+        public static float ComputeRotation2(float x1, float y1, float x2, float y2)
+        {
+            return 360 - ComputeRotation(x1, y1, x2, y2) + 45 / 2f;
+        }
+
+
+        public static float ComputeRotation2(IVector2<float> position, IVector2<float> target)
+        {
+            return 360 - ComputeRotation(position, target) + 45 / 2f;
+        }
+
         public static float ComputeRotation(float x1, float y1, float x2, float y2)
         {
             float dx = x2 - x1;
@@ -22,11 +33,11 @@ namespace Annex.Core.Calculations
             return degrees;
         }
 
-        public static double ComputeRotation(IVector2<float> position, IVector2<float> target)
+        public static float ComputeRotation(IVector2<float> position, IVector2<float> target)
         {
             float dx = target.X - position.X;
             float dy = target.Y - position.Y;
-            return Math.Atan2(dy, dx).ToDegrees();
+            return (float)Math.Atan2(dy, dx).ToDegrees();
         }
 
         public static (float x, float y) ComputeUnits(IVector2<float> position, IVector2<float> target)
