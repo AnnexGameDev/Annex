@@ -14,43 +14,42 @@ internal class SfmlCamera
         get
         {
             RefreshView();
-            return this._view;
+            return _view;
         }
     }
 
     public SfmlCamera(Camera camera)
     {
-        this.Camera = camera;
+        Camera = camera;
     }
 
     private void RefreshView()
     {
 
-        if (this._view.Center.DoesNotEqual(this.Camera.Center))
+        if (_view.Center.DoesNotEqual(Camera.Center))
         {
-            this._view.Center = this.Camera.Center.ToSFML();
+            _view.Center = Camera.Center.ToSFML();
         }
 
-        if (this._view.Size.DoesNotEqual(this.Camera.Size))
+        if (_view.Size.DoesNotEqual(Camera.Size))
         {
-            this._view.Size = this.Camera.Size.ToSFML();
+            _view.Size = Camera.Size.ToSFML();
         }
 
-        if (this._view.Rotation != this.Camera.Rotation.Value)
+        if (_view.Rotation != Camera.Rotation.Value)
         {
-            this._view.Rotation = this.Camera.Rotation.Value;
+            _view.Rotation = Camera.Rotation.Value;
         }
 
-        if (this._view.Viewport.DoesNotEqual(this.Camera.Region))
+        if (_view.Viewport.DoesNotEqual(Camera.Region))
         {
-            this._view.Viewport = this.Camera.Region.ToSFML();
+            _view.Viewport = Camera.Region.ToSFML();
         }
     }
 }
 
 internal interface ICameraCache
 {
-    SfmlCamera? GetCamera(CameraId cameraId);
     SfmlCamera? GetCamera(string cameraId);
     void AddCamera(Camera camera);
 }

@@ -1,5 +1,6 @@
 ﻿using Annex.Core.Assets;
 using Annex.Core.Data;
+using Annex.Core.Graphics;
 using Annex.Core.Graphics.Windows;
 using Annex.Core.Input.InputEvents;
 
@@ -85,7 +86,7 @@ public class Scene : Container, IScene
 
     public virtual void OnMouseScrollWheelMoved(IWindow window, MouseScrollWheelMovedEvent mouseScrollWheelMovedEvent)
     {
-        var mousePosition = window.GetMousePos(Graphics.CameraId.UI);
+        var mousePosition = window.GetMousePos(KnownCamera.UI);
         if (this.FocusElement?.IsInBounds(mousePosition.X, mousePosition.Y) == true)
         {
             this.FocusElement?.OnMouseScrollWheelMoved(mouseScrollWheelMovedEvent);

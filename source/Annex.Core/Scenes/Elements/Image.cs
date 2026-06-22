@@ -31,10 +31,10 @@ public class Image : UIElement, IImage
 
     public Image(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size)
     {
-        TextureContext = new TextureContext(string.Empty.ToShared(), Position)
+        TextureContext = new TextureContext(string.Empty, Position)
         {
             RenderSize = Size,
-            Camera = CameraId.UI.ToString()
+            Camera = KnownCamera.UI
         };
     }
 
@@ -51,7 +51,7 @@ public class Image : UIElement, IImage
             textureToRender = FocusedBackgroundTextureId;
         }
 
-        TextureContext.TextureId.Set(textureToRender);
+        TextureContext.TextureId = textureToRender;
         window.Draw(TextureContext);
     }
 

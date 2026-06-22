@@ -4,7 +4,7 @@ public abstract class DrawContext : IDisposable
 {
     public IPlatformTarget? PlatformTarget { get; private set; }
 
-    public string? Camera { get; init; } = CameraId.Default.ToString();
+    public string? Camera { get; init; } = KnownCamera.Default;
     public Shader? Shader { get; set; } = null;
 
     public void SetPlatformTarget(IPlatformTarget? platformTarget)

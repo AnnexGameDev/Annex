@@ -8,9 +8,9 @@ internal abstract class TransformablePlatformTarget : PlatformTarget
 {
     protected abstract Transformable Transformable { get; }
 
-    protected float UpdateRotation(IShared<float>? rotation)
+    protected float UpdateRotation(float? rotation)
     {
-        float trueRotation = rotation?.Value ?? 0;
+        float trueRotation = rotation ?? 0;
         if (Transformable.Rotation != trueRotation)
         {
             Transformable.Rotation = trueRotation;

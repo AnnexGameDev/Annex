@@ -9,17 +9,15 @@ internal class CameraCache : ICameraCache
 
     public void AddCamera(Camera camera)
     {
-        this._cache.Add(camera.Id, new SfmlCamera(camera));
+        _cache.Add(camera.CameraId, new SfmlCamera(camera));
     }
 
     public SfmlCamera? GetCamera(string cameraId)
     {
-        if (this._cache.TryGetValue(cameraId, out var camera))
+        if (_cache.TryGetValue(cameraId, out var camera))
         {
             return camera;
         }
         return null;
     }
-
-    public SfmlCamera? GetCamera(CameraId cameraId) => GetCamera(cameraId.ToString());
 }

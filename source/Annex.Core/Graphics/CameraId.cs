@@ -1,8 +1,7 @@
-﻿namespace Annex.Core.Graphics
+﻿namespace Annex.Core.Graphics;
+
+public static class KnownCamera
 {
-    public enum CameraId
-    {
-        Default,
-        UI,
-    }
+    public const string Default = nameof(Default);
+    public const string UI = nameof(UI);
 }

@@ -11,12 +11,12 @@ internal class TexturePlatformTarget : SpritePlatformTarget<TextureContext>
 
     protected override void UpdateIfNeeded()
     {
-        if (string.IsNullOrEmpty(Context.TextureId.Value))
+        if (string.IsNullOrEmpty(Context.TextureId))
         {
             return;
         }
 
-        var texture = UpdateTexture(Context.TextureId.Value);
+        var texture = UpdateTexture(Context.TextureId);
         var rect = UpdateTextureRect(Context.SourceTextureRect);
 
         // Compute scale

@@ -24,66 +24,66 @@ public class Button : UIElement, IButton
 
     public string BackgroundTextureId
     {
-        get => this._background.BackgroundTextureId;
-        set => this._background.BackgroundTextureId = value;
+        get => _background.BackgroundTextureId;
+        set => _background.BackgroundTextureId = value;
     }
-    public string Text
+    public virtual string Text
     {
-        get => this._label.Text;
-        set => this._label.Text = value;
+        get => _label.Text;
+        set => _label.Text = value;
     }
     public string Font
     {
-        get => this._label.Font;
-        set => this._label.Font = value;
+        get => _label.Font;
+        set => _label.Font = value;
     }
     public uint FontSize
     {
-        get => this._label.FontSize;
-        set => this._label.FontSize = value;
+        get => _label.FontSize;
+        set => _label.FontSize = value;
     }
     public RGBA FontColor
     {
-        get => this._label.FontColor;
-        set => this._label.FontColor = value;
+        get => _label.FontColor;
+        set => _label.FontColor = value;
     }
     public HorizontalAlignment HorizontalTextAlignment
     {
-        get => this._label.HorizontalTextAlignment;
-        set => this._label.HorizontalTextAlignment = value;
+        get => _label.HorizontalTextAlignment;
+        set => _label.HorizontalTextAlignment = value;
     }
     public VerticalAlignment VerticalTextAlignment
     {
-        get => this._label.VerticalTextAlignment;
-        set => this._label.VerticalTextAlignment = value;
+        get => _label.VerticalTextAlignment;
+        set => _label.VerticalTextAlignment = value;
     }
     public IVector2<float> TextPositionOffset
     {
-        get => this._label.TextPositionOffset;
-        set => this._label.TextPositionOffset = value;
+        get => _label.TextPositionOffset;
+        set => _label.TextPositionOffset = value;
     }
     public float TextBorderThickness
     {
-        get => this._label.TextBorderThickness;
-        set => this._label.TextBorderThickness = value;
+        get => _label.TextBorderThickness;
+        set => _label.TextBorderThickness = value;
     }
     public RGBA TextBorderColor
     {
-        get => this._label.TextBorderColor;
-        set => this._label.TextBorderColor = value;
+        get => _label.TextBorderColor;
+        set => _label.TextBorderColor = value;
     }
 
-    public Button(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null, IVector2<float>? textOffset = null, IShared<string>? text = null) : base(elementId, position, size)
+    public Button(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null, IVector2<float>? textOffset = null, string? text = null) : base(elementId, position, size)
     {
 
-        this._background = new Image($"{elementId}.background", this.Position, this.Size);
-        this._label = new Label($"{elementId}.label", this.Position, this.Size, textOffset, text);
+        _background = new Image($"{elementId}.background", Position, Size);
+        _label = new Label($"{elementId}.label", Position, Size, textOffset, text);
     }
 
     protected override void DrawInternal(IWindow window, long timeDelta)
     {
-        this._background.DrawOn(window, timeDelta);
-        this._label.DrawOn(window, timeDelta);
+        _background.DrawOn(window, timeDelta);
+        _label.DrawOn(window, timeDelta);
     }
 
     public override void OnMouseLeft(MouseMovedEvent mouseMovedEvent)

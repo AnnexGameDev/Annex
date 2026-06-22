@@ -8,9 +8,9 @@ public class SolidRectangleContext : DrawContext
     public IVector2<float> Position { get; }
     public IVector2<float> Size { get; }
     public IVector2<float>? RenderOffset { get; init; }
-    public IShared<float>? Rotation { get; init; }
+    public float? Rotation { get; set; }
     public RGBA? BorderColor { get; init; }
-    public IShared<float>? BorderThickness { get; init; }
+    public float? BorderThickness { get; set; }
 
     public SolidRectangleContext(RGBA color, IVector2<float> position, IVector2<float> size) {
         this.FillColor = color;

@@ -9,20 +9,20 @@ public class Label : UIElement, ILabel
 {
     public readonly TextContext RenderText;
 
-    public string Text
+    public virtual string Text
     {
-        get => RenderText.Text.Value;
-        set => RenderText.Text.Value = value;
+        get => RenderText.Text;
+        set => RenderText.Text = value;
     }
     public string Font
     {
-        get => RenderText.Font.Value;
-        set => RenderText.Font.Value = value;
+        get => RenderText.Font;
+        set => RenderText.Font = value;
     }
     public uint FontSize
     {
-        get => RenderText.FontSize!.Value;
-        set => RenderText.FontSize!.Value = value;
+        get => RenderText.FontSize ?? 0;
+        set => RenderText.FontSize = value;
     }
     public RGBA FontColor
     {
@@ -47,8 +47,8 @@ public class Label : UIElement, ILabel
     }
     public float TextBorderThickness
     {
-        get => RenderText.BorderThickness?.Value ?? 0;
-        set => RenderText.BorderThickness?.Set(value);
+        get => RenderText.BorderThickness ?? 0;
+        set => RenderText.BorderThickness = value;
     }
     public RGBA TextBorderColor
     {
@@ -56,17 +56,17 @@ public class Label : UIElement, ILabel
         set => RenderText.BorderColor?.Set(value);
     }
 
-    public Label(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null, IVector2<float>? textOffset = null, IShared<string>? text = null)
+    public Label(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null, IVector2<float>? textOffset = null, string? text = null)
         : base(elementId, position, size)
     {
-        RenderText = new TextContext(text ?? string.Empty.ToShared(), "default.ttf".ToShared())
+        RenderText = new TextContext(text ?? string.Empty, "default.ttf")
         {
             Position = Position,
             PositionOffset = textOffset ?? new Vector2f(),
-            Camera = CameraId.UI.ToString(),
-            FontSize = new Shared<uint>(12),
+            Camera = KnownCamera.UI,
+            FontSize = 12,
             Color = KnownColor.Black,
-            BorderThickness = new Shared<float>(0),
+            BorderThickness = 0,
             BorderColor = KnownColor.Transparent,
         };
     }

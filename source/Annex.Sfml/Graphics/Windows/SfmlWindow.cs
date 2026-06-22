@@ -56,14 +56,14 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
 
         _renderWindow = CreateWindow(title, width, height, 0, 0, windowStyle);
 
-        var defaultCamera = new Camera(CameraId.Default, Width, Height)
+        var defaultCamera = new Camera(KnownCamera.Default, Width, Height)
         {
             Region = new Core.Data.FloatRect(0, 0, 1, 1),
             Center = new Vector2f(Width / 2, Height / 2),
         };
         AddCamera(defaultCamera);
 
-        var uiCamera = new Camera(CameraId.UI, Width, Height)
+        var uiCamera = new Camera(KnownCamera.UI, Width, Height)
         {
             Region = new Core.Data.FloatRect(0, 0, 1, 1),
             Center = new Vector2f(Width / 2, Height / 2),
@@ -138,7 +138,6 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
     #endregion
 
     #region Camera
-    public Camera? GetCamera(CameraId cameraId) => GetCamera(cameraId.ToString());
     public Camera? GetCamera(string cameraId) => _cameraCache.GetCamera(cameraId)?.Camera;
     public void AddCamera(Camera camera) => _cameraCache.AddCamera(camera);
     #endregion
@@ -176,10 +175,10 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
     public void OnKeyboardKeyReleased(object? sender, KeyEventArgs e) => _inputHandler.HandleKeyboardKeyReleased(this, e.Code.ToKeyboardKey());
     public void OnWindowClosed(object? sender, EventArgs e) => _inputHandler.HandleWindowClosed(this);
 
-    public void OnMouseMoved(object? sender, MouseMoveEventArgs e) => _inputHandler.HandleMouseMoved(this, RelatePointTo(e.X, e.Y, CameraId.UI));
+    public void OnMouseMoved(object? sender, MouseMoveEventArgs e) => _inputHandler.HandleMouseMoved(this, RelatePointTo(e.X, e.Y, KnownCamera.UI));
     public void OnMouseScrollWheelMoved(object? sender, MouseWheelScrollEventArgs e) => _inputHandler.HandleMouseScrollWheelMoved(this, e.Delta);
-    public void OnMouseButtonReleased(object? sender, MouseButtonEventArgs e) => _inputHandler.HandleMouseButtonReleased(this, e.Button.ToMouseButton(), RelatePointTo(e.X, e.Y, CameraId.UI));
-    public void OnMouseButtonPressed(object? sender, MouseButtonEventArgs e) => _inputHandler.HandleMouseButtonPressed(this, e.Button.ToMouseButton(), RelatePointTo(e.X, e.Y, CameraId.UI));
+    public void OnMouseButtonReleased(object? sender, MouseButtonEventArgs e) => _inputHandler.HandleMouseButtonReleased(this, e.Button.ToMouseButton(), RelatePointTo(e.X, e.Y, KnownCamera.UI));
+    public void OnMouseButtonPressed(object? sender, MouseButtonEventArgs e) => _inputHandler.HandleMouseButtonPressed(this, e.Button.ToMouseButton(), RelatePointTo(e.X, e.Y, KnownCamera.UI));
     #endregion
 
     #region Canvas
@@ -226,7 +225,7 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
         return Keyboard.IsKeyPressed(key.ToSfmlKeyboardKey());
     }
 
-    public IVector2<float> GetMousePos(CameraId cameraId = CameraId.UI)
+    public IVector2<float> GetMousePos(string cameraId = KnownCamera.UI)
     {
         var mousePos = Mouse.GetPosition(this._renderWindow);
         var camera = this._cameraCache.GetCamera(cameraId);
@@ -253,11 +252,6 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
         return Joystick.GetAxisPosition(controllerId, axis.ToSfml());
     }
     #endregion
-
-    private IVector2<float> RelatePointTo(int x, int y, CameraId cameraId)
-    {
-        return RelatePointTo(x, y, cameraId.ToString());
-    }
 
     private IVector2<float> RelatePointTo(int x, int y, string cameraId)
     {
@@ -312,12 +306,12 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
 
     private (float x, float y) GetCameraPoint(string cameraId, float uiCameraSpaceX, float uiCameraSpaceY)
     {
-        if (cameraId == CameraId.UI.ToString())
+        if (cameraId == KnownCamera.UI)
         {
             return (uiCameraSpaceX, uiCameraSpaceY);
         }
 
-        var uiCamera = GetCamera(CameraId.UI);
+        var uiCamera = GetCamera(KnownCamera.UI);
         var (top, left, bottom, right) = GetCameraBounds(cameraId);
 
         return (
@@ -327,9 +321,6 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
     }
 
     public (float x, float y) GetCameraPoint(string cameraId, MouseButtonPressedEvent @event) => GetCameraPoint(cameraId, @event.WindowX, @event.WindowY);
-    public (float x, float y) GetCameraPoint(CameraId cameraId, MouseButtonPressedEvent @event) => GetCameraPoint(cameraId.ToString(), @event);
     public (float x, float y) GetCameraPoint(string cameraId, MouseButtonReleasedEvent @event) => GetCameraPoint(cameraId, @event.WindowX, @event.WindowY);
-    public (float x, float y) GetCameraPoint(CameraId cameraId, MouseButtonReleasedEvent @event) => GetCameraPoint(cameraId.ToString(), @event);
     public (float x, float y) GetCameraPoint(string cameraId, MouseMovedEvent @event) => GetCameraPoint(cameraId, @event.WindowX, @event.WindowY);
-    public (float x, float y) GetCameraPoint(CameraId cameraId, MouseMovedEvent @event) => GetCameraPoint(cameraId.ToString(), @event);
 }

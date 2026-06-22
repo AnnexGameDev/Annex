@@ -33,14 +33,14 @@ public class ListView : Image, IParentElement
 
     public string? SelectedItemTextureId
     {
-        get => _selectionTexture.TextureId.Value;
-        set => _selectionTexture.TextureId.Set(value ?? string.Empty);
+        get => _selectionTexture.TextureId;
+        set => _selectionTexture.TextureId = value ?? string.Empty;
     }
 
     public string HoverItemTextureId
     {
-        get => _hoverItemTexture.TextureId.Value;
-        set => _hoverItemTexture.TextureId.Set(value);
+        get => _hoverItemTexture.TextureId;
+        set => _hoverItemTexture.TextureId = value;
     }
 
     private int _bottomVisibleIndex => _topVisibleIndex + _maxVisibleItemsCount - 1;
@@ -53,15 +53,15 @@ public class ListView : Image, IParentElement
     public ListView(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null)
         : base(elementId, position, size)
     {
-        _selectionTexture = new TextureContext(string.Empty.ToShared())
+        _selectionTexture = new TextureContext(string.Empty)
         {
             RenderSize = new Vector2f(),
-            Camera = CameraId.UI.ToString()
+            Camera = KnownCamera.UI
         };
-        _hoverItemTexture = new TextureContext(string.Empty.ToShared())
+        _hoverItemTexture = new TextureContext(string.Empty)
         {
             RenderSize = new Vector2f(),
-            Camera = CameraId.UI.ToString()
+            Camera = KnownCamera.UI
         };
     }
 
@@ -72,14 +72,14 @@ public class ListView : Image, IParentElement
 
     public IUIElement? GetElementById(string id)
     {
-        if (this.ElementID == id)
+        if (ElementID == id)
         {
             return this;
         }
 
-        for (int i = 0; i < this._children.Count; i++)
+        for (int i = 0; i < _children.Count; i++)
         {
-            var child = this._children[i];
+            var child = _children[i];
             if (child.ElementID == id)
             {
                 return child;
@@ -100,12 +100,12 @@ public class ListView : Image, IParentElement
 
     public IUIElement? GetFirstVisibleElement(float x, float y)
     {
-        if (!this.IsInBounds(x, y))
+        if (!IsInBounds(x, y))
             return null;
 
-        for (int i = this._children.Count - 1; i >= 0; i--)
+        for (int i = _children.Count - 1; i >= 0; i--)
         {
-            var child = this._children[i];
+            var child = _children[i];
 
             if (!child.Visible)
             {
@@ -169,7 +169,7 @@ public class ListView : Image, IParentElement
 
     private void OnItemHovered(MouseMovedEvent mouseMovedEvent)
     {
-        float y = mouseMovedEvent.WindowY - this.Position.Y;
+        float y = mouseMovedEvent.WindowY - Position.Y;
         int hoveredIndex = _topVisibleIndex + (int)(y / LineHeight);
 
         if (hoveredIndex >= 0 && hoveredIndex < _children.Count)
@@ -194,25 +194,25 @@ public class ListView : Image, IParentElement
         _isHoveringAnItem = false;
     }
 
-    public void AddItem(IShared<string> text)
+    public void AddItem(string text)
     {
         var item = CreateItem(text);
-        this._children.Add(item);
+        _children.Add(item);
     }
 
     public void Clear()
     {
-        this._children.Clear();
+        _children.Clear();
     }
 
-    private ListViewItem CreateItem(IShared<string> text)
+    private ListViewItem CreateItem(string text)
     {
-        var item = new ListViewItem(this, new Vector2f(this.Size.X, this.LineHeight), new PrefixedString("", text))
+        var item = new ListViewItem(this, new Vector2f(Size.X, LineHeight), new PrefixedString("", text))
         {
             TrySelectItem = OnItemRequestedTrySelectItem,
             KeyPressed = OnKeyPressed,
         };
-        item.SetIndex(this._children.Count);
+        item.SetIndex(_children.Count);
         return item;
     }
 
@@ -257,7 +257,7 @@ public class ListView : Image, IParentElement
 
         // Select the new item
         SelectedIndex = index;
-        var selectedItem = this._children[SelectedIndex];
+        var selectedItem = _children[SelectedIndex];
         selectedItem.Select();
 
         // Update the selection background
@@ -306,7 +306,7 @@ public class ListView : Image, IParentElement
 
         public Action<int>? TrySelectItem { get; set; }
         public Action<KeyboardKey>? KeyPressed { get; set; }
-        private ListView _parent;
+        private readonly ListView _parent;
         private readonly PrefixedString _text;
 
         public ListViewItem(ListView parent, IVector2<float> itemSize, PrefixedString text)
@@ -314,7 +314,7 @@ public class ListView : Image, IParentElement
                   position: new OffsetVector2f(new OffsetVector2f(parent.Position, parent._renderOffset), new ScalingVector2f(itemSize, 0, 0)),
                   size: itemSize,
                   textOffset: new ScalingVector2f(itemSize, 0, 0.5f),
-                  text: text
+                  text: text.Value
                 )
         {
             HorizontalTextAlignment = HorizontalAlignment.Left;
@@ -335,7 +335,6 @@ public class ListView : Image, IParentElement
         {
             RefreshPosition();
             FontColor = (IsSelected ? _parent.SelectedFontColor : _parent.FontColor) ?? KnownColor.Black;
-
             _text.Prefix = _parent.ShowIndexPrefix ? $"{Index}: " : string.Empty;
         }
 
@@ -366,6 +365,12 @@ public class ListView : Image, IParentElement
             RefreshView();
         }
 
+        protected override void DrawInternal(IWindow window, long timeDelta)
+        {
+            Text = _text.Value;
+            base.DrawInternal(window, timeDelta);
+        }
+
         internal void Select()
         {
             IsSelected = true;
@@ -382,16 +387,16 @@ public class ListView : Image, IParentElement
 
     private class PrefixedString : IShared<string>
     {
-        private IShared<string> _originalValue;
+        private string _originalValue;
         public string Prefix { get; set; }
 
         public string Value
         {
-            get => Prefix + _originalValue.Value;
+            get => Prefix + _originalValue;
             set => Set(value);
         }
 
-        public PrefixedString(string prefix, IShared<string> value)
+        public PrefixedString(string prefix, string value)
         {
             Prefix = prefix;
             _originalValue = value;
@@ -399,7 +404,7 @@ public class ListView : Image, IParentElement
 
         public void Set(string value)
         {
-            _originalValue.Set(value);
+            _originalValue = value;
         }
     }
 }

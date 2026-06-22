@@ -16,8 +16,8 @@ public class ContextMenu : Container, IParentElement
         this._background = new SolidRectangleContext(KnownColor.White, this.Position, this.Size)
         {
             BorderColor = KnownColor.Black,
-            BorderThickness = 1.0f.ToShared(),
-            Camera = CameraId.UI.ToString()
+            BorderThickness = 1.0f,
+            Camera = KnownCamera.UI
         };
 
         // We need the widths to be consistent throughout
@@ -75,7 +75,7 @@ public class ContextMenu : Container, IParentElement
 
             this._hoveredBackground = new SolidRectangleContext(KnownColor.Teal, this.Position, this.Size)
             {
-                Camera = CameraId.UI.ToString()
+                Camera = KnownCamera.UI
             };
 
             this.HorizontalTextAlignment = HorizontalAlignment.Left;

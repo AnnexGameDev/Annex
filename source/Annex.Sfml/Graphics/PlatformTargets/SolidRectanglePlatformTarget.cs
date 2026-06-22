@@ -46,9 +46,9 @@ internal class SolidRectanglePlatformTarget : TransformablePlatformTarget
         }
 
         const float defaultThickness = 0;
-        if (_rectangle.OutlineThickness != (_rectangleContext.BorderThickness?.Value ?? defaultThickness))
+        if (_rectangle.OutlineThickness != (_rectangleContext.BorderThickness ?? defaultThickness))
         {
-            _rectangle.OutlineThickness = (_rectangleContext.BorderThickness?.Value ?? defaultThickness);
+            _rectangle.OutlineThickness = (_rectangleContext.BorderThickness ?? defaultThickness);
         }
     }
 

@@ -1,5 +1,4 @@
-﻿using Annex.Core.Assets;
-using Annex.Core.Data;
+﻿using Annex.Core.Data;
 using Annex.Core.Graphics.Contexts;
 using Annex.Core.Input;
 using Annex.Core.Input.InputEvents;
@@ -31,12 +30,8 @@ public interface IWindow : IDisposable
     // Cameras
     (float top, float left, float bottom, float right) GetCameraBounds(string cameraId);
     (float x, float y) GetCameraPoint(string cameraId, MouseButtonPressedEvent @event);
-    (float x, float y) GetCameraPoint(CameraId cameraId, MouseButtonPressedEvent @event);
     (float x, float y) GetCameraPoint(string cameraId, MouseButtonReleasedEvent @event);
-    (float x, float y) GetCameraPoint(CameraId cameraId, MouseButtonReleasedEvent @event);
     (float x, float y) GetCameraPoint(string cameraId, MouseMovedEvent @event);
-    (float x, float y) GetCameraPoint(CameraId cameraId, MouseMovedEvent @event);
-    Camera? GetCamera(CameraId cameraId);
     Camera? GetCamera(string cameraId);
     void AddCamera(Camera camera);
 
@@ -44,7 +39,7 @@ public interface IWindow : IDisposable
     void SetMouseImage(object img, uint sizeX, uint sizeY, uint offsetX, uint offsetY);
 
     // Mouse
-    IVector2<float> GetMousePos(CameraId cameraId = CameraId.UI);
+    IVector2<float> GetMousePos(string cameraId = KnownCamera.UI);
     bool IsMouseButtonDown(MouseButton button);
 
     // Keyboard

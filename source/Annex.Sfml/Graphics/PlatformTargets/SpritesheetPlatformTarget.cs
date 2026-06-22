@@ -11,12 +11,12 @@ internal class SpritesheetPlatformTarget : SpritePlatformTarget<SpritesheetConte
 
     protected override void UpdateIfNeeded()
     {
-        if (string.IsNullOrEmpty(Context.TextureId.Value))
+        if (string.IsNullOrEmpty(Context.TextureId))
         {
             return;
         }
 
-        var texture = UpdateTexture(Context.TextureId.Value);
+        var texture = UpdateTexture(Context.TextureId);
 
         int frameSizeX = (int)texture.Size.X / Context.NumColumns;
         int frameSizeY = (int)texture.Size.Y / Context.NumRows;

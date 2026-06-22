@@ -88,9 +88,9 @@ internal class TextPlatformTarget : PlatformTarget
     private bool UpdateTextTextureIfNeeded()
     {
         bool update = _invalidated;
-        update |= UpdateSuperSampleScale(_textContext.SuperSampleCount?.Value ?? 1);
-        update |= UpdateFont(_textContext.Font.Value);
-        update |= UpdateText(_textContext.Text.Value);
+        update |= UpdateSuperSampleScale(_textContext.SuperSampleCount ?? 1);
+        update |= UpdateFont(_textContext.Font);
+        update |= UpdateText(_textContext.Text);
         update |= UpdateFontSize(_textContext.FontSize);
         update |= UpdateFontColor(_textContext.Color);
         update |= UpdateBorderThickness(_textContext.BorderThickness);
@@ -108,10 +108,10 @@ internal class TextPlatformTarget : PlatformTarget
         return false;
     }
 
-    private void UpdateRotation(IShared<float>? rotation)
+    private void UpdateRotation(float? rotation)
     {
         const float DefaultRotation = 0;
-        var finalRotation = rotation?.Value ?? DefaultRotation;
+        var finalRotation = rotation ?? DefaultRotation;
         if (_renderedText_Sprite.Rotation != finalRotation)
         {
             _renderedText_Sprite.Rotation = finalRotation;
@@ -152,10 +152,10 @@ internal class TextPlatformTarget : PlatformTarget
         return false;
     }
 
-    private bool UpdateBorderThickness(IShared<float>? borderThickness)
+    private bool UpdateBorderThickness(float? borderThickness)
     {
         const float DefaultBorderThickness = 0;
-        float finalBorderThickness = borderThickness?.Value ?? DefaultBorderThickness;
+        float finalBorderThickness = borderThickness ?? DefaultBorderThickness;
         if (_text.OutlineThickness != finalBorderThickness)
         {
             _text.OutlineThickness = finalBorderThickness;
@@ -174,10 +174,10 @@ internal class TextPlatformTarget : PlatformTarget
         return false;
     }
 
-    private bool UpdateFontSize(IShared<uint>? fontSize)
+    private bool UpdateFontSize(uint? fontSize)
     {
         const uint DefaultFontSize = 12;
-        uint finalFontSize = fontSize?.Value ?? DefaultFontSize;
+        uint finalFontSize = fontSize ?? DefaultFontSize;
         if (_text.CharacterSize != finalFontSize)
         {
             _text.CharacterSize = finalFontSize;

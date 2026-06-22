@@ -9,7 +9,7 @@ public class Camera
     private uint _originalResolutionWidth;
     private Vector2f _size = new Vector2f();
 
-    public string Id { get; }
+    public string CameraId { get; }
     public FloatRect Region { get; set; } = new(0, 0, 1, 1);
     public IReadonlyVector2<float> Size => _size;
     public IVector2<float> Center { get; set; } = new Vector2f();
@@ -18,18 +18,14 @@ public class Camera
     private uint _currentZoomLevel = 1;
     private uint _maxZoomLevel = uint.MaxValue;
 
-    public IShared<float> TextRenderingSuperSampleScaleBasedOnZoom { get; } = new Shared<float>(1);
+    public float TextRenderingSuperSampleScaleBasedOnZoom { get; private set; } = 1;
 
-    public Camera(string id, uint width, uint height)
+    public Camera(string cameraId, uint width, uint height)
     {
-        Id = id;
+        CameraId = cameraId;
         _originalHeight = height;
         _originalWidth = _originalResolutionWidth = width;
         _size.Set(width, height);
-    }
-
-    public Camera(CameraId id, uint width, uint height) : this(id.ToString(), width, height)
-    {
     }
 
     public void Zoom(double delta)
@@ -72,7 +68,7 @@ public class Camera
         const float increment = 0.5f;
         float superSampleScale = Math.Max((_originalResolutionWidth / Size.X), 1);
         float superSampleScaleInIncrement = (float)Math.Ceiling(superSampleScale / increment) * increment;
-        TextRenderingSuperSampleScaleBasedOnZoom.Set(superSampleScaleInIncrement);
+        TextRenderingSuperSampleScaleBasedOnZoom = superSampleScaleInIncrement;
     }
 
     public void SetMaxZoomLevel(uint zoomLevel)
