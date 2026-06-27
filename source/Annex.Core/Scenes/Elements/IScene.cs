@@ -7,6 +7,8 @@ namespace Annex.Core.Scenes.Elements;
 public interface IScene : IUIElement, IAddableParentElement
 {
     AssetRegistry Assets { get; }
+    IUIElement? CurrentFocusElement { get; }
+    IUIElement? CurrentHoverElement { get; }
 
     void OnLeave(OnSceneLeaveEventArgs onSceneLeaveEventArgs);
     void OnEnter(OnSceneEnterEventArgs onSceneEnterEventArgs);

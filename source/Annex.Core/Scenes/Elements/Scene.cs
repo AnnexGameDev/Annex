@@ -13,12 +13,17 @@ public class Scene : Container, IScene
     /// <summary>
     /// The IUIElement that currently has the focus
     /// </summary>
-    private IUIElement? _focusElement;
-    public IUIElement? FocusElement
+    public IUIElement? CurrentFocusElement
     {
-        get => this._focusElement;
+        get;
         // We don't want ourselves as the focus element. Otherwise we'll stackoverflow in the UI handlers
-        private set => this._focusElement = value == this ? null : value;
+        private set => field = value == this ? null : value;
+    }
+
+    public IUIElement? CurrentHoverElement
+    {
+        get;
+        private set => field = value == this ? null : value;
     }
 
     public Scene(
@@ -40,12 +45,12 @@ public class Scene : Container, IScene
 
     public virtual void OnKeyboardKeyPressed(IWindow window, KeyboardKeyPressedEvent keyboardKeyPressedEvent)
     {
-        this.FocusElement?.OnKeyboardKeyPressed(keyboardKeyPressedEvent);
+        CurrentFocusElement?.OnKeyboardKeyPressed(keyboardKeyPressedEvent);
     }
 
     public virtual void OnKeyboardKeyReleased(IWindow window, KeyboardKeyReleasedEvent keyboardKeyReleasedEvent)
     {
-        this.FocusElement?.OnKeyboardKeyReleased(keyboardKeyReleasedEvent);
+        CurrentFocusElement?.OnKeyboardKeyReleased(keyboardKeyReleasedEvent);
     }
 
     public virtual void OnWindowClosed(IWindow window)
@@ -66,30 +71,29 @@ public class Scene : Container, IScene
 
     public virtual void OnMouseButtonReleased(IWindow window, MouseButtonReleasedEvent mouseButtonReleasedEvent)
     {
-        if (this.FocusElement?.IsInBounds(mouseButtonReleasedEvent.WindowX, mouseButtonReleasedEvent.WindowY) == true)
+        if (CurrentFocusElement?.IsInBounds(mouseButtonReleasedEvent.WindowX, mouseButtonReleasedEvent.WindowY) == true)
         {
-            this.FocusElement?.OnMouseButtonReleased(mouseButtonReleasedEvent);
+            CurrentFocusElement?.OnMouseButtonReleased(mouseButtonReleasedEvent);
         }
     }
 
-    private IUIElement? _lastMouseMovedElement = null;
     public virtual void OnMouseMoved(IWindow window, MouseMovedEvent mouseMovedEvent)
     {
-        var newLastMovedElement = this.GetFirstVisibleElement(mouseMovedEvent.WindowX, mouseMovedEvent.WindowY);
-        if (this._lastMouseMovedElement != newLastMovedElement)
+        var newLastMovedElement = GetFirstVisibleElement(mouseMovedEvent.WindowX, mouseMovedEvent.WindowY);
+        if (CurrentHoverElement != newLastMovedElement)
         {
-            this._lastMouseMovedElement?.OnMouseLeft(mouseMovedEvent);
+            CurrentHoverElement?.OnMouseLeft(mouseMovedEvent);
         }
-        this._lastMouseMovedElement = newLastMovedElement;
-        this._lastMouseMovedElement?.OnMouseMoved(mouseMovedEvent);
+        CurrentHoverElement = newLastMovedElement;
+        CurrentHoverElement?.OnMouseMoved(mouseMovedEvent);
     }
 
     public virtual void OnMouseScrollWheelMoved(IWindow window, MouseScrollWheelMovedEvent mouseScrollWheelMovedEvent)
     {
         var mousePosition = window.GetMousePos(KnownCamera.UI);
-        if (this.FocusElement?.IsInBounds(mousePosition.X, mousePosition.Y) == true)
+        if (CurrentFocusElement?.IsInBounds(mousePosition.X, mousePosition.Y) == true)
         {
-            this.FocusElement?.OnMouseScrollWheelMoved(mouseScrollWheelMovedEvent);
+            CurrentFocusElement?.OnMouseScrollWheelMoved(mouseScrollWheelMovedEvent);
         }
     }
 
@@ -98,11 +102,11 @@ public class Scene : Container, IScene
 
     public void SetFocus(IUIElement? newFocusElement)
     {
-        if (this.FocusElement != newFocusElement)
+        if (CurrentFocusElement != newFocusElement)
         {
-            this.FocusElement?.OnLostFocus();
-            this.FocusElement = newFocusElement;
-            this.FocusElement?.OnGainedFocus();
+            CurrentFocusElement?.OnLostFocus();
+            CurrentFocusElement = newFocusElement;
+            CurrentFocusElement?.OnGainedFocus();
         }
     }
 
@@ -111,7 +115,7 @@ public class Scene : Container, IScene
         base.AddChild(element);
         if (focus)
         {
-            FocusElement = element;
+            CurrentFocusElement = element;
         }
     }
 
@@ -119,9 +123,9 @@ public class Scene : Container, IScene
     {
         base.RemoveChild(elementId);
 
-        if (FocusElement?.ElementID == elementId)
+        if (CurrentFocusElement?.ElementID == elementId)
         {
-            FocusElement = null;
+            CurrentFocusElement = null;
         }
     }
 
