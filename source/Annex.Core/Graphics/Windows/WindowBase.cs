@@ -69,18 +69,26 @@ public abstract class WindowBase
 
     public void LoadScene<T>(object? parameters = null, bool disposeOldScene = true) where T : IScene
     {
-        var newScene = _container.Resolve<T>();
+        LoadScene(typeof(T), parameters, disposeOldScene);
+    }
+
+    public void LoadScene(Type sceneType, object? parameters = null, bool disposeOldScene = true)
+    {
+        if (!sceneType.IsAssignableTo(typeof(IScene)))
+        {
+            throw new ArgumentException($"Unable to cast {sceneType.Name} to a Scene");
+        }
+        IScene? newScene = _container.Resolve(sceneType) as IScene;
 
         // If the new scene can't be resolved, don't switch.
         if (newScene == null)
         {
-            Log.Error($"Unable to resolve scene {typeof(T).Name}.");
+            Log.Error($"Unable to resolve scene {sceneType.Name}.");
             return;
         }
 
         LoadScene(newScene, parameters, disposeOldScene);
     }
-
 
     private class NullScene : Scene
     {
