@@ -15,10 +15,10 @@ public abstract class UIElement : IUIElement
 
     public UIElement(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null)
     {
-        this.ElementID = elementId ?? string.Empty;
-        this.Position = position ?? new Vector2f();
-        this.Size = size ?? new Vector2f();
-        this.Visible = true;
+        ElementID = elementId ?? string.Empty;
+        Position = position ?? new Vector2f();
+        Size = size ?? new Vector2f();
+        Visible = true;
     }
     private bool disposedValue = false;
 
@@ -34,8 +34,8 @@ public abstract class UIElement : IUIElement
 
     public void DrawOn(IWindow window, long timeDelta)
     {
-        if (this.Visible)
-            this.DrawInternal(window, timeDelta);
+        if (Visible)
+            DrawInternal(window, timeDelta);
     }
 
     protected abstract void DrawInternal(IWindow canvas, long timeDelta);
@@ -71,57 +71,57 @@ public abstract class UIElement : IUIElement
 
     public bool IsInBounds(float x, float y)
     {
-        if (x < this.Position.X || x > this.Position.X + this.Size.X)
+        if (x < Position.X || x > Position.X + Size.X)
             return false;
-        if (y < this.Position.Y || y > this.Position.Y + this.Size.Y)
+        if (y < Position.Y || y > Position.Y + Size.Y)
             return false;
         return !InputTransparent;
     }
 
     public virtual void OnLostFocus()
     {
-        this.IsFocused = false;
-        this.OnElementLostFocus?.Invoke(this, EventArgs.Empty);
+        IsFocused = false;
+        OnElementLostFocus?.Invoke(this, EventArgs.Empty);
     }
 
     public virtual void OnGainedFocus()
     {
-        this.IsFocused = true;
-        this.OnElementGainedFocus?.Invoke(this, EventArgs.Empty);
+        IsFocused = true;
+        OnElementGainedFocus?.Invoke(this, EventArgs.Empty);
     }
 
     public virtual void OnMouseButtonPressed(MouseButtonPressedEvent mouseButtonPressedEvent)
     {
-        this.OnElementMouseButtonPressed?.Invoke(this, mouseButtonPressedEvent);
+        OnElementMouseButtonPressed?.Invoke(this, mouseButtonPressedEvent);
     }
 
     public virtual void OnMouseButtonReleased(MouseButtonReleasedEvent mouseButtonReleasedEvent)
     {
-        this.OnElementMouseButtonReleased?.Invoke(this, mouseButtonReleasedEvent);
+        OnElementMouseButtonReleased?.Invoke(this, mouseButtonReleasedEvent);
     }
 
     public virtual void OnMouseMoved(MouseMovedEvent mouseMovedEvent)
     {
-        this.OnElementMouseMoved?.Invoke(this, mouseMovedEvent);
+        OnElementMouseMoved?.Invoke(this, mouseMovedEvent);
     }
 
     public virtual void OnKeyboardKeyPressed(KeyboardKeyPressedEvent keyboardKeyPressedEvent)
     {
-        this.OnElementKeyboardKeyPressed?.Invoke(this, keyboardKeyPressedEvent);
+        OnElementKeyboardKeyPressed?.Invoke(this, keyboardKeyPressedEvent);
     }
 
     public virtual void OnKeyboardKeyReleased(KeyboardKeyReleasedEvent keyboardKeyReleasedEvent)
     {
-        this.OnElementKeyboardKeyReleased?.Invoke(this, keyboardKeyReleasedEvent);
+        OnElementKeyboardKeyReleased?.Invoke(this, keyboardKeyReleasedEvent);
     }
 
     public virtual void OnMouseScrollWheelMoved(MouseScrollWheelMovedEvent mouseScrollWheelMovedEvent)
     {
-        this.OnElementMouseScrollWheelMoved?.Invoke(this, mouseScrollWheelMovedEvent);
+        OnElementMouseScrollWheelMoved?.Invoke(this, mouseScrollWheelMovedEvent);
     }
 
     public virtual void OnMouseLeft(MouseMovedEvent mouseMovedEvent)
     {
-        this.OnElementMouseLeft?.Invoke(this, mouseMovedEvent);
+        OnElementMouseLeft?.Invoke(this, mouseMovedEvent);
     }
 }

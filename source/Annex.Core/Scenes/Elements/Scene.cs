@@ -59,6 +59,12 @@ public class Scene : Container, IScene
 
     public virtual void OnMouseButtonPressed(IWindow window, MouseButtonPressedEvent mouseButtonPressedEvent)
     {
+        base.OnMouseButtonPressed(mouseButtonPressedEvent);
+        if (mouseButtonPressedEvent.Handled)
+        {
+            return;
+        }
+
         var newFocusElement = GetFirstVisibleElement(mouseButtonPressedEvent.WindowX, mouseButtonPressedEvent.WindowY);
         newFocusElement?.OnMouseButtonPressed(mouseButtonPressedEvent);
 
@@ -71,6 +77,12 @@ public class Scene : Container, IScene
 
     public virtual void OnMouseButtonReleased(IWindow window, MouseButtonReleasedEvent mouseButtonReleasedEvent)
     {
+        base.OnMouseButtonReleased(mouseButtonReleasedEvent);
+        if (mouseButtonReleasedEvent.Handled)
+        {
+            return;
+        }
+
         if (CurrentFocusElement?.IsInBounds(mouseButtonReleasedEvent.WindowX, mouseButtonReleasedEvent.WindowY) == true)
         {
             CurrentFocusElement?.OnMouseButtonReleased(mouseButtonReleasedEvent);
@@ -86,6 +98,7 @@ public class Scene : Container, IScene
         }
         CurrentHoverElement = newLastMovedElement;
         CurrentHoverElement?.OnMouseMoved(mouseMovedEvent);
+        base.OnMouseMoved(mouseMovedEvent);
     }
 
     public virtual void OnMouseScrollWheelMoved(IWindow window, MouseScrollWheelMovedEvent mouseScrollWheelMovedEvent)
