@@ -225,7 +225,7 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
         return Keyboard.IsKeyPressed(key.ToSfmlKeyboardKey());
     }
 
-    public IVector2<float> GetMousePos(string cameraId = KnownCamera.UI)
+    public Position GetMousePosition(string cameraId = KnownCamera.UI)
     {
         var mousePos = Mouse.GetPosition(this._renderWindow);
         var camera = this._cameraCache.GetCamera(cameraId);
@@ -253,7 +253,7 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
     }
     #endregion
 
-    private IVector2<float> RelatePointTo(int x, int y, string cameraId)
+    private Position RelatePointTo(int x, int y, string cameraId)
     {
         var camera = _cameraCache.GetCamera(cameraId);
 
@@ -264,7 +264,7 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
             throw new NullReferenceException($"{nameof(_renderWindow)} is null when performing {nameof(RelatePointTo)}");
 
         var viewPos = _renderWindow.MapPixelToCoords(new SFML.System.Vector2i(x, y), camera.View);
-        return new Vector2f(viewPos.X, viewPos.Y);
+        return new Position(viewPos.X, viewPos.Y);
     }
 
     public (float top, float left, float bottom, float right) GetCameraBounds(string cameraId)

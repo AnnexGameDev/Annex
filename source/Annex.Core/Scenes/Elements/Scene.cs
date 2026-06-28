@@ -103,7 +103,7 @@ public class Scene : Container, IScene
 
     public virtual void OnMouseScrollWheelMoved(IWindow window, MouseScrollWheelMovedEvent mouseScrollWheelMovedEvent)
     {
-        var mousePosition = window.GetMousePos(KnownCamera.UI);
+        var mousePosition = window.GetMousePosition(KnownCamera.UI);
         if (CurrentFocusElement?.IsInBounds(mousePosition.X, mousePosition.Y) == true)
         {
             CurrentFocusElement?.OnMouseScrollWheelMoved(mouseScrollWheelMovedEvent);

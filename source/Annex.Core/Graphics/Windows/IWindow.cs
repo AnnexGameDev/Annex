@@ -39,7 +39,7 @@ public interface IWindow : IDisposable
     void SetMouseImage(object img, uint sizeX, uint sizeY, uint offsetX, uint offsetY);
 
     // Mouse
-    IVector2<float> GetMousePos(string cameraId = KnownCamera.UI);
+    Position GetMousePosition(string cameraId = KnownCamera.UI);
     bool IsMouseButtonDown(MouseButton button);
 
     // Keyboard

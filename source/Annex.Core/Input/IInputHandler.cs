@@ -13,9 +13,9 @@ public interface IInputHandler
     void HandleKeyboardKeyPressed(IWindow window, KeyboardKey key);
     void HandleKeyboardKeyReleased(IWindow window, KeyboardKey key);
 
-    void HandleMouseButtonPressed(IWindow window, MouseButton button, IVector2<float> position);
-    void HandleMouseButtonReleased(IWindow window, MouseButton button, IVector2<float> position);
-    void HandleMouseMoved(IWindow window, IVector2<float> position);
+    void HandleMouseButtonPressed(IWindow window, MouseButton button, Position position);
+    void HandleMouseButtonReleased(IWindow window, MouseButton button, Position position);
+    void HandleMouseMoved(IWindow window, Position position);
     void HandleMouseScrollWheelMoved(IWindow window, double delta);
 
     void HandleWindowGainedFocus(IWindow window);

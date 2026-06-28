@@ -71,7 +71,7 @@ internal class InputHandler : IInputHandler
         window.Scene.OnWindowClosed(window);
     }
 
-    public void HandleMouseButtonPressed(IWindow window, MouseButton button, IVector2<float> position)
+    public void HandleMouseButtonPressed(IWindow window, MouseButton button, Position position)
     {
         if (!InputShouldBeProcessed)
         {
@@ -85,7 +85,7 @@ internal class InputHandler : IInputHandler
         window.Scene.OnMouseButtonPressed(window, mouseButtonPressedEvent);
     }
 
-    public void HandleMouseButtonReleased(IWindow window, MouseButton button, IVector2<float> position)
+    public void HandleMouseButtonReleased(IWindow window, MouseButton button, Position position)
     {
         if (!InputShouldBeProcessed)
         {
@@ -99,7 +99,7 @@ internal class InputHandler : IInputHandler
         window.Scene.OnMouseButtonReleased(window, mouseButtonReleasedEvent);
     }
 
-    public void HandleMouseMoved(IWindow window, IVector2<float> position)
+    public void HandleMouseMoved(IWindow window, Position position)
     {
         if (!InputShouldBeProcessed)
         {
