@@ -128,7 +128,7 @@ public class Scene : Container, IScene
         base.AddChild(element);
         if (focus)
         {
-            CurrentFocusElement = element;
+            SetFocus(element);
         }
     }
 
