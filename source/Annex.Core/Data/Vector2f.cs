@@ -44,10 +44,18 @@ public class Vector2f : VectorBase<float>
         return sum;
     }
 
+    public static IVector2<float> CenterInside(float containerX, float containerY, float elementToCenterX, float elementToCenterY)
+    {
+        return new Vector2f((containerX - elementToCenterX) / 2, (containerY - elementToCenterY) / 2);
+    }
+
     public static IVector2<float> CenterInside(IVector2<float> container, IVector2<float> elementToCenter)
     {
-        var halfContainerSize = new ScalingVector2f(container, 0.5f, 0.5f);
-        var negativeHalfElementSize = new ScalingVector2f(elementToCenter, -0.5f, -0.5f);
-        return new OffsetVector2f(halfContainerSize, negativeHalfElementSize);
+        return CenterInside(container.X, container.Y, elementToCenter.X, elementToCenter.Y);
+    }
+
+    public static IVector2<float> CenterInside(IVector2<float> container, float elementToCenterX, float elementToCenterY)
+    {
+        return CenterInside(container.X, container.Y, elementToCenterX, elementToCenterY);
     }
 }
