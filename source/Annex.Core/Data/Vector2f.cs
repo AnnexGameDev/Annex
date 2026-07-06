@@ -46,7 +46,10 @@ public class Vector2f : VectorBase<float>
 
     public static IVector2<float> CenterInside(float containerX, float containerY, float elementToCenterX, float elementToCenterY)
     {
-        return new Vector2f((containerX - elementToCenterX) / 2, (containerY - elementToCenterY) / 2);
+        return new Vector2f(
+            Center(containerX, elementToCenterX), 
+            Center(containerY, elementToCenterY)
+        );
     }
 
     public static IVector2<float> CenterInside(IVector2<float> container, IVector2<float> elementToCenter)
@@ -57,5 +60,10 @@ public class Vector2f : VectorBase<float>
     public static IVector2<float> CenterInside(IVector2<float> container, float elementToCenterX, float elementToCenterY)
     {
         return CenterInside(container.X, container.Y, elementToCenterX, elementToCenterY);
+    }
+
+    public static float Center(float x1, float x2)
+    {
+        return (x1 - x2) / 2;
     }
 }

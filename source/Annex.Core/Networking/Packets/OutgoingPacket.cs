@@ -8,7 +8,7 @@ public class OutgoingPacket : IPacket
     private readonly BinaryWriter _writer;
     public readonly string RequestId;
 
-    public long Length => this._memoryStream.Length;
+    public long Length => _memoryStream.Length;
 
     public int PacketId { get; }
 
@@ -17,28 +17,28 @@ public class OutgoingPacket : IPacket
     [Conditional("DEBUG")]
     public void StartTrace(string id) {
         Console.WriteLine($"START {id}");
-        this._traceId = id;
+        _traceId = id;
     }
 
     [Conditional("DEBUG")]
     public void StopTrace() {
-        Console.WriteLine($"END {this._traceId}");
-        this._traceId = null;
+        Console.WriteLine($"END {_traceId}");
+        _traceId = null;
     }
 
     [Conditional("DEBUG")]
     public void TraceWrite(dynamic value) {
-        if (this._traceId != null)
+        if (_traceId != null)
         {
             Console.WriteLine(value);
         }
     }
 
     private OutgoingPacket(int packetId, string requestId) {
-        this._memoryStream = new MemoryStream();
-        this._writer = new BinaryWriter(this._memoryStream);
-        this.PacketId = packetId;
-        this.RequestId = requestId;
+        _memoryStream = new MemoryStream();
+        _writer = new BinaryWriter(_memoryStream);
+        PacketId = packetId;
+        RequestId = requestId;
         Write(RequestId);
     }
 
@@ -49,174 +49,174 @@ public class OutgoingPacket : IPacket
     }
 
     public byte[] Data() {
-        return this._memoryStream.ToArray();
+        return _memoryStream.ToArray();
     }
 
     public void Write(bool data) {
-        this._writer.Write(data);
-        this.TraceWrite(data);
+        _writer.Write(data);
+        TraceWrite(data);
     }
 
     public void Write(byte[] data) {
-        this._writer.Write(data.Length);
-        this._writer.Write(data);
-        this.TraceWrite(data.Length + " bytes");
+        _writer.Write(data.Length);
+        _writer.Write(data);
+        TraceWrite(data.Length + " bytes");
     }
 
     public void Write(decimal value) {
-        this._writer.Write(value);
-        this.TraceWrite(value);
+        _writer.Write(value);
+        TraceWrite(value);
     }
 
     public void Write(float value) {
-        this._writer.Write(value);
-        this.TraceWrite(value);
+        _writer.Write(value);
+        TraceWrite(value);
     }
 
     public void Write(double value) {
-        this._writer.Write(value);
-        this.TraceWrite(value);
+        _writer.Write(value);
+        TraceWrite(value);
     }
 
     public void Write(string value) {
-        this._writer.Write(value);
-        this.TraceWrite(value);
+        _writer.Write(value);
+        TraceWrite(value);
     }
 
     public void Write(char value) {
-        this._writer.Write(value);
-        this.TraceWrite(value);
+        _writer.Write(value);
+        TraceWrite(value);
     }
 
     public void Write(ulong value) {
-        this._writer.Write(value);
-        this.TraceWrite(value);
+        _writer.Write(value);
+        TraceWrite(value);
     }
 
     public void Write(long value) {
-        this._writer.Write(value);
-        this.TraceWrite(value);
+        _writer.Write(value);
+        TraceWrite(value);
     }
 
     public void Write(uint value) {
-        this._writer.Write(value);
-        this.TraceWrite(value);
+        _writer.Write(value);
+        TraceWrite(value);
     }
 
     public void Write(int value) {
-        this._writer.Write(value);
-        this.TraceWrite(value);
+        _writer.Write(value);
+        TraceWrite(value);
     }
 
     public void Write(ushort value) {
-        this._writer.Write(value);
-        this.TraceWrite(value);
+        _writer.Write(value);
+        TraceWrite(value);
     }
 
     public void Write(short value) {
-        this._writer.Write(value);
-        this.TraceWrite(value);
+        _writer.Write(value);
+        TraceWrite(value);
     }
 
     public void Write(sbyte value) {
-        this._writer.Write(value);
-        this.TraceWrite(value);
+        _writer.Write(value);
+        TraceWrite(value);
     }
 
     public void Write(byte value) {
-        this._writer.Write(value);
-        this.TraceWrite(value);
+        _writer.Write(value);
+        TraceWrite(value);
     }
 
     public void Dispose() {
-        this._writer.Dispose();
-        this._memoryStream.Dispose();
+        _writer.Dispose();
+        _memoryStream.Dispose();
     }
 
 #if DEBUG
     [Conditional("DEBUG")]
     public void Write(string id, byte[] data) {
-        this._writer.Write(data.Length);
-        this._writer.Write(data);
-        this.TraceWrite(id + ": " + data.Length + " bytes");
+        _writer.Write(data.Length);
+        _writer.Write(data);
+        TraceWrite(id + ": " + data.Length + " bytes");
     }
 
     [Conditional("DEBUG")]
     public void Write(string id, decimal value) {
-        this._writer.Write(value);
-        this.TraceWrite(id + ": " + value);
+        _writer.Write(value);
+        TraceWrite(id + ": " + value);
     }
 
     [Conditional("DEBUG")]
     public void Write(string id, float value) {
-        this._writer.Write(value);
-        this.TraceWrite(id + ": " + value);
+        _writer.Write(value);
+        TraceWrite(id + ": " + value);
     }
 
     [Conditional("DEBUG")]
     public void Write(string id, double value) {
-        this._writer.Write(value);
-        this.TraceWrite(id + ": " + value);
+        _writer.Write(value);
+        TraceWrite(id + ": " + value);
     }
 
     [Conditional("DEBUG")]
     public void Write(string id, string value) {
-        this._writer.Write(value);
-        this.TraceWrite(id + ": " + value);
+        _writer.Write(value);
+        TraceWrite(id + ": " + value);
     }
 
     [Conditional("DEBUG")]
     public void Write(string id, char value) {
-        this._writer.Write(value);
-        this.TraceWrite(id + ": " + value);
+        _writer.Write(value);
+        TraceWrite(id + ": " + value);
     }
 
     [Conditional("DEBUG")]
     public void Write(string id, ulong value) {
-        this._writer.Write(value);
-        this.TraceWrite(id + ": " + value);
+        _writer.Write(value);
+        TraceWrite(id + ": " + value);
     }
 
     [Conditional("DEBUG")]
     public void Write(string id, long value) {
-        this._writer.Write(value);
-        this.TraceWrite(id + ": " + value);
+        _writer.Write(value);
+        TraceWrite(id + ": " + value);
     }
 
     [Conditional("DEBUG")]
     public void Write(string id, uint value) {
-        this._writer.Write(value);
-        this.TraceWrite(id + ": " + value);
+        _writer.Write(value);
+        TraceWrite(id + ": " + value);
     }
 
     [Conditional("DEBUG")]
     public void Write(string id, int value) {
-        this._writer.Write(value);
-        this.TraceWrite(id + ": " + value);
+        _writer.Write(value);
+        TraceWrite(id + ": " + value);
     }
 
     [Conditional("DEBUG")]
     public void Write(string id, ushort value) {
-        this._writer.Write(value);
-        this.TraceWrite(id + ": " + value);
+        _writer.Write(value);
+        TraceWrite(id + ": " + value);
     }
 
     [Conditional("DEBUG")]
     public void Write(string id, short value) {
-        this._writer.Write(value);
-        this.TraceWrite(id + ": " + value);
+        _writer.Write(value);
+        TraceWrite(id + ": " + value);
     }
 
     [Conditional("DEBUG")]
     public void Write(string id, sbyte value) {
-        this._writer.Write(value);
-        this.TraceWrite(id + ": " + value);
+        _writer.Write(value);
+        TraceWrite(id + ": " + value);
     }
 
     [Conditional("DEBUG")]
     public void Write(string id, byte value) {
-        this._writer.Write(value);
-        this.TraceWrite(id + ": " + value);
+        _writer.Write(value);
+        TraceWrite(id + ": " + value);
     }
 #endif
 }
