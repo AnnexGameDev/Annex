@@ -31,6 +31,7 @@ public abstract class UIElement : IUIElement
     public event EventHandler<KeyboardKeyReleasedEvent>? OnElementKeyboardKeyReleased;
     public event EventHandler<MouseScrollWheelMovedEvent>? OnElementMouseScrollWheelMoved;
     public event EventHandler<MouseMovedEvent>? OnElementMouseLeft;
+    public event EventHandler<MouseMovedEvent>? OnElementMouseEntered;
 
     public void DrawOn(IWindow window, long timeDelta)
     {
@@ -123,5 +124,10 @@ public abstract class UIElement : IUIElement
     public virtual void OnMouseLeft(MouseMovedEvent mouseMovedEvent)
     {
         OnElementMouseLeft?.Invoke(this, mouseMovedEvent);
+    }
+
+    public virtual void OnMouseEntered(MouseMovedEvent mouseMovedEvent)
+    {
+        OnElementMouseEntered?.Invoke(this, mouseMovedEvent);
     }
 }

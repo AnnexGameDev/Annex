@@ -39,4 +39,7 @@ public interface IUIElement : IDrawable
 
     void OnMouseLeft(MouseMovedEvent mouseMovedEvent);
     event EventHandler<MouseMovedEvent>? OnElementMouseLeft;
+
+    void OnMouseEntered(MouseMovedEvent mouseMovedEvent);
+    event EventHandler<MouseMovedEvent>? OnElementMouseEntered;
 }

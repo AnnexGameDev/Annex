@@ -95,6 +95,7 @@ public class Scene : Container, IScene
         if (CurrentHoverElement != newLastMovedElement)
         {
             CurrentHoverElement?.OnMouseLeft(mouseMovedEvent);
+            newLastMovedElement?.OnMouseEntered(mouseMovedEvent);
         }
         CurrentHoverElement = newLastMovedElement;
         CurrentHoverElement?.OnMouseMoved(mouseMovedEvent);

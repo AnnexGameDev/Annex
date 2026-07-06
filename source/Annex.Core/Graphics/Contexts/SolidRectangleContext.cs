@@ -13,13 +13,13 @@ public class SolidRectangleContext : DrawContext
     public float? BorderThickness { get; set; }
 
     public SolidRectangleContext(RGBA color, IVector2<float> position, IVector2<float> size) {
-        this.FillColor = color;
-        this.Position = position;
-        this.Size = size;
+        FillColor = color;
+        Position = position;
+        Size = size;
 
-        this.RenderOffset = null;
-        this.Rotation = null;
-        this.BorderColor = null;
-        this.BorderThickness = null;
+        RenderOffset = null;
+        Rotation = null;
+        BorderColor = null;
+        BorderThickness = null;
     }
 }
