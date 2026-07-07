@@ -68,7 +68,7 @@ internal class HtmlSceneLoader : IHtmlSceneLoader
             _ => typeNameToInstantiate
         };
 
-        if (GetStringAttribute("class", element, styles) is string className)
+        if (GetStringAttribute("class", element, styles) is string className && !string.IsNullOrWhiteSpace(className))
         {
             typeNameToInstantiate = className;
         }
