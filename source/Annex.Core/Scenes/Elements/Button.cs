@@ -73,11 +73,10 @@ public class Button : UIElement, IButton
         set => _label.TextBorderColor = value;
     }
 
-    public Button(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null, IVector2<float>? textOffset = null, string? text = null) : base(elementId, position, size)
+    public Button(UIElementCreationArgs? args, IVector2<float>? textOffset = null, string? text = null) : base(args)
     {
-
-        _background = new Image($"{elementId}.background", Position, Size);
-        _label = new Label($"{elementId}.label", Position, Size, textOffset, text);
+        _background = new Image(new ($"{args?.ElementId}.background", Position, Size));
+        _label = new Label(new ($"{args?.ElementId}.label", Position, Size), textOffset, text);
     }
 
     protected override void DrawInternal(IWindow window, long timeDelta)

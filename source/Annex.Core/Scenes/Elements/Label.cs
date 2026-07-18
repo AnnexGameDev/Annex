@@ -56,8 +56,8 @@ public class Label : UIElement, ILabel
         set => RenderText.BorderColor?.Set(value);
     }
 
-    public Label(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null, IVector2<float>? textOffset = null, string? text = null)
-        : base(elementId, position, size)
+    public Label(UIElementCreationArgs? args, IVector2<float>? textOffset = null, string? text = null)
+        : base(args)
     {
         RenderText = new TextContext(text ?? string.Empty, "default.ttf")
         {

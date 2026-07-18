@@ -9,7 +9,7 @@ public class Container : UIElement, IAddableParentElement
 {
     private ConcurrentList<IUIElement> _children = new();
 
-    public Container(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size)
+    public Container(UIElementCreationArgs? args) : base(args)
     {
     }
 

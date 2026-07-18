@@ -50,8 +50,7 @@ public class ListView : Image, IParentElement
 
     public event EventHandler<SelectIndexChangedEventArgs>? OnSelectedIndexChanged;
 
-    public ListView(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null)
-        : base(elementId, position, size)
+    public ListView(UIElementCreationArgs? args) : base(args)
     {
         _selectionTexture = new TextureContext(string.Empty)
         {
@@ -294,11 +293,6 @@ public class ListView : Image, IParentElement
         SelectedIndex = -1;
     }
 
-    private void ClearSelection()
-    {
-        UnselectItem(SelectedIndex);
-    }
-
     private class ListViewItem : Label
     {
         public int Index { get; private set; }
@@ -310,9 +304,8 @@ public class ListView : Image, IParentElement
         private readonly PrefixedString _text;
 
         public ListViewItem(ListView parent, IVector2<float> itemSize, PrefixedString text)
-            : base(
-                  position: new OffsetVector2f(new OffsetVector2f(parent.Position, parent._renderOffset), new ScalingVector2f(itemSize, 0, 0)),
-                  size: itemSize,
+            : base( 
+                  new(position: new OffsetVector2f(new OffsetVector2f(parent.Position, parent._renderOffset), new ScalingVector2f(itemSize, 0, 0)), size: itemSize),
                   textOffset: new ScalingVector2f(itemSize, 0, 0.5f),
                   text: text.Value
                 )

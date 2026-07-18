@@ -7,4 +7,5 @@ public interface IHtmlSceneLoader
     const string AssetProviderId = "html-scene-provider";
 
     void Load(string assetId, IScene scene);
+    void RefreshUI(IScene scene);
 }

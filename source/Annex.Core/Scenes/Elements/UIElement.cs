@@ -13,11 +13,11 @@ public abstract class UIElement : IUIElement
     protected bool IsFocused { get; private set; }
     public bool InputTransparent { get; set; } = false;
 
-    public UIElement(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null)
+    public UIElement(UIElementCreationArgs? args)
     {
-        ElementID = elementId ?? string.Empty;
-        Position = position ?? new Vector2f();
-        Size = size ?? new Vector2f();
+        ElementID = args?.ElementId ?? string.Empty;
+        Position = args?.Position ?? new Vector2f();
+        Size = args?.Size ?? new Vector2f();
         Visible = true;
     }
     private bool disposedValue = false;

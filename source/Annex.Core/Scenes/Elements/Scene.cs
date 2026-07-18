@@ -26,12 +26,7 @@ public class Scene : Container, IScene
         private set => field = value == this ? null : value;
     }
 
-    public Scene(
-        string elementId = "",
-        IVector2<float>? size = null,
-        IVector2<float>? position = null
-        )
-            : base(elementId, position ?? new Vector2f(), size ?? new Vector2f())
+    public Scene(UIElementCreationArgs? args) : base(args)
     {
     }
 

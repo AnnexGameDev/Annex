@@ -3,7 +3,6 @@ using Annex.Core.Data;
 using Annex.Core.Graphics.Contexts;
 using Annex.Core.Scenes.Elements;
 using Scaffold.DependencyInjection;
-using Scaffold.Extensions;
 using Scaffold.Logging;
 using System.Xml.Linq;
 
@@ -11,13 +10,12 @@ namespace Annex.Core.Scenes.Layouts.Html;
 
 internal class HtmlSceneLoader : IHtmlSceneLoader
 {
-    private readonly IContainer _container;
+    private readonly IContainer _containerScope;
     private readonly IUIElementTypeResolverService _uiElementTypeResolverService;
-    private static readonly char[] KnownCalcOperators = new[] { '-', '+', '/', '*' };
 
     public HtmlSceneLoader(IContainer container, IUIElementTypeResolverService uIElementTypeResolverService)
     {
-        _container = container;
+        _containerScope = container.CreateScope();
         _uiElementTypeResolverService = uIElementTypeResolverService;
     }
 
@@ -33,17 +31,44 @@ internal class HtmlSceneLoader : IHtmlSceneLoader
             return;
         }
 
-        // Apply styles to the scene
-        ProcessElement(sceneInstance, null, scene, styles);
+        // Apply styles to the scene, most other properties are already applied
+        SetElementId(sceneInstance, scene, styles);
 
         ProcessChildren(sceneInstance, scene, styles, sceneInstance.GetType());
+
+        _containerScope.Dispose();
+    }
+
+    public void RefreshUI(IScene scene)
+    {
+        RefreshUI(scene, scene.Children);
+    }
+
+    private void RefreshUI(IUIElement parent, IEnumerable<IUIElement> children)
+    {
+        foreach (var child in children)
+        {
+            if (child.Size is HtmlSceneVector2f size)
+            {
+                size.Refresh(parent.Size, null);
+            }
+            if (child.Position is HtmlSceneVector2f position)
+            {
+                position.Refresh(parent.Size, parent.Position);
+            }
+
+            if (child is IParentElement subParentInstance)
+            {
+                RefreshUI(subParentInstance, subParentInstance.Children);
+            }
+        }
     }
 
     private void ProcessChildren(IAddableParentElement parentInstance, XElement parentElement, Styles styles, Type sceneType)
     {
         foreach (var childElement in parentElement.Elements())
         {
-            if (!TryCreateInstance(childElement, styles, sceneType, out var childInstance))
+            if (!TryCreateInstance(parentInstance, childElement, styles, sceneType, out var childInstance))
             {
                 continue;
             }
@@ -58,7 +83,7 @@ internal class HtmlSceneLoader : IHtmlSceneLoader
         }
     }
 
-    private bool TryCreateInstance(XElement element, Styles styles, Type sceneType, out IUIElement uiElement)
+    private bool TryCreateInstance(IUIElement parent, XElement element, Styles styles, Type sceneType, out IUIElement uiElement)
     {
         string? typeNameToInstantiate = element.Name.ToString();
         typeNameToInstantiate = typeNameToInstantiate switch
@@ -79,9 +104,14 @@ internal class HtmlSceneLoader : IHtmlSceneLoader
             return false;
         }
 
+        var position = GetPosition(parent, element, styles);
+        var size = GetSize(parent, element, styles);
+        var args = new UIElementCreationArgs(position: position, size: size);
+        _containerScope.Register<UIElementCreationArgs?>(() => args);
+
         if (_uiElementTypeResolverService.ResolveType(typeNameToInstantiate, sceneType) is Type type)
         {
-            uiElement = _container.Resolve(type) as IUIElement;
+            uiElement = _containerScope.Resolve(type) as IUIElement;
             return true;
         }
         uiElement = default;
@@ -109,9 +139,6 @@ internal class HtmlSceneLoader : IHtmlSceneLoader
 
     private void ProcessElement(IUIElement instance, IUIElement? parent, XElement element, Styles styles)
     {
-        SetPosition(instance, parent, element, styles);
-        SetSize(instance, parent, element, styles);
-
         SetElementId(instance, element, styles);
 
         if (instance is IImage img)
@@ -224,9 +251,9 @@ internal class HtmlSceneLoader : IHtmlSceneLoader
             label.Font = "default.ttf";
         }
 
-        if (GetVectorAttribute("text-offset", label.Size, element, styles) is IVector2<float> offset)
+        if (GetVectorAttribute("text-offset", label.Size, null, element, styles) is IVector2<float> offset)
         {
-            label.TextPositionOffset = new Vector2f(offset.X, offset.Y);
+            label.TextPositionOffset = offset;
         }
 
         if (GetStringAttribute("font-size", element, styles) is string fontSize)
@@ -268,24 +295,22 @@ internal class HtmlSceneLoader : IHtmlSceneLoader
         }
     }
 
-    private void SetSize(IUIElement instance, IUIElement? parent, XElement element, Styles styles)
+    private IVector2<float>? GetSize(IUIElement? parent, XElement element, Styles styles)
     {
-        if (GetVectorAttribute("size", parent?.Size, element, styles) is IVector2<float> value)
+        if (GetVectorAttribute("size", parent?.Size, null, element, styles) is IVector2<float> value)
         {
-            instance.Size.Set(value);
+            return value;
         }
+        return null;
     }
 
-    private void SetPosition(IUIElement instance, IUIElement? parent, XElement element, Styles styles)
+    private IVector2<float>? GetPosition(IUIElement? parent, XElement element, Styles styles)
     {
-        if (GetVectorAttribute("position", parent?.Size, element, styles) is Vector2f value)
+        if (GetVectorAttribute("position", parent?.Size, parent?.Position, element, styles) is IVector2<float> value)
         {
-            instance.Position.Set(Vector2f.SumOf(value, parent?.Position ?? new Vector2f()));
+            return value;
         }
-        else
-        {
-            instance.Position.Set(parent?.Position ?? new Vector2f());
-        }
+        return new Vector2f(parent?.Position);
     }
 
     private string? GetStringAttribute(string attributeName, XElement element, Styles styles)
@@ -329,24 +354,7 @@ internal class HtmlSceneLoader : IHtmlSceneLoader
         return null;
     }
 
-    private float ComputeVectorValue(string val, float parentVal)
-    {
-        val = val.Trim();
-
-        if (val.StartsWith("calc(") && val.EndsWith(")"))
-        {
-            val = val[5..^1];
-            var terms = val.Split(KnownCalcOperators).Select(term => ComputeVectorValue(term, parentVal)).ToList();
-            var operators = val.FindAll(KnownCalcOperators).ToList();
-            operators.Insert(0, '+'); // to match the length of the terms collection
-
-            return Calc.Compute(terms, operators);
-        }
-
-        return val.EndsWith("%") ? parentVal * float.Parse(val[..^1]) / 100 : float.Parse(val);
-    }
-
-    private IVector2<float>? GetVectorAttribute(string attributeName, IVector2<float>? parentValue, XElement element, Styles styles)
+    private IVector2<float>? GetVectorAttribute(string attributeName, IVector2<float>? parentValue, IVector2<float>? offset, XElement element, Styles styles)
     {
         var finalValue = GetStringAttribute(attributeName, element, styles);
         if (finalValue == null)
@@ -354,13 +362,7 @@ internal class HtmlSceneLoader : IHtmlSceneLoader
             return null;
         }
 
-        var data = finalValue.Split(',').Select(val => val.Trim()).ToArray();
-        string x = data[0];
-        string y = data[1];
-
-        float xf = ComputeVectorValue(x, parentValue?.X ?? 0);
-        float yf = ComputeVectorValue(y, parentValue?.Y ?? 0);
-        return new Vector2f(xf, yf);
+        return new HtmlSceneVector2f(finalValue, parentValue, offset);
     }
 
     #endregion

@@ -92,5 +92,8 @@ public abstract class WindowBase
 
     private class NullScene : Scene
     {
+        public NullScene() : base(null)
+        {
+        }
     }
 }

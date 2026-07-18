@@ -6,6 +6,10 @@ public class Vector2f : VectorBase<float>
     {
     }
 
+    public Vector2f(IReadonlyVector2<float> vector) : base(vector.X, vector.Y)
+    {
+    }
+
     public Vector2f(float x, float y) : base(x, y)
     {
     }

@@ -11,9 +11,9 @@ public class ContextMenu : Container, IParentElement
     private readonly SolidRectangleContext _background;
     private IScene? _currentScene;
 
-    public ContextMenu(IVector2<float> position, params Item[] contextMenuItems) : base(position: position)
+    public ContextMenu(IVector2<float> position, params Item[] contextMenuItems) : base(new (position: position))
     {
-        this._background = new SolidRectangleContext(KnownColor.White, this.Position, this.Size)
+        _background = new SolidRectangleContext(KnownColor.White, Position, Size)
         {
             BorderColor = KnownColor.Black,
             BorderThickness = 1.0f,
@@ -23,7 +23,7 @@ public class ContextMenu : Container, IParentElement
         // We need the widths to be consistent throughout
         float maxWidth = contextMenuItems.Max(item => item.Size.X);
         float totalHeight = contextMenuItems.Sum(item => item.Size.Y);
-        this.Size.Set(maxWidth, totalHeight);
+        Size.Set(maxWidth, totalHeight);
 
         float heightSoFar = 0;
         for (int i = 0; i < contextMenuItems.Length; i++)
@@ -31,8 +31,8 @@ public class ContextMenu : Container, IParentElement
             var child = contextMenuItems[i];
 
             // Manually set the position
-            child.Position.Set(this.Position.X, this.Position.Y + heightSoFar);
-            this.AddChild(child);
+            child.Position.Set(Position.X, Position.Y + heightSoFar);
+            AddChild(child);
 
             heightSoFar += child.Size.Y;
         }
@@ -40,9 +40,9 @@ public class ContextMenu : Container, IParentElement
 
     protected override void DrawInternal(IWindow window, long timeDelta)
     {
-        if (this.Visible)
+        if (Visible)
         {
-            window.Draw(this._background);
+            window.Draw(_background);
             base.DrawInternal(window, timeDelta);
         }
     }
@@ -66,41 +66,41 @@ public class ContextMenu : Container, IParentElement
         private readonly SolidRectangleContext _hoveredBackground;
         private readonly Action<WindowEvent> _selectedAction;
 
-        public Item(string text, Action<WindowEvent> selectionAction)
+        public Item(string text, Action<WindowEvent> selectionAction) : base(null)
         {
-            this.Text = text;
-            this.Size.Set(75, 30);
-            this.FontSize = 18;
-            this.TextPositionOffset = new Vector2f(5, this.Size.Y / 2);
+            Text = text;
+            Size.Set(75, 30);
+            FontSize = 18;
+            TextPositionOffset = new Vector2f(5, Size.Y / 2);
 
-            this._hoveredBackground = new SolidRectangleContext(KnownColor.Teal, this.Position, this.Size)
+            _hoveredBackground = new SolidRectangleContext(KnownColor.Teal, Position, Size)
             {
                 Camera = KnownCamera.UI
             };
 
-            this.HorizontalTextAlignment = HorizontalAlignment.Left;
-            this.VerticalTextAlignment = VerticalAlignment.Middle;
+            HorizontalTextAlignment = HorizontalAlignment.Left;
+            VerticalTextAlignment = VerticalAlignment.Middle;
 
-            this._selectedAction = selectionAction;
+            _selectedAction = selectionAction;
         }
 
         public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent)
         {
             base.OnMouseMoved(mouseMovedEvent);
-            this.IsHovered = true;
+            IsHovered = true;
         }
 
         public override void OnMouseLeft(MouseMovedEvent mouseMovedEvent)
         {
             base.OnMouseLeft(mouseMovedEvent);
-            this.IsHovered = false;
+            IsHovered = false;
         }
 
         protected override void DrawInternal(IWindow window, long timeDelta)
         {
-            if (this.IsHovered)
+            if (IsHovered)
             {
-                window.Draw(this._hoveredBackground);
+                window.Draw(_hoveredBackground);
             }
             base.DrawInternal(window, timeDelta);
         }
@@ -108,7 +108,7 @@ public class ContextMenu : Container, IParentElement
         public override void OnMouseButtonPressed(MouseButtonPressedEvent mouseButtonPressedEvent)
         {
             base.OnMouseButtonPressed(mouseButtonPressedEvent);
-            this._selectedAction.Invoke(mouseButtonPressedEvent);
+            _selectedAction.Invoke(mouseButtonPressedEvent);
         }
     }
 }

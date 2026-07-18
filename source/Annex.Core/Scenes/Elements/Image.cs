@@ -29,7 +29,7 @@ public class Image : UIElement, IImage
         set;
     }
 
-    public Image(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size)
+    public Image(UIElementCreationArgs? args) : base(args)
     {
         TextureContext = new TextureContext(string.Empty, Position)
         {

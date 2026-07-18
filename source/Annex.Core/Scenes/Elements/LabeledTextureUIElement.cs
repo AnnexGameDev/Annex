@@ -81,10 +81,10 @@ public abstract class LabeledTextureUIElement : UIElement, IButton, ILabel
         set => Label.TextBorderColor = value;
     }
 
-    public LabeledTextureUIElement(string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size)
+    public LabeledTextureUIElement(UIElementCreationArgs? args) : base(args)
     {
-        Image = new Image($"{elementId}.background", Position, Size);
-        Label = new Label($"{elementId}.label", Position, Size);
+        Image = new Image(new ($"{args?.ElementId}.background", Position, Size));
+        Label = new Label(new ($"{args?.ElementId}.label", Position, Size));
     }
 
     protected override void DrawInternal(IWindow window, long timeDelta)

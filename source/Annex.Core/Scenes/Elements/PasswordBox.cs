@@ -9,7 +9,7 @@ public class PasswordBox : Textbox, IPasswordBox
 {
     public char PasswordChar { get; set; } = '*';
 
-    public PasswordBox(IContainer container, string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(container, elementId, position, size)
+    public PasswordBox(IContainer container, UIElementCreationArgs? args) : base(container, args)
     {
     }
 

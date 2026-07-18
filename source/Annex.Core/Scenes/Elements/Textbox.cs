@@ -39,7 +39,7 @@ public partial class Textbox : LabeledTextureUIElement, ITextbox
     public int SelectionStart { get; private set; }
     public int SelectionLength { get; private set; }
 
-    public Textbox(IContainer container, string? elementId = null, IVector2<float>? position = null, IVector2<float>? size = null) : base(elementId, position, size)
+    public Textbox(IContainer container, UIElementCreationArgs? args) : base(args)
     {
         _clipboardService = container.Resolve<IClipboardService>();
         _timeService = container.Resolve<ITimeService>();
