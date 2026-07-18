@@ -310,7 +310,7 @@ internal class HtmlSceneLoader : IHtmlSceneLoader
         {
             return value;
         }
-        return new Vector2f(parent?.Position);
+        return new HtmlSceneVector2f("0, 0", parent?.Size, parent?.Position);
     }
 
     private string? GetStringAttribute(string attributeName, XElement element, Styles styles)

@@ -1,9 +1,8 @@
 ﻿using Annex.Core.Data;
-using Scaffold.Extensions;
 
 namespace Annex.Core.Scenes.Layouts.Html;
 
-internal class HtmlSceneVector2f : IVector2<float>
+public class HtmlSceneVector2f : IVector2<float>
 {
     private static readonly char[] KnownCalcOperators = ['-', '+', '/', '*'];
     private readonly string _stringValue;
@@ -11,20 +10,20 @@ internal class HtmlSceneVector2f : IVector2<float>
     public float X { get; private set; }
     public float Y { get; private set; }
 
-    public HtmlSceneVector2f(string stringValue, IVector2<float>? parentValue, IVector2<float>? offset)
+    public HtmlSceneVector2f(string stringValue, IVector2<float>? valueToApplyPercentageTo = null, IVector2<float>? offsetToApply = null)
     {
         _stringValue = stringValue;
-        Refresh(parentValue, offset);
+        Refresh(valueToApplyPercentageTo, offsetToApply);
     }
 
-    public void Refresh(IVector2<float>? parentValue, IVector2<float>? offset)
+    public void Refresh(IVector2<float>? valueToApplyPercentageTo = null, IVector2<float>? offsetToApply = null)
     {
         var data = _stringValue.Split(',').Select(val => val.Trim()).ToArray();
         string x = data[0];
         string y = data[1];
 
-        X = ComputeVectorValue(x, parentValue?.X ?? 0) + (offset?.X ?? 0);
-        Y = ComputeVectorValue(y, parentValue?.Y ?? 0) + (offset?.Y ?? 0);
+        X = ComputeVectorValue(x, valueToApplyPercentageTo?.X ?? 0) + (offsetToApply?.X ?? 0);
+        Y = ComputeVectorValue(y, valueToApplyPercentageTo?.Y ?? 0) + (offsetToApply?.Y ?? 0);
     }
 
     private static float ComputeVectorValue(string val, float parentVal)
@@ -34,14 +33,9 @@ internal class HtmlSceneVector2f : IVector2<float>
         if (val.StartsWith("calc(") && val.EndsWith(")"))
         {
             val = val[5..^1];
-            var terms = val.Split(KnownCalcOperators).Select(term => ComputeVectorValue(term, parentVal)).ToList();
-            var operators = val.FindAll(KnownCalcOperators).ToList();
-            operators.Insert(0, '+'); // to match the length of the terms collection
-
-            return Calc.Compute(terms, operators);
         }
 
-        return val.EndsWith("%") ? parentVal * float.Parse(val[..^1]) / 100 : float.Parse(val);
+        return Calc.Compute(val, parentVal);
     }
 
     public void Set(IVector2<float> vector)
