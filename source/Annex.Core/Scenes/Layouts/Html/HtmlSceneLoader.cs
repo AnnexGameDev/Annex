@@ -10,12 +10,12 @@ namespace Annex.Core.Scenes.Layouts.Html;
 
 internal class HtmlSceneLoader : IHtmlSceneLoader
 {
-    private readonly IContainer _containerScope;
+    private readonly IContainer _container;
     private readonly IUIElementTypeResolverService _uiElementTypeResolverService;
 
     public HtmlSceneLoader(IContainer container, IUIElementTypeResolverService uIElementTypeResolverService)
     {
-        _containerScope = container.CreateScope();
+        _container = container;
         _uiElementTypeResolverService = uIElementTypeResolverService;
     }
 
@@ -35,8 +35,6 @@ internal class HtmlSceneLoader : IHtmlSceneLoader
         SetElementId(sceneInstance, scene, styles);
 
         ProcessChildren(sceneInstance, scene, styles, sceneInstance.GetType());
-
-        _containerScope.Dispose();
     }
 
     public void RefreshUI(IScene scene)
@@ -107,11 +105,12 @@ internal class HtmlSceneLoader : IHtmlSceneLoader
         var position = GetPosition(parent, element, styles);
         var size = GetSize(parent, element, styles);
         var args = new UIElementCreationArgs(position: position, size: size);
-        _containerScope.Register<UIElementCreationArgs?>(() => args);
+        using var containerScope = _container.CreateScope();
+        containerScope.Register<UIElementCreationArgs?>(() => args);
 
         if (_uiElementTypeResolverService.ResolveType(typeNameToInstantiate, sceneType) is Type type)
         {
-            uiElement = _containerScope.Resolve(type) as IUIElement;
+            uiElement = containerScope.Resolve(type) as IUIElement;
             return true;
         }
         uiElement = default;
