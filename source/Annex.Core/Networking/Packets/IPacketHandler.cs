@@ -1,10 +1,9 @@
 ﻿using Annex.Core.Networking.Connections;
 
-namespace Annex.Core.Networking.Packets
+namespace Annex.Core.Networking.Packets;
+
+public interface IPacketHandler
 {
-    public interface IPacketHandler
-    {
-        int Id { get; }
-        Task HandleAsync(IConnection connection, IncomingPacket packet);
-    }
+    int Id { get; }
+    Task HandleAsync(IConnection connection, IncomingPacket packet);
 }
