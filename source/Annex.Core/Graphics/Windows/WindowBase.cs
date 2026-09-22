@@ -48,7 +48,11 @@ public abstract class WindowBase
 
     protected abstract void RaisePropertyChanged([CallerMemberName] string property = "");
 
-    public void LoadScene(IScene newScene, object? parameters = null, bool disposeOldScene = true)
+    public
+#if DEBUG
+        virtual
+#endif
+        void LoadScene(IScene newScene, object? parameters = null, bool disposeOldScene = true)
     {
         Log.Normal($"Loading scene {newScene.GetType().Name}");
 

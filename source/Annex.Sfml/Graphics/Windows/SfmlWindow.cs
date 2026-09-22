@@ -5,6 +5,9 @@ using Annex.Core.Graphics.Contexts;
 using Annex.Core.Graphics.Windows;
 using Annex.Core.Input;
 using Annex.Core.Input.InputEvents;
+#if DEBUG
+using Annex.Core.Scenes.Elements;
+#endif
 using Annex.Core.Time;
 using Annex.Sfml.Collections.Generic;
 using Annex.Sfml.Extensions;
@@ -28,6 +31,9 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
     private readonly ITimeService _timeService;
     private long? _timeSinceLastDraw = null;
     private AssetRegistry? _assetsToUseThisFrame;
+#if DEBUG
+    private bool _inDrawCurrentScene;
+#endif
 
     public uint ResolutionWidth { get; }
     public uint ResolutionHeight { get; }
@@ -282,8 +288,23 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
         return (centerY - halfHeight, centerX - halfWidth, centerY + halfHeight, centerX + halfWidth);
     }
 
+#if DEBUG
+    public override void LoadScene(IScene newScene, object? parameters = null, bool disposeOldScene = true)
+    {
+        base.LoadScene(newScene, parameters, disposeOldScene);
+
+        if (_inDrawCurrentScene == true)
+        {
+            throw new Exception("Loading a scene while drawing :(, check the stacktrace and look for async void");
+        }
+    }
+#endif
+
     public void DrawCurrentScene()
     {
+#if DEBUG
+        _inDrawCurrentScene = true;
+#endif
         _assetsToUseThisFrame = Scene.Assets;
         _renderWindow.Clear();
         _buffer.Clear();
@@ -295,6 +316,9 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
         _buffer.Display();
         _renderWindow.Draw(_bufferSprite);
         _renderWindow.Display();
+#if DEBUG
+        _inDrawCurrentScene = false;
+#endif
         _renderWindow.DispatchEvents();
         _assetsToUseThisFrame = null;
     }
