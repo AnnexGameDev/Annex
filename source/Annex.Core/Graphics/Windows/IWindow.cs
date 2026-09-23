@@ -25,6 +25,8 @@ public interface IWindow : IDisposable
     int Left { get; }
     int Top { get; }
 
+    long FrameNumber { get; }
+
     void SetPosition(int x, int y);
 
     // Cameras

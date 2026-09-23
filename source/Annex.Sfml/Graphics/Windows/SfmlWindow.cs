@@ -47,6 +47,8 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
     public int Left => _renderWindow.Position.X;
     public int Top => _renderWindow.Position.Y;
 
+    public long FrameNumber { get; private set; }
+
     public nint SystemHandle => _renderWindow.SystemHandle;
 
     public SfmlWindow(IContainer container, string title, uint width, uint height, WindowStyle windowStyle)
@@ -305,6 +307,7 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
 #if DEBUG
         _inDrawCurrentScene = true;
 #endif
+        FrameNumber++;
         _assetsToUseThisFrame = Scene.Assets;
         _renderWindow.Clear();
         _buffer.Clear();
