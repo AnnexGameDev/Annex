@@ -48,7 +48,6 @@ namespace Annex.Core.Calculations
 
         public static (float x, float y) RotateAbout(float x, float y, double degrees, float x2, float y2)
         {
-
             float zerod_x = x - x2;
             float zerod_y = y - y2;
 
