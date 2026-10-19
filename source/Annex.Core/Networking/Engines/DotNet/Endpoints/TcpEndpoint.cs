@@ -14,13 +14,16 @@ internal abstract class TcpEndpoint : IEndpoint
     protected bool Disposed { get; private set; }
 
     public TcpEndpoint(EndpointConfiguration config) {
-        this.Config = config;
-        this.Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        Config = config;
+        Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
+        {
+            NoDelay = true
+        };
     }
 
     protected virtual void HandleNewConnection(TcpConnection connection) {
 
-        if (this.Connections.ContainsKey(connection.Id))
+        if (Connections.ContainsKey(connection.Id))
         {
             Log.Error($"Connection {connection} is already registered");
             return;
@@ -29,7 +32,7 @@ internal abstract class TcpEndpoint : IEndpoint
 
         connection.OnConnectionStateChanged += Connection_OnConnectionStateChanged;
 
-        this.Connections.TryAdd(connection.Id, connection);
+        Connections.TryAdd(connection.Id, connection);
         connection.ListenForIncomingPackets();
     }
 
@@ -42,19 +45,19 @@ internal abstract class TcpEndpoint : IEndpoint
     }
 
     protected virtual void HandleDisconnectedConnection(TcpConnection connection) {
-        if (!this.Connections.ContainsKey(connection.Id))
+        if (!Connections.ContainsKey(connection.Id))
         {
             Log.Error($"Connection {connection} is not registered");
             return;
         }
 
         connection.OnConnectionStateChanged -= Connection_OnConnectionStateChanged;
-        this.Connections.TryRemove(connection.Id, out _);
+        Connections.TryRemove(connection.Id, out _);
         connection.Dispose();
     }
 
     protected void SendTo(TcpConnection connection, OutgoingPacket packet) {
-        if (!this.Connections.ContainsKey(connection.Id))
+        if (!Connections.ContainsKey(connection.Id))
         {
             Log.Error($"Connection {connection} is not registered");
             return;
@@ -67,11 +70,11 @@ internal abstract class TcpEndpoint : IEndpoint
         {
             if (disposing)
             {
-                foreach (var connection in this.Connections.Values)
+                foreach (var connection in Connections.Values)
                 {
-                    this.HandleDisconnectedConnection(connection);
+                    HandleDisconnectedConnection(connection);
                 }
-                this.Socket.Dispose();
+                Socket.Dispose();
             }
 
             // TODO: free unmanaged resources (unmanaged objects) and override finalizer
