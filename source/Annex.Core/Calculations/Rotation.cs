@@ -1,66 +1,42 @@
-﻿using Annex.Core.Data;
+﻿namespace Annex.Core.Calculations;
 
-namespace Annex.Core.Calculations
+public static class Rotation
 {
-    public static class Rotation
+    private static (float x, float y) GetDirectionalUnitVector(double degrees)
     {
-        public static (float x, float y) ComputeUnits(double degrees)
+        double radians = degrees.ToRadians();
+        return ((float)Math.Cos(radians), (float)Math.Sin(radians));
+    }
+
+    public static float FindAngle(float x1, float y1, float x2, float y2)
+    {
+        float dx = x2 - x1;
+        float dy = y2 - y1;
+        float degrees = (float)Math.Atan2(dy, dx).ToDegrees();
+
+        while (degrees < 0)
         {
-            return ((float)Math.Cos(degrees.ToRadians()), (float)Math.Sin(degrees.ToRadians()));
+            degrees += 360;
         }
+        return (360 - (degrees % 360)) % 360;
+    }
 
-        public static float ComputeRotation2(float x1, float y1, float x2, float y2)
-        {
-            return 360 - ComputeRotation(x1, y1, x2, y2) + 45 / 2f;
-        }
+    public static (float x, float y) RotatePointAround(float x, float y, double degrees, float length)
+    {
+        var rotatedPoint = RotatePointAround(length, 0, degrees, 0, 0);
+        return (x + rotatedPoint.x, y + rotatedPoint.y);
+    }
 
+    public static (float x, float y) RotatePointAround(float x, float y, double degrees, float x2, float y2)
+    {
+        float zerod_x = x - x2;
+        float zerod_y = y - y2;
 
-        public static float ComputeRotation2(IVector2<float> position, IVector2<float> target)
-        {
-            return 360 - ComputeRotation(position, target) + 45 / 2f;
-        }
+        (float cos, float sin) = GetDirectionalUnitVector(degrees);
 
-        public static float ComputeRotation(float x1, float y1, float x2, float y2)
-        {
-            float dx = x2 - x1;
-            float dy = y2 - y1;
-            float degrees = (float)Math.Atan2(dy, dx).ToDegrees();
+        float xnew = cos * zerod_x + sin * zerod_y;
+        float ynew = -sin * zerod_x + cos * zerod_y;
 
-            if (degrees < 0)
-            {
-                degrees += 360;
-            }
-            return degrees;
-        }
-
-        public static float ComputeRotation(IVector2<float> position, IVector2<float> target)
-        {
-            float dx = target.X - position.X;
-            float dy = target.Y - position.Y;
-            return (float)Math.Atan2(dy, dx).ToDegrees();
-        }
-
-        public static (float x, float y) ComputeUnits(IVector2<float> position, IVector2<float> target)
-        {
-            var rotation = ComputeRotation(position, target);
-            return ComputeUnits(rotation);
-        }
-
-        public static (float x, float y) RotateAbout(float x, float y, double degrees, float x2, float y2)
-        {
-            float zerod_x = x - x2;
-            float zerod_y = y - y2;
-
-            (float cos, float sin) = ComputeUnits(degrees);
-
-            float xnew = cos * zerod_x - zerod_y * sin;
-            float ynew = sin * zerod_x - zerod_y * cos;
-
-            // Shift it back
-            float finalX = xnew + x2;
-            float finalY = ynew + y2;
-
-            return (finalX, finalY);
-        }
+        return (xnew + x2, ynew + y2);
     }
 }

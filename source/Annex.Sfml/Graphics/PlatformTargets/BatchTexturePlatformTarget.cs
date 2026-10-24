@@ -124,7 +124,7 @@ internal class BatchTexturePlatformTarget : PlatformTarget
             {
                 return (x, y);
             }
-            return Core.Calculations.Rotation.RotateAbout(x, y, rotation, originx, originy);
+            return Core.Calculations.Rotation.RotatePointAround(x, y, rotation, originx, originy);
         }
 
         protected override void Destroy(bool disposing)
