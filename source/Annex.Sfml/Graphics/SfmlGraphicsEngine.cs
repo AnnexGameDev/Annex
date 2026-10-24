@@ -23,6 +23,7 @@ public class SfmlGraphicsEngine : IGraphicsEngine
         _container.RegisterAggregate<IPlatformTargetCreator, TexturePlatformTargetCreator>();
         _container.RegisterAggregate<IPlatformTargetCreator, SpritesheetPlatformTargetCreator>();
         _container.RegisterAggregate<IPlatformTargetCreator, SolidRectanglePlatformTargetCreator>();
+        _container.RegisterAggregate<IPlatformTargetCreator, SolidCirclePlatformTargetCreator>();
         _container.RegisterAggregate<IPlatformTargetCreator, BatchTexturePlatformTargetCreator>();
         _container.Register<ICameraCache, CameraCache>();
 
