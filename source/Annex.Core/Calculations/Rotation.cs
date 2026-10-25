@@ -27,16 +27,16 @@ public static class Rotation
         return (x + rotatedPoint.x, y + rotatedPoint.y);
     }
 
-    public static (float x, float y) RotatePointAround(float x, float y, double degrees, float x2, float y2)
+    public static (float x, float y) RotatePointAround(float pointX, float pointY, double degrees, float fixedX, float fixedY)
     {
-        float zerod_x = x - x2;
-        float zerod_y = y - y2;
+        float zerod_x = pointX - fixedX;
+        float zerod_y = pointY - fixedY;
 
         (float cos, float sin) = GetDirectionalUnitVector(degrees);
 
         float xnew = cos * zerod_x + sin * zerod_y;
         float ynew = -sin * zerod_x + cos * zerod_y;
 
-        return (xnew + x2, ynew + y2);
+        return (xnew + fixedX, ynew + fixedY);
     }
 }
