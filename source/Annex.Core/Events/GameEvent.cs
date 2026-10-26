@@ -20,8 +20,8 @@ public class GameEvent : IGameEvent
     {
         if (_timeService.ElapsedTimeSince(_lastProbe) >= _interval)
         {
-            _action();
             _lastProbe = _timeService.Now;
+            _action();
         }
     }
 }
