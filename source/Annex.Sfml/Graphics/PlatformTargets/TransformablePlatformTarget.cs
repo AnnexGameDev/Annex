@@ -10,7 +10,7 @@ internal abstract class TransformablePlatformTarget : PlatformTarget
 
     protected float UpdateRotation(float? rotation)
     {
-        float trueRotation = rotation ?? 0;
+        float trueRotation = 360 - (rotation ?? 0);
         if (Transformable.Rotation != trueRotation)
         {
             Transformable.Rotation = trueRotation;
