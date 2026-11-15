@@ -64,7 +64,7 @@ internal class SfmlWindow : WindowBase, IWindow, IDisposable
 
         _renderWindow = CreateWindow(title, width, height, 0, 0, windowStyle);
 
-        var defaultCamera = new Camera(KnownCamera.Default, Width, Height)
+        var defaultCamera = new Camera(KnownCamera.GameWorld, Width, Height)
         {
             Region = new Core.Data.FloatRect(0, 0, 1, 1),
             Center = new Vector2f(Width / 2, Height / 2),
