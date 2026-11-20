@@ -37,9 +37,4 @@ public class AssetStore<T> : IAssetStore<T> where T : notnull
     }
 
     public object GetUntyped(string id) => Get(id);
-
-    public void Clear()
-    {
-        _assets.Clear();
-    }
 }

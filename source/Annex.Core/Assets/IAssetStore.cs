@@ -8,6 +8,5 @@ public interface IAssetStore : IDisposable
 
 public interface IAssetStore<T> : IAssetStore where T : notnull
 {
-    void Clear();
     T Get(string id);
 }
