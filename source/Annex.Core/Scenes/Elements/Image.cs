@@ -1,29 +1,25 @@
-﻿using Annex.Core.Data;
-using Annex.Core.Graphics;
-using Annex.Core.Graphics.Contexts;
-using Annex.Core.Graphics.Windows;
+﻿using Annex.Core.Graphics.Windows;
 using Annex.Core.Input.InputEvents;
 
 namespace Annex.Core.Scenes.Elements;
 
 public class Image : UIElement, IImage
 {
-    public TextureContext TextureContext { get; }
     private bool _hasMouse;
 
-    public string? HoverBackgroundTextureId
+    public IUISurface? HoverSurface
     {
         get;
         set;
     }
 
-    public string? FocusedBackgroundTextureId
+    public IUISurface? FocusSurface
     {
         get;
         set;
     }
 
-    public string BackgroundTextureId
+    public IUISurface BackgroundSurface
     {
         get;
         set;
@@ -31,28 +27,22 @@ public class Image : UIElement, IImage
 
     public Image(UIElementCreationArgs? args) : base(args)
     {
-        TextureContext = new TextureContext(string.Empty, Position)
-        {
-            RenderSize = Size,
-            Camera = KnownCamera.UI
-        };
     }
 
     protected override void DrawInternal(IWindow window, long timeDelta)
     {
-        string textureToRender = BackgroundTextureId;
+        var surfaceToRender = BackgroundSurface;
 
-        if (_hasMouse && HoverBackgroundTextureId is not null)
+        if (_hasMouse && HoverSurface is not null)
         {
-            textureToRender = HoverBackgroundTextureId;
+            surfaceToRender = HoverSurface;
         }
-        else if (IsFocused && FocusedBackgroundTextureId is not null)
+        else if (IsFocused && FocusSurface is not null)
         {
-            textureToRender = FocusedBackgroundTextureId;
+            surfaceToRender = FocusSurface;
         }
 
-        TextureContext.TextureId = textureToRender;
-        window.Draw(TextureContext);
+        surfaceToRender?.DrawOn(window, timeDelta);
     }
 
     public override void OnMouseMoved(MouseMovedEvent mouseMovedEvent)

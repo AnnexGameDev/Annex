@@ -10,23 +10,24 @@ public class Button : UIElement, IButton
     private readonly Image _background;
     private readonly Label _label;
 
-    public string? FocusedBackgroundTextureId
+    public IUISurface? BackgroundSurface
     {
-        get => _background.FocusedBackgroundTextureId;
-        set => _background.FocusedBackgroundTextureId = value;
+        get => _background.BackgroundSurface;
+        set => _background.BackgroundSurface = value;
     }
 
-    public string? HoverBackgroundTextureId
+    public IUISurface? FocusSurface
     {
-        get => _background.HoverBackgroundTextureId;
-        set => _background.HoverBackgroundTextureId = value;
+        get => _background.FocusSurface;
+        set => _background.FocusSurface = value;
     }
 
-    public string BackgroundTextureId
+    public IUISurface? HoverSurface
     {
-        get => _background.BackgroundTextureId;
-        set => _background.BackgroundTextureId = value;
+        get => _background.HoverSurface;
+        set => _background.HoverSurface = value;
     }
+    
     public virtual string Text
     {
         get => _label.Text;

@@ -278,19 +278,70 @@ internal class HtmlSceneLoader : IHtmlSceneLoader
 
     private void SetTexture(IImage img, XElement element, Styles styles)
     {
+        if (GetStringAttribute("color", element, styles) is string backgroundColor)
+        {
+            var background = new SolidRectangleUISurface(RGBA.Parse(backgroundColor), img);
+
+            if (GetStringAttribute("border-color", element, styles) is string borderColor)
+            {
+                background.BorderColor = RGBA.Parse(borderColor);
+            }
+
+            if (GetStringAttribute("border-thickness", element, styles) is string borderThickness)
+            {
+                background.BorderThickness = float.Parse(borderThickness);
+            }
+
+            img.BackgroundSurface = background;
+        }
+
+        if (GetStringAttribute("hover-color", element, styles) is string hoverBackgroundColor)
+        {
+            var hover = new SolidRectangleUISurface(RGBA.Parse(hoverBackgroundColor), img);
+
+            if (GetStringAttribute("hover-border-color", element, styles) is string hoverBorderColor)
+            {
+                hover.BorderColor = RGBA.Parse(hoverBorderColor);
+            }
+
+            if (GetStringAttribute("hover-border-thickness", element, styles) is string hoverBorderThickness)
+            {
+                hover.BorderThickness = float.Parse(hoverBorderThickness);
+            }
+
+            img.HoverSurface = hover;
+        }
+
+        if (GetStringAttribute("focus-color", element, styles) is string focusBackgroundColor)
+        {
+            var focus = new SolidRectangleUISurface(RGBA.Parse(focusBackgroundColor), img);
+
+            if (GetStringAttribute("focus-border-color", element, styles) is string focusBorderColor)
+            {
+                focus.BorderColor = RGBA.Parse(focusBorderColor);
+            }
+
+            if (GetStringAttribute("focus-border-thickness", element, styles) is string focusBorderThickness)
+            {
+                focus.BorderThickness = float.Parse(focusBorderThickness);
+            }
+
+            img.FocusSurface = focus;
+        }
+
         if (GetStringAttribute("texture", element, styles) is string textureId)
         {
-            img.BackgroundTextureId = textureId;
+            img.BackgroundSurface = new TextureUISurface(textureId, img);
         }
 
         if (GetStringAttribute("hover-texture", element, styles) is string hoverTextureId)
         {
-            img.HoverBackgroundTextureId = hoverTextureId;
+            img.HoverSurface = new TextureUISurface(hoverTextureId, img);
         }
 
         if (GetStringAttribute("focused-texture", element, styles) is string focusedTextureId)
         {
-            img.FocusedBackgroundTextureId = focusedTextureId;
+            img.FocusSurface = new TextureUISurface(focusedTextureId, img);
         }
     }
 

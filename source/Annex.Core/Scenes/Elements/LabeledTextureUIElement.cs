@@ -12,20 +12,22 @@ public abstract class LabeledTextureUIElement : UIElement, IButton, ILabel
 
     public event EventHandler<TextChangedEventArgs>? OnTextChanged;
 
-    public string? FocusedBackgroundTextureId
+    public IUISurface? BackgroundSurface
     {
-        get => Image.FocusedBackgroundTextureId;
-        set => Image.FocusedBackgroundTextureId = value;
+        get => Image.BackgroundSurface;
+        set => Image.BackgroundSurface = value;
     }
-    public string? HoverBackgroundTextureId
+
+    public IUISurface? FocusSurface
     {
-        get => Image.HoverBackgroundTextureId;
-        set => Image.HoverBackgroundTextureId = value;
+        get => Image.FocusSurface;
+        set => Image.FocusSurface = value;
     }
-    public string BackgroundTextureId
+
+    public IUISurface? HoverSurface
     {
-        get => Image.BackgroundTextureId;
-        set => Image.BackgroundTextureId = value;
+        get => Image.HoverSurface;
+        set => Image.HoverSurface = value;
     }
     public string Text
     {

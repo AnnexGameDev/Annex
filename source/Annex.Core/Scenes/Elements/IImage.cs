@@ -2,7 +2,9 @@
 
 public interface IImage : IUIElement
 {
-    string? HoverBackgroundTextureId { get; set; }
-    string? FocusedBackgroundTextureId { get; set; }
-    string BackgroundTextureId { get; set; }
+    public IUISurface? BackgroundSurface { get; set; }
+
+    public IUISurface? FocusSurface { get; set; }
+
+    public IUISurface? HoverSurface { get; set; }
 }
